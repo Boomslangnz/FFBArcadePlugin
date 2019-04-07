@@ -1,0 +1,374 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Game Files\ButtonRumble64bit.h" />
+    <ClInclude Include="Game Files\OutRun2Real.h" />
+    <ClInclude Include="Game Files\Mame019964bit.h" />
+    <ClInclude Include="Game Files\Mame020664bit.h" />
+    <ClInclude Include="Game Files\ButtonRumble32bit.h" />
+    <ClInclude Include="Game Files\Demul.h" />
+    <ClInclude Include="dinput8.def">
+    </ClInclude>
+    <ClInclude Include="Game Files\Mame020632bit.h" />
+    <ClInclude Include="Game Files\MarioKartGPDX1.10.h" />
+    <ClInclude Include="Game Files\InitialD5.h" />
+    <ClInclude Include="Game Files\InitialD4Japan.h" />
+    <ClInclude Include="Game Files\M2Emulator.h" />
+    <ClInclude Include="Game Files\RoadFighters3D.h" />
+    <ClInclude Include="Game Files\LGI.h" />
+    <ClInclude Include="Game Files\LGI3D.h" />
+    <None Include="Config\FFBPlugin.ini">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="Includes\SDL2.dll" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Game Files\ButtonRumble64bit.cpp" />
+    <ClCompile Include="Game Files\OutRun2Real.cpp" />
+    <ClCompile Include="Game Files\Mame019964bit.cpp" />
+    <ClCompile Include="Game Files\Mame020664bit.cpp" />
+    <ClCompile Include="Game Files\ButtonRumble32bit.cpp" />
+    <ClCompile Include="Common Files\TeknoParrotGame.cpp" />
+    <ClCompile Include="Game Files\Demul.cpp" />
+    <ClCompile Include="Game Files\AfterburnerClimax.cpp" />
+    <ClCompile Include="Game Files\BG4JP.cpp" />
+    <ClCompile Include="Game Files\Daytona3.cpp" />
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="Common Files\Game.cpp" />
+    <ClCompile Include="Game Files\ChaseHQ2.cpp" />
+    <ClCompile Include="Game Files\InitialD4.cpp" />
+    <ClCompile Include="Game Files\InitialD6.cpp" />
+    <ClCompile Include="Game Files\InitialD7.cpp" />
+    <ClCompile Include="Game Files\InitialD8.cpp" />
+    <ClCompile Include="Game Files\Machstorm.cpp" />
+    <ClCompile Include="Game Files\Mame020632bit.cpp" />
+    <ClCompile Include="Game Files\OutRun2Fake.cpp" />
+    <ClCompile Include="Game Files\PokkenTournament.cpp" />
+    <ClCompile Include="Game Files\SegaRally3.cpp" />
+    <ClCompile Include="Game Files\SegaRacingClassic.cpp" />
+    <ClCompile Include="Game Files\FordRacing.cpp" />
+    <ClCompile Include="Game Files\FNF.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDX.cpp" />
+    <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
+    <ClCompile Include="Game Files\TestGame.cpp" />
+    <ClCompile Include="Game Files\Mame019932bit.cpp" />
+    <ClCompile Include="Game Files\WackyRaces.cpp" />
+    <ClCompile Include="Game Files\WMMT5.cpp" />
+    <ClCompile Include="Game Files\InitialD4Japan.cpp" />
+    <ClCompile Include="Game Files\GTIClub3.cpp" />
+    <ClCompile Include="IDirectInputDevice.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDX1.10.cpp" />
+    <ClCompile Include="Game Files\InitialD5.cpp" />
+    <ClCompile Include="Game Files\M2Emulator.cpp" />
+    <ClCompile Include="Game Files\RoadFighters3D.cpp" />
+    <ClCompile Include="Game Files\LGI.cpp" />
+    <ClCompile Include="Game Files\LGI3D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common Files\TeknoParrotGame.h" />
+    <ClInclude Include="Game Files\AfterburnerClimax.h" />
+    <ClInclude Include="Game Files\BG4JP.h" />
+    <ClInclude Include="Game Files\Daytona3.h" />
+    <ClInclude Include="Common Files\Game.h" />
+    <ClInclude Include="Game Files\ChaseHQ2.h" />
+    <ClInclude Include="Game Files\InitialD4.h" />
+    <ClInclude Include="Game Files\InitialD6.h" />
+    <ClInclude Include="Game Files\InitialD7.h" />
+    <ClInclude Include="Game Files\InitialD8.h" />
+    <ClInclude Include="Game Files\Machstorm.h" />
+    <ClInclude Include="Game Files\OutRun2Fake.h" />
+    <ClInclude Include="Game Files\PokkenTournament.h" />
+    <ClInclude Include="Game Files\SegaRally3.h" />
+    <ClInclude Include="Game Files\SegaRacingClassic.h" />
+    <ClInclude Include="Game Files\FordRacing.h" />
+    <ClInclude Include="Game Files\FNF.h" />
+    <ClInclude Include="Game Files\MarioKartGPDX.h" />
+    <ClInclude Include="Game Files\SonicSegaAllStarsRacing.h" />
+    <ClInclude Include="Game Files\TestGame.h" />
+    <ClInclude Include="Game Files\Mame019932bit.h" />
+    <ClInclude Include="Game Files\WackyRaces.h" />
+    <ClInclude Include="Game Files\WMMT5.h" />
+    <ClInclude Include="Game Files\GTIClub3.h" />
+    <ClInclude Include="IDirectInputDevice.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Includes\FFBPlugin.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <MASM Include="DLLWrapper.asm" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{023441F6-2554-440F-9FFB-7E185AB7CF41}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Dinput8Wrapper</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <ProjectName>DInput8Wrapper</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v141</PlatformToolset>
+    <WholeProgramOptimization>false</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.props" />
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration).$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration).$(Platform)\$(ProjectName)\</IntDir>
+    <TargetName>dinput8</TargetName>
+    <EmbedManifest>false</EmbedManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration).$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration).$(Platform)\$(ProjectName)</IntDir>
+    <TargetName>dinput8</TargetName>
+    <EmbedManifest>false</EmbedManifest>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration).$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration).$(Platform)\$(ProjectName)\</IntDir>
+    <TargetName>dinput8</TargetName>
+    <EmbedManifest>false</EmbedManifest>
+    <IncludePath>$(SolutionDir)\Xidi-master\Include\Xidi;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+    <SourcePath>$(VC_SourcePath)</SourcePath>
+    <CustomBuildAfterTargets>sdl2_init</CustomBuildAfterTargets>
+    <MASMAfterTargets>CoreBuild</MASMAfterTargets>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Configuration).$(Platform)\</OutDir>
+    <IntDir>$(SolutionDir)$(Configuration).$(Platform)\$(ProjectName)\</IntDir>
+    <TargetName>dinput8</TargetName>
+    <EmbedManifest>false</EmbedManifest>
+    <IncludePath>$(SolutionDir)\Xidi-master\Include\Xidi;$(VC_IncludePath);$(WindowsSDK_IncludePath);</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DIRECTINPUT_VERSION=0x0800;WIN32;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>Include/$(SolutionName)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
+      <AdditionalDependencies>dinput8.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>Resources</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
+    <Manifest>
+      <OutputManifestFile>$(IntDir)$(TargetName)$(TargetExt).embed.manifest</OutputManifestFile>
+    </Manifest>
+    <ManifestResourceCompile>
+      <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
+    </ManifestResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DIRECTINPUT_VERSION=0x0800;_DEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <MinimalRebuild>false</MinimalRebuild>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>Include/$(SolutionName)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>Debug</GenerateDebugInformation>
+      <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
+      <AdditionalDependencies>dinput8.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;xinput.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>Resources</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
+    <Manifest>
+      <OutputManifestFile>$(IntDir)$(TargetName)$(TargetExt).embed.manifest</OutputManifestFile>
+    </Manifest>
+    <ManifestResourceCompile>
+      <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
+    </ManifestResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DIRECTINPUT_VERSION=0x0800;WIN32;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>Include/$(SolutionName)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>No</GenerateDebugInformation>
+      <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
+      <AdditionalDependencies>dinput8.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers />
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>Resources</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
+    <Manifest>
+      <OutputManifestFile>$(IntDir)$(TargetName)$(TargetExt).embed.manifest</OutputManifestFile>
+    </Manifest>
+    <ManifestResourceCompile>
+      <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
+    </ManifestResourceCompile>
+    <PostBuildEvent>
+      <Command>xcopy /y "$(ProjectDir)Includes\*"  "$(OutDir)"
+if not exist "$(ProjectDir)Post-Build\node_modules" (cd "$(ProjectDir)Post-Build\" &amp;&amp; npm install)
+node "$(ProjectDir)Post-Build\build.js" "$(ProjectDir)Config\FFBPlugin.ini" "$(OutDir)\" "$(OutDir)\"
+$(ProjectDir)Post-Build\copydlls.bat "$(OutDir)"</Command>
+    </PostBuildEvent>
+    <CustomBuildStep>
+      <Command>echo HELLO WORLD
+cd $(OutDir) &amp;amp;&amp;amp; for /D /r %d in (.\Deploy\*) do @xcopy *.dll %d\ /y</Command>
+      <TreatOutputAsContent>
+      </TreatOutputAsContent>
+    </CustomBuildStep>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;DIRECTINPUT_VERSION=0x0800;NDEBUG;_WINDOWS;_USRDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <OmitFramePointers>false</OmitFramePointers>
+      <RuntimeTypeInfo>false</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <AdditionalIncludeDirectories>Include/$(SolutionName)</AdditionalIncludeDirectories>
+      <ForcedIncludeFiles>
+      </ForcedIncludeFiles>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>No</GenerateDebugInformation>
+      <ModuleDefinitionFile>dinput8.def</ModuleDefinitionFile>
+      <AdditionalDependencies>dinput8.lib;dxguid.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>Resources</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <ResourceCompile>
+      <NullTerminateStrings>true</NullTerminateStrings>
+    </ResourceCompile>
+    <Manifest>
+      <OutputManifestFile>$(IntDir)$(TargetName)$(TargetExt).embed.manifest</OutputManifestFile>
+    </Manifest>
+    <ManifestResourceCompile>
+      <ResourceOutputFileName>$(IntDir)$(TargetName)$(TargetExt).embed.manifest.res</ResourceOutputFileName>
+    </ManifestResourceCompile>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\masm.targets" />
+    <Import Project="packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets" Condition="Exists('packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" />
+    <Import Project="packages\sdl2.2.0.5\build\native\sdl2.targets" Condition="Exists('packages\sdl2.2.0.5\build\native\sdl2.targets')" />
+  </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2.redist.2.0.5\build\native\sdl2.redist.targets'))" />
+    <Error Condition="!Exists('packages\sdl2.2.0.5\build\native\sdl2.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\sdl2.2.0.5\build\native\sdl2.targets'))" />
+  </Target>
+</Project>

@@ -1,0 +1,417 @@
+***FFB Arcade Plugin***
+
+Version 0.8
+
+Created by Boomslangnz, Ducon2016 & Spazzy.
+
+This is a plugin to provide Force Feedback and Rumble (and in certain cases added input support) to various arcade games. Initially this was a small project
+to add FFB to Daytona Championship USA and it grew from there to support several more games and rumble was added. 
+While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
+in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4. Effects were created entirely from scratch
+so are not using any real force feedback values
+
+***0.8 Changes***
+
+- Sorry! Been so busy,never had time to test last release correctly and upgrading SDL2 version broke effects working correctly on all games! 
+
+Reverting back to SDL2 2.0.5 and modified lindbergh game plugins to load SDL22.dll.
+
+SDL22.dll will be supplied in plugin folders for Lindbergh games and need to be placed into the Teknoparrot folder INSIDE the MAIN Teknoparrot folder. 
+
+SDL2.dll will still be supplied aswell to be placed in same folder as FFBPlugin.ini if you want to use FFBPluginGUI.exe
+
+Hopefully this makes sense, please ask if you are confused.
+
+- Outrun 2 now has 2 x plugins. One is the custom effects created from scratch you have been using all this time :) and the other is using the real FFB Address now.
+(Big thanks to Reaver for help on getting the real ffb working)
+
+***0.7 Changes***
+
+- Upgraded FFB Arcade Plugin to use SDL 2 2.0.9 version compared to the old 2.0.5 used previously. Will sort out FFB Plugin working when using Faudio on new teknoparrot
+
+***0.6a Changes***
+
+- Modified GUI to check FFBPlugin and load game settings as soon as you choose Force Feedback Setup or Input Setup instead of having game list and potentially writing unnecessary values to ini
+
+- Added logo on first GUI page made by POOTERMAN (Thanks mate)
+
+- Defaulted WMMT5 logging to off as plugin hooks GUI lol
+
+- Added GUI to every plugin folder by default now as it was confusing users with copying GUI to correct folders etc. I have setup correct 32bit and 64bit exe with each plugin
+
+- Just a note if you are using Lindbergh games and want to use GUI. Copy MetroFramework.dll & SDL2.dll to same folder as elf file (Where FFBPlugin.ini goes too),
+opengl32.dll & SDL2.dll goes to Teknoparrot folder as usual. You do not need to copy GUI or Metroframework.dll to Teknoparrot folder at all.
+
+
+***0.6 Changes***
+
+- Added support for Mame 0.206 with same games from old 0.199 games. Works with 32bit, 64bit Mame Binary or MameUI64
+
+- Added Optional GUI to make modifying settings or setting up deviceguid a bit easier (read below for details, HAS TO BE IN SAME FOLDER WITH PLUGIN FILES & METROFRAMEWORK.dll)
+
+
+***0.5 Changes***
+
+- Removed spring effect from Mario Kart 1.10 as it had issues with pulling wheel to side and replaced with constant effect for steering. Added options to enable and disable and modify strength (Do not lower below 128 in ini!!)
+
+- Added Dpad support for Road Fighters 3D input (read below for details)
+
+- Added ForceShowDeviceGUIDMessageBox option in ini to force Device Name and Device GUID to show in messagebox popup for each device connected
+
+- Added option to reverse rumble motors if motors rumbling in reverse to how you like it
+
+
+***0.4 Changes***
+
+- Modified Button Rumble plugin to allow 2 x controllers to rumble
+(Plugin can be renamed to either dinput8.dll,dinput.dll,d3d9.dll,d3d11.dll,xinput1_3.dll,opengl32.dll or winmm.dll to hook application)
+
+- Modified Machstorm plugin to allow modifying rumble strength and length if required on effects
+
+- Modified Afterburner Climax plugin to allow modifying strength and length if required on effects
+
+- Modified Pokken Tournament plugin to allow modifying strength and length if required on effects (ini contains HowtoRumbleEffect. 0 = both motors, 1 = left motor, 2 = right motor so you can customize to how it suits)
+
+- Fixed bug on Pokken Tournament where rumble wouldn't work
+
+- Added rumble support for Let's Go Island (ini contains HowtoRumbleEffect. 0 = both motors, 1 = left motor, 2 = right motor so you can customize to how it suits, supports multiple controllers for 2p)
+
+- Added rumble support for Let's Go Island 3D (ini contains HowtoRumbleEffect. 0 = both motors, 1 = left motor, 2 = right motor so you can customize to how it suits, supports multiple controllers for 2p)
+
+- Added FFB Support for San Francisco Rush and San Francisco Rush The Rock for mame 0.199 60fps custom hack version (http://forum.arcadecontrols.com/index.php?topic=158489.0)
+
+
+***0.3 Changes***
+
+- Added general button plugin to rumble controller when button pressed, modify length for how long in ini (Great for lightgun games!)
+
+- Added options to Daytona Championship USA ini to enable or disable Exit Button, Menu Movement or Gear Changes (Teknoparrot version now has this all built in)
+
+- Added FFB support for Nascar Racing on Demul (180428 version)
+
+- Added FFB support for GTI Club Supermini Festa on Teknoparrot
+
+- Added FFB support for Road Fighters 3D using spicetools, added option for input support for analog and buttons. Read bottom of this for details 
+
+- Fixed issue where Sega Racing Classic FFB wouldn't work while playing over network
+
+- Renamed the log.txt to FFBlog.txt as certain games already created a log.txt which could cause issues
+
+- Added Daytona USA Multiplayer AI Hack (up to 4 player so far) on M2 Emulator, enable in ini file to enable. While racing network, positions will include AI Car positions too.
+
+- Added Daytona Force Panoramic Attract option on M2 Emulator to force the game to use panoramic attract mode on less then 4 players even
+
+
+***0.2 Changes***
+
+- Added support for California Speed, Cruis'n World, Cruis'n USA & Off Road Challenge on Mame 32 or 64bit Binary OR MameUI64 ONLY for Mame 0.199.
+
+- Added support for Sega Rally Championship,Daytona USA,Indy 500,Sega Touring Car Championship,Over Rev & Super GT 24h on M2 Emulator 1.1a (just alternative to built in FFB)
+ (Disable FFB in Emulator.ini if you want to use FFB Plugin instead of M2 Emulator's built in FFB support. Set hardware type to STCC for OverRev & I/O board to A or B for Super GT 24h in test menu!! )
+
+- Added support for Initial D4 Japan, Initial D5,Sonic & Sega All Stars Racing & Outrun 2 Special Tours Deluxe for Teknoparrot
+
+- Added strength options in ini for most effects in Mario Kart 1.10. Wheels can only use MAX of 100, Controller can go higher
+Multiplier option is if you want to raise the strength of Water and Drift effects, 200 would double the strength etc. Set to 100 by default
+
+- Added option to certain games in ini to give a bit more strength to lower forces. FFBMode=0 is the standard and FFBMode=1 is the new mode 
+(BE WARNED ON CERTAIN WHEELS THIS COULD CAUSE OSCILLATION TO OCCUR)
+
+- Added option to Daytona Championship USA ini to hide mouse cursor
+
+- Added AlternativeFFB option to ini which is for wheels such as PWM2M2 or certain direct drive wheels etc which use constant effect incorrectly ingame.
+eg Roll left and Roll Right doesn't work correctly, Enable Alternative FFB to modify this and added strength options for it
+
+
+***0.1a Changes***
+
+- Added support for San Francisco Rush, San Francisco Rush The Rock, San Francisco Rush 2049,
+San Francisco Rush 2049 SE & Rave Racer on Mame 32 or 64bit Binary OR MameUI64 ONLY for Mame 0.199.
+
+ Please turn on Feedback steering in game settings on Rave Racer or you will not recieve FFB & I suggest you 
+ adjust deadzone for your wheel in mame settings.
+
+(This was added just for a little fun as no one really has done ffb on mame yet)
+
+- Added Daytona Championship USA exit key (escape), Gear change added for Gears 1,2,3 & 4 or Sequential Gear Up/Down.
+Change Button Number in ini if necessary (x360ce not necessary for gear change).
+Make ShowButtonNumbersForSetup=1 if you want to have popup boxes to work out Button Layout. Press button to see box
+Track selection menu & Name Entry has added control too now
+
+
+- Modified Mario Kart DX 1.10 FFB adding a bunch of new effects and ini can now Enable or Disable Effects
+- Will rumble when picking up coins
+- Will rumble when picking up weapons
+- Will rumble when using weapons
+- Drift effect on rumble (stronger the more you turn)(rumble each way when turning etc)
+- Boost effect on rumble
+- Rumble when kart hits ground from jumps or flying
+- Water effect on rumble (rumble each way when turning etc)
+- Speed of kart taken into effect etc
+
+***REQUIREMENTS***
+
+- Requires Visual Runtime Files
+
+- GUI Requires Visual Runtime 2015 (pretty sure its this lol) and has to be in same folder with metroframework.dll & SDL2.dll
+
+***CREDITS***
+
+- Reaver from Teknoparrot . Huge thanks to Reaver for supplying code necessary for some games & general force feedback,
+extremely generous.
+
+- Jackchen for his Daytona Championship USA FFB work at beginning of year.
+
+- Howard Castro for help on game FFB code. Always helpful and a big reason this plugin was ever made
+
+- Mame team
+
+- Racer_S for making dinput8 blocker used on Road Fighters 3D
+
+- SailorSat for finding the offsets etc required for Daytona USA Multiplayer AI hack
+
+- Nuexzz for finding offset required for Daytona Panoramic Force Hack
+
+- POOTERMAN for making logo on GUI
+
+- Everyone who helps and gives back to this awesome scene. Thanks for everything!
+
+
+***SUPPORTED GAMES***
+
+-Afterburner Climax (Rumble only) [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+
+-Battle Gear 4 Tuned (Japan version v2.07) [d3d9.dll into game exe folder]
+
+-ChaseHQ 2 [d3d9.dll into game exe folder]
+
+-Daytona USA [dinput8.dll into m2 emulator 1.1a folder]
+
+-Daytona Championship USA [dinput8.dll into game exe folder]
+
+-Ford Racing [dinput8.dll into game exe folder]
+
+-Indy 500 [dinput8.dll into m2 emulator 1.1a folder]
+
+-Initial D4 [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+
+-Initial D4 Japan [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+
+-Initial D5 [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+
+-Initial D6 [dinput8.dll into game exe folder]
+
+-Initial D7 [dinput8.dll into game exe folder]
+
+-Initial D8 [dinput8.dll into game exe folder]
+
+-Machstorm (Rumble only) [xinput1_3.dll into game exe folder]
+
+-Mario Kart GP DX (Version 1.00 & version 1.10) [dinput8.dll into game exe folder]
+
+-Pokken Tournament (Rumble only) [dinput8.dll into game exe folder]
+
+-Sega Touring Car Championship [dinput8.dll into m2 emulator 1.1a folder]
+
+-Sega Racing Classic [dinput8.dll into game exe folder]
+
+-Sega Rally Championship [dinput8.dll into m2 emulator 1.1a folder]
+
+-Sega Rally 3 [dinput8.dll into game exe folder]
+
+-Super GT 24h [dinput8.dll into m2 emulator 1.1a folder]
+
+-Sonic & Sega All Stars Racing [d3d9.dll into game exe folder]
+
+-Outrun 2 Special Tours Deluxe [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+
+-Over Rev [dinput8.dll into m2 emulator 1.1a folder]
+
+-Wacky Races [d3d9.dll into game exe folder]
+
+-Wangan Midnight Maximum Tune 5 (Update 5) [d3d11.dll into game exe folder]
+
+-San Francisco Rush, San Francisco Rush The Rock, San Francisco Rush 2049 & San Francisco Rush 2049 SE 
+(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+
+-Rave Racer [dinput8.dll into any mame 0.199 folder]
+TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK!
+(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206  [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+
+-California Speed
+(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+
+-Cruis'n World
+(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+
+-Cruis'n USA
+(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+
+-Off Road Challenge
+(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+
+-GTI Club Supermini Festa [dinput8.dll into game exe folder]
+
+-Road Fighters 3D [d3d9.dll & dinput8.dll(if using ffb plugin for inputs) into game exe folder]
+
+-Nascar Racing [dinput8.dll into demul 180428 version folder]
+
+-Let's Go Island [d3d9.dll into game exe folder]
+
+-Let's Go Island 3D [d3d9.dll into game exe folder]
+
+
+***HOW TO USE***
+
+Place the main dll file, SDL2.dll & FFBPlugin.ini into game folder for most games. For Teknoparrot Lindbergh 
+games place opengl32.dll, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder & FFBPlugin.ini into same folder as elf file for each game.
+
+Elf file is like the lindbergh version of an exe eg the file you choose to load via teknoparrot
+
+If using GUI, put FFBPluginGUI.exe & Metroframework.dll into same folder as FFBPlugin.ini
+
+If you are using FFB Plugin on Teknoparrot instead of using Teknoparrot built in FFB, Please turn off Force Feedback in TeknoparrotUI. (Not necessary on latest TP Versions)
+
+ini file contains settings to adjust for each game
+
+GameId= **GameId for code to identify game, also has a test FFB mode,-1 for Constant test ,-2 for
+Sine test, -3 for Friction test, -4 for Spring test, -5 for Heavy test or -6 for loose test**
+
+MinForce= **Minimum FFB force with 0 being lowest value available**
+
+MaxForce= **Maximum FFB force with 100 being highest value available**
+
+DeviceGUID= **Set Device GUID to connect to specific wheel or controller**
+
+EnableRumble= **Turn Off (0) if your wheel supports rumble effect. For controllers, turn on (1)**
+
+Logging= **Turn On (1) to allow log.txt to be made to log plugin. Device GUID is given in here**
+
+ResetFeedback= **When a command is set that contradicts a prior command, clear the prior command. Should stay as 1**
+
+FeedbackLength= **Length of a feedback command**
+
+DefaultCentering= **If a game does not specify its own Centering force then a default centering can be applied here.
+If a game has any of its own such forces,these values will be overwritten immediately in-game. Use -1 to disable**
+
+DefaultFriction= **If a game does not specify its own Friction force then a default friction can be applied here.
+If a game has any of its own such forces,these values will be overwritten immediately in-game. Use -1 to disable**
+
+BeepWhenHook= **Beep should occur if dll is hooked by executable when turned on (1)**
+
+FFBMode= **This will raise strength of lower forces, potentially could cause oscillation to occur on certain games. Set 1 to turn on**
+
+AlternativeFFB= **This is for certain wheels where roll effect does not work correctly normally (such as PWM2M2 or Thrustmaster 300rs etc). Set 1 to turn on **
+
+Device2GUID= **Set Device 2 GUID to connect to secondary specific wheel or controller (buttons only)**
+
+
+*** GUI SUPPORT ***
+
+- REQUIRES visual runtime 2015,SDL2.dll & Metroframework.dll. SDL2.dll & Metroframework.dll are supplied in each plugin folder
+
+- Is designed to be used in conjunction with FFBPlugin.ini files included with each plugin folder. Place all plugin files into game exe folder(unless Lindbergh, read 0.6a changes above)
+
+- If FFBPlugin.ini exists, it will read the values and display values etc on game page. As soon as you adjust any value, it automatically writes to FFBPlugin.ini the new value
+
+- If FFBPlugin.ini doesn't exist it will give you message saying so or if GameId number is missing from FFBPlugin.ini
+
+- Input support will only work on the supported games, otherwise message will tell you it is unsupported for that games plugin
+
+
+*** INPUT SUPPORT ***
+
+To enable input on supported games, firstly setup GUID as normal and enable InputDeviceWheelEnable in ini (1 to turn on, 0 to turn off).
+
+Ive pre-set the axis for Logitech G920 wheel however if this is incorrect I have added options 
+to change in FFBPlugin.ini. 
+
+- Added option for Device2GUID in ini for a 2nd device to include inputs (great for seperate usb shifter etc, add the button numbers to the device2 buttons in ini )
+
+- Enable ShowButtonNumbersForSetup to give window popup to give button numbers for setup into FFBPlugin.ini
+
+- Enable ShowAxisSetup to give window popup to give axis numbers for setup into FFBPlugin.ini
+
+- You can enable ShowButtonNumbersForSetup & ShowAxisSetup at same time if you wish
+
+- SteeringDeadzone to modify the steering deadzone for either wheel or controller. 
+(Recommend around 2 for wheel and 70 for controller, but feel free to play around for best setting)
+
+- SequentialGears option will disable standard h pattern gear shift and use leverUp & leverDown to shift up and down gears easily
+
+- Enable InputDeviceCombinedPedals if your wheel or controller uses combined axis, setup as InputDeviceWheelAcclAxis in ini
+
+- Set DpadUp,DpadDown,DpadLeft & DpadRight = as any button name in ini eg DpadUp=StartButton and DpadUp will now do start button ingame. You can use Dpad and normal button at same time if you wish
+
+After setting up Axis and Buttons then Disable ShowButtonNumbersForSetup & ShowAxisSetup if enabled and play!
+
+
+*** TROUBLESHOOTING ***
+
+OMG FFB DOESN'T WORK!!
+
+1) Firstly copy files to where supported games section says
+2) Run Game then exit after a few seconds
+3) Check FFBlog.txt for device guid number
+4) Copy this number to FFBPlugin.ini to DeviceGUID=
+5) Disable logging in FFBPlugin.ini if you wish for no logging
+6) Play Game
+7) If still no FFB, ensure you have visual runtime files installed
+
+INPUT HELP
+1) Device does nothing ingame!! (enable InputDeviceWheelEnable)
+2) Steering doesn't work (set up correct axis in ini)
+3) Pedals don't work (set up correct axis in ini)
+4) Pedals only work when not pressed (enable reverse axis)
+5) Pedals need to be combined (enable combined pedals)
+6) Buttons don't work (set up correct button numbers in ini)
+7) Device2 doesn't work (set up correct button numbers in ini under Device2buttons)
+
+Default Axis and Button Numbers to help with setup on certain controllers/wheels
+
+For Xbox One & Xbox 360 Controller:
+[Axis Numbers]
+Left Stick X Axis = 0
+Left Stick Y Axis = 1
+Right Stick X Axis = 3
+Right Stick Y Axis = 4
+Left Trigger = 2
+Right Trigger = 5
+
+[Button Numbers]
+A Button = 0
+B Button = 1
+X Button = 2
+Y Button = 3
+Left Shoulder Button = 4
+Right Shoulder Button = 5
+Back Button/View Button = 6
+Start Button/Menu Button = 7
+Left Stick Down Button = 8
+Right Stick Down Button = 9
+
+For Thrustmaster T300RS:
+[Axis Numbers]
+
+[If Seperate Axis]
+Steering Axis = 0
+Accl Axis = 2
+Brake Axis = 1
+
+[If Combined Axis]
+Steering Axis = 0
+Accl Axis = 1
+Brake Axis = 1
+
+[Button Numbers]
+PS Button = 12
+L2 Button = 9
+R2 Button = 8
+ST Button = 7
+SE Button = 6
+X Button = 5
+[] Button = 3
+() Button = 4
+/\ Button = 2
+Right Paddle = 1
+Left Paddle = 0
