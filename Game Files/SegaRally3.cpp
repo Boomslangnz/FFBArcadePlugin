@@ -1,7 +1,27 @@
 #include <string>
 #include "SegaRally3.h"
 
+static int __stdcall Out32(DWORD device, DWORD data)
+{
+	/*static char test[256];
+	memset(test, 0, 256);
+	sprintf(test, "hex print: %08X", data);
+	OutputDebugStringA(test);
+	return 0;*/
+}
+
 void SegaRally3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+	/*bool init = false;
+	HMODULE hMod = GetModuleHandleA("inpout32.dll");
+	if (hMod)
+	{
+		if (!init)
+		{
+			//injector::MakeJMP((DWORD)GetProcAddress(GetModuleHandle(L"inpout32.dll"), "Inp32"), Inp32);
+			injector::MakeJMP((DWORD)GetProcAddress(GetModuleHandle(L"inpout32.dll"), "Out32"), Out32);
+			init = true;
+		}
+	}*/
 	helpers->log("in SR3 Ffbloop");
 	const int ff = GetTeknoParrotFFB();
 	std::string ffs = std::to_string(ff);

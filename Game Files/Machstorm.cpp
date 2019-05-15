@@ -30,44 +30,6 @@ void Machstorm::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrig
 	int vibration = helpers->ReadInt32(0x6390E9, /* relative */ true);
 	int power = helpers->ReadInt32(0x639109, /* relative */ true);
 
-	/*if (DomeFix == 1)
-	{
-		U16 *buffer = new U16[1920 * 1080 * 2];
-
-		for (int y = 0; y < 1080; y++)
-		{
-			for (int x = 0; x < 1920; x++)
-			{
-				float d = 0.5f;
-				float xf = x / 1920.0f;
-				float yf = y / 1080.0f;
-				xf = 2.0f * xf - 1.0f;
-				yf = 2.0f * yf - 1.0f;
-				if (0.0f > xf)
-				{
-					float k = 0.95f * -xf / (-xf + d);
-					xf = -k;
-					yf = yf * (1.0f - k);
-				}
-				else
-				{
-					float k = 0.95f * xf / (xf + d);
-					xf = k;
-					yf = yf * (1.0f - k);
-				}
-				xf = 0.5f * xf + 0.5f;
-				yf = -0.5f * yf - 0.5f;
-				buffer[(y * 1920 + x) * 2] = 65535 * xf;
-				buffer[(y * 1920 + x) * 2 + 1] = 65535 * yf;
-			}
-		}
-
-		helpers->WriteByte<U8>(0x003D2FEE, 0x45, true);
-		helpers->WriteByte<U8>(0x003D3637, 0xB8, true);
-		helpers->WriteIntPtr<U32>(0x003D3638, (U16)buffer, true);
-		helpers->WriteIntPtr<U32>(0x003D363C, 0x0C244489, true);
-	}*/
-
 	if (vibration == 16842753)
 	{
 		if (power == 61542)

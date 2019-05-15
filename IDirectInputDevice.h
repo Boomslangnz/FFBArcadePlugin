@@ -10,9 +10,9 @@ private:
 	bool useUnicode;
 
 public:
-	DirectInputDeviceWrapper( LPVOID device, bool unicode );
+	DirectInputDeviceWrapper(LPVOID device, bool unicode);
 	virtual ~DirectInputDeviceWrapper(void);
-        
+
 public:
 	// -------- METHODS: IUnknown ---------------------------------------------- //
 	virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, LPVOID* ppvObj);

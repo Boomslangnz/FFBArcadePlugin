@@ -18,7 +18,9 @@
 #include "Game Files/ChaseHQ2.h"
 #include "Game Files/Daytona3.h"
 #include "Game Files/FordRacing.h"
+#include "Game Files/FordRacingOther.h"
 #include "Game Files/FNF.h"
+#include "Game Files/GRID.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"
 #include "Game Files/InitialD5.h"
@@ -779,10 +781,19 @@ HRESULT WINAPI DirectInputDirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, 
 // DINPUT8 WRAPPER
 HRESULT WINAPI DirectInputDirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
 {
-	LPVOID val;
-	HRESULT res = originalDirectInputDirectInput8Create(hinst, dwVersion, riidltf, &val, punkOuter);
-	*ppvOut = new DirectInputDeviceWrapper(val, (IID_IDirectInput8W == riidltf));
-	return res;
+	/*wchar_t *settingsFilenameA = TEXT(".\\FFBPlugin.ini");
+	int configGameIdA = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 1, settingsFilenameA);
+	if (configGameIdA == 29)
+	{
+		return DIERR_OUTOFMEMORY;
+	}
+	else
+	{*/
+		LPVOID val;
+		HRESULT res = originalDirectInputDirectInput8Create(hinst, dwVersion, riidltf, &val, punkOuter);
+		*ppvOut = new DirectInputDeviceWrapper(val, (IID_IDirectInput8W == riidltf));
+		return res;
+//	}	
 }
 
 HRESULT WINAPI DirectInputDllRegisterServer(void)
@@ -848,7 +859,7 @@ wchar_t *deviceGUIDString = new wchar_t[256];
 int DeviceGUID = GetPrivateProfileString(TEXT("Settings"), TEXT("DeviceGUID"), NULL, deviceGUIDString, 256, settingsFilename);
 int configResetFeedback = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFeedback"), 1, settingsFilename);
 int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
-int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 1, settingsFilename);
+int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 0, settingsFilename);
 int configDefaultCentering = GetPrivateProfileInt(TEXT("Settings"), TEXT("DefaultCentering"), 0, settingsFilename);
 int configDefaultFriction = GetPrivateProfileInt(TEXT("Settings"), TEXT("DefaultFriction"), 0, settingsFilename);
 int BeepWhenHook = GetPrivateProfileInt(TEXT("Settings"), TEXT("BeepWhenHook"), 0, settingsFilename);
@@ -857,7 +868,7 @@ int configAlternativeMinForceLeft = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 int configAlternativeMaxForceLeft = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeft"), 100, settingsFilename);
 int configAlternativeMinForceRight = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRight"), 0, settingsFilename);
 int configAlternativeMaxForceRight = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRight"), 100, settingsFilename);
-int ForceShowDeviceGUIDMessageBox = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceShowDeviceGUIDMessageBox"), 100, settingsFilename);
+int ForceShowDeviceGUIDMessageBox = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceShowDeviceGUIDMessageBox"), 0, settingsFilename);
 
 char chainedDLL[256];
 
@@ -867,6 +878,7 @@ const int TEST_GAME_FRICTION = -3;
 const int TEST_GAME_SPRING = -4;
 const int TEST_GAME_HEAVY = -5;
 const int TEST_GAME_LOOSE = -6;
+const int TEST_GAME_RUMBLE = -7;
 
 const int DAYTONA_3 = 1;
 const int WACKY_RACES = 2;
@@ -903,6 +915,8 @@ const int MAME_020664bit = 33;
 const int MAME_019964bit = 34;
 const int OUTRUN_2Real = 35;
 const int Button_Rumble64bit = 36;
+const int GRID_ = 37;
+const int FORD_RACING_OTHER = 38;
 
 HINSTANCE Get_hInstance()
 {
@@ -914,7 +928,7 @@ HINSTANCE Get_hInstance()
 void Initialize(int device_index)
 {
 	hlp.log("in initialize");
-	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
+	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC | SDL_INIT_TIMER);
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_JoystickUpdate;
 	char joystick_guid[256];
@@ -969,7 +983,6 @@ void Initialize(int device_index)
 										
 
 	SDL_HapticEffect tempEffect;
-
 	hlp.log("creating base effects...");
 
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1006,10 +1019,52 @@ void Initialize(int device_index)
 	tempEffect.condition.length = 5000;
 	effects.effect_spring_id = SDL_HapticNewEffect(haptic, &tempEffect);
 
+	tempEffect = SDL_HapticEffect();
+	tempEffect.type = SDL_HAPTIC_INERTIA;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.delay = 0;
+	tempEffect.condition.length = 5000;
+	effects.effect_inertia_id = SDL_HapticNewEffect(haptic, &tempEffect);
+
+	tempEffect = SDL_HapticEffect();
+	tempEffect.type = SDL_HAPTIC_DAMPER;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.delay = 0;
+	tempEffect.condition.length = 5000;
+	effects.effect_damper_id = SDL_HapticNewEffect(haptic, &tempEffect);
+
+	tempEffect = SDL_HapticEffect();
+	tempEffect.type = SDL_HAPTIC_TRIANGLE;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.delay = 0;
+	tempEffect.condition.length = 5000;
+	effects.effect_triangle_id = SDL_HapticNewEffect(haptic, &tempEffect);
+
+	tempEffect = SDL_HapticEffect();
+	tempEffect.type = SDL_HAPTIC_RAMP;
+	tempEffect.ramp.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.ramp.delay = 0;
+	tempEffect.ramp.length = 5000;
+	effects.effect_ramp_id = SDL_HapticNewEffect(haptic, &tempEffect);
+
+	tempEffect = SDL_HapticEffect();
+	tempEffect.type = SDL_HAPTIC_SAWTOOTHUP;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.delay = 0;
+	tempEffect.condition.length = 5000;
+	effects.effect_sawtoothup_id = SDL_HapticNewEffect(haptic, &tempEffect);
+
+	tempEffect = SDL_HapticEffect();
+	tempEffect.type = SDL_HAPTIC_SAWTOOTHDOWN;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.delay = 0;
+	tempEffect.condition.length = 5000;
+	effects.effect_sawtoothdown_id = SDL_HapticNewEffect(haptic, &tempEffect);
+
 	// TODO: why don't we just define this as hackFix = true in the other file?
 	// Was there a reason to put it here?
-	extern bool hackFix;
-	hackFix = true;
+//	extern bool hackFix;
+//	hackFix = true;
 	
 }
 
@@ -1022,23 +1077,21 @@ std::string lastConstantEffectHash = "";
 std::string lastFrictionEffectHash = "";
 std::string lastSineEffectHash = "";
 std::string lastSpringEffectHash = "";
-
-
 void TriggerConstantEffect(int direction, double strength)
 {
 	if (AlternativeFFB == 1)
 	{
-		std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		/*std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
 		int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
 		std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
 
 		// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-		if (effectHash.compare(lastConstantEffectHash) == 0 && elapsedTime < configFeedbackLength) {
+		if (effectHash.compare(lastConstantEffectHash) == 0 && elapsedTime < configFeedbackLength) {			
 			return; // same effect, do nothing.
 		}
 
-		// TODO: investigate if we need this
+		 TODO: investigate if we need this
 		if (configResetFeedback || strength <= 0.001) {
 			SDL_HapticStopEffect(haptic, effects.effect_left_id);
 			SDL_HapticStopEffect(haptic, effects.effect_right_id);
@@ -1047,10 +1100,8 @@ void TriggerConstantEffect(int direction, double strength)
 				lastConstantEffectHash = effectHash;
 				return;
 			}
-		}
-
+		}*/
 		SDL_HapticEffect tempEffect;
-
 		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 		tempEffect.type = SDL_HAPTIC_CONSTANT;
 		tempEffect.constant.direction.type = SDL_HAPTIC_CARTESIAN;
@@ -1065,8 +1116,8 @@ void TriggerConstantEffect(int direction, double strength)
 			SHORT level = (SHORT)(strength * range - minForce);
 			tempEffect.constant.level = level;
 			hlp.log((char *)(std::to_string(level)).c_str());
-			SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
-			SDL_HapticRunEffect(haptic, effects.effect_id, 1);
+			SDL_HapticUpdateEffect(haptic, effects.effect_left_id, &tempEffect);
+			SDL_HapticRunEffect(haptic, effects.effect_left_id, 1);
 		}
 		else
 		{
@@ -1079,15 +1130,15 @@ void TriggerConstantEffect(int direction, double strength)
 			SHORT level = (SHORT)(strength * range + minForce);
 			tempEffect.constant.level = level;
 			hlp.log((char *)(std::to_string(level)).c_str());
-			SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
-			SDL_HapticRunEffect(haptic, effects.effect_id, 1);
+			SDL_HapticUpdateEffect(haptic, effects.effect_right_id, &tempEffect);
+			SDL_HapticRunEffect(haptic, effects.effect_right_id, 1);
 		}
-		timeOfLastConstantEffect = now;
-		lastConstantEffectHash = effectHash;
+		/*timeOfLastConstantEffect = now;
+		lastConstantEffectHash = effectHash;*/
 	}
 	else
 	{
-		std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	  /*std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
 		int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
 		std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
@@ -1106,9 +1157,10 @@ void TriggerConstantEffect(int direction, double strength)
 				lastConstantEffectHash = effectHash;
 				return;
 			}
-		}
+		}*/
 
 		SDL_HapticEffect tempEffect;
+		
 
 		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 		tempEffect.type = SDL_HAPTIC_CONSTANT;
@@ -1125,8 +1177,8 @@ void TriggerConstantEffect(int direction, double strength)
 		SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
 		SDL_HapticRunEffect(haptic, effects.effect_id, 1);
 
-		timeOfLastConstantEffect = now;
-		lastConstantEffectHash = effectHash;
+		/*timeOfLastConstantEffect = now;
+		lastConstantEffectHash = effectHash;*/
 	}
 }
 
@@ -1157,11 +1209,8 @@ void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 	tempEffect.type = SDL_HAPTIC_FRICTION;
 	tempEffect.condition.type = SDL_HAPTIC_FRICTION;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
 	tempEffect.condition.delay = 0;
 	tempEffect.condition.length = isDefault ? 0xFFFFFFFF : configFeedbackLength;
-	tempEffect.condition.direction.dir[0] = 1; // not used
-	tempEffect.constant.direction.dir[1] = 0; //Y Position
 	tempEffect.condition.left_sat[0] = 0xFFFF;
 	tempEffect.condition.right_sat[0] = 0xFFFF;
 
@@ -1178,6 +1227,142 @@ void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
 		timeOfLastFrictionEffect = now;
 		lastFrictionEffectHash = effectHash;
 	}
+}
+
+void TriggerInertiaEffect(double strength) 
+{
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	tempEffect.type = SDL_HAPTIC_INERTIA;
+	tempEffect.condition.type = SDL_HAPTIC_INERTIA;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.delay = 0;
+	tempEffect.condition.length = configFeedbackLength;
+	tempEffect.condition.direction.dir[0] = 1;
+	tempEffect.condition.direction.dir[1] = 1; //Y Position
+	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT range = maxForce - minForce;
+	SHORT coeff = (SHORT)(strength * range + minForce);
+
+	tempEffect.condition.left_coeff[0] = (short)(coeff);
+	tempEffect.condition.right_coeff[0] = (short)(coeff);
+	tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
+	tempEffect.condition.right_sat[0] = (short)(coeff) * 10;
+	tempEffect.condition.center[0] = 0;
+
+	SDL_HapticUpdateEffect(haptic, effects.effect_inertia_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_inertia_id, 1);
+}
+
+void TriggerTriangleEffect(double strength, double length)
+{
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	tempEffect.type = SDL_HAPTIC_TRIANGLE;
+	tempEffect.condition.type = SDL_HAPTIC_TRIANGLE;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.periodic.period = 500;
+	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT range = maxForce - minForce;
+	SHORT power = (SHORT)(strength * range + minForce);
+	tempEffect.periodic.magnitude = power;
+	tempEffect.periodic.length = length;
+	tempEffect.periodic.attack_length = 1000;
+	tempEffect.periodic.fade_length = 1000;
+	
+	SDL_HapticUpdateEffect(haptic, effects.effect_triangle_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_triangle_id, 1);
+}
+
+void TriggerDamperEffect(double strength) 
+{
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	tempEffect.type = SDL_HAPTIC_DAMPER;
+	tempEffect.condition.type = SDL_HAPTIC_DAMPER;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.delay = 0;
+	tempEffect.condition.length = configFeedbackLength;
+	tempEffect.condition.direction.dir[0] = 1; // not used
+	tempEffect.condition.direction.dir[1] = 0; //Y Position
+	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT range = maxForce - minForce;
+	SHORT coeff = (SHORT)(strength * range + minForce);
+	tempEffect.condition.left_coeff[0] = (short)(coeff);
+	tempEffect.condition.right_coeff[0] = (short)(coeff);
+	tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
+	tempEffect.condition.right_sat[0] = (short)(coeff) * 10;
+
+	SDL_HapticUpdateEffect(haptic, effects.effect_damper_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_damper_id, 1);
+}
+
+void TriggerRampEffect(double start,double end,double length) 
+{
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	tempEffect.type = SDL_HAPTIC_RAMP;
+	tempEffect.ramp.type = SDL_HAPTIC_RAMP;
+	tempEffect.ramp.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.ramp.length = length;
+	SHORT minForce = (SHORT)(start > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT range = maxForce - minForce;
+	SHORT start1 = (SHORT)(start * range + minForce);
+	SHORT minForce2 = (SHORT)(end > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce2 = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT range2 = maxForce - minForce;
+	SHORT start2 = (SHORT)(end * range + minForce);
+	tempEffect.ramp.delay = 0;	
+	tempEffect.ramp.start = start1;
+	tempEffect.ramp.end = -start2;
+	
+	SDL_HapticUpdateEffect(haptic, effects.effect_ramp_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_ramp_id, 1);
+}
+
+void TriggerSawtoothUpEffect(double strength, double length) 
+{
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	tempEffect.type = SDL_HAPTIC_SAWTOOTHUP;
+	tempEffect.condition.type = SDL_HAPTIC_SAWTOOTHUP;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.periodic.period = 500;
+	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT range = maxForce - minForce;
+	SHORT power = (SHORT)(strength * range + minForce);
+	tempEffect.periodic.magnitude = power;
+	tempEffect.periodic.length = length;
+	tempEffect.periodic.attack_length = 1000;
+	tempEffect.periodic.fade_length = 1000;
+
+	SDL_HapticUpdateEffect(haptic, effects.effect_sawtoothup_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_sawtoothup_id, 1);
+}
+
+void TriggerSawtoothDownEffect(double strength, double length) {
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	tempEffect.type = SDL_HAPTIC_SAWTOOTHDOWN;
+	tempEffect.condition.type = SDL_HAPTIC_SAWTOOTHDOWN;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.periodic.period = 500;
+	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT range = maxForce - minForce;
+	SHORT power = (SHORT)(strength * range + minForce);
+	tempEffect.periodic.magnitude = power;
+	tempEffect.periodic.length = length;
+	tempEffect.periodic.attack_length = 1000;
+	tempEffect.periodic.fade_length = 1000;
+
+	SDL_HapticUpdateEffect(haptic, effects.effect_sawtoothdown_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_sawtoothdown_id, 1);
 }
 
 void TriggerFrictionEffect(double strength)
@@ -1236,7 +1421,7 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 }
 
 void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
-	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	/*std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSpringEffect)).count();
 	std::string effectHash = std::to_string(effects.effect_spring_id) + "_" + std::to_string(strength);
 
@@ -1255,7 +1440,7 @@ void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
 				return;
 			}
 		}
-	}
+	}*/
 
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1281,10 +1466,10 @@ void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
 	SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_spring_id, 1);
 
-	if (!isDefault) {
+	/*if (!isDefault) {
 		timeOfLastSpringEffect = now;
 		lastSpringEffectHash = effectHash;
-	}
+	}*/
 }
 
 void TriggerSpringEffectInfinite(double strength)
@@ -1410,7 +1595,6 @@ void TriggerSpringEffect(double strength)
 
 DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
-	
 	hlp.log("In FFBLoop");
 	Sleep(2500);
 	SDL_HapticStopAll(haptic);
@@ -1427,6 +1611,12 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	t.LeftRight = &TriggerLeftRightEffect;
 	t.LeftRightDevice2 = &TriggerLeftRightDevice2Effect;
 	t.Springi = &TriggerSpringEffectInfinite;
+	t.Damper = &TriggerDamperEffect;
+	t.Inertia = &TriggerInertiaEffect;
+	t.Ramp = &TriggerRampEffect;
+	t.SawtoothUp = &TriggerSawtoothUpEffect;
+	t.SawtoothDown = &TriggerSawtoothDownEffect;
+	t.Triangle = &TriggerTriangleEffect;
 
 	Game* game;
 	switch (configGameId) {
@@ -1442,8 +1632,14 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case FNF_GAME:
 		game = new FNF;
 		break;
+	case GRID_:
+		game = new GRID;
+		break;
 	case FORD_RACING:
 		game = new FordRacing;
+		break;
+	case FORD_RACING_OTHER:
+		game = new FordRacingOther;
 		break;
 	case INITIAL_D_4:
 		game = new InitialD4;
@@ -1541,6 +1737,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case TEST_GAME_SPRING:
 	case TEST_GAME_HEAVY:
 	case TEST_GAME_LOOSE:
+	case TEST_GAME_RUMBLE:
 		game = new TestGame;
 		break;
 	default:
@@ -1558,8 +1755,11 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	bool* kr = (bool*)lpParam;
 	while (*kr)
 	{
-		game->FFBLoop(&effectConst, &hlp, &t);
-		Sleep(16);
+		if (game != 0)
+		{
+			game->FFBLoop(&effectConst, &hlp, &t);
+			Sleep(16);
+		}			
 	}
 	hlp.log("about to exit FFBLoop");
 	return 0;
@@ -1595,7 +1795,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		hlp.log((char *)(std::to_string(configMinForce)).c_str());
 		hlp.log((char *)(std::to_string(configMaxForce)).c_str());
 		DisableThreadLibraryCalls(hModule);
-
 		hlp.log("loading original library...");
 
 		GetPrivateProfileStringA("Settings", "ChainLoad", "", chainedDLL, 256, ".\\FFBplugin.ini");

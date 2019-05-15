@@ -1,14 +1,66 @@
 ***FFB Arcade Plugin***
 
-Version 0.8
+Version 0.9
 
 Created by Boomslangnz, Ducon2016 & Spazzy.
 
 This is a plugin to provide Force Feedback and Rumble (and in certain cases added input support) to various arcade games. Initially this was a small project
 to add FFB to Daytona Championship USA and it grew from there to support several more games and rumble was added. 
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
-in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4. Effects were created entirely from scratch
-so are not using any real force feedback values
+in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
+so are not using real force feedback values. Most games use correct ffb values however :)
+
+***0.9 Changes***
+
+- Added scroll bar to MKDX and Road Fighters 3D input side as couldn't see all options unless very high resolution monitor on GUI
+
+- Completely Modified OR2 SP Real plugin as effects were set quite wrong previously & added gear shift rumble as requested
+
+- Added optional input support for OR2 SP for H-Pattern gear changes (will only work if you select manual transmission)
+
+- Fixed issue which would cause Force Feedback to not work on Road Fighters 3D due to dinput8 blocker i was using previously on certain wheels.
+PLEASE REMOVE d3d9.dll & dinput8.dll if used old version!!!
+Blocker is not necessary anymore and ive fixed it properly compared to being lazy lol. Enable input support to disable default dinput8 controls used by Road Fighters 3D
+
+- Modified Road Fighters 3D FFB to only work when racing starts as otherwise it does crazy stuff before race or while attract mode plays
+
+- Added option to disable 3D for Road Fighters 3D
+
+- Added option to do a hack to try skip past error menu screen quickly for Road Fighters 3D on startup
+
+- Added option to close Libmovie error popup automatically if it happens for Road Fighters 3D
+
+- Lowered default Max Force for WMMT5 since people never read readme, then complain it's too strong
+
+- Huge overhaul for when adding inputs to input supported games via gui, Works much better (Click on axis/button number on right side to remove if required)
+
+- Re-wrote input system for every supported game via plugin itself
+
+- Fixed various bugs found in GUI
+
+- Renamed Input Setup in FFBPluginGUI.exe to Input / Miscellaneous Setup as it has options other then JUST input on certain games
+
+- Added Force Feedback test page to GUI for users to test effects on their devices
+
+- Fixed issue where Feedback Length wouldn't allow enough characters and modify ini setting automatically
+
+- Defaulted log to off, not as necessary anymore with GUI around
+
+- Modified Initial D4,D5,D6,D7 & D8 plugin (Be sure to try out both FFBMode and without) Remember to set FORCE=10 in test menu
+
+- Added support for new haptic effect forces damper, inertia, ramp, sawtoothup, sawtoothdown & triangle
+
+- Modified Daytona Championship USA exit method for better way
+
+- Modified forces to avoid the "tick" feeling with certain effects
+
+- Raised spring strength in Sega Racing Classic plugin
+
+- Tidied up Battle Gear 4 code and replace simple rumble with left/right effects for rumble
+
+- Added test code to rumble for infinite time period. Set GameID to -7 if you want to check rumble works via plugin
+
+- Fixed issue where plugin could crash game if no FFBPlugin.ini was present in game folder
 
 ***0.8 Changes***
 
@@ -166,8 +218,6 @@ extremely generous.
 
 - Mame team
 
-- Racer_S for making dinput8 blocker used on Road Fighters 3D
-
 - SailorSat for finding the offsets etc required for Daytona USA Multiplayer AI hack
 
 - Nuexzz for finding offset required for Daytona Panoramic Force Hack
@@ -252,7 +302,7 @@ TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBAC
 
 -GTI Club Supermini Festa [dinput8.dll into game exe folder]
 
--Road Fighters 3D [d3d9.dll & dinput8.dll(if using ffb plugin for inputs) into game exe folder]
+-Road Fighters 3D [dinput8.dll into game exe folder]
 
 -Nascar Racing [dinput8.dll into demul 180428 version folder]
 
@@ -287,7 +337,7 @@ EnableRumble= **Turn Off (0) if your wheel supports rumble effect. For controlle
 
 Logging= **Turn On (1) to allow log.txt to be made to log plugin. Device GUID is given in here**
 
-ResetFeedback= **When a command is set that contradicts a prior command, clear the prior command. Should stay as 1**
+ResetFeedback= **When a command is set that contradicts a prior command, clear the prior command.**
 
 FeedbackLength= **Length of a feedback command**
 

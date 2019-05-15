@@ -1,7 +1,9 @@
 #include <string>
 #include "AfterburnerClimax.h"
+#include "SDL.h"
 void AfterburnerClimax::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 	UINT8 ff = helpers->ReadByte(0x08347A5E, /* isRelativeOffset */ false);
+		
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char *)ffs.c_str());

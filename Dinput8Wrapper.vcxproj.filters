@@ -118,6 +118,8 @@
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="Game Files\ButtonRumble64bit.cpp" />
+    <ClCompile Include="Game Files\GRID.cpp" />
+    <ClCompile Include="Game Files\FordRacingOther.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -236,6 +238,12 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\ButtonRumble64bit.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\GRID.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\FordRacingOther.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

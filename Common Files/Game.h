@@ -10,19 +10,33 @@ struct EffectTriggers {
 	void(*LeftRight)(double smallstrength, double largestrength, double length);
 	void(*LeftRightDevice2)(double smallstrength, double largestrength, double length);
 	void(*Springi)(double strength);
+	void(*Inertia)(double strength);
+	void(*Ramp)(double start, double end, double length);
+	void(*Damper)(double strength);
+	void(*SawtoothUp)(double strength, double length);
+	void(*SawtoothDown)(double strength, double length);
+	void(*Triangle)(double strength, double length);
 };
 
 // classes
 class EffectCollection {
 public:
-	int effect_id = 0;
-	int effect_left_id = 0;
-	int effect_right_id = 0;
-	int effect_friction_id = 0;
-	int effect_leftright_id = 0;
-	int effect_sine_id = 0;
-	int effect_spring_id = 0;
-	int effect_vibration_id = 0;
+	int effect_id;
+	int effect_left_id;
+	int effect_right_id;
+	int effect_leftramp_id;
+	int effect_rightramp_id;
+	int effect_friction_id;
+	int effect_leftright_id;
+	int effect_sine_id;
+	int effect_spring_id;
+	int effect_vibration_id;
+	int effect_inertia_id;
+	int effect_ramp_id;
+	int effect_damper_id;
+	int effect_sawtoothup_id;
+	int effect_sawtoothdown_id;
+	int effect_triangle_id;
 };
 
 class EffectConstants {
@@ -94,5 +108,5 @@ public:
 
 class Game {
 public:
-	virtual void FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers);
+	virtual void FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers *triggers);
 };

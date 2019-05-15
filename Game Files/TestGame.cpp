@@ -1,5 +1,6 @@
 #include <string>
 #include "TestGame.h"
+#include "SDL.h"
 
 //settingsFN copied from DllMain.cpp; renamed from settingsFilename
 wchar_t *settingsFN = TEXT(".\\FFBPlugin.ini");
@@ -35,6 +36,9 @@ void TestGame::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 	case -6:
 		triggers->Friction(0);
 		triggers->Spring(0);
+		break;
+	case -7:
+		triggers->LeftRight(1.0, 1.0, SDL_HAPTIC_INFINITY);
 		break;
 	}
 }

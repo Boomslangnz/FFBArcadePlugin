@@ -23,7 +23,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 			//Centering
 			double percentForce = (200 - ff ) / 8.0;
 			double percentLength = 100;
-			triggers->Spring(percentForce);
+			triggers->Spring(pow(percentForce, 0.1));
 		}
 		else if ((ff > 0xB7) & (ff < 0xC0))
 		{
@@ -63,7 +63,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 			//Centering
 			double percentForce = (200 - ff) / 8.0;
 			double percentLength = 100;
-			triggers->Spring(pow(percentForce, 0.5));
+			triggers->Spring(pow(percentForce, 0.1));
 		}
 		else if ((ff > 0xB7) & (ff < 0xC0))
 		{

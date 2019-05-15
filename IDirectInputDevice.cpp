@@ -57,13 +57,13 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::EnumCreatedEffectObjects(LPD
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::EnumEffects(LPDIENUMEFFECTSCALLBACK lpCallback, LPVOID pvRef, DWORD dwEffType)
 {
-	if (pDeviceA)	return pDeviceA->EnumEffects((LPDIENUMEFFECTSCALLBACKA) lpCallback, pvRef, dwEffType);
+	if (pDeviceA)	return pDeviceA->EnumEffects((LPDIENUMEFFECTSCALLBACKA)lpCallback, pvRef, dwEffType);
 	return pDeviceW->EnumEffects(lpCallback, pvRef, dwEffType);
 }
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::EnumEffectsInFile(LPCTSTR lptszFileName, LPDIENUMEFFECTSINFILECALLBACK pec, LPVOID pvRef, DWORD dwFlags)
 {
-	if (pDeviceA)	return pDeviceA->EnumEffectsInFile((LPCSTR) lptszFileName, pec, pvRef, dwFlags);
+	if (pDeviceA)	return pDeviceA->EnumEffectsInFile((LPCSTR)lptszFileName, pec, pvRef, dwFlags);
 	return pDeviceW->EnumEffectsInFile(lptszFileName, pec, pvRef, dwFlags);
 }
 
@@ -81,8 +81,18 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::Escape(LPDIEFFESCAPE pesc)
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetCapabilities(LPDIDEVCAPS lpDIDevCaps)
 {
-	if (pDeviceA)	return pDeviceA->GetCapabilities(lpDIDevCaps);
-	return pDeviceW->GetCapabilities(lpDIDevCaps);
+	wchar_t *settingsFilenameA = TEXT(".\\FFBPlugin.ini");
+	int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 1, settingsFilenameA);
+	if (configGameId == 29)
+	{
+		if (pDeviceA)	return pDeviceA->GetCapabilities(NULL);
+		return pDeviceW->GetCapabilities(lpDIDevCaps);
+	}
+	else
+	{
+		if (pDeviceA)	return pDeviceA->GetCapabilities(lpDIDevCaps);
+		return pDeviceW->GetCapabilities(lpDIDevCaps);
+	}	
 }
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetDeviceData(DWORD cbObjectData, LPDIDEVICEOBJECTDATA rgdod, LPDWORD pdwInOut, DWORD dwFlags)
@@ -93,7 +103,7 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetDeviceData(DWORD cbObject
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetDeviceInfo(LPDIDEVICEINSTANCE pdidi)
 {
-	if (pDeviceA)	return pDeviceA->GetDeviceInfo((LPDIDEVICEINSTANCEA) pdidi);
+	if (pDeviceA)	return pDeviceA->GetDeviceInfo((LPDIDEVICEINSTANCEA)pdidi);
 	return pDeviceW->GetDeviceInfo(pdidi);
 }
 
@@ -105,7 +115,7 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetDeviceState(DWORD cbData,
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetEffectInfo(LPDIEFFECTINFO pdei, REFGUID rguid)
 {
-	if (pDeviceA)	return pDeviceA->GetEffectInfo((LPDIEFFECTINFOA) pdei, rguid);
+	if (pDeviceA)	return pDeviceA->GetEffectInfo((LPDIEFFECTINFOA)pdei, rguid);
 	return pDeviceW->GetEffectInfo(pdei, rguid);
 }
 
@@ -117,7 +127,7 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetForceFeedbackState(LPDWOR
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetObjectInfo(LPDIDEVICEOBJECTINSTANCE pdidoi, DWORD dwObj, DWORD dwHow)
 {
-	if (pDeviceA)	return pDeviceA->GetObjectInfo((LPDIDEVICEOBJECTINSTANCEA) pdidoi, dwObj, dwHow);
+	if (pDeviceA)	return pDeviceA->GetObjectInfo((LPDIDEVICEOBJECTINSTANCEA)pdidoi, dwObj, dwHow);
 	return pDeviceW->GetObjectInfo(pdidoi, dwObj, dwHow);
 }
 
@@ -199,7 +209,7 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::Unacquire(void)
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::WriteEffectToFile(LPCTSTR lptszFileName, DWORD dwEntries, LPDIFILEEFFECT rgDiFileEft, DWORD dwFlags)
 {
-	if (pDeviceA)	return pDeviceA->WriteEffectToFile((LPCSTR) lptszFileName, dwEntries, rgDiFileEft, dwFlags);
+	if (pDeviceA)	return pDeviceA->WriteEffectToFile((LPCSTR)lptszFileName, dwEntries, rgDiFileEft, dwFlags);
 	return pDeviceW->WriteEffectToFile(lptszFileName, dwEntries, rgDiFileEft, dwFlags);
 }
 
@@ -207,13 +217,13 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::WriteEffectToFile(LPCTSTR lp
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::BuildActionMap(LPDIACTIONFORMAT lpdiaf, LPCTSTR lpszUserName, DWORD dwFlags)
 {
-	if (pDeviceA)	return pDeviceA->BuildActionMap((LPDIACTIONFORMATA) lpdiaf, (LPCSTR) lpszUserName, dwFlags);
+	if (pDeviceA)	return pDeviceA->BuildActionMap((LPDIACTIONFORMATA)lpdiaf, (LPCSTR)lpszUserName, dwFlags);
 	return pDeviceW->BuildActionMap(lpdiaf, lpszUserName, dwFlags);
 }
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetImageInfo(LPDIDEVICEIMAGEINFOHEADER lpdiDevImageInfoHeader)
 {
-	if (pDeviceA)	return pDeviceA->GetImageInfo((LPDIDEVICEIMAGEINFOHEADERA) lpdiDevImageInfoHeader);
+	if (pDeviceA)	return pDeviceA->GetImageInfo((LPDIDEVICEIMAGEINFOHEADERA)lpdiDevImageInfoHeader);
 	return pDeviceW->GetImageInfo(lpdiDevImageInfoHeader);
 }
 
