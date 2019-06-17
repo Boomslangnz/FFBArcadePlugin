@@ -1,5 +1,8 @@
 #include "IDirectInputDevice.h"
 
+wchar_t *settingsFilenameA = TEXT(".\\FFBPlugin.ini");
+static int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 1, settingsFilenameA);
+
 DirectInputDeviceWrapper::DirectInputDeviceWrapper(LPVOID device, bool unicode)
 {
 	useUnicode = unicode;
@@ -81,8 +84,6 @@ HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::Escape(LPDIEFFESCAPE pesc)
 
 HRESULT STDMETHODCALLTYPE DirectInputDeviceWrapper::GetCapabilities(LPDIDEVCAPS lpDIDevCaps)
 {
-	wchar_t *settingsFilenameA = TEXT(".\\FFBPlugin.ini");
-	int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 1, settingsFilenameA);
 	if (configGameId == 29)
 	{
 		if (pDeviceA)	return pDeviceA->GetCapabilities(NULL);
