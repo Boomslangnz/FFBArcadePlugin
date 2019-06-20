@@ -3,6 +3,9 @@
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
+
+static bool init = false;
+
 static int __stdcall Out32(DWORD device, DWORD data)
 {
 	if (device == 0x378)
@@ -49,7 +52,6 @@ static bool Hook(void * toHook, void * ourFunct, int len) {
 static DWORD jmpBackAddy;
 
 void FordRacingOther::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-	bool init = false;
 	HMODULE hMod = GetModuleHandleA("inpout32.dll");
 	if (hMod)
 	{

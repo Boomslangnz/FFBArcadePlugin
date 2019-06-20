@@ -14,6 +14,8 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Fixed issue where M2 Emulator wouldn't close correctly while using FFB Plugin
 
+- Added FFB support for Ford Racing to non-TP loaders (use FordRacingOther plugin)
+
 ***0.9a Changes***
 
 - Fixed issue where MAME plugins would not load
