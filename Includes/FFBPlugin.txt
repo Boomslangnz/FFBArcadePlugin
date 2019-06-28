@@ -239,7 +239,7 @@ extremely generous.
 
 ***SUPPORTED GAMES***
 
--Afterburner Climax (Rumble only) [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Afterburner Climax (Rumble only) [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Battle Gear 4 Tuned (Japan version v2.07) [d3d9.dll into game exe folder]
 
@@ -253,11 +253,11 @@ extremely generous.
 
 -Indy 500 [dinput8.dll into m2 emulator 1.1a folder]
 
--Initial D4 [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D4 [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
--Initial D4 Japan [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D4 Japan [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
--Initial D5 [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D5 [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Initial D6 [dinput8.dll into game exe folder]
 
@@ -283,7 +283,7 @@ extremely generous.
 
 -Sonic & Sega All Stars Racing [d3d9.dll into game exe folder]
 
--Outrun 2 Special Tours Deluxe [opengl32.dll into Teknoparrot folder, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Outrun 2 Special Tours Deluxe [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Over Rev [dinput8.dll into m2 emulator 1.1a folder]
 
