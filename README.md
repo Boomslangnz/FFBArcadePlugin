@@ -1,4 +1,4 @@
-# FFBPlugin
+# FFBArcadePlugin
 
 C++ plugin for adding force feedback support to arcade games.
 
