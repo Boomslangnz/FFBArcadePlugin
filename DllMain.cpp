@@ -52,6 +52,7 @@
 #include "Game Files/LGI.h"
 #include "Game Files/Mame020632bit.h"
 #include "Game Files/Mame020664bit.h"
+#include "Game Files/KODrive.h"
 
 // typedefs 
 typedef unsigned char U8;
@@ -917,6 +918,7 @@ const int OUTRUN_2Real = 35;
 const int Button_Rumble64bit = 36;
 const int GRID_ = 37;
 const int FORD_RACING_OTHER = 38;
+const int KO_Drive = 39;
 
 HINSTANCE Get_hInstance()
 {
@@ -1081,7 +1083,7 @@ void TriggerConstantEffect(int direction, double strength)
 {
 	if (AlternativeFFB == 1)
 	{
-		/*std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
 		int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
 		std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
@@ -1091,7 +1093,7 @@ void TriggerConstantEffect(int direction, double strength)
 			return; // same effect, do nothing.
 		}
 
-		 TODO: investigate if we need this
+		// TODO: investigate if we need this
 		if (configResetFeedback || strength <= 0.001) {
 			SDL_HapticStopEffect(haptic, effects.effect_left_id);
 			SDL_HapticStopEffect(haptic, effects.effect_right_id);
@@ -1100,7 +1102,7 @@ void TriggerConstantEffect(int direction, double strength)
 				lastConstantEffectHash = effectHash;
 				return;
 			}
-		}*/
+		}
 		SDL_HapticEffect tempEffect;
 		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 		tempEffect.type = SDL_HAPTIC_CONSTANT;
@@ -1133,12 +1135,12 @@ void TriggerConstantEffect(int direction, double strength)
 			SDL_HapticUpdateEffect(haptic, effects.effect_right_id, &tempEffect);
 			SDL_HapticRunEffect(haptic, effects.effect_right_id, 1);
 		}
-		/*timeOfLastConstantEffect = now;
-		lastConstantEffectHash = effectHash;*/
+		timeOfLastConstantEffect = now;
+		lastConstantEffectHash = effectHash;
 	}
 	else
 	{
-	  /*std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	  std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
 		int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
 		std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
@@ -1157,7 +1159,7 @@ void TriggerConstantEffect(int direction, double strength)
 				lastConstantEffectHash = effectHash;
 				return;
 			}
-		}*/
+		}
 
 		SDL_HapticEffect tempEffect;
 		
@@ -1177,8 +1179,8 @@ void TriggerConstantEffect(int direction, double strength)
 		SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
 		SDL_HapticRunEffect(haptic, effects.effect_id, 1);
 
-		/*timeOfLastConstantEffect = now;
-		lastConstantEffectHash = effectHash;*/
+		timeOfLastConstantEffect = now;
+		lastConstantEffectHash = effectHash;
 	}
 }
 
@@ -1730,6 +1732,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case MAME_020664bit:
 		game = new Mame020664bit;
+		break;
+	case KO_Drive:
+		game = new KODrive;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

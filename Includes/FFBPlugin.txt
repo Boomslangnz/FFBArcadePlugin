@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.0
+Version 0.9c
 
 Created by Boomslangnz, Ducon2016 & Spazzy.
 
@@ -10,11 +10,17 @@ While best efforts were made to try to resemble the real arcade force feedback, 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
 
-***1.0 Changes***
+***0.9c Changes***
+
+- Added FFB Support for KO Drive
+
+***0.9b Changes***
 
 - Fixed issue where M2 Emulator wouldn't close correctly while using FFB Plugin
 
 - Added FFB support for Ford Racing to non-TP loaders (use FordRacingOther plugin)
+
+- Fixed wrong SDL2.dll file with WMMT5 on last release (sorry)
 
 ***0.9a Changes***
 
@@ -319,6 +325,8 @@ TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBAC
 -Let's Go Island [d3d9.dll into game exe folder]
 
 -Let's Go Island 3D [d3d9.dll into game exe folder]
+
+-KO Drive [d3d9.dll into game exe folder]
 
 
 ***HOW TO USE***

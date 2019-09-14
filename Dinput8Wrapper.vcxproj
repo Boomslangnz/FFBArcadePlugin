@@ -22,6 +22,7 @@
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\ButtonRumble64bit.h" />
     <ClInclude Include="Game Files\GRID.h" />
+    <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
     <ClInclude Include="Game Files\Mame019964bit.h" />
     <ClInclude Include="Game Files\Mame020664bit.h" />
@@ -47,6 +48,7 @@
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\ButtonRumble64bit.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
+    <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\Mame019964bit.cpp" />
     <ClCompile Include="Game Files\Mame020664bit.cpp" />
