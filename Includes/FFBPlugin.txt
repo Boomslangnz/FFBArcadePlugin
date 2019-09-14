@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 0.9c
+Version 1.0
 
 Created by Boomslangnz, Ducon2016 & Spazzy.
 
@@ -9,6 +9,23 @@ to add FFB to Daytona Championship USA and it grew from there to support several
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
+
+***1.0 Changes***
+
+- Made Code Open Source (Good luck trying to decipher my poor coding)
+
+https://nodejs.org/en/ Install this if you want to auto build into named folders etc
+
+FFB Arcade Plugin is free software : you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+FFB Arcade Plugin is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 ***0.9c Changes***
 
