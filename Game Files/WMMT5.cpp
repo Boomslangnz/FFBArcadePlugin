@@ -66,8 +66,8 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		triggers->LeftRight(0, percentForce, percentLength);
 //		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 
-		double percentForce2 = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
-		triggers->Sine(100, 120, percentForce2);
+		percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
+		triggers->Sine(100, 120, percentForce);
 	}
 	if (0 < tiresSlip)
 	{
