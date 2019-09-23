@@ -44,7 +44,7 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	}
 	if (0 < friction)
 	{
-		double percentForce = (1.0 - friction) * FrictionStrengthWMMT5 / 100.0;
+		double percentForce = (1.0 * friction) * FrictionStrengthWMMT5 / 100.0;
 		triggers->Friction(percentForce);
 	}
 	if (0 < collisions)
