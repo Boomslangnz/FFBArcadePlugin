@@ -20,6 +20,7 @@ int FrictionStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Frictio
 int CollisionsStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("CollisionsStrength"), 0, settingsWMMT5);
 int TiresSlipStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("TiresSlipStrength"), 0, settingsWMMT5);
 int HighhSpeedVibrationsStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("HighhSpeedVibrationsStrength"), 0, settingsWMMT5);
+int LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("LimitBetweenHighSpeedVibrationsAndTiresSlip"), 0, settingsWMMT5);
 
 void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
@@ -72,14 +73,14 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	if (0 < tiresSlip)
 	{
 		helpers->log("tires slip left");
-		bool highSpeedVibrations = tiresSlip < 0.06;
+		bool highSpeedVibrations = (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 / 1000.0);
 		double percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
 		triggers->Sine(highSpeedVibrations ? 100 : 120, 120, percentForce);
 	}
 	else if (0 > tiresSlip)
 	{
 		helpers->log("tires slip right");
-		bool highSpeedVibrations = tiresSlip > -0.06;
+		bool highSpeedVibrations = (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 / 1000.0);
 		double percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
 		triggers->Sine(highSpeedVibrations ? 100 : 120, 120, percentForce);
 	}
