@@ -52,23 +52,19 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	{
 		helpers->log("collision on the left");
 		double percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
-		double percentLength = (250);
-		// direction from right => makes wheel turn left
-		triggers->LeftRight(percentForce, 0, percentLength);
-//		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		triggers->Sine(100, 120, percentForce);
+
+		double percentLength = (150);
+		triggers->LeftRight(0, percentForce, percentLength);
 	}
 	else if (0 > collisions)
 	{
 		helpers->log("collision on the right");
-		double percentForce = (-1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
-		double percentLength = (250);
-		// direction from left => makes wheel turn right
-		triggers->LeftRight(0, percentForce, percentLength);
-//		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-
-		percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
+		double percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
 		triggers->Sine(100, 120, percentForce);
+
+		double percentLength = (150);
+		triggers->LeftRight(0, -1.0 * percentForce, percentLength);
 	}
 	if (0 < tiresSlip)
 	{
@@ -76,6 +72,13 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		bool highSpeedVibrations = (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 / 1000.0);
 		double percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
 		triggers->Sine(highSpeedVibrations ? 100 : 120, 120, percentForce);
+
+		if (0 == CollisionsStrengthWMMT5 || (0.001 > collisions && -0.001 < collisions))
+		{
+			percentForce *= -1.0;
+			double percentLength = (150);
+			triggers->LeftRight(highSpeedVibrations ? percentForce : 0, highSpeedVibrations ? 0 : percentForce, percentLength);
+		}
 	}
 	else if (0 > tiresSlip)
 	{
@@ -83,5 +86,11 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		bool highSpeedVibrations = (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 / 1000.0);
 		double percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
 		triggers->Sine(highSpeedVibrations ? 100 : 120, 120, percentForce);
+
+		if (0 == CollisionsStrengthWMMT5 || (0.001 > collisions && -0.001 < collisions))
+		{
+			double percentLength = (150);
+			triggers->LeftRight(highSpeedVibrations ? percentForce : 0, highSpeedVibrations ? 0 : percentForce, percentLength);
+		}
 	}
 }
