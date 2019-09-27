@@ -41,10 +41,7 @@ static int Gear6 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear6"), 0, sett
 void SendForceFeedback(__int8 force)
 {
 	float ffspeed = myHelpers->ReadFloat32(0x08273DF0, /* isRelativeOffset */ false); //speedo
-	/*char gay[256];
-	memset(gay, 0, 256);
-	sprintf(gay, "hex print: %08X", force);
-	OutputDebugStringA(gay);*/
+
 	if ((force == 0x10) || (force == 0x0B) || (force == 0x04))
 	{
 		double percentForce = SpeedStrength / 100.0;

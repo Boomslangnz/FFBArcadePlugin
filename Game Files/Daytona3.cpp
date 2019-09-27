@@ -125,13 +125,6 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 	helpers->log((char *)ffs.c_str());
 	while (SDL_WaitEvent(&e) != 0)
 	{		
-		/*	if (e.type == SDL_KEYDOWN)
-		{
-		if (e.key.keysym.sym == SDLK_ESCAPE)
-		{
-		MessageBoxA(NULL, "test", "", 0);
-		}
-		} */
 		myTriggers = triggers;
 		myConstants = constants;
 		myHelpers = helpers;
