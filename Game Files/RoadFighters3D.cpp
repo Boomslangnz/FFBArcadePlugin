@@ -252,6 +252,7 @@ static int RunningThread(void *ptr)
 				}
 			}						
 		}
+		Sleep(300);
 	}
 	return 0;
 }

@@ -252,6 +252,7 @@ static int RunningThread(void *ptr)
 		}
 		oldFloat = newFloat;
 		oldFloat1 = newFloat1;
+		Sleep(300);
 	}
 	return 0;
 }

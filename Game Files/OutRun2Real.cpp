@@ -148,6 +148,7 @@ static int RunningThread(void *ptr)
 			myTriggers->LeftRight(percentForce, percentForce, percentLength);
 		}
 		oldgear = newgear;
+		Sleep(300);
 	}
 	return 0;
 }
