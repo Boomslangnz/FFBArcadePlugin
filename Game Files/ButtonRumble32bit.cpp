@@ -96,76 +96,23 @@ void ButtonRumble32bit::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 				SDL_HapticRumbleInit(ControllerHaptic2);
 			}
 		}
+
 		if (ShowButtonNumbersForSetup == 1)
 		{
 			if (e.type == SDL_JOYBUTTONDOWN)
 			{
-				if (e.jbutton.button == 0)
+				if (e.jaxis.which == joystick_index1 || e.jaxis.which == joystick_index2)
 				{
-					MessageBoxA(NULL, "Button 0 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 1)
-				{
-					MessageBoxA(NULL, "Button 1 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 2)
-				{
-					MessageBoxA(NULL, "Button 2 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 3)
-				{
-					MessageBoxA(NULL, "Button 3 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 4)
-				{
-					MessageBoxA(NULL, "Button 4 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 5)
-				{
-					MessageBoxA(NULL, "Button 5 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 6)
-				{
-					MessageBoxA(NULL, "Button 6 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 7)
-				{
-					MessageBoxA(NULL, "Button 7 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 8)
-				{
-					MessageBoxA(NULL, "Button 8 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 9)
-				{
-					MessageBoxA(NULL, "Button 9 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 10)
-				{
-					MessageBoxA(NULL, "Button 10 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 11)
-				{
-					MessageBoxA(NULL, "Button 11 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 12)
-				{
-					MessageBoxA(NULL, "Button 12 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 13)
-				{
-					MessageBoxA(NULL, "Button 13 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 14)
-				{
-					MessageBoxA(NULL, "Button 14 Pressed", "", 0);
-				}
-				else if (e.jbutton.button == 15)
-				{
-					MessageBoxA(NULL, "Button 15 Pressed", "", 0);
+					if (e.jbutton.button >= 0)
+					{
+						char buff[100];
+						sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
+						MessageBoxA(NULL, buff, "", NULL);
+					}
 				}
 			}
 		}
+
 		if (e.type == SDL_JOYBUTTONDOWN)
 		{
 			if (e.jaxis.which == joystick_index1)

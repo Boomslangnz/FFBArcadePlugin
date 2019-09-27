@@ -523,154 +523,26 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 				}
 			}
 
-
 			if (ShowAxisForSetup == 1)
 			{
 				if (e.type == SDL_JOYAXISMOTION)
 				{
 					if (e.jaxis.which == joystick_index1)
 					{
-						if (e.jaxis.axis == 0)
+						if (e.jaxis.axis >= 0)
 						{
 							if (e.jaxis.value < -SETUP_DEAD_ZONE)
 							{
 								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 0 Moved", "", 0);
+								char buff[100];
+								sprintf_s(buff, "Axis %d Moved", e.jaxis.axis);
+								MessageBoxA(NULL, buff, "", NULL);
 							}
 							else if (e.jaxis.value > SETUP_DEAD_ZONE)
 							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 0 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 1)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 1 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 1 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 2)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 2 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 2 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 3)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 3 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 3 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 4)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 4 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 4 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 5)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 5 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 5 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 6)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 6 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 6 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 7)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 7 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 7 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 8)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 8 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 8 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 9)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 9 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 9 Moved", "", 0);
-							}
-						}
-						else if (e.jaxis.axis == 10)
-						{
-							if (e.jaxis.value < -SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value - SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 10 Moved", "", 0);
-							}
-							else if (e.jaxis.value > SETUP_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value + SETUP_DEAD_ZONE;
-								MessageBoxA(NULL, "Axis 10 Moved", "", 0);
+								char buff[100];
+								sprintf_s(buff, "Axis %d Moved", e.jaxis.axis);
+								MessageBoxA(NULL, buff, "", NULL);
 							}
 						}
 					}
@@ -683,69 +555,11 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 				{
 					if (e.jaxis.which == joystick_index1 || e.jaxis.which == joystick_index2)
 					{
-						if (e.jbutton.button == 0)
+						if (e.jbutton.button >= 0)
 						{
-							MessageBoxA(NULL, "Button 0 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 1)
-						{
-							MessageBoxA(NULL, "Button 1 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 2)
-						{
-							MessageBoxA(NULL, "Button 2 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 3)
-						{
-							MessageBoxA(NULL, "Button 3 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 4)
-						{
-							MessageBoxA(NULL, "Button 4 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 5)
-						{
-							MessageBoxA(NULL, "Button 5 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 6)
-						{
-							MessageBoxA(NULL, "Button 6 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 7)
-						{
-							MessageBoxA(NULL, "Button 7 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 8)
-						{
-							MessageBoxA(NULL, "Button 8 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 9)
-						{
-							MessageBoxA(NULL, "Button 9 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 10)
-						{
-							MessageBoxA(NULL, "Button 10 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 11)
-						{
-							MessageBoxA(NULL, "Button 11 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 12)
-						{
-							MessageBoxA(NULL, "Button 12 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 13)
-						{
-							MessageBoxA(NULL, "Button 13 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 14)
-						{
-							MessageBoxA(NULL, "Button 14 Pressed", "", 0);
-						}
-						else if (e.jbutton.button == 15)
-						{
-							MessageBoxA(NULL, "Button 15 Pressed", "", 0);
+							char buff[100];
+							sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
+							MessageBoxA(NULL, buff, "", NULL);
 						}
 					}
 				}
