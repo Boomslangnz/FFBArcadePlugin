@@ -1129,7 +1129,11 @@ void TriggerConstantEffect(int direction, double strength)
 			SHORT minForce = (SHORT)(strength > 0.001 ? (configAlternativeMinForceLeft / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 			SHORT maxForce = (SHORT)(configAlternativeMaxForceLeft / 100.0 * 32767.0);
 			SHORT range = maxForce - minForce;
-			SHORT level = (SHORT)(strength * range - minForce);
+			SHORT level = (SHORT)(strength * range + minForce);
+			if (level > 0)
+			{
+				level = -32767;
+			}
 			tempEffect.constant.level = level;
 			hlp.log((char *)(std::to_string(level)).c_str());
 			SDL_HapticUpdateEffect(haptic, effects.effect_left_id, &tempEffect);
@@ -1144,6 +1148,10 @@ void TriggerConstantEffect(int direction, double strength)
 			SHORT maxForce = (SHORT)(configAlternativeMaxForceRight / 100.0 * 32767.0);
 			SHORT range = maxForce - minForce;
 			SHORT level = (SHORT)(strength * range + minForce);
+			if (level < 0)
+			{
+				level = 32767;
+			}
 			tempEffect.constant.level = level;
 			hlp.log((char *)(std::to_string(level)).c_str());
 			SDL_HapticUpdateEffect(haptic, effects.effect_right_id, &tempEffect);
@@ -1300,13 +1308,33 @@ void TriggerTriangleEffect(double strength, double length)
 	tempEffect.condition.direction.dir[0] = direction;
 	tempEffect.condition.direction.dir[1] = 0; //Y Position
 	tempEffect.periodic.period = 500;
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+
+	int confMinForce = configMinForce;
+	int confMaxForce = configMaxForce;
+	if (AlternativeFFB == 1)
+	{
+		if (direction == -1)
+		{
+			confMinForce = configAlternativeMinForceLeft;
+			confMaxForce = configAlternativeMaxForceLeft;
+		}
+		else
+		{
+			confMinForce = configAlternativeMinForceRight;
+			confMaxForce = configAlternativeMaxForceRight;
+		}
+	}
+	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT power = (SHORT)(strength * range + minForce);
-	if (power < 0)
+	if (range > 0 && power < 0)
 	{
 		power = 32767;
+	}
+	else if (range < 0 && power > 0)
+	{
+		power = -32767;
 	}
 	tempEffect.periodic.magnitude = power;
 	tempEffect.periodic.length = length;
@@ -1473,13 +1501,32 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	tempEffect.constant.direction.dir[1] = 0; //Y Position
 	tempEffect.periodic.period = period;
 
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	int confMinForce = configMinForce;
+	int confMaxForce = configMaxForce;
+	if (AlternativeFFB == 1)
+	{
+		if (direction == -1)
+		{
+			confMinForce = configAlternativeMinForceLeft;
+			confMaxForce = configAlternativeMaxForceLeft;
+		}
+		else
+		{
+			confMinForce = configAlternativeMinForceRight;
+			confMaxForce = configAlternativeMaxForceRight;
+		}
+	}
+	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT magnitude = (SHORT)(strength * range + minForce);
-	if (magnitude < 0)
+	if (range > 0 && magnitude < 0)
 	{
 		magnitude = 32767;
+	}
+	else if (range < 0 && magnitude > 0)
+	{
+		magnitude = -32767;
 	}
 
 	tempEffect.periodic.magnitude = (SHORT)(magnitude);
