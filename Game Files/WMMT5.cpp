@@ -15,8 +15,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "WMMT5.h"
 
 wchar_t* settingsWMMT5 = TEXT(".\\FFBPlugin.ini");
+bool gameFfbStarted = false;
 int SpringStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 0, settingsWMMT5);
 int FrictionStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FrictionStrength"), 0, settingsWMMT5);
+int JointsAndStripesStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("JointsAndStripesStrength"), 0, settingsWMMT5);
 int CollisionsStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("CollisionsStrength"), 0, settingsWMMT5);
 int TiresSlipStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("TiresSlipStrength"), 0, settingsWMMT5);
 int HighhSpeedVibrationsStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("HighhSpeedVibrationsStrength"), 0, settingsWMMT5);
@@ -38,59 +40,87 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	ffs = "tires slip: " + std::to_string(tiresSlip);
 	helpers->log((char*)ffs.c_str());
 
+	double percentForce;
 	if (0 < spring)
 	{
-		double percentForce = (1.0 * spring) * SpringStrengthWMMT5 / 100.0;
+		if (!gameFfbStarted)
+		{
+			helpers->log("game's FFB started");
+			gameFfbStarted = true;
+		}
+		percentForce = (1.0 * spring) * SpringStrengthWMMT5 / 100.0;
 		triggers->Spring(percentForce);
+	}
+	else if (!gameFfbStarted)
+	{
+		helpers->log("fake spring/friction until game's FFB starts");
+		percentForce = 0.4 * SpringStrengthWMMT5 / 100.0;
+		triggers->Spring(percentForce);
+		percentForce = 0.5 * FrictionStrengthWMMT5 / 100.0;
+		triggers->Friction(percentForce);
 	}
 	if (0 < friction)
 	{
-		double percentForce = (1.0 * friction) * FrictionStrengthWMMT5 / 100.0;
+		percentForce = (1.0 * friction) * FrictionStrengthWMMT5 / 100.0;
 		triggers->Friction(percentForce);
 	}
 	if (0 < collisions)
 	{
-		helpers->log("collision on the left");
-		double percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
-		triggers->Sine(100, 120, percentForce);
-
-		double percentLength = (150);
-		triggers->LeftRight(0, percentForce, percentLength);
+		if (0.209 <= collisions && 0.311 >= collisions)
+		{
+			helpers->log("joint/stripe on the right");
+			percentForce = (1.0 * collisions) * JointsAndStripesStrengthWMMT5 / 100.0;
+			triggers->Sine(80, 80, percentForce);
+			triggers->LeftRight(0, percentForce, 150);
+		}
+		else
+		{
+			helpers->log("collision on the right");
+			percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			triggers->LeftRight(0, percentForce, 150);
+		}
 	}
 	else if (0 > collisions)
 	{
-		helpers->log("collision on the right");
-		double percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
-		triggers->Sine(100, 120, percentForce);
+		if (-0.209 >= collisions && -0.311 <= collisions)
+		{
+			helpers->log("joint/stripe on the left");
+			percentForce = (1.0 * collisions) * JointsAndStripesStrengthWMMT5 / 100.0;
+			triggers->Sine(80, 80, percentForce);
+			triggers->LeftRight(0, -1.0 * percentForce, 150);
+		}
+		else
+		{
+			helpers->log("collision on the left");
+			percentForce = (-1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			triggers->LeftRight(0, percentForce, 150);
+		}
 
-		double percentLength = (150);
-		triggers->LeftRight(0, -1.0 * percentForce, percentLength);
 	}
 	if (0 < tiresSlip)
 	{
 		helpers->log("tires slip left");
 		bool highSpeedVibrations = (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 / 1000.0);
-		double percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
-		triggers->Sine(highSpeedVibrations ? 100 : 120, 120, percentForce);
+		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
+		triggers->Sine(100, 100, percentForce);
 
-		if (0 == CollisionsStrengthWMMT5 || (0.001 > collisions && -0.001 < collisions))
+		if ((0 == JointsAndStripesStrengthWMMT5 && 0 == CollisionsStrengthWMMT5) || (0.001 > collisions && -0.001 < collisions))
 		{
-			percentForce *= -1.0;
-			double percentLength = (150);
-			triggers->LeftRight(highSpeedVibrations ? percentForce : 0, highSpeedVibrations ? 0 : percentForce, percentLength);
+			triggers->LeftRight(highSpeedVibrations ? (-1.0 * percentForce) : 0, highSpeedVibrations ? 0 : (-1.0 * percentForce), 150);
 		}
 	}
 	else if (0 > tiresSlip)
 	{
 		helpers->log("tires slip right");
 		bool highSpeedVibrations = (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 / 1000.0);
-		double percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
-		triggers->Sine(highSpeedVibrations ? 100 : 120, 120, percentForce);
+		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
+		triggers->Sine(100, 100, percentForce);
 
-		if (0 == CollisionsStrengthWMMT5 || (0.001 > collisions && -0.001 < collisions))
+		if ((0 == JointsAndStripesStrengthWMMT5 && 0 == CollisionsStrengthWMMT5) || (0.001 > collisions && -0.001 < collisions))
 		{
-			double percentLength = (150);
-			triggers->LeftRight(highSpeedVibrations ? percentForce : 0, highSpeedVibrations ? 0 : percentForce, percentLength);
+			triggers->LeftRight(highSpeedVibrations ? percentForce : 0, highSpeedVibrations ? 0 : percentForce, 150);
 		}
 	}
 }

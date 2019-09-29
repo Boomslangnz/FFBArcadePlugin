@@ -1090,8 +1090,8 @@ std::chrono::milliseconds timeOfLastSineEffect = duration_cast<milliseconds>(sys
 std::chrono::milliseconds timeOfLastSpringEffect = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 std::string lastConstantEffectHash = "";
 std::string lastFrictionEffectHash = "";
-std::string lastSineEffectHash = "";
 double lastSineEffectStrength = 0;
+double lastSineEffectPeriod = 0;
 std::string lastSpringEffectHash = "";
 void TriggerConstantEffect(int direction, double strength)
 {
@@ -1464,12 +1464,6 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 {
 	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffect)).count();
-	std::string effectHash = std::to_string(effects.effect_sine_id) + "_" + std::to_string(period) + "_" + std::to_string(fadePeriod) + "_" + std::to_string(strength);
-
-	// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-	if (effectHash.compare(lastSineEffectHash) == 0 && elapsedTime < configFeedbackLength) {
-		return; // same effect, do nothing.
-	}
 
 	int direction = 1;
 	if (strength <= -0.001) {
@@ -1477,19 +1471,19 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 		direction = -1;
 	}
 
-	if (strength < (lastSineEffectStrength / 2.0) && elapsedTime < configFeedbackLength) {
-		return; // we prevent interruption of previous vibrations by a vibration a lot less strong.
+	// we ignore new effect until the last one is completed, unless the new one is significantly stronger
+	if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 2.0)) {
+		return;
 	}
 
-	// TODO: investigate if we need this
-	if (configResetFeedback || strength <= 0.001) {
+	// if no strength, we do nothing
+	if (strength <= 0.001) {
+		return;
+	}
+
+	// stop previous sine if not completed
+	if (configResetFeedback) {
 		SDL_HapticStopEffect(haptic, effects.effect_sine_id);
-		if (strength <= 0.01) {
-			timeOfLastSineEffect = now;
-			lastSineEffectHash = effectHash;
-			lastSineEffectStrength = strength;
-			return;
-		}
 	}
 
 	SDL_HapticEffect tempEffect;
@@ -1530,7 +1524,7 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	}
 
 	tempEffect.periodic.magnitude = (SHORT)(magnitude);
-	tempEffect.periodic.length = configFeedbackLength;
+	tempEffect.periodic.length = period;
 	tempEffect.periodic.attack_length = fadePeriod;
 	tempEffect.periodic.fade_length = fadePeriod;
 
@@ -1541,8 +1535,8 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	hlp.log((char *)std::to_string(supported).c_str());*/
 
 	timeOfLastSineEffect = now;
-	lastSineEffectHash = effectHash;
 	lastSineEffectStrength = strength;
+	lastSineEffectPeriod = period;
 }
 
 void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
