@@ -71,14 +71,14 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			helpers->log("joint/stripe on the right");
 			percentForce = (1.0 * collisions) * JointsAndStripesStrengthWMMT5 / 100.0;
 			triggers->Sine(80, 80, percentForce);
-			triggers->LeftRight(0, percentForce, 100);
+			triggers->LeftRight(0, percentForce, 150);
 		}
 		else
 		{
 			helpers->log("collision on the right");
 			percentForce = (1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			triggers->LeftRight(0, percentForce, 100);
+			triggers->LeftRight(0, percentForce, 150);
 		}
 	}
 	else if (0 > collisions)
@@ -88,14 +88,14 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			helpers->log("joint/stripe on the left");
 			percentForce = (1.0 * collisions) * JointsAndStripesStrengthWMMT5 / 100.0;
 			triggers->Sine(80, 80, percentForce);
-			triggers->LeftRight(0, -1.0 * percentForce, 100);
+			triggers->LeftRight(0, -1.0 * percentForce, 150);
 		}
 		else
 		{
 			helpers->log("collision on the left");
 			percentForce = (-1.0 * collisions) * CollisionsStrengthWMMT5 / 100.0;
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			triggers->LeftRight(0, percentForce, 100);
+			triggers->LeftRight(0, percentForce, 150);
 		}
 
 	}
@@ -106,9 +106,9 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
 		triggers->Sine(100, 100, percentForce);
 
-		if ((0 == JointsAndStripesStrengthWMMT5 && 0 == CollisionsStrengthWMMT5) || (0.001 > collisions && -0.001 < collisions))
+		if (!highSpeedVibrations && ((0 == JointsAndStripesStrengthWMMT5 && 0 == CollisionsStrengthWMMT5) || (0.001 > collisions && -0.001 < collisions)))
 		{
-			triggers->LeftRight(highSpeedVibrations ? (-1.0 * percentForce) : 0, highSpeedVibrations ? 0 : (-1.0 * percentForce), 100);
+			triggers->LeftRight(0, -1.0 * percentForce, 150);
 		}
 	}
 	else if (0 > tiresSlip)
@@ -118,9 +118,9 @@ void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighhSpeedVibrationsStrengthWMMT5 : TiresSlipStrengthWMMT5) / 100.0;
 		triggers->Sine(100, 100, percentForce);
 
-		if ((0 == JointsAndStripesStrengthWMMT5 && 0 == CollisionsStrengthWMMT5) || (0.001 > collisions && -0.001 < collisions))
+		if (!highSpeedVibrations && ((0 == JointsAndStripesStrengthWMMT5 && 0 == CollisionsStrengthWMMT5) || (0.001 > collisions && -0.001 < collisions)))
 		{
-			triggers->LeftRight(highSpeedVibrations ? percentForce : 0, highSpeedVibrations ? 0 : percentForce, 100);
+			triggers->LeftRight(0, percentForce, 150);
 		}
 	}
 }
