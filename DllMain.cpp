@@ -1471,7 +1471,7 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 		direction = -1;
 	}
 
-	// we ignore new effect until the last one is completed, unless the new one is significantly stronger
+	// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
 	if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 2.0)) {
 		return;
 	}
@@ -1481,7 +1481,7 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 		return;
 	}
 
-	// stop previous sine if not completed
+	// stop previous effect if not completed
 	if (configResetFeedback) {
 		SDL_HapticStopEffect(haptic, effects.effect_sine_id);
 	}
