@@ -953,6 +953,8 @@ void Initialize(int device_index)
 	hlp.log("numJoysticks = ");
 	std::string njs = std::to_string(numJoysticks);
 	hlp.log((char *)njs.c_str());
+	char firstJoystickSelectedText[256];
+	SDL_Joystick* FirstGameController = NULL;
 	for (int i = 0; i< SDL_NumJoysticks(); i++)
 	{
 		SDL_Joystick* js = SDL_JoystickOpen(i);
@@ -979,8 +981,26 @@ void Initialize(int device_index)
 			joystick1Index = i;
 			GameController = SDL_JoystickOpen(i);
 			ControllerHaptic = SDL_HapticOpenFromJoystick(GameController);
-			break;
+			// We save the first controller matching the guid to select this one if no haptic controller with the same guid is found.
+			if (FirstGameController == NULL)
+			{
+				sprintf(firstJoystickSelectedText, "No haptic joystick found, selecting first joystick matching the GUID: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+				FirstGameController = GameController;
+			}
+			// We select the first haptic controller matching the guid.
+			if (ControllerHaptic != NULL)
+			{
+				sprintf(text, "Haptic joystick found: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+				hlp.log(text);
+				break;
+			}
 		}
+	}
+	// If no haptic controller has been found, we select the first controller matching the guid.
+	if (ControllerHaptic == NULL)
+	{
+		GameController = FirstGameController;
+		hlp.log(firstJoystickSelectedText);
 	}
 	haptic = ControllerHaptic;
 	if ((SDL_HapticRumbleSupported(haptic) == SDL_TRUE && EnableRumble == 1)) 
