@@ -1090,7 +1090,8 @@ std::chrono::milliseconds timeOfLastSineEffect = duration_cast<milliseconds>(sys
 std::chrono::milliseconds timeOfLastSpringEffect = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 std::string lastConstantEffectHash = "";
 std::string lastFrictionEffectHash = "";
-std::string lastSineEffectHash = "";
+double lastSineEffectStrength = 0;
+double lastSineEffectPeriod = 0;
 std::string lastSpringEffectHash = "";
 void TriggerConstantEffect(int direction, double strength)
 {
@@ -1128,7 +1129,11 @@ void TriggerConstantEffect(int direction, double strength)
 			SHORT minForce = (SHORT)(strength > 0.001 ? (configAlternativeMinForceLeft / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 			SHORT maxForce = (SHORT)(configAlternativeMaxForceLeft / 100.0 * 32767.0);
 			SHORT range = maxForce - minForce;
-			SHORT level = (SHORT)(strength * range - minForce);
+			SHORT level = (SHORT)(strength * range + minForce);
+			if (level > 0)
+			{
+				level = -32767;
+			}
 			tempEffect.constant.level = level;
 			hlp.log((char *)(std::to_string(level)).c_str());
 			SDL_HapticUpdateEffect(haptic, effects.effect_left_id, &tempEffect);
@@ -1143,6 +1148,10 @@ void TriggerConstantEffect(int direction, double strength)
 			SHORT maxForce = (SHORT)(configAlternativeMaxForceRight / 100.0 * 32767.0);
 			SHORT range = maxForce - minForce;
 			SHORT level = (SHORT)(strength * range + minForce);
+			if (level < 0)
+			{
+				level = 32767;
+			}
 			tempEffect.constant.level = level;
 			hlp.log((char *)(std::to_string(level)).c_str());
 			SDL_HapticUpdateEffect(haptic, effects.effect_right_id, &tempEffect);
@@ -1187,6 +1196,10 @@ void TriggerConstantEffect(int direction, double strength)
 		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 		SHORT range = maxForce - minForce;
 		SHORT level = (SHORT)(strength * range + minForce);
+		if (level < 0)
+		{
+			level = 32767;
+		}
 		tempEffect.constant.level = level;
 		hlp.log((char *)(std::to_string(level)).c_str());
 		SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
@@ -1224,6 +1237,7 @@ void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 	tempEffect.type = SDL_HAPTIC_FRICTION;
 	tempEffect.condition.type = SDL_HAPTIC_FRICTION;
+	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
 	tempEffect.condition.delay = 0;
 	tempEffect.condition.length = isDefault ? 0xFFFFFFFF : configFeedbackLength;
 	tempEffect.condition.left_sat[0] = 0xFFFF;
@@ -1233,6 +1247,10 @@ void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT coeff = (SHORT)(strength * range + minForce);
+	if (coeff < 0)
+	{
+		coeff = 32767;
+	}
 
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
@@ -1259,6 +1277,10 @@ void TriggerInertiaEffect(double strength)
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT coeff = (SHORT)(strength * range + minForce);
+	if (coeff < 0)
+	{
+		coeff = 32767;
+	}
 
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
@@ -1272,16 +1294,48 @@ void TriggerInertiaEffect(double strength)
 
 void TriggerTriangleEffect(double strength, double length)
 {
+	int direction = 1;
+	if (strength <= -0.001) {
+		strength *= -1;
+		direction = -1;
+	}
+
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 	tempEffect.type = SDL_HAPTIC_TRIANGLE;
 	tempEffect.condition.type = SDL_HAPTIC_TRIANGLE;
 	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.condition.direction.dir[0] = direction;
+	tempEffect.condition.direction.dir[1] = 0; //Y Position
 	tempEffect.periodic.period = 500;
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+
+	int confMinForce = configMinForce;
+	int confMaxForce = configMaxForce;
+	if (AlternativeFFB == 1)
+	{
+		if (direction == -1)
+		{
+			confMinForce = configAlternativeMinForceLeft;
+			confMaxForce = configAlternativeMaxForceLeft;
+		}
+		else
+		{
+			confMinForce = configAlternativeMinForceRight;
+			confMaxForce = configAlternativeMaxForceRight;
+		}
+	}
+	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT power = (SHORT)(strength * range + minForce);
+	if (range > 0 && power < 0)
+	{
+		power = 32767;
+	}
+	else if (range < 0 && power > 0)
+	{
+		power = -32767;
+	}
 	tempEffect.periodic.magnitude = power;
 	tempEffect.periodic.length = length;
 	tempEffect.periodic.attack_length = 1000;
@@ -1306,6 +1360,11 @@ void TriggerDamperEffect(double strength)
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT coeff = (SHORT)(strength * range + minForce);
+	if (coeff < 0)
+	{
+		coeff = 32767;
+	}
+
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
 	tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
@@ -1327,11 +1386,19 @@ void TriggerRampEffect(double start,double end,double length)
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT start1 = (SHORT)(start * range + minForce);
+	if (start1 < 0)
+	{
+		start1 = 32767;
+	}
 	SHORT minForce2 = (SHORT)(end > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 	SHORT maxForce2 = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range2 = maxForce - minForce;
 	SHORT start2 = (SHORT)(end * range + minForce);
-	tempEffect.ramp.delay = 0;	
+	if (start2 < 0)
+	{
+		start2 = 32767;
+	}
+	tempEffect.ramp.delay = 0;
 	tempEffect.ramp.start = start1;
 	tempEffect.ramp.end = -start2;
 	
@@ -1351,6 +1418,10 @@ void TriggerSawtoothUpEffect(double strength, double length)
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT power = (SHORT)(strength * range + minForce);
+	if (power < 0)
+	{
+		power = 32767;
+	}
 	tempEffect.periodic.magnitude = power;
 	tempEffect.periodic.length = length;
 	tempEffect.periodic.attack_length = 1000;
@@ -1371,6 +1442,10 @@ void TriggerSawtoothDownEffect(double strength, double length) {
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT power = (SHORT)(strength * range + minForce);
+	if (power < 0)
+	{
+		power = 32767;
+	}
 	tempEffect.periodic.magnitude = power;
 	tempEffect.periodic.length = length;
 	tempEffect.periodic.attack_length = 1000;
@@ -1389,21 +1464,26 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 {
 	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffect)).count();
-	std::string effectHash = std::to_string(effects.effect_sine_id) + "_" + std::to_string(period) + "_" + std::to_string(fadePeriod) + "_" + std::to_string(strength);
 
-	// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-	if (effectHash.compare(lastSineEffectHash) == 0 && elapsedTime < configFeedbackLength) {
-		return; // same effect, do nothing.
+	int direction = 1;
+	if (strength <= -0.001) {
+		strength *= -1;
+		direction = -1;
 	}
 
-	// TODO: investigate if we need this
-	if (configResetFeedback || strength <= 0.001) {
+	// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
+	if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 2.0)) {
+		return;
+	}
+
+	// if no strength, we do nothing
+	if (strength <= 0.001) {
+		return;
+	}
+
+	// stop previous effect if not completed
+	if (configResetFeedback) {
 		SDL_HapticStopEffect(haptic, effects.effect_sine_id);
-		if (strength <= 0.01) {
-			timeOfLastSineEffect = now;
-			lastSineEffectHash = effectHash;
-			return;
-		}
 	}
 
 	SDL_HapticEffect tempEffect;
@@ -1411,17 +1491,40 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	hlp.log("Doing sine...");
 	tempEffect.type = SDL_HAPTIC_SINE;
 	tempEffect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.periodic.direction.dir[0] = 1;
+	tempEffect.periodic.direction.dir[0] = direction;
 	tempEffect.constant.direction.dir[1] = 0; //Y Position
 	tempEffect.periodic.period = period;
 
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	int confMinForce = configMinForce;
+	int confMaxForce = configMaxForce;
+	if (AlternativeFFB == 1)
+	{
+		if (direction == -1)
+		{
+			confMinForce = configAlternativeMinForceLeft;
+			confMaxForce = configAlternativeMaxForceLeft;
+		}
+		else
+		{
+			confMinForce = configAlternativeMinForceRight;
+			confMaxForce = configAlternativeMaxForceRight;
+		}
+	}
+	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT magnitude = (SHORT)(strength * range + minForce);
+	if (range > 0 && magnitude < 0)
+	{
+		magnitude = 32767;
+	}
+	else if (range < 0 && magnitude > 0)
+	{
+		magnitude = -32767;
+	}
 
 	tempEffect.periodic.magnitude = (SHORT)(magnitude);
-	tempEffect.periodic.length = configFeedbackLength;
+	tempEffect.periodic.length = period;
 	tempEffect.periodic.attack_length = fadePeriod;
 	tempEffect.periodic.fade_length = fadePeriod;
 
@@ -1432,7 +1535,8 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	hlp.log((char *)std::to_string(supported).c_str());*/
 
 	timeOfLastSineEffect = now;
-	lastSineEffectHash = effectHash;
+	lastSineEffectStrength = strength;
+	lastSineEffectPeriod = period;
 }
 
 void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
@@ -1471,6 +1575,10 @@ void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT coeff = (SHORT)(strength * range + minForce);
+	if (coeff < 0)
+	{
+		coeff = 32767;
+	}
 
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
@@ -1505,6 +1613,10 @@ void TriggerSpringEffectInfinite(double strength)
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT coeff = (SHORT)(strength * range + minForce);
+	if (coeff < 0)
+	{
+		coeff = 32767;
+	}
 
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
