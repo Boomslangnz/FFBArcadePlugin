@@ -285,7 +285,7 @@ extremely generous.
 
 ***SUPPORTED GAMES***
 
--Afterburner Climax (Rumble only) [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Afterburner Climax (Rumble only) [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Battle Gear 4 Tuned (Japan version v2.07) [d3d9.dll into game exe folder]
 
@@ -299,11 +299,11 @@ extremely generous.
 
 -Indy 500 [dinput8.dll into m2 emulator 1.1a folder]
 
--Initial D4 [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D4 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
--Initial D4 Japan [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D4 Japan [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
--Initial D5 [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D5 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Initial D6 [dinput8.dll into game exe folder]
 
@@ -329,7 +329,7 @@ extremely generous.
 
 -Sonic & Sega All Stars Racing [d3d9.dll into game exe folder]
 
--Outrun 2 Special Tours Deluxe [opengl32.dll & SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Outrun 2 Special Tours Deluxe [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Over Rev [dinput8.dll into m2 emulator 1.1a folder]
 
@@ -371,12 +371,11 @@ TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBAC
 
 ***HOW TO USE***
 
-Place the main dll file, SDL2.dll & FFBPlugin.ini into game folder for most games. For Teknoparrot Lindbergh 
-games place opengl32.dll, SDL22.dll into Teknoparrot folder inside Main Teknoparrot folder & FFBPlugin.ini into same folder as elf file for each game.
+Place the main dll file, SDL2.dll & FFBPlugin.ini into game folder for most games. 
+
+For Teknoparrot Lindbergh games place opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder & FFBPlugin.ini,SDL2.dll, MetroFramework.dll & FFBPluginGUI.exe into same folder as elf file for each game.
 
 Elf file is like the lindbergh version of an exe eg the file you choose to load via teknoparrot
-
-If using GUI, put FFBPluginGUI.exe & Metroframework.dll into same folder as FFBPlugin.ini
 
 If you are using FFB Plugin on Teknoparrot instead of using Teknoparrot built in FFB, Please turn off Force Feedback in TeknoparrotUI. (Not necessary on latest TP Versions)
 
@@ -418,7 +417,7 @@ Device2GUID= **Set Device 2 GUID to connect to secondary specific wheel or contr
 
 - REQUIRES visual runtime 2015,SDL2.dll & Metroframework.dll. SDL2.dll & Metroframework.dll are supplied in each plugin folder
 
-- Is designed to be used in conjunction with FFBPlugin.ini files included with each plugin folder. Place all plugin files into game exe folder(unless Lindbergh, read 0.6a changes above)
+- Is designed to be used in conjunction with FFBPlugin.ini files included with each plugin folder. Place all plugin files into game exe folder(unless Lindbergh)
 
 - If FFBPlugin.ini exists, it will read the values and display values etc on game page. As soon as you adjust any value, it automatically writes to FFBPlugin.ini the new value
 
