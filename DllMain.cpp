@@ -1115,119 +1115,64 @@ double lastSineEffectPeriod = 0;
 std::string lastSpringEffectHash = "";
 void TriggerConstantEffect(int direction, double strength)
 {
+	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
+	int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
+	std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
+
+	// if no strength, we do nothing
+	if (strength <= 0.001) {
+		return;
+	}
+
+	// stop previous effect if not completed
+	if (configResetFeedback) {
+		SDL_HapticStopEffect(haptic, effects.effect_sine_id);
+	}
+
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	tempEffect.type = SDL_HAPTIC_CONSTANT;
+	tempEffect.constant.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.constant.direction.dir[0] = direction;
+	tempEffect.constant.length = configFeedbackLength;
+	tempEffect.constant.delay = 0;
+
+	int confMinForce = configMinForce;
+	int confMaxForce = configMaxForce;
+
 	if (AlternativeFFB == 1)
 	{
-		std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
-		int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
-		std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
-
-		// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-		if (effectHash.compare(lastConstantEffectHash) == 0 && elapsedTime < configFeedbackLength) {			
-			return; // same effect, do nothing.
-		}
-
-		// TODO: investigate if we need this
-		if (configResetFeedback || strength <= 0.001) {
-			SDL_HapticStopEffect(haptic, effects.effect_left_id);
-			SDL_HapticStopEffect(haptic, effects.effect_right_id);
-			if (strength <= 0.01) {
-				timeOfLastConstantEffect = now;
-				lastConstantEffectHash = effectHash;
-				return;
-			}
-		}
-		SDL_HapticEffect tempEffect;
-		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-		tempEffect.type = SDL_HAPTIC_CONSTANT;
-		tempEffect.constant.direction.type = SDL_HAPTIC_CARTESIAN;
 		if (direction == -1)
 		{
-			tempEffect.constant.direction.dir[0] = -1;
-			tempEffect.constant.length = configFeedbackLength;
-			tempEffect.constant.delay = 0;
-			SHORT minForce = (SHORT)(strength > 0.001 ? (configAlternativeMinForceLeft / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-			SHORT maxForce = (SHORT)(configAlternativeMaxForceLeft / 100.0 * 32767.0);
-			SHORT range = maxForce - minForce;
-			SHORT level = (SHORT)(strength * range + minForce);
-			if (level > 0)
-			{
-				level = -32767;
-			}
-			tempEffect.constant.level = level;
-			hlp.log((char *)(std::to_string(level)).c_str());
-			SDL_HapticUpdateEffect(haptic, effects.effect_left_id, &tempEffect);
-			SDL_HapticRunEffect(haptic, effects.effect_left_id, 1);
+			confMinForce = configAlternativeMinForceLeft;
+			confMaxForce = configAlternativeMaxForceLeft;
 		}
 		else
 		{
-			tempEffect.constant.direction.dir[0] = 1;
-			tempEffect.constant.length = configFeedbackLength;
-			tempEffect.constant.delay = 0;
-			SHORT minForce = (SHORT)(strength > 0.001 ? (configAlternativeMinForceRight / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-			SHORT maxForce = (SHORT)(configAlternativeMaxForceRight / 100.0 * 32767.0);
-			SHORT range = maxForce - minForce;
-			SHORT level = (SHORT)(strength * range + minForce);
-			if (level < 0)
-			{
-				level = 32767;
-			}
-			tempEffect.constant.level = level;
-			hlp.log((char *)(std::to_string(level)).c_str());
-			SDL_HapticUpdateEffect(haptic, effects.effect_right_id, &tempEffect);
-			SDL_HapticRunEffect(haptic, effects.effect_right_id, 1);
+			confMinForce = configAlternativeMinForceRight;
+			confMaxForce = configAlternativeMaxForceRight;
 		}
-		timeOfLastConstantEffect = now;
-		lastConstantEffectHash = effectHash;
 	}
-	else
+
+	SHORT MinForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0);
+	SHORT MaxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
+	SHORT range = MaxForce - MinForce;
+	SHORT level = (SHORT)(strength * range + MinForce);
+
+	if (range > 0 && level < 0)
 	{
-	  std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
-		int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
-		std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
-
-		// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-		if (effectHash.compare(lastConstantEffectHash) == 0 && elapsedTime < configFeedbackLength) {
-			return; // same effect, do nothing.
-		}
-
-		// TODO: investigate if we need this
-		if (configResetFeedback || strength <= 0.001) {
-			SDL_HapticStopEffect(haptic, effects.effect_left_id);
-			SDL_HapticStopEffect(haptic, effects.effect_right_id);
-			if (strength <= 0.01) {
-				timeOfLastConstantEffect = now;
-				lastConstantEffectHash = effectHash;
-				return;
-			}
-		}
-
-		SDL_HapticEffect tempEffect;
-		
-
-		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-		tempEffect.type = SDL_HAPTIC_CONSTANT;
-		tempEffect.constant.direction.type = SDL_HAPTIC_CARTESIAN;
-		tempEffect.constant.direction.dir[0] = direction;
-		tempEffect.constant.length = configFeedbackLength;
-		tempEffect.constant.delay = 0;
-		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-		SHORT range = maxForce - minForce;
-		SHORT level = (SHORT)(strength * range + minForce);
-		if (level < 0)
-		{
-			level = 32767;
-		}
-		tempEffect.constant.level = level;
-		hlp.log((char *)(std::to_string(level)).c_str());
-		SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
-		SDL_HapticRunEffect(haptic, effects.effect_id, 1);
-
-		timeOfLastConstantEffect = now;
-		lastConstantEffectHash = effectHash;
+		level = 32767;
 	}
+	else if (range < 0 && level > 0)
+	{
+		level = -32767;
+	}
+
+	tempEffect.constant.level = level;
+	hlp.log((char *)(std::to_string(level)).c_str());
+	SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_id, 1);
 }
 
 void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
