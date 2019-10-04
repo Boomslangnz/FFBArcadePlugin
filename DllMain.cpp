@@ -1115,26 +1115,6 @@ double lastSineEffectPeriod = 0;
 std::string lastSpringEffectHash = "";
 void TriggerConstantEffect(int direction, double strength)
 {
-	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastConstantEffect)).count();
-	int effectId = direction == effectConst.DIRECTION_FROM_LEFT ? effects.effect_right_id : effects.effect_left_id;
-	std::string effectHash = std::to_string(effectId) + "_" + std::to_string(strength) + "_" + std::to_string(direction);
-
-	// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-	if (effectHash.compare(lastConstantEffectHash) == 0 && elapsedTime < configFeedbackLength) {
-		return; // same effect, do nothing.
-	}
-
-	//TODO: investigate if we need this
-	if (configResetFeedback || strength <= 0.001) {
-		SDL_HapticStopEffect(haptic, effects.effect_id);
-		if (strength <= 0.01) {
-			timeOfLastConstantEffect = now;
-			lastConstantEffectHash = effectHash;
-			return;
-		}
-	}
-
 	// if no strength, we do nothing
 	if (strength <= 0.001) {
 		return;
@@ -1188,9 +1168,6 @@ void TriggerConstantEffect(int direction, double strength)
 	hlp.log((char *)(std::to_string(level)).c_str());
 	SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_id, 1);
-
-	timeOfLastConstantEffect = now;
-	lastConstantEffectHash = effectHash;
 }
 
 void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
