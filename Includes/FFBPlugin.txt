@@ -31,7 +31,7 @@ so are not using real force feedback values. Most games use correct ffb values h
 - Fixed issue where CPU could run at 100% with FFB Plugin
 
 - Updated SDL2 from 2.0.5 to 2.0.9 to match Teknoparrot (Delete SDL22.dll if leftover from old release in any teknoparrot folders)
-
+BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 
 ***1.0 Changes***
 
