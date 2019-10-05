@@ -654,5 +654,3 @@ EXPORTS
 	sndPlaySoundW = _sndPlaySoundW                                                                    
 	WOWAppExit = _WOWAppExit                                                                 
 	mmsystemGetVersion = _mmsystemGetVersion
-
-	TPValues = TPValues

@@ -32,8 +32,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Daytona3.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
-#include "Game Files/FNF.h"
-#include "Game Files/GRID.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"
 #include "Game Files/InitialD5.h"
@@ -795,19 +793,10 @@ HRESULT WINAPI DirectInputDirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, 
 // DINPUT8 WRAPPER
 HRESULT WINAPI DirectInputDirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
 {
-	/*wchar_t *settingsFilenameA = TEXT(".\\FFBPlugin.ini");
-	int configGameIdA = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 1, settingsFilenameA);
-	if (configGameIdA == 29)
-	{
-		return DIERR_OUTOFMEMORY;
-	}
-	else
-	{*/
 		LPVOID val;
 		HRESULT res = originalDirectInputDirectInput8Create(hinst, dwVersion, riidltf, &val, punkOuter);
 		*ppvOut = new DirectInputDeviceWrapper(val, (IID_IDirectInput8W == riidltf));
-		return res;
-//	}	
+		return res;	
 }
 
 HRESULT WINAPI DirectInputDllRegisterServer(void)
@@ -833,12 +822,6 @@ HRESULT WINAPI DirectInputDllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID
 LPCDIDATAFORMAT WINAPI DirectInputGetdfDIJoystick()
 {
 	return originalGetdfDIJoystick();
-}
-
-__declspec(dllexport) void TPValues(float *values, int num);
-
-void TPValues(float *values, int num)
-{
 }
 
 // global variables 
@@ -903,7 +886,6 @@ const int SEGA_RALLY_3 = 6;
 const int FORD_RACING = 7;
 const int INITIAL_D_6 = 8;
 const int WMMT_5 = 9;
-const int FNF_GAME = 10;
 const int MARIO_KART_GPDX = 11;
 const int OUTRUN_2Fake = 12;
 const int BG4_JP = 13;
@@ -929,7 +911,6 @@ const int MAME_020664bit = 33;
 const int MAME_019964bit = 34;
 const int OUTRUN_2Real = 35;
 const int Button_Rumble64bit = 36;
-const int GRID_ = 37;
 const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
 
@@ -1683,7 +1664,7 @@ void TriggerSpringEffect(double strength)
 DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
-	Sleep(2500);
+	//Sleep(2500);  NOT SURE IF THIS IS NECESSARY, IF CAUSES ISSUES THEN UNDO
 	SDL_HapticStopAll(haptic);
 	Initialize(0);
 	hlp.log("Initialize() complete");
@@ -1715,12 +1696,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case DAYTONA_3:
 		game = new Daytona3;
-		break;
-	case FNF_GAME:
-		game = new FNF;
-		break;
-	case GRID_:
-		game = new GRID;
 		break;
 	case FORD_RACING:
 		game = new FordRacing;
@@ -2671,6 +2646,7 @@ if (currentLibrary == lib::winmm)
 		// this doesn't seem to really work...hmm...if i ALT+F4, then the program quits and haptic is still set.
 		// try setting GameId to HEAVY (-5 or -6..can't remember) and then force quit. Wheel will stay heavy :/.
 		if (haptic) {
+			SDL_HapticStopEffect(haptic, effects.effect_id);
 			SDL_HapticStopEffect(haptic, effects.effect_left_id);
 			SDL_HapticStopEffect(haptic, effects.effect_right_id);
 			SDL_HapticStopEffect(haptic, effects.effect_friction_id);

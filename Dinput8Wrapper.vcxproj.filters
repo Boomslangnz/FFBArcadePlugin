@@ -50,9 +50,6 @@
     <ClCompile Include="Game Files\MarioKartGPDX.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game Files\FNF.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
     <ClCompile Include="Game Files\BG4JP.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
@@ -118,7 +115,6 @@
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="Game Files\ButtonRumble64bit.cpp" />
-    <ClCompile Include="Game Files\GRID.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
   </ItemGroup>
@@ -160,9 +156,6 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\MarioKartGPDX.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\FNF.h">
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\BG4JP.h">
@@ -239,9 +232,6 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\ButtonRumble64bit.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\GRID.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\FordRacingOther.h">
