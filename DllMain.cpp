@@ -1103,7 +1103,7 @@ void TriggerConstantEffect(int direction, double strength)
 
 	// stop previous effect if not completed
 	if (configResetFeedback) {
-		SDL_HapticStopEffect(haptic, effects.effect_sine_id);
+		SDL_HapticStopEffect(haptic, effects.effect_id);
 	}
 
 	SDL_HapticEffect tempEffect;
