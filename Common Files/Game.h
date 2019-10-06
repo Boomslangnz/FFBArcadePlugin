@@ -21,9 +21,7 @@ struct EffectTriggers {
 // classes
 class EffectCollection {
 public:
-	int effect_id;
-	int effect_left_id;
-	int effect_right_id;
+	int effect_constant_id;
 	int effect_leftramp_id;
 	int effect_rightramp_id;
 	int effect_friction_id;

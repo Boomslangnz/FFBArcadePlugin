@@ -1008,13 +1008,7 @@ void Initialize(int device_index)
 	tempEffect.constant.length = configFeedbackLength; // presumably is ms, but is not documented
 	tempEffect.constant.delay = 0;
 	tempEffect.constant.level = 9999; // this is an sint16 => -32768 to 32767
-
-									  // Upload the effect
-	effects.effect_left_id = SDL_HapticNewEffect(haptic, &tempEffect);
-
-	tempEffect.constant.direction.dir[0] = 1; // this is right-side
-
-	effects.effect_right_id = SDL_HapticNewEffect(haptic, &tempEffect);
+	effects.effect_constant_id = SDL_HapticNewEffect(haptic, &tempEffect); // Upload the effect
 
 	tempEffect = SDL_HapticEffect();
 	tempEffect.type = SDL_HAPTIC_FRICTION;
@@ -1103,7 +1097,7 @@ void TriggerConstantEffect(int direction, double strength)
 
 	// stop previous effect if not completed
 	if (configResetFeedback) {
-		SDL_HapticStopEffect(haptic, effects.effect_id);
+		SDL_HapticStopEffect(haptic, effects.effect_constant_id);
 	}
 
 	SDL_HapticEffect tempEffect;
@@ -1147,8 +1141,8 @@ void TriggerConstantEffect(int direction, double strength)
 
 	tempEffect.constant.level = level;
 	hlp.log((char *)(std::to_string(level)).c_str());
-	SDL_HapticUpdateEffect(haptic, effects.effect_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_id, 1);
+	SDL_HapticUpdateEffect(haptic, effects.effect_constant_id, &tempEffect);
+	SDL_HapticRunEffect(haptic, effects.effect_constant_id, 1);
 }
 
 void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
@@ -2646,9 +2640,7 @@ if (currentLibrary == lib::winmm)
 		// this doesn't seem to really work...hmm...if i ALT+F4, then the program quits and haptic is still set.
 		// try setting GameId to HEAVY (-5 or -6..can't remember) and then force quit. Wheel will stay heavy :/.
 		if (haptic) {
-			SDL_HapticStopEffect(haptic, effects.effect_id);
-			SDL_HapticStopEffect(haptic, effects.effect_left_id);
-			SDL_HapticStopEffect(haptic, effects.effect_right_id);
+			SDL_HapticStopEffect(haptic, effects.effect_constant_id);
 			SDL_HapticStopEffect(haptic, effects.effect_friction_id);
 			SDL_HapticStopEffect(haptic, effects.effect_leftright_id);
 			SDL_HapticStopEffect(haptic, effects.effect_sine_id);
