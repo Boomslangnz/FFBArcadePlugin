@@ -111,7 +111,6 @@ static int RunningThread(void *ptr)
 			myTriggers->LeftRight(0, percentForce, percentLength);
 			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 		}
-		Sleep(300);
 	}
 	return 0;
 }
