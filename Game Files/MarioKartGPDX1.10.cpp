@@ -51,17 +51,16 @@ void MarioKartGPDX110::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	int BridgeRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumble"), 0, settingsFilename);
 	int BridgeRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumbleStrength"), 0, settingsFilename);
 
-	int ff1 = helpers->ReadInt32(0xA46974, /* isRelativeOffset */ true); //shake
-	int ff2 = helpers->ReadInt32(0x00A416E4,/* isRelativeOffset */ true);
-	int ff3 = helpers->ReadInt32(ff2 + 0x628, /* isRelativeOffset */ false); // terrain data
-	int Gas = helpers->ReadInt32(0xA455C0, /* isRelativeOffset */ true); //0-255 accl
-	int ff5 = helpers->ReadInt32(ff2 + 0x658, /* isRelativeOffset */ false); //kart flying or on ground
-	int ff6 = helpers->ReadInt32(0x00A309A0,/* isRelativeOffset */ true);
-	int ff7 = helpers->ReadInt32(ff6 + 0x304, /* isRelativeOffset */ false);
-	int ff8 = helpers->ReadInt32(ff7 + 0xE8, /* isRelativeOffset */ false);
-	int ff9 = helpers->ReadInt32(ff8 + 0x64, /* isRelativeOffset */ false);
-	int ff10 = helpers->ReadInt32(ff9 + 0x38, /* isRelativeOffset */ false);
-	int ff11 = helpers->ReadInt32(ff10 + 0x4C4, /* isRelativeOffset */ false); // 1 during race only
+	INT_PTR ff1 = helpers->ReadIntPtr(0xA46974, /* isRelativeOffset */ true); //shake
+	INT_PTR ff2 = helpers->ReadIntPtr(0x00A416E4,/* isRelativeOffset */ true);
+	UINT8 ff3 = helpers->ReadByte(ff2 + 0x628, /* isRelativeOffset */ false); // terrain data
+	UINT8 ff5 = helpers->ReadByte(ff2 + 0x658, /* isRelativeOffset */ false); //kart flying or on ground
+	INT_PTR ff6 = helpers->ReadIntPtr(0x00A309A0,/* isRelativeOffset */ true);
+	INT_PTR ff7 = helpers->ReadIntPtr(ff6 + 0x304, /* isRelativeOffset */ false);
+	INT_PTR ff8 = helpers->ReadIntPtr(ff7 + 0xE8, /* isRelativeOffset */ false);
+	INT_PTR ff9 = helpers->ReadIntPtr(ff8 + 0x64, /* isRelativeOffset */ false);
+	INT_PTR ff10 = helpers->ReadIntPtr(ff9 + 0x38, /* isRelativeOffset */ false);
+	UINT8 ff11 = helpers->ReadByte(ff10 + 0x4C4, /* isRelativeOffset */ false); // 1 during race only
 	float Speed = helpers->ReadFloat32(ff2 + 0x558, /* isRelativeOffset */ false); //Speed of Kart
 	UINT8 ff13 = helpers->ReadByte(0xA39690, /* isRelativeOffset */ true); //picking up coins
 	UINT8 ff14 = helpers->ReadByte(0xA4528D, /* isRelativeOffset */ true); //picking up weapon box
@@ -150,7 +149,7 @@ void MarioKartGPDX110::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	else if ((CoinRumble == 1) & (oldcoins != newcoins) & (ff11 == 1))
 	{
 		// Shake when picking up coins
-		double percentForce = ((CoinRumbleStrength) / 100);
+		double percentForce = ((CoinRumbleStrength) / 100.0);
 		double percentLength = (200);
 		triggers->LeftRight(percentForce, percentForce, percentLength);
 		triggers->Sine(50, 50, percentForce);
