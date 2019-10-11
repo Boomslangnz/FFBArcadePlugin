@@ -1,8 +1,8 @@
 ***FFB Arcade Plugin***
 
-Version 1.01
+Version 1.1
 
-Created by Boomslangnz, Ducon2016 & Spazzy.
+Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
 This is a plugin to provide Force Feedback and Rumble (and in certain cases added input support) to various arcade games. Initially this was a small project
 to add FFB to Daytona Championship USA and it grew from there to support several more games and rumble was added. 
@@ -10,11 +10,13 @@ While best efforts were made to try to resemble the real arcade force feedback, 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
 
-***1.01 Changes***
+***1.1 Changes***
 
-  Big Thanks to pinkimo for his efforts!
+  Big Thanks to pinkimo for his efforts, Open Source has added good value already!
 
 - Huge modification of WMMT5 FFB effects completely re-done by pinkimo!!
+
+- GUI for WMMT5 re-done for new effects (pinkimo)
 
 - Fixed issue with newer Fanatec wheels which would show as 2 x devices and load wrong "device" and ffb wouldn't work (pinkimo)
 
@@ -28,10 +30,16 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Replaced code for ShowButtonNumbersForSetup & ShowAxisForSetup if not using GUI to use every button/axis available
 
-- Fixed issue where CPU could run at 100% with FFB Plugin
-
 - Updated SDL2 from 2.0.5 to 2.0.9 to match Teknoparrot (Delete SDL22.dll if leftover from old release in any teknoparrot folders)
 BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
+
+- Renamed FFBPlugin.txt to FFBPluginReadme.txt to make it obvious its a readme 
+
+- Fixed issue where coin rumble wouldn't work at all on Mario Kart GP DX 1.10
+
+- Modified and cleaned constant effect up
+
+- General code cleanup
 
 ***1.0 Changes***
 
@@ -259,7 +267,7 @@ Track selection menu & Name Entry has added control too now
 
 ***REQUIREMENTS***
 
-- Requires Visual Runtime Files
+- Requires Visual Runtime Files https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/
 
 - GUI Requires Visual Runtime 2015 (pretty sure its this lol) and has to be in same folder with metroframework.dll & SDL2.dll
 
