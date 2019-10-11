@@ -113,7 +113,7 @@
     <ClInclude Include="IDirectInputDevice.h" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Includes\FFBPlugin.txt" />
+    <Text Include="Includes\FFBPluginReadme.txt" />
   </ItemGroup>
   <ItemGroup>
     <MASM Include="DLLWrapper.asm" />

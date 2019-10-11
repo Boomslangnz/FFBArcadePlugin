@@ -242,9 +242,9 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="Includes\FFBPlugin.txt" />
+    <MASM Include="DLLWrapper.asm" />
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="DLLWrapper.asm" />
+    <Text Include="Includes\FFBPluginReadme.txt" />
   </ItemGroup>
 </Project>
