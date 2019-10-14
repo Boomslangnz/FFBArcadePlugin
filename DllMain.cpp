@@ -978,7 +978,7 @@ void Initialize(int device_index)
 		}
 	}
 	// If no haptic controller has been found, we select the first controller matching the guid.
-	if (ControllerHaptic == NULL)
+	if (ControllerHaptic == NULL && FirstGameController != NULL)
 	{
 		GameController = FirstGameController;
 		hlp.log(firstJoystickSelectedText);
@@ -1658,7 +1658,7 @@ void TriggerSpringEffect(double strength)
 DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
-	//Sleep(2500);  NOT SURE IF THIS IS NECESSARY, IF CAUSES ISSUES THEN UNDO
+	Sleep(2500);
 	SDL_HapticStopAll(haptic);
 	Initialize(0);
 	hlp.log("Initialize() complete");
