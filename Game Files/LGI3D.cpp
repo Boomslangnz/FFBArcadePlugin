@@ -114,7 +114,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
-	else if ((oldFloat2 != newFloat2) && (health2p != 0x1))
+	if ((oldFloat2 != newFloat2) && (health2p != 0x1))
 	{
 		if (HowtoRumbleHealthEffect == 0)
 		{
@@ -156,7 +156,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
-	else if (ff1 == 0x40)
+	if (ff1 == 0x40)
 	{
 		if (HowtoRumbleMotorEffect == 0)
 		{
@@ -177,7 +177,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
-	else if (ff1 == 0x22)
+	if (ff1 == 0x22)
 	{
 		if (HowtoRumbleKnockEffect == 0)
 		{
@@ -198,7 +198,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
-	else if (ff1 == 0x42)
+	if (ff1 == 0x42)
 	{
 		if (HowtoRumbleMotorEffect == 0)
 		{
@@ -219,7 +219,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
-	else if (ff1 == 0x4)
+	if (ff1 == 0x4)
 	{
 		if (HowtoRumbleKnockEffect == 0)
 		{
@@ -240,7 +240,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}
 	}
-	else if (ff1 == 0x8)
+	if (ff1 == 0x8)
 	{
 		if (HowtoRumbleMotorEffect == 0)
 		{
@@ -261,7 +261,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}
 	}
-	else if (ff1 == 0x6)
+	if (ff1 == 0x6)
 	{
 	if (HowtoRumbleKnockEffect == 0)
 	{
@@ -282,7 +282,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		triggers->LeftRightDevice2(percentForce, 0, percentLength);
 	}
 	}
-	else if (ff1 == 0xA)
+	if (ff1 == 0xA)
 	{
 	if (HowtoRumbleMotorEffect == 0)
 	{
@@ -303,7 +303,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		triggers->LeftRightDevice2(percentForce, 0, percentLength);
 	}
 	}
-	else if (ff1 == 0x24)
+	if (ff1 == 0x24)
 	{
 		if (HowtoRumbleKnockEffect == 0)
 		{
@@ -327,7 +327,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}
 	}
-	else if (ff1 == 0x4A)
+	if (ff1 == 0x4A)
 	{
 		if (HowtoRumbleMotorEffect == 0)
 		{

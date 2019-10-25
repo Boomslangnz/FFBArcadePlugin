@@ -113,7 +113,7 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 				triggers->LeftRight(percentForce, 0, percentLength);
 			}
 		}
-		else if ((oldFloat2 != newFloat2) && (health2p != 0x1))
+		if ((oldFloat2 != newFloat2) && (health2p != 0x1))
 		{
 			if (HowtoRumbleHealthEffect == 0)
 			{
@@ -155,7 +155,7 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 				triggers->LeftRight(percentForce, 0, percentLength);
 			}
 		}
-		else if (ff1 == 0x40)
+		if (ff1 == 0x40)
 		{
 			if (HowtoRumbleMotorEffect == 0)
 			{
@@ -176,7 +176,7 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 				triggers->LeftRight(percentForce, 0, percentLength);
 			}
 		}
-		else if (ff1 == 0x4)
+		if (ff1 == 0x4)
 		{
 			if (HowtoRumbleKnockEffect == 0)
 			{
@@ -197,7 +197,7 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 				triggers->LeftRightDevice2(percentForce, 0, percentLength);
 			}
 		}
-		else if (ff1 == 0x8)
+		if (ff1 == 0x8)
 		{
 			if (HowtoRumbleMotorEffect == 0)
 			{
@@ -218,7 +218,7 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 				triggers->LeftRightDevice2(percentForce, 0, percentLength);
 			}
 		}
-		else if (ff1 == 0x24)
+		if (ff1 == 0x24)
 		{
 			if (HowtoRumbleKnockEffect == 0)
 			{
@@ -242,7 +242,7 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 				triggers->LeftRightDevice2(percentForce, 0, percentLength);
 			}
 		}
-		else if (ff1 == 0x48)
+		if (ff1 == 0x48)
 		{
 			if (HowtoRumbleMotorEffect == 0)
 			{
