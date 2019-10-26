@@ -35,7 +35,16 @@ static bool leverrightA;
 static bool stophack;
 static SDL_Event e;
 
+static void MEMwrite(void *adr, void *ptr, int size)
+{
+	DWORD OldProtection;
+	VirtualProtect(adr, size, PAGE_EXECUTE_READWRITE, &OldProtection);
+	memcpy(adr, ptr, size);
+	VirtualProtect(adr, size, OldProtection, &OldProtection);
+}
+
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int CabinetID = GetPrivateProfileInt(TEXT("Settings"), TEXT("CabinetID"), 0, settingsFilename);
 static int Only2D = GetPrivateProfileInt(TEXT("Settings"), TEXT("Only2D"), 0, settingsFilename);
 static int HackToSkipMenuError = GetPrivateProfileInt(TEXT("Settings"), TEXT("HackToSkipMenuError"), 0, settingsFilename);
 static int HackToCloseLibmovieErrorAuto = GetPrivateProfileInt(TEXT("Settings"), TEXT("HackToCloseLibmovieErrorAuto"), 0, settingsFilename);
@@ -84,6 +93,29 @@ static int RunningThread(void *ptr)
 		int cabid = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x951034, false);
 		int cabid2 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x952B9C, false);
 		float timeroutofmenu = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x94BEE8, false);
+		uintptr_t jgtBase;
+		jgtBase = (uintptr_t)GetModuleHandleA("jgt.dll");
+
+		if (CabinetID == 1)
+		{
+			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x01", 1);
+			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
+		}
+		else if (CabinetID == 2)
+		{
+			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x02", 1);
+			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
+		}
+		else if (CabinetID == 3)
+		{
+			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x03", 1);
+			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
+		}
+		else
+		{
+			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x00", 1);
+		}
+
 		if (HackToCloseLibmovieErrorAuto == 1)
 		{
 			//Remove fucken window error popup
