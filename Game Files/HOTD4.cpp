@@ -23,6 +23,7 @@ extern SDL_Haptic* haptic2;
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
+SDL_Event e;
 
 static int RunningThread(void *ptr)
 {
@@ -173,6 +174,14 @@ void HOTD4::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			SDL_HapticRumbleInit(ControllerHaptic2);
 		}
 	}
+
+	while (SDL_WaitEvent(&e) != 0)
+	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
+	}
+
 	myTriggers = triggers;
 	myConstants = constants;
 	myHelpers = helpers;
