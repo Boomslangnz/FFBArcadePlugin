@@ -26,7 +26,9 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Added AlternativeFFB for Sine & Triangle Effects (pinkimo) 
 
-- Disabled Rumble by default now as it caused issues with wheel rotation. Enable if using controller!!
+- Fixed issue where Lindbergh games wouldn't work
+
+- Disabled Rumble by default now as it caused issues with wheel rotation. Enable if using controller!! (unless using Rumble ONLY games eg LGI,LGI3D & ABC etc)
 
 - Replaced code for ShowButtonNumbersForSetup & ShowAxisForSetup if not using GUI to use every button/axis available
 
@@ -36,6 +38,10 @@ BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 - Renamed FFBPlugin.txt to FFBPluginReadme.txt to make it obvious its a readme 
 
 - Fixed issue where coin rumble wouldn't work at all on Mario Kart GP DX 1.10
+
+- Added MessageBox popup & log if using Special K with WMMT5 which by default disables Rumble. Will now tell you if it detects this and tell you to change if using Rumble
+
+- Fixed issue with LGI & LGI3D where rumble wouldn't always work
 
 - Modified and cleaned constant effect up
 
