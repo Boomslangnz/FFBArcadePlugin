@@ -1891,27 +1891,27 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 				currentLibrary = lib::dinput;
 				strcat_s(buffer, MAX_PATH, "\\dinput.dll");
 			}
-			else if (NULL != strstr(libName, "D3D11"))
+			if (NULL != strstr(libName, "D3D11"))
 			{
 				currentLibrary = lib::d3d11;
 				strcat_s(buffer, MAX_PATH, "\\d3d11.dll");
 			}
-			else if (NULL != strstr(libName, "XINPUT1_3"))
+			if (NULL != strstr(libName, "XINPUT1_3"))
 			{
 				currentLibrary = lib::xinput1_3;
 				strcat_s(buffer, MAX_PATH, "\\xinput1_3.dll");
 			}
-			else if (NULL != strstr(libName, "OPENGL32"))
+			if (NULL != strstr(libName, "OPENGL32"))
 			{
 				currentLibrary = lib::opengl32;
 				strcat_s(buffer, MAX_PATH, "\\opengl32.dll");
 			}
-			else if (NULL != strstr(libName, "D3D9"))
+			if (NULL != strstr(libName, "D3D9"))
 			{
 				currentLibrary = lib::d3d9;
 				strcat_s(buffer, MAX_PATH, "\\d3d9.dll");
 			}
-			else if (NULL != strstr(libName, "WINMM"))
+			if (NULL != strstr(libName, "WINMM"))
 			{
 				currentLibrary = lib::winmm;
 				strcat_s(buffer, MAX_PATH, "\\winmm.dll");
