@@ -1652,7 +1652,10 @@ void TriggerSpringEffect(double strength)
 DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
-	Sleep(2500);
+	if (configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24) //Lindbergh Games which require Sleep until loaded enough
+	{
+		Sleep(2500);
+	}	
 	SDL_HapticStopAll(haptic);
 	Initialize(0);
 	hlp.log("Initialize() complete");
