@@ -115,6 +115,7 @@
       <Filter>Game Files</Filter>
     </ClCompile>
     <ClCompile Include="Game Files\Mame0206.cpp" />
+    <ClCompile Include="Game Files\HOTD4.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -227,6 +228,9 @@
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\Mame0206.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\HOTD4.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

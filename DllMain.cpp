@@ -61,6 +61,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/LGI.h"
 #include "Game Files/Mame0206.h"
 #include "Game Files/KODrive.h"
+#include "Game Files/HOTD4.h"
 
 // typedefs 
 typedef unsigned char U8;
@@ -877,6 +878,7 @@ const int TEST_GAME_RUMBLE = -7;
 const int DAYTONA_3 = 1;
 const int WACKY_RACES = 2;
 const int CHASE_HQ_2 = 3;
+const int HOTD_4 = 4;
 const int SEGA_RACING_CLASSIC = 5;
 const int SEGA_RALLY_3 = 6;
 const int FORD_RACING = 7;
@@ -1653,7 +1655,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if (configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24) //Lindbergh Games which require Sleep until loaded enough
+	if (configGameId == 4 || configGameId == 12 || configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24 ||configGameId == 35) //Lindbergh Games which require Sleep until loaded enough
 	{
 		Sleep(2500);
 	}
@@ -1799,6 +1801,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case KO_Drive:
 		game = new KODrive;
+		break;
+	case HOTD_4:
+		game = new HOTD4;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

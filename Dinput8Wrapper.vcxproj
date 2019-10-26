@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\FordRacingOther.h" />
+    <ClInclude Include="Game Files\HOTD4.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
     <ClInclude Include="Game Files\ButtonRumble.h" />
@@ -43,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
+    <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\ButtonRumble.cpp" />
