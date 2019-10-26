@@ -15,6 +15,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Daytona3.h"
 #include "SDL.h"
 #include <Windows.h>
+static bool keybdleft = false;
+static bool keybdright = false;
+static bool keybdup = false;
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
@@ -37,9 +40,10 @@ static int RunningThread(void *ptr)
 	int cnt;
 	for (cnt = 0; cnt >= 0; ++cnt)
 	{
-		UINT8 steering = myHelpers->ReadByte(0x019B4678, /* isRelativeOffset */ false);
-		int gamestate = myHelpers->ReadInt32(0x19B5744, /* isRelativeOffset */ false);
-		int ff = myHelpers->ReadInt32(0x15AFC46, /* isRelativeOffset */ false);
+		UINT8 steering = myHelpers->ReadByte(0x019B4678, false);
+		UINT8 gamestate = myHelpers->ReadByte(0x19B5744, false);
+		UINT8 ff = myHelpers->ReadByte(0x15AFC46, false);
+		HWND hWnd = FindWindowA(0, ("Daytona Championship USA"));
 
 		if (HideCursor == 1)
 		{
@@ -48,7 +52,6 @@ static int RunningThread(void *ptr)
 
 		if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
 		{
-			HWND hWnd = FindWindowA(0, ("Daytona Championship USA"));
 			if (hWnd > NULL)
 			{
 				//SendMessage(hWnd, WM_CLOSE, NULL, NULL);
@@ -57,46 +60,67 @@ static int RunningThread(void *ptr)
 			}
 		}
 
-		if ((steering > 137) & (gamestate == 18) && (MenuMovementViaPlugin == 1))
+		if (MenuMovementViaPlugin == 1)
 		{
-			keybd_event(VK_RIGHT, 0x25, 0, 0);
-			keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
-			Sleep(100);
-			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
+			//Menu Movement & Game Initial Screen
+			if (gamestate == 18 || gamestate == 30)
+			{
+				if ((steering <= 0x75) && (steering > 0x50))
+				{
+					//Menu Left
+					if (!keybdleft)
+					{
+						keybdleft = true;
+						SendMessage(hWnd, WM_KEYDOWN, VK_LEFT, 0);
+					}
+					else
+					{
+						SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
+					}
+				}
+				else if (steering <= 0x50)
+				{
+					SendMessage(hWnd, WM_KEYDOWN, VK_LEFT, 0);
+				}
+				else if ((steering >= 0x89) && (steering < 0xAE))
+				{
+					//Menu Right
+					if (!keybdright)
+					{
+						keybdright = true;
+						SendMessage(hWnd, WM_KEYDOWN, VK_RIGHT, 0);
+					}
+					else
+					{
+						SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
+					}
+				}
+				else if (steering >= 0xAE)
+				{
+					SendMessage(hWnd, WM_KEYDOWN, VK_RIGHT, 0);
+				}
+				else
+				{
+					keybdleft = false;
+					keybdright = false;
+					SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
+					SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
+				}
+				keybdup = false;
+			}
+			else
+			{
+				if (!keybdup)
+				{
+					keybdup = true;
+					keybdleft = false;
+					keybdright = false;
+					SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
+					SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
+				}
+			}
 		}
-		else if ((steering > 117 & steering < 138) & (gamestate == 18) && (MenuMovementViaPlugin == 1))
-		{
-			keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
-			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
-		}
-		else if ((steering < 118) & (gamestate == 18) && (MenuMovementViaPlugin == 1))
-		{
-			keybd_event(VK_LEFT, 0x25, 0, 0);
-			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
-			Sleep(100);
-			keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
-		}
-
-		if ((steering > 137) & (gamestate == 30) && (MenuMovementViaPlugin == 1))
-		{
-			keybd_event(VK_RIGHT, 0x25, 0, 0);
-			keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
-			Sleep(100);
-			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
-		}
-		else if ((steering > 117 & steering < 138) & (gamestate == 30) && (MenuMovementViaPlugin == 1))
-		{
-			keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
-			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
-		}
-		else if ((steering < 118) & (gamestate == 30) && (MenuMovementViaPlugin == 1))
-		{
-			keybd_event(VK_LEFT, 0x25, 0, 0);
-			keybd_event(VK_RIGHT, 0, KEYEVENTF_KEYUP, 0);
-			Sleep(100);
-			keybd_event(VK_LEFT, 0, KEYEVENTF_KEYUP, 0);
-		}
-
+		
 		if (ff > 15)
 		{
 			double percentForce = (31 - ff) / 15.0;
