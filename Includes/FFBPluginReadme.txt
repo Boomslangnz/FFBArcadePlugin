@@ -47,6 +47,7 @@ BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 
 - General code cleanup
 
+
 ***1.0 Changes***
 
 - Made Code Open Source (Good luck trying to decipher my poor coding)

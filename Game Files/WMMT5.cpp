@@ -24,26 +24,8 @@ int CollisionsStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Colli
 int TiresSlipStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("TiresSlipStrength"), 0, settingsWMMT5);
 int HighSpeedVibrationsStrengthWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("HighSpeedVibrationsStrength"), 0, settingsWMMT5);
 int LimitBetweenHighSpeedVibrationsAndTiresSlipWMMT5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("LimitBetweenHighSpeedVibrationsAndTiresSlip"), 0, settingsWMMT5);
-static int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 0, settingsWMMT5);
 
 void WMMT5::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-
-	if (EnableRumble == 1)
-	{
-		//SPECIAL K DISABLES RUMBLE BY DEFAULT. THIS WILL GIVE ERROR MESSAGE TO LET USER KNOW IF USING IT
-		char RumbleDisableChar[256];
-		GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
-		std::string rumbletrue("true");
-		std::string rumbleTRUE("TRUE");
-		std::string rumbleTrue("True");
-		std::string rumdisable(RumbleDisableChar);
-
-		if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
-		{
-			helpers->log("Special K has rumble disabled. Change DisableRumble to false in dxgi.ini");
-			MessageBoxA(NULL, "Special K has rumble disabled. Change DisableRumble to false in dxgi.ini", "", NULL);
-		}
-	}
 
 	float spring = helpers->ReadFloat32(0x196F18C, /* isRelativeOffset*/ true);
 	float friction = helpers->ReadFloat32(0x196F190, /* isRelativeOffset*/ true);

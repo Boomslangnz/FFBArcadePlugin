@@ -1652,10 +1652,32 @@ void TriggerSpringEffect(double strength)
 DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
+
 	if (configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24) //Lindbergh Games which require Sleep until loaded enough
 	{
 		Sleep(2500);
-	}	
+	}
+
+	if (configGameId == 9)
+	{
+		if (EnableRumble == 1)
+		{
+			//SPECIAL K DISABLES RUMBLE BY DEFAULT. THIS WILL GIVE ERROR MESSAGE TO LET USER KNOW IF USING IT
+			char RumbleDisableChar[256];
+			GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
+			std::string rumbletrue("true");
+			std::string rumbleTRUE("TRUE");
+			std::string rumbleTrue("True");
+			std::string rumdisable(RumbleDisableChar);
+
+			if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
+			{
+				hlp.log("Special K has rumble disabled. Change DisableRumble to false in dxgi.ini");
+				MessageBoxA(NULL, "Special K has rumble disabled. Change DisableRumble to false in dxgi.ini", "FFBArcadePlugin", NULL);
+			}
+		}
+	}
+
 	SDL_HapticStopAll(haptic);
 	Initialize(0);
 	hlp.log("Initialize() complete");
