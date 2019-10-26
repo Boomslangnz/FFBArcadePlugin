@@ -113,6 +113,6 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		double percentForce = 0.4;
 		double percentLength = (100);
 		triggers->LeftRight(percentForce, percentForce, percentLength);
-		triggers->Sine(180, 150, percentForce);
+		triggers->Sine(120, 120, percentForce);
 	}
 }
