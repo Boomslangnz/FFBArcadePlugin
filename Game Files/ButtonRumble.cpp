@@ -12,7 +12,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "ButtonRumble32bit.h"
+#include "ButtonRumble.h"
 #include "SDL.h"
 #include <Windows.h>
 extern int joystick_index1;
@@ -50,7 +50,7 @@ static int Button8Device2Rumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("B
 static int Button9Device2Rumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("Button9Device2Rumble"), 0, settingsFilename);
 static int Button10Device2Rumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("Button10Device2Rumble"), 0, settingsFilename);
 
-void ButtonRumble32bit::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+void ButtonRumble::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 																							
 	while (SDL_WaitEvent(&e) != 0)
 	{

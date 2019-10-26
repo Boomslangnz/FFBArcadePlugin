@@ -43,8 +43,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/OutRun2Real.h"
 #include "Game Files/SegaRacingClassic.h"
 #include "Game Files/SegaRally3.h"
-#include "Game Files/Mame019932bit.h"
-#include "Game Files/Mame019964bit.h"
+#include "Game Files/Mame0199.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
 #include "Game Files/BG4JP.h"
@@ -56,13 +55,11 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/M2Emulator.h"
 #include "Game Files/GTIClub3.h"
 #include "Game Files/Demul.h"
-#include "Game Files/ButtonRumble32bit.h"
-#include "Game Files/ButtonRumble64bit.h"
+#include "Game Files/ButtonRumble.h"
 #include "Game Files/RoadFighters3D.h"
 #include "Game Files/LGI3D.h"
 #include "Game Files/LGI.h"
-#include "Game Files/Mame020632bit.h"
-#include "Game Files/Mame020664bit.h"
+#include "Game Files/Mame0206.h"
 #include "Game Files/KODrive.h"
 
 // typedefs 
@@ -880,7 +877,6 @@ const int TEST_GAME_RUMBLE = -7;
 const int DAYTONA_3 = 1;
 const int WACKY_RACES = 2;
 const int CHASE_HQ_2 = 3;
-const int MAME_019932bit = 4;
 const int SEGA_RACING_CLASSIC = 5;
 const int SEGA_RALLY_3 = 6;
 const int FORD_RACING = 7;
@@ -902,15 +898,13 @@ const int INITIAL_D_4_Japan = 24;
 const int M2_Emulator = 25;
 const int Demul_Emulator = 26;
 const int GTI_Club_3 = 27;
-const int Button_Rumble32bit = 28;
+const int Button_Rumble = 28;
 const int Road_Fighters_3D = 29;
 const int LGI_3D = 30;
 const int LGI_ = 31;
-const int MAME_020632bit = 32;
-const int MAME_020664bit = 33;
-const int MAME_019964bit = 34;
+const int MAME_0206 = 33;
+const int MAME_0199 = 34;
 const int OUTRUN_2Real = 35;
-const int Button_Rumble64bit = 36;
 const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
 
@@ -1721,12 +1715,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case SEGA_RALLY_3:
 		game = new SegaRally3;
 		break;
-	case MAME_019932bit:
-		game = new Mame019932bit;
-		break;
-	case MAME_019964bit:
-		game = new Mame019964bit;
-		break;
 	case WACKY_RACES:
 		game = new WackyRaces;
 		break;
@@ -1766,11 +1754,8 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case GTI_Club_3:
 		game = new GTIClub3;
 		break;
-	case Button_Rumble32bit:
-		game = new ButtonRumble32bit;
-		break;
-	case Button_Rumble64bit:
-		game = new ButtonRumble64bit;
+	case Button_Rumble:
+		game = new ButtonRumble;
 		break;
 	case Road_Fighters_3D:
 		game = new RoadFighters3D;
@@ -1781,11 +1766,11 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case LGI_:
 		game = new LGI;
 		break;
-	case MAME_020632bit:
-		game = new Mame020632bit;
+	case MAME_0199:
+		game = new Mame0199;
 		break;
-	case MAME_020664bit:
-		game = new Mame020664bit;
+	case MAME_0206:
+		game = new Mame0206;
 		break;
 	case KO_Drive:
 		game = new KODrive;

@@ -101,22 +101,19 @@
     <ClCompile Include="Game Files\LGI3D.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game Files\Mame020632bit.cpp" />
-    <ClCompile Include="Game Files\Mame020664bit.cpp" />
-    <ClCompile Include="Game Files\Mame019932bit.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game Files\Mame019964bit.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\OutRun2Fake.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game Files\ButtonRumble32bit.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game Files\ButtonRumble64bit.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
+    <ClCompile Include="Game Files\ButtonRumble.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Files\Mame0199.cpp">
+      <Filter>Game Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Game Files\Mame0206.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -210,34 +207,25 @@
     <ClInclude Include="Game Files\LGI3D.h">
       <Filter>Game Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game Files\Mame020632bit.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\Mame020664bit.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\Mame019932bit.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\Mame019964bit.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game Files\OutRun2Fake.h">
       <Filter>Game Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\OutRun2Real.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game Files\ButtonRumble32bit.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\ButtonRumble64bit.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game Files\FordRacingOther.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\KODrive.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\ButtonRumble.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\Mame0199.h">
+      <Filter>Game Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\Mame0206.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

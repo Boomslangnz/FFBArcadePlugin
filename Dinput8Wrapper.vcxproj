@@ -20,16 +20,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\FordRacingOther.h" />
-    <ClInclude Include="Game Files\ButtonRumble64bit.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
-    <ClInclude Include="Game Files\Mame019964bit.h" />
-    <ClInclude Include="Game Files\Mame020664bit.h" />
-    <ClInclude Include="Game Files\ButtonRumble32bit.h" />
+    <ClInclude Include="Game Files\ButtonRumble.h" />
     <ClInclude Include="Game Files\Demul.h" />
     <ClInclude Include="dinput8.def">
     </ClInclude>
-    <ClInclude Include="Game Files\Mame020632bit.h" />
+    <ClInclude Include="Game Files\Mame0206.h" />
     <ClInclude Include="Game Files\MarioKartGPDX1.10.h" />
     <ClInclude Include="Game Files\InitialD5.h" />
     <ClInclude Include="Game Files\InitialD4Japan.h" />
@@ -45,12 +42,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
-    <ClCompile Include="Game Files\ButtonRumble64bit.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
-    <ClCompile Include="Game Files\Mame019964bit.cpp" />
-    <ClCompile Include="Game Files\Mame020664bit.cpp" />
-    <ClCompile Include="Game Files\ButtonRumble32bit.cpp" />
+    <ClCompile Include="Game Files\ButtonRumble.cpp" />
     <ClCompile Include="Common Files\TeknoParrotGame.cpp" />
     <ClCompile Include="Game Files\Demul.cpp" />
     <ClCompile Include="Game Files\AfterburnerClimax.cpp" />
@@ -64,7 +58,7 @@
     <ClCompile Include="Game Files\InitialD7.cpp" />
     <ClCompile Include="Game Files\InitialD8.cpp" />
     <ClCompile Include="Game Files\Machstorm.cpp" />
-    <ClCompile Include="Game Files\Mame020632bit.cpp" />
+    <ClCompile Include="Game Files\Mame0206.cpp" />
     <ClCompile Include="Game Files\OutRun2Fake.cpp" />
     <ClCompile Include="Game Files\PokkenTournament.cpp" />
     <ClCompile Include="Game Files\SegaRally3.cpp" />
@@ -73,7 +67,7 @@
     <ClCompile Include="Game Files\MarioKartGPDX.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />
-    <ClCompile Include="Game Files\Mame019932bit.cpp" />
+    <ClCompile Include="Game Files\Mame0199.cpp" />
     <ClCompile Include="Game Files\WackyRaces.cpp" />
     <ClCompile Include="Game Files\WMMT5.cpp" />
     <ClCompile Include="Game Files\InitialD4Japan.cpp" />
@@ -106,7 +100,7 @@
     <ClInclude Include="Game Files\MarioKartGPDX.h" />
     <ClInclude Include="Game Files\SonicSegaAllStarsRacing.h" />
     <ClInclude Include="Game Files\TestGame.h" />
-    <ClInclude Include="Game Files\Mame019932bit.h" />
+    <ClInclude Include="Game Files\Mame0199.h" />
     <ClInclude Include="Game Files\WackyRaces.h" />
     <ClInclude Include="Game Files\WMMT5.h" />
     <ClInclude Include="Game Files\GTIClub3.h" />

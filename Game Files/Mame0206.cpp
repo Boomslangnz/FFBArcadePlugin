@@ -13,7 +13,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include <tchar.h>
-#include "Mame020632bit.h"
+#include "Mame0206.h"
 #include "math.h"
 
 static int sanfran(int ffsan) {
@@ -1649,7 +1649,7 @@ static int raveracer(int ffRaw) {
 	}
 }
 
-void Mame020632bit::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
+void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
 	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 	int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
 	HWND hWnds = FindWindow(NULL, _T("MAME: San Francisco Rush 2049 [sf2049]"));
