@@ -96,17 +96,17 @@ static int RunningThread(void *ptr)
 		uintptr_t jgtBase;
 		jgtBase = (uintptr_t)GetModuleHandleA("jgt.dll");
 
-		if (CabinetID == 1)
+		if (CabinetID == 2)
 		{
 			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x01", 1);
 			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
 		}
-		else if (CabinetID == 2)
+		else if (CabinetID == 3)
 		{
 			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x02", 1);
 			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
 		}
-		else if (CabinetID == 3)
+		else if (CabinetID == 4)
 		{
 			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x03", 1);
 			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
@@ -114,6 +114,7 @@ static int RunningThread(void *ptr)
 		else
 		{
 			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x00", 1);
+			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x74", 1);
 		}
 
 		if (HackToCloseLibmovieErrorAuto == 1)
