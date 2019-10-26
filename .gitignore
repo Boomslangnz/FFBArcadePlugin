@@ -1,0 +1,5 @@
+.vs/
+packages/
+Release.Win32/
+Release.x64/
+Debug.x64/
