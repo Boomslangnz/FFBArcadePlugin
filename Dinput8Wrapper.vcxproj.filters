@@ -14,6 +14,7 @@
     <None Include="Config\FFBPlugin.ini" />
     <None Include="Includes\SDL2.dll" />
     <None Include="packages.config" />
+    <None Include="LICENSE" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DllMain.cpp" />
