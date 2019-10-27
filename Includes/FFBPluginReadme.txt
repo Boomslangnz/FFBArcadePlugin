@@ -16,7 +16,8 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Huge modification of WMMT5 FFB effects completely re-done by pinkimo!!
 
-- GUI for WMMT5 re-done for new effects (pinkimo)
+- Huge modification of FFBPlugin GUI. Big Changes from Development point of view aswell as for users & much needed work!!
+  Helper function added, New WMMT5 options (including cheats) & SO MUCH MORE (pinkimo)
 
 - Fixed issue with newer Fanatec wheels which would show as 2 x devices and load wrong "device" and ffb wouldn't work (pinkimo)
 
@@ -25,8 +26,6 @@ so are not using real force feedback values. Most games use correct ffb values h
 - Fixed & Improved Sine Effect (pinkimo)
 
 - Added AlternativeFFB for Sine & Triangle Effects (pinkimo) 
-
-- Fixed issue where Lindbergh games wouldn't work
 
 - Disabled Rumble by default now as it caused issues with wheel rotation. Enable if using controller!! (unless using Rumble ONLY games eg LGI,LGI3D & ABC etc)
 
@@ -39,9 +38,15 @@ BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 
 - Fixed issue where coin rumble wouldn't work at all on Mario Kart GP DX 1.10
 
-- Added MessageBox popup & log if using Special K with WMMT5 which by default disables Rumble. Will now tell you if it detects this and tell you to change if using Rumble
-
 - Fixed issue with LGI & LGI3D where rumble wouldn't always work
+
+- Added Rumble Support for HOTD4 
+
+- Overhauled Daytona Championship USA Menu Movement Input to allow initials to be selected after races etc aswell
+
+- Added CabinetID code to Road Fighters 3D to not require hex edited files etc anymore. Simply select Cabinet ID in GUI and LAN Play will work :)
+
+- Modified Button Rumble Plugin to work better as previously could have slight lag on rumble
 
 - Modified and cleaned constant effect up
 
