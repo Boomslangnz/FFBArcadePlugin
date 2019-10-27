@@ -1661,21 +1661,21 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	}
 
 	if (EnableRumble == 1)
+	{
+		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
+		char RumbleDisableChar[256];
+		GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
+		std::string rumbletrue("true");
+		std::string rumbleTRUE("TRUE");
+		std::string rumbleTrue("True");
+		std::string rumdisable(RumbleDisableChar);
+
+		if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
 		{
-			//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
-			char RumbleDisableChar[256];
-			GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
-			std::string rumbletrue("true");
-			std::string rumbleTRUE("TRUE");
-			std::string rumbleTrue("True");
-			std::string rumdisable(RumbleDisableChar);
-
-			if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
-			{
-				WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
-			}
+			WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
 		}
-
+	}
+		
 	SDL_HapticStopAll(haptic);
 	Initialize(0);
 	hlp.log("Initialize() complete");
