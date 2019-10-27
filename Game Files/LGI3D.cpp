@@ -40,6 +40,7 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	float newFloat2 = health2p;
 
 	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+	int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
 	int HowtoRumbleKnockEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleKnockEffect"), 0, settingsFilename);
 	int HowtoRumbleMotorEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleMotorEffect"), 0, settingsFilename);
 	int HowtoRumbleHealthEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleHealthEffect"), 0, settingsFilename);
@@ -98,19 +99,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleHealthEffect == 0)
 		{
 			double percentForce = ((Health1pStrength) / 100.0);
-			double percentLength = (400);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleHealthEffect == 1)
 		{
 			double percentForce = ((Health1pStrength) / 100.0);
-			double percentLength = (400);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleHealthEffect == 2)
 		{
 			double percentForce = ((Health1pStrength) / 100.0);
-			double percentLength = (400);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
@@ -119,19 +120,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleHealthEffect == 0)
 		{
 			double percentForce = ((Health2pStrength) / 100.0);
-			double percentLength = (400);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleHealthEffect == 1)
 		{
 			double percentForce = ((Health2pStrength) / 100.0);
-			double percentLength = (400);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleHealthEffect == 2)
 		{
 			double percentForce = ((Health2pStrength) / 100.0);
-			double percentLength = (400);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}
 	}
@@ -140,19 +141,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleKnockEffect == 0)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 1)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 2)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
@@ -161,19 +162,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleMotorEffect == 0)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 1)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 2)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
@@ -182,19 +183,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleKnockEffect == 0)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 1)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 2)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
@@ -203,19 +204,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleMotorEffect == 0)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 1)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 2)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, 0, percentLength);
 		}
 	}
@@ -224,19 +225,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleKnockEffect == 0)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 1)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 2)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}
 	}
@@ -245,19 +246,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleMotorEffect == 0)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 1)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 2)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}
 	}
@@ -266,19 +267,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	if (HowtoRumbleKnockEffect == 0)
 	{
 		double percentForce = ((Knock1pStrength) / 100.0);
-		double percentLength = (100);
+		double percentLength = configFeedbackLength;
 		triggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 	}
 	else if (HowtoRumbleKnockEffect == 1)
 	{
 		double percentForce = ((Knock1pStrength) / 100.0);
-		double percentLength = (100);
+		double percentLength = configFeedbackLength;
 		triggers->LeftRightDevice2(0, percentForce, percentLength);
 	}
 	else if (HowtoRumbleKnockEffect == 2)
 	{
 		double percentForce = ((Knock1pStrength) / 100.0);
-		double percentLength = (100);
+		double percentLength = configFeedbackLength;
 		triggers->LeftRightDevice2(percentForce, 0, percentLength);
 	}
 	}
@@ -287,19 +288,19 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	if (HowtoRumbleMotorEffect == 0)
 	{
 		double percentForce = ((Motor1pStrength) / 100.0);
-		double percentLength = (100);
+		double percentLength = configFeedbackLength;
 		triggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 	}
 	else if (HowtoRumbleMotorEffect == 1)
 	{
 		double percentForce = ((Motor1pStrength) / 100.0);
-		double percentLength = (100);
+		double percentLength = configFeedbackLength;
 		triggers->LeftRightDevice2(0, percentForce, percentLength);
 	}
 	else if (HowtoRumbleMotorEffect == 2)
 	{
 		double percentForce = ((Motor1pStrength) / 100.0);
-		double percentLength = (100);
+		double percentLength = configFeedbackLength;
 		triggers->LeftRightDevice2(percentForce, 0, percentLength);
 	}
 	}
@@ -308,21 +309,21 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleKnockEffect == 0)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 			triggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 1)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 			triggers->LeftRightDevice2(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleKnockEffect == 2)
 		{
 			double percentForce = ((Knock1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}
@@ -332,21 +333,21 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		if (HowtoRumbleMotorEffect == 0)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, percentForce, percentLength);
 			triggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 1)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(0, percentForce, percentLength);
 			triggers->LeftRightDevice2(0, percentForce, percentLength);
 		}
 		else if (HowtoRumbleMotorEffect == 2)
 		{
 			double percentForce = ((Motor1pStrength) / 100.0);
-			double percentLength = (100);
+			double percentLength = configFeedbackLength;
 			triggers->LeftRight(percentForce, 0, percentLength);
 			triggers->LeftRightDevice2(percentForce, 0, percentLength);
 		}

@@ -66,6 +66,7 @@ static int RunningThread(void *ptr)
 		UINT8 newBullet2p = Bullet2p;
 
 		wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+		int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
 		int HowtoRumbleBulletEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleBulletEffect"), 0, settingsFilename);
 		int HowtoRumbleGrenadeEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleGrenadeEffect"), 0, settingsFilename);
 		int HowtoRumbleHealthEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleHealthEffect"), 0, settingsFilename);
@@ -83,19 +84,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleHealthEffect == 0)
 				{
 					double percentForce = ((Health1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 1)
 				{
 					double percentForce = ((Health1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 2)
 				{
 					double percentForce = ((Health1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, 0, percentLength);
 				}
 				HealthA = true;
@@ -109,19 +110,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleHealthEffect == 0)
 				{
 					double percentForce = ((Health2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 1)
 				{
 					double percentForce = ((Health2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 2)
 				{
 					double percentForce = ((Health2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
 				}
 				HealthB = true;
@@ -135,19 +136,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleHealthEffect == 0)
 				{
 					double percentForce = ((Health1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 1)
 				{
 					double percentForce = ((Health1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 2)
 				{
 					double percentForce = ((Health1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, 0, percentLength);
 				}
 			}
@@ -156,19 +157,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleBulletEffect == 0)
 				{
 					double percentForce = ((Bullet1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleBulletEffect == 1)
 				{
 					double percentForce = ((Bullet1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleBulletEffect == 2)
 				{
 					double percentForce = ((Bullet1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, 0, percentLength);
 				}
 			}
@@ -177,19 +178,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleGrenadeEffect == 0)
 				{
 					double percentForce = ((Grenade1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleGrenadeEffect == 1)
 				{
 					double percentForce = ((Grenade1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleGrenadeEffect == 2)
 				{
 					double percentForce = ((Grenade1pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRight(percentForce, 0, percentLength);
 				}
 			}
@@ -203,19 +204,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleHealthEffect == 0)
 				{
 					double percentForce = ((Health2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 1)
 				{
 					double percentForce = ((Health2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleHealthEffect == 2)
 				{
 					double percentForce = ((Health2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
 				}
 			}
@@ -224,19 +225,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleBulletEffect == 0)
 				{
 					double percentForce = ((Bullet2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleBulletEffect == 1)
 				{
 					double percentForce = ((Bullet2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleBulletEffect == 2)
 				{
 					double percentForce = ((Bullet2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
 				}
 			}
@@ -245,19 +246,19 @@ static int RunningThread(void *ptr)
 				if (HowtoRumbleGrenadeEffect == 0)
 				{
 					double percentForce = ((Grenade2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleGrenadeEffect == 1)
 				{
 					double percentForce = ((Grenade2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleGrenadeEffect == 2)
 				{
 					double percentForce = ((Grenade2pStrength) / 100.0);
-					double percentLength = (100);
+					double percentLength = configFeedbackLength;
 					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
 				}
 			}
