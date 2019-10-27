@@ -125,6 +125,19 @@ static int SpamThread(void* ptr)
 	return 0;
 }
 
+static int GearChangeThread(void* ptr)
+{
+	if (GearChangeDelay > 0)
+	{
+		Sleep(GearChangeDelay);
+	}
+	myHelpers->log("gear change");
+	double percentForce = GearChangeStrength / 100.0;
+	myTriggers->Sine(GearChangeLength, 0, percentForce);
+	myTriggers->LeftRight(0, percentForce, 150);
+	return 0;
+}
+
 void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	if (!init)
@@ -293,14 +306,7 @@ void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 		if (oldgear != gear && 0 < gear && 0.5 < time && 0.1 <= speed)
 		{
-			if (GearChangeDelay > 0)
-			{
-				Sleep(GearChangeDelay);
-			}
-			helpers->log("gear change");
-			percentForce = GearChangeStrength / 100.0;
-			triggers->Sine(GearChangeLength, 0, percentForce);
-			triggers->LeftRight(0, percentForce, 150);
+			SDL_Thread* gearChangeThread = SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
 		}
 		oldgear = gear;
 	}
