@@ -607,32 +607,32 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 						if (testbuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x02, false);
-							leverleftA = false;
+							testbuttonA = false;
 						}
 						if (servicebuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x01, false);
-							leverrightA = false;
+							servicebuttonA = false;
 						}
 						if (viewbuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x400, false);
-							leverrightA = false;
+							viewbuttonA = false;
 						}
 						if (threedeebuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x800, false);
-							leverleftA = false;
+							threedeebuttonA = false;
 						}						
 						if (leverupA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
-							leverleftA = false;
+							leverupA = false;
 						}
 						if (leverdownA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
-							leverrightA = false;
+							leverdownA = false;
 						}
 						if (leverleftA)
 						{
@@ -650,32 +650,32 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 						if (testbuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x02, false);
-							leverleftA = false;
+							testbuttonA = false;
 						}
 						if (servicebuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x01, false);
-							leverrightA = false;
+							servicebuttonA = false;
 						}
 						if (viewbuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x400, false);
-							leverrightA = false;
+							viewbuttonA = false;
 						}
 						if (threedeebuttonA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x800, false);
-							leverleftA = false;
+							threedeebuttonA = false;
 						}
 						if (leverupA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
-							leverleftA = false;
+							leverupA = false;
 						}
 						if (leverdownA)
 						{
 							helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
-							leverrightA = false;
+							leverdownA = false;
 						}
 						if (leverleftA)
 						{
