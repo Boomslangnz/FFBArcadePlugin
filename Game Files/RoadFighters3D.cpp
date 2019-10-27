@@ -161,6 +161,7 @@ static int RunningThread(void *ptr)
 					if (timeroutofmenu != 0)
 					{															
 						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x00, false);
+						myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B39, 0x7F, false);
 						avoiderror = false;
 					}
 				}
