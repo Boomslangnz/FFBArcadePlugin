@@ -1660,11 +1660,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		Sleep(2500);
 	}
 
-	if (configGameId == 9)
-	{
-		if (EnableRumble == 1)
+	if (EnableRumble == 1)
 		{
-			//SPECIAL K DISABLES RUMBLE BY DEFAULT. THIS WILL GIVE ERROR MESSAGE TO LET USER KNOW IF USING IT
+			//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
 			char RumbleDisableChar[256];
 			GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
 			std::string rumbletrue("true");
@@ -1674,11 +1672,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 
 			if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
 			{
-				hlp.log("Special K has rumble disabled. Change DisableRumble to false in dxgi.ini");
-				MessageBoxA(NULL, "Special K has rumble disabled. Change DisableRumble to false in dxgi.ini", "FFBArcadePlugin", NULL);
+				WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
 			}
 		}
-	}
 
 	SDL_HapticStopAll(haptic);
 	Initialize(0);
