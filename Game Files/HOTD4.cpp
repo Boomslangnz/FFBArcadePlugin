@@ -24,6 +24,8 @@ static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
 extern HINSTANCE gl_cgGLDll;
+static bool HealthA = false;
+static bool HealthB = false;
 SDL_Event e;
 
 static int RunningThread(void *ptr)
@@ -31,20 +33,37 @@ static int RunningThread(void *ptr)
 	int cnt;
 	for (cnt = 0; cnt >= 0; ++cnt)
 	{
-		INT_PTR Base = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x9164, false);
-		INT_PTR Base1 = myHelpers->ReadIntPtr(Base + 0x11C, false);
-		INT_PTR Base2 = myHelpers->ReadIntPtr(Base1 + 0x50, false);
-		INT_PTR Base3 = myHelpers->ReadIntPtr(Base2 + 0x20, false);
-		UINT8 Health = myHelpers->ReadByte(Base3 + 0x3C, false);
-		UINT8 Bullet = myHelpers->ReadByte(Base3 + 0x274, false);
-		UINT8 Grenade = myHelpers->ReadByte(Base3 + 0x2A0, false);
+		INT_PTR Base1p = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x9164, false);
+		INT_PTR Base11p = myHelpers->ReadIntPtr(Base1p + 0x11C, false);
+		INT_PTR Base21p = myHelpers->ReadIntPtr(Base11p + 0x50, false);
+		INT_PTR Base31p = myHelpers->ReadIntPtr(Base21p + 0x20, false);
+		UINT8 Health1p = myHelpers->ReadByte(Base31p + 0x3C, false);
+		UINT8 Bullet1p = myHelpers->ReadByte(Base31p + 0x274, false);
+		UINT8 GrenadeExplode1p = myHelpers->ReadByte(Base31p + 0x2B3, false);
+		INT_PTR Base2p = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x1219C, false);
+		INT_PTR Base12p = myHelpers->ReadIntPtr(Base2p + 0x69C, false);
+		INT_PTR Base22p = myHelpers->ReadIntPtr(Base12p + 0x4CC, false);
+		INT_PTR Base32p = myHelpers->ReadIntPtr(Base22p + 0xD0, false);
+		INT_PTR Base42p = myHelpers->ReadIntPtr(Base32p + 0x38, false);
+		UINT8 Health2p = myHelpers->ReadByte(Base42p + 0x3C, false);
+		UINT8 Bullet2p = myHelpers->ReadByte(Base42p + 0x274, false);
+		UINT8 GrenadeExplode2p = myHelpers->ReadByte(Base42p + 0x2B3, false);
+		UINT8 IngameValue1p = myHelpers->ReadByte(Base31p + 0x38, false);
+		UINT8 IngameValue2p = myHelpers->ReadByte(Base42p + 0x38, false);
+		INT_PTR StartBase = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x3C40, false);
+		INT_PTR StartBase1 = myHelpers->ReadIntPtr(StartBase + 0x130, false);
+		INT_PTR StartBase2 = myHelpers->ReadIntPtr(StartBase1 + 0x234, false);
+		UINT8 StartButton1p = myHelpers->ReadByte(StartBase2 + 0x530, false);
+		UINT8 StartButton2p = myHelpers->ReadByte(StartBase2 + 0x538, false);
 
-		UINT8 static oldHealth = 0;
-		UINT8 static oldBullet = 0;
-		UINT8 static oldGrenade = 0;
-		UINT8 newHealth = Health;
-		UINT8 newBullet = Bullet;
-		UINT8 newGrenade = Grenade;
+		UINT8 static oldHealth1p = 0;
+		UINT8 static oldBullet1p = 0;
+		UINT8 static oldHealth2p = 0;
+		UINT8 static oldBullet2p = 0;
+		UINT8 newHealth1p = Health1p;
+		UINT8 newBullet1p = Bullet1p;		
+		UINT8 newHealth2p = Health2p;
+		UINT8 newBullet2p = Bullet2p;
 
 		wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 		int HowtoRumbleBulletEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleBulletEffect"), 0, settingsFilename);
@@ -57,72 +76,197 @@ static int RunningThread(void *ptr)
 		int Grenade2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Grenade2pStrength"), 0, settingsFilename);
 		int Health2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Health2pStrength"), 0, settingsFilename);
 
-		if (oldHealth != newHealth)
+		if ((Health1p == 0) && (IngameValue1p == 11))
 		{
-			if (HowtoRumbleHealthEffect == 0)
+			if (!HealthA)
 			{
-				double percentForce = ((Health1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleHealthEffect == 1)
-			{
-				double percentForce = ((Health1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleHealthEffect == 2)
-			{
-				double percentForce = ((Health1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(percentForce, 0, percentLength);
+				if (HowtoRumbleHealthEffect == 0)
+				{
+					double percentForce = ((Health1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 1)
+				{
+					double percentForce = ((Health1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 2)
+				{
+					double percentForce = ((Health1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, 0, percentLength);
+				}
+				HealthA = true;
 			}
 		}
-		if (oldBullet != newBullet)
+
+		if ((Health2p == 0) && (IngameValue2p == 11))
 		{
-			if (HowtoRumbleBulletEffect == 0)
+			if (!HealthB)
 			{
-				double percentForce = ((Bullet1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleBulletEffect == 1)
-			{
-				double percentForce = ((Bullet1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleBulletEffect == 2)
-			{
-				double percentForce = ((Bullet1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(percentForce, 0, percentLength);
+				if (HowtoRumbleHealthEffect == 0)
+				{
+					double percentForce = ((Health2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 1)
+				{
+					double percentForce = ((Health2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 2)
+				{
+					double percentForce = ((Health2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
+				}
+				HealthB = true;
 			}
 		}
-		if (oldGrenade != newGrenade)
+
+		if ((IngameValue1p == 3) && (StartButton1p != 0x80))
 		{
-			if (HowtoRumbleGrenadeEffect == 0)
+			if (oldHealth1p != newHealth1p)
 			{
-				double percentForce = ((Grenade1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				if (HowtoRumbleHealthEffect == 0)
+				{
+					double percentForce = ((Health1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 1)
+				{
+					double percentForce = ((Health1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 2)
+				{
+					double percentForce = ((Health1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, 0, percentLength);
+				}
 			}
-			else if (HowtoRumbleGrenadeEffect == 1)
+			if (oldBullet1p != newBullet1p)
 			{
-				double percentForce = ((Grenade1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(0, percentForce, percentLength);
+				if (HowtoRumbleBulletEffect == 0)
+				{
+					double percentForce = ((Bullet1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleBulletEffect == 1)
+				{
+					double percentForce = ((Bullet1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleBulletEffect == 2)
+				{
+					double percentForce = ((Bullet1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, 0, percentLength);
+				}
 			}
-			else if (HowtoRumbleGrenadeEffect == 2)
+			if (GrenadeExplode1p == 0x42)
 			{
-				double percentForce = ((Grenade1pStrength) / 100.0);
-				double percentLength = (400);
-				myTriggers->LeftRight(percentForce, 0, percentLength);
+				if (HowtoRumbleGrenadeEffect == 0)
+				{
+					double percentForce = ((Grenade1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleGrenadeEffect == 1)
+				{
+					double percentForce = ((Grenade1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleGrenadeEffect == 2)
+				{
+					double percentForce = ((Grenade1pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRight(percentForce, 0, percentLength);
+				}
 			}
+			HealthA = false;
 		}
-		oldHealth = newHealth;
-		oldBullet = newBullet;
-		oldGrenade = newGrenade;
+
+		if ((IngameValue2p == 3) && (StartButton2p != 0x80))
+		{
+			if (oldHealth2p != newHealth2p)
+			{
+				if (HowtoRumbleHealthEffect == 0)
+				{
+					double percentForce = ((Health2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 1)
+				{
+					double percentForce = ((Health2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleHealthEffect == 2)
+				{
+					double percentForce = ((Health2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
+				}
+			}
+			if (oldBullet2p != newBullet2p)
+			{
+				if (HowtoRumbleBulletEffect == 0)
+				{
+					double percentForce = ((Bullet2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleBulletEffect == 1)
+				{
+					double percentForce = ((Bullet2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleBulletEffect == 2)
+				{
+					double percentForce = ((Bullet2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
+				}
+			}
+			if (GrenadeExplode2p == 0x42)
+			{
+				if (HowtoRumbleGrenadeEffect == 0)
+				{
+					double percentForce = ((Grenade2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
+				}
+				else if (HowtoRumbleGrenadeEffect == 1)
+				{
+					double percentForce = ((Grenade2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(0, percentForce, percentLength);
+				}
+				else if (HowtoRumbleGrenadeEffect == 2)
+				{
+					double percentForce = ((Grenade2pStrength) / 100.0);
+					double percentLength = (100);
+					myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
+				}
+			}
+			HealthB = false;
+		}
+		oldHealth1p = newHealth1p;
+		oldBullet1p = newBullet1p;
+		oldHealth2p = newHealth2p;
+		oldBullet2p = newBullet2p;
 	}
 	return 0;
 }
