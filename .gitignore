@@ -1,3 +1,6 @@
+*.sln
+*.vcxproj
+*.vcxproj.filters
 .vs/
 packages/
 Release.Win32/
