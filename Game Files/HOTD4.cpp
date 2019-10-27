@@ -23,6 +23,7 @@ extern SDL_Haptic* haptic2;
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
+extern HINSTANCE gl_cgGLDll;
 SDL_Event e;
 
 static int RunningThread(void *ptr)
@@ -30,9 +31,9 @@ static int RunningThread(void *ptr)
 	int cnt;
 	for (cnt = 0; cnt >= 0; ++cnt)
 	{
-		INT_PTR Base = myHelpers->ReadIntPtr(0x1CCEC0, true);
-		INT_PTR Base1 = myHelpers->ReadIntPtr(Base + 0xF8, false);
-		INT_PTR Base2 = myHelpers->ReadIntPtr(Base1 + 0x38, false);
+		INT_PTR Base = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x9164, false);
+		INT_PTR Base1 = myHelpers->ReadIntPtr(Base + 0x11C, false);
+		INT_PTR Base2 = myHelpers->ReadIntPtr(Base1 + 0x50, false);
 		INT_PTR Base3 = myHelpers->ReadIntPtr(Base2 + 0x20, false);
 		UINT8 Health = myHelpers->ReadByte(Base3 + 0x3C, false);
 		UINT8 Bullet = myHelpers->ReadByte(Base3 + 0x274, false);

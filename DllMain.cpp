@@ -838,6 +838,7 @@ SDL_Joystick* GameController2 = NULL;
 SDL_Haptic* ControllerHaptic2 = NULL;
 HINSTANCE gl_hOriginalDll = NULL;
 HINSTANCE gl_hjgtDll = NULL;
+HINSTANCE gl_cgGLDll = NULL;
 HINSTANCE gl_hlibavs = NULL;
 int joystick_index1;
 int joystick1Index = -1;
@@ -1918,6 +1919,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			{
 				gl_hjgtDll = LoadLibraryA("jgt.dll");
 				gl_hlibavs = LoadLibraryA("libavs-win32-ea3.dll");
+			}
+			if (configGameId == 4)
+			{
+				gl_cgGLDll = LoadLibraryA("cgGL.dll");
 			}
 		}
 		else
