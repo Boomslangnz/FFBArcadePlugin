@@ -45,6 +45,8 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	INT_PTR PanelBase3 = helpers->ReadIntPtr(PanelBase2 + 0x30, false);
 	UINT8 PanelBase4 = helpers->ReadByte(PanelBase3 + 0x2C, false);
 	UINT8 Wheels = helpers->ReadByte(PanelBase3 + 0xB4, false);
+	UINT8 Skids = helpers->ReadByte(PanelBase3 + 0x100, false);
+	UINT8 AI = helpers->ReadByte(PanelBase3 + 0x3D4, false);
 	UINT8 gear = helpers->ReadByte(0x346A5C6C, false);
 	INT_PTR speedoBase = helpers->ReadIntPtr(0x28C008, true);
 	INT_PTR speedoBase1 = helpers->ReadIntPtr(speedoBase + 0xD0, false);
@@ -70,6 +72,20 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		double percentLength = 100;
 		triggers->LeftRight(percentForce, percentForce, percentLength);
 		triggers->Sine(80, 80, percentForce);
+	}
+
+	if ((Skids > 12) && (speedo > 0))
+	{
+		double percentForce = ((Skids - 12) / 8.0);
+		double percentLength = 100;
+		triggers->LeftRight(percentForce, 0, percentLength);
+	}
+
+	if ((AI > 0) && (PanelBase4 > 0))
+	{
+		double percentForce = (PanelBase4) / 8.0;
+		double percentLength = 100;
+		triggers->LeftRight(percentForce, percentForce, percentLength);
 	}
 
 	if ((WallBase4 > 0) && (PanelBase4 > 0))
