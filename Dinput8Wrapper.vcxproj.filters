@@ -116,6 +116,7 @@
     </ClCompile>
     <ClCompile Include="Game Files\Mame0206.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
+    <ClCompile Include="Game Files\GRID.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -231,6 +232,9 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\HOTD4.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\GRID.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

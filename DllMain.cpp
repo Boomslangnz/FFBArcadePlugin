@@ -32,6 +32,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Daytona3.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
+#include "Game Files/GRID.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"
 #include "Game Files/InitialD5.h"
@@ -885,6 +886,7 @@ const int SEGA_RALLY_3 = 6;
 const int FORD_RACING = 7;
 const int INITIAL_D_6 = 8;
 const int WMMT_5 = 9;
+const int GRID_ = 10;
 const int MARIO_KART_GPDX = 11;
 const int OUTRUN_2Fake = 12;
 const int BG4_JP = 13;
@@ -1714,6 +1716,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case FORD_RACING_OTHER:
 		game = new FordRacingOther;
+		break;
+	case GRID_:
+		game = new GRID;
 		break;
 	case INITIAL_D_4:
 		game = new InitialD4;
