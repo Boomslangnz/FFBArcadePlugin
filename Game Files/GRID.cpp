@@ -13,6 +13,24 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "GRID.h"
+#include "SDL.h"
+static EffectTriggers* myTriggers;
+static EffectConstants* myConstants;
+static Helpers* myHelpers;
+
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 0, settingsFilename);
+static int GearChangeStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearChangeStrength"), 20, settingsFilename);
+static int GearChangeLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearChangeLength"), 200, settingsFilename);
+
+static int GearChangeThread(void* ptr)
+{
+	myHelpers->log("gear change");
+	double percentForce = GearChangeStrength / 100.0;
+	myTriggers->Sine(GearChangeLength, 0, percentForce);
+	myTriggers->LeftRight(0, percentForce, 150);
+	return 0;
+}
 
 void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -21,17 +39,24 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	INT_PTR WallBase2 = helpers->ReadIntPtr(WallBase1 + 0x4, false);
 	INT_PTR WallBase3 = helpers->ReadIntPtr(WallBase2 + 0x4, false);
 	float WallBase4 = helpers->ReadFloat32(WallBase3 + 0x118, false);
-
 	INT_PTR PanelBase = helpers->ReadIntPtr(0xA3FA34, true);
 	INT_PTR PanelBase1 = helpers->ReadIntPtr(PanelBase + 0x678, false);
 	INT_PTR PanelBase2 = helpers->ReadIntPtr(PanelBase1 + 0x14, false);
 	INT_PTR PanelBase3 = helpers->ReadIntPtr(PanelBase2 + 0x30, false);
 	UINT8 PanelBase4 = helpers->ReadByte(PanelBase3 + 0x2C, false);
 	UINT8 Wheels = helpers->ReadByte(PanelBase3 + 0xB4, false);
+	UINT8 gear = helpers->ReadByte(0x346A5C6C, false);
 
-	if (WallBase4 != NULL)
+	UINT8 static oldgear = 0;
+	UINT8 newgear = gear;
+
 	{
-		triggers->Springi(0.6);
+		triggers->Springi(SpringStrength / 100.0);
+	}
+
+	if (oldgear != newgear)
+	{
+		SDL_Thread* gearChangeThread = SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
 	}
 
 	if (Wheels > 0)
@@ -54,4 +79,8 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		triggers->LeftRight(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 	}
+	oldgear = newgear;
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
 }
