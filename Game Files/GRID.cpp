@@ -46,6 +46,11 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	UINT8 PanelBase4 = helpers->ReadByte(PanelBase3 + 0x2C, false);
 	UINT8 Wheels = helpers->ReadByte(PanelBase3 + 0xB4, false);
 	UINT8 gear = helpers->ReadByte(0x346A5C6C, false);
+	INT_PTR speedoBase = helpers->ReadIntPtr(0x28C008, true);
+	INT_PTR speedoBase1 = helpers->ReadIntPtr(speedoBase + 0xD0, false);
+	INT_PTR speedoBase2 = helpers->ReadIntPtr(speedoBase1 + 0x460, false);
+	INT_PTR speedoBase3 = helpers->ReadIntPtr(speedoBase2 + 0x184, false);
+	float speedo = helpers->ReadFloat32(speedoBase3 + 0x4F4, false);
 
 	UINT8 static oldgear = 0;
 	UINT8 newgear = gear;
@@ -54,7 +59,7 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		triggers->Springi(SpringStrength / 100.0);
 	}
 
-	if (oldgear != newgear)
+	if ((oldgear != newgear) && (speedo > 0))
 	{
 		SDL_Thread* gearChangeThread = SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
 	}
