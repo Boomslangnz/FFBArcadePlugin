@@ -67,6 +67,8 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	if (Wheels > 0)
 	{
 		double percentForce = Wheels / 37.0;
+		double percentLength = 100;
+		triggers->LeftRight(percentForce, percentForce, percentLength);
 		triggers->Sine(80, 80, percentForce);
 	}
 
