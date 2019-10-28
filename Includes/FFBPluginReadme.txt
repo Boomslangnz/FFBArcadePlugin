@@ -414,8 +414,6 @@ EnableRumble= **Turn Off (0) if your wheel supports rumble effect. For controlle
 
 Logging= **Turn On (1) to allow log.txt to be made to log plugin. Device GUID is given in here**
 
-ResetFeedback= **When a command is set that contradicts a prior command, clear the prior command.**
-
 FeedbackLength= **Length of a feedback command**
 
 DefaultCentering= **If a game does not specify its own Centering force then a default centering can be applied here.

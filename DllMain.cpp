@@ -854,7 +854,6 @@ int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 
 int ReverseRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumble"), 0, settingsFilename);
 wchar_t *deviceGUIDString = new wchar_t[256];
 int DeviceGUID = GetPrivateProfileString(TEXT("Settings"), TEXT("DeviceGUID"), NULL, deviceGUIDString, 256, settingsFilename);
-int configResetFeedback = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFeedback"), 1, settingsFilename);
 int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
 int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 0, settingsFilename);
 int configDefaultCentering = GetPrivateProfileInt(TEXT("Settings"), TEXT("DefaultCentering"), 0, settingsFilename);
@@ -925,7 +924,7 @@ void Initialize(int device_index)
 	hlp.log("in initialize");
 	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC | SDL_INIT_TIMER);
 	SDL_JoystickEventState(SDL_ENABLE);
-	SDL_JoystickUpdate;
+	SDL_JoystickUpdate();
 	char joystick_guid[256];
 	sprintf(joystick_guid, "%S", deviceGUIDString);
 	SDL_JoystickGUID guid, dev_guid;
@@ -940,7 +939,7 @@ void Initialize(int device_index)
 		SDL_Joystick* js = SDL_JoystickOpen(i);
 		const char* name = SDL_JoystickName(js);
 		joystick_index1 = SDL_JoystickInstanceID(js);
-		SDL_JoystickGUID guid = SDL_JoystickGetGUID(js);
+		guid = SDL_JoystickGetGUID(js);
 		if (ForceShowDeviceGUIDMessageBox == 1)
 		{
 			char text[256];
@@ -985,7 +984,6 @@ void Initialize(int device_index)
 	haptic = ControllerHaptic;
 	if ((SDL_HapticRumbleSupported(haptic) == SDL_TRUE && EnableRumble == 1)) 
 	{
-		SDL_HapticRumbleInit;
 		SDL_HapticRumbleInit(ControllerHaptic);	
 		hlp.log("Rumble Init");
 	}
@@ -1078,27 +1076,11 @@ void Initialize(int device_index)
 }
 
 using namespace std::chrono;
-std::chrono::milliseconds timeOfLastConstantEffect = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-std::chrono::milliseconds timeOfLastFrictionEffect = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 std::chrono::milliseconds timeOfLastSineEffect = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-std::chrono::milliseconds timeOfLastSpringEffect = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-std::string lastConstantEffectHash = "";
-std::string lastFrictionEffectHash = "";
 double lastSineEffectStrength = 0;
 double lastSineEffectPeriod = 0;
-std::string lastSpringEffectHash = "";
 void TriggerConstantEffect(int direction, double strength)
 {
-	// if no strength, we do nothing
-	if (strength <= 0.001) {
-		return;
-	}
-
-	// stop previous effect if not completed
-	if (configResetFeedback) {
-		SDL_HapticStopEffect(haptic, effects.effect_constant_id);
-	}
-
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 	tempEffect.type = SDL_HAPTIC_CONSTANT;
@@ -1144,36 +1126,15 @@ void TriggerConstantEffect(int direction, double strength)
 	SDL_HapticRunEffect(haptic, effects.effect_constant_id, 1);
 }
 
-void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
-	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastFrictionEffect)).count();
-	std::string effectHash = std::to_string(effects.effect_friction_id) + "_" + std::to_string(strength);
-
-	if (!isDefault) {
-		// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-		if (effectHash.compare(lastFrictionEffectHash) == 0 && elapsedTime < configFeedbackLength) {
-			return; // same effect, do nothing.
-		}
-
-		// TODO: investigate if we need this
-		if (configResetFeedback || strength <= 0.001) {
-			SDL_HapticStopEffect(haptic, effects.effect_friction_id);
-			if (strength <= 0.01) {
-				timeOfLastFrictionEffect = now;
-				lastFrictionEffectHash = effectHash;
-				return;
-			}
-		}
-	}
-
+void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault)
+{
 	SDL_HapticEffect tempEffect;
-
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 	tempEffect.type = SDL_HAPTIC_FRICTION;
 	tempEffect.condition.type = SDL_HAPTIC_FRICTION;
 	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
 	tempEffect.condition.delay = 0;
-	tempEffect.condition.length = isDefault ? 0xFFFFFFFF : configFeedbackLength;
+	tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
 	tempEffect.condition.left_sat[0] = 0xFFFF;
 	tempEffect.condition.right_sat[0] = 0xFFFF;
 
@@ -1190,10 +1151,6 @@ void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault) {
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
 	SDL_HapticUpdateEffect(haptic, effects.effect_friction_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_friction_id, 1);
-	if (!isDefault) {
-		timeOfLastFrictionEffect = now;
-		lastFrictionEffectHash = effectHash;
-	}
 }
 
 void TriggerInertiaEffect(double strength) 
@@ -1415,11 +1372,6 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 		return;
 	}
 
-	// stop previous effect if not completed
-	if (configResetFeedback) {
-		SDL_HapticStopEffect(haptic, effects.effect_sine_id);
-	}
-
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 	hlp.log("Doing sine...");
@@ -1473,35 +1425,15 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	lastSineEffectPeriod = period;
 }
 
-void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
-	/*std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSpringEffect)).count();
-	std::string effectHash = std::to_string(effects.effect_spring_id) + "_" + std::to_string(strength);
-
-	if (!isDefault) {
-		// if the effect is the same as the last effect that was sent AND enough time hasn't elapsed, do nothing
-		if (effectHash.compare(lastSpringEffectHash) == 0 && elapsedTime < configFeedbackLength) {
-			return; // same effect, do nothing.
-		}
-
-		// TODO: investigate if we need this
-		if (configResetFeedback || strength <= 0.001) {
-			SDL_HapticStopEffect(haptic, effects.effect_spring_id);
-			if (strength <= 0.01) {
-				timeOfLastSpringEffect = now;
-				lastSpringEffectHash = effectHash;
-				return;
-			}
-		}
-	}*/
-
+void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault)
+{
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 	tempEffect.type = SDL_HAPTIC_SPRING;
 	tempEffect.condition.type = SDL_HAPTIC_SPRING;
 	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
 	tempEffect.condition.delay = 0;
-	tempEffect.condition.length = isDefault ? 0xFFFFFFFF : configFeedbackLength;
+	tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
 	tempEffect.condition.direction.dir[0] = 1;
 	tempEffect.constant.direction.dir[1] = 0; //Y Position
 	
@@ -1522,11 +1454,6 @@ void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault) {
 
 	SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_spring_id, 1);
-
-	/*if (!isDefault) {
-		timeOfLastSpringEffect = now;
-		lastSpringEffectHash = effectHash;
-	}*/
 }
 
 void TriggerSpringEffectInfinite(double strength)
@@ -1541,7 +1468,6 @@ void TriggerSpringEffectInfinite(double strength)
 	tempEffect.condition.length = SDL_HAPTIC_INFINITY;
 	tempEffect.condition.direction.dir[0] = 1;
 	tempEffect.constant.direction.dir[1] = 1; //Y Position
-
 
 	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
@@ -1647,7 +1573,6 @@ void TriggerRumbleEffect(double strength, double length)
 		SDL_HapticRumblePlay(haptic, strength, length);
 	}
 }
-
 
 void TriggerSpringEffect(double strength)
 {
