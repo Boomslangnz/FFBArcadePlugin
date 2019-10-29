@@ -1197,7 +1197,7 @@ void TriggerTriangleEffect(double strength, double length)
 	if (FFBorRumble == 0)
 	{
 		int direction = 1;
-		if (strength <= -0.001) {
+		if (strength < -0.001) {
 			strength *= -1;
 			direction = -1;
 		}
@@ -1387,18 +1387,18 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffect)).count();
 
 		int direction = 1;
-		if (strength <= -0.001) {
+		if (strength < -0.001) {
 			strength *= -1;
 			direction = -1;
 		}
 
-		// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
-		if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 2.0)) {
+		// if no strength, we do nothing
+		if (strength <= 0.001) {
 			return;
 		}
 
-		// if no strength, we do nothing
-		if (strength <= 0.001) {
+		// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
+		if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 1.5)) {
 			return;
 		}
 

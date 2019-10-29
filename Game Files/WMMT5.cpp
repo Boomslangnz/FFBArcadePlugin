@@ -44,19 +44,17 @@ static int ForceTimeUpButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("Forc
 
 static int InputThread(void *ptr)
 {
+	if (1 != EnableForceFinish && 1 != EnableForceTimeUp)
+	{
+		return 0;
+	}
+
 	myHelpers->log("starting input thread");
 	while (SDL_WaitEvent(&e) != 0)
 	{
 		if (e.type == SDL_JOYBUTTONDOWN)
 		{
 			myHelpers->log("button pressed");
-			if (1 == ShowButtonNumbersForSetup && e.jbutton.button >= 0)
-			{
-				char buff[100];
-				sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
-				MessageBoxA(NULL, buff, "", NULL);
-			}
-
 			if (1 == EnableForceFinish && e.jbutton.button == ForceFinishButton)
 			{
 				INT_PTR ptr1 = myHelpers->ReadIntPtr(0x199A468, true);
@@ -133,21 +131,21 @@ static int GearChangeThread(void* ptr)
 	}
 	myHelpers->log("gear change");
 	double percentForce = GearChangeStrength / 100.0;
-	myTriggers->Sine(GearChangeLength, 0, percentForce);
+	myTriggers->Sine(GearChangeLength, GearChangeLength, percentForce);
 	myTriggers->LeftRight(0, percentForce, 150);
 	return 0;
 }
 
-void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
-
+void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
+{
 	if (!init)
 	{
 		init = true;
 		myTriggers = triggers;
 		myConstants = constants;
 		myHelpers = helpers;
-		SDL_Thread* inputThread = SDL_CreateThread(InputThread, "InputThread", (void*)NULL);
-		SDL_Thread* spamThread = SDL_CreateThread(SpamThread, "SpamThread", (void*)NULL);
+		SDL_CreateThread(InputThread, "InputThread", (void*)NULL);
+		SDL_CreateThread(SpamThread, "SpamThread", (void*)NULL);
 	}
 
 	float spring = helpers->ReadFloat32(0x196F18C, true);
@@ -161,7 +159,15 @@ void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	helpers->log((char*)msg.c_str());
 
 	double percentForce;
-	if (0 < spring)
+	if (0.001 > spring && !gameFfbStarted)
+	{
+		helpers->log("fake spring+friction until game's FFB starts");
+		percentForce = 0.3 * SpringStrength / 100.0;
+		triggers->Spring(percentForce);
+		percentForce = 0.5 * FrictionStrength / 100.0;
+		triggers->Friction(percentForce);
+	}
+	else
 	{
 		if (!gameFfbStarted)
 		{
@@ -170,20 +176,10 @@ void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		}
 		percentForce = (1.0 * spring) * SpringStrength / 100.0;
 		triggers->Spring(percentForce);
-	}
-	else if (!gameFfbStarted)
-	{
-		helpers->log("fake spring/friction until game's FFB starts");
-		percentForce = 0.3 * SpringStrength / 100.0;
-		triggers->Spring(percentForce);
-		percentForce = 0.5 * FrictionStrength / 100.0;
-		triggers->Friction(percentForce);
-	}
-	if (0 < friction)
-	{
 		percentForce = (1.0 * friction) * FrictionStrength / 100.0;
 		triggers->Friction(percentForce);
 	}
+
 	if (0 < collisions)
 	{
 		if (0.209 <= collisions && 0.311 >= collisions)
@@ -217,8 +213,13 @@ void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			triggers->LeftRight(0, percentForce, 150);
 		}
-
 	}
+	else
+	{
+		helpers->log("resetting collision");
+		triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+	}
+
 	if (0 < tiresSlip)
 	{
 		helpers->log("tires slip left");
@@ -246,7 +247,6 @@ void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 	INT_PTR ptr1 = helpers->ReadIntPtr(0x199A450, true);
 	UINT8 gear = helpers->ReadByte(ptr1 + 0x398, false);
-
 
 	if (0 < WheelSpinStrength)
 	{
@@ -306,7 +306,7 @@ void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 		if (oldgear != gear && 0 < gear && 0.5 < time && 0.1 <= speed)
 		{
-			SDL_Thread* gearChangeThread = SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
+			SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
 		}
 		oldgear = gear;
 	}
