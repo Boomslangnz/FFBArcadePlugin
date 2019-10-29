@@ -410,7 +410,7 @@ MaxForce= **Maximum FFB force with 100 being highest value available**
 
 DeviceGUID= **Set Device GUID to connect to specific wheel or controller**
 
-EnableRumble= **Turn Off (0) if your wheel supports rumble effect. For controllers, turn on (1)**
+FFBorRumble= **Turn to 0 if using wheel & want Force Feedback effects. For controllers change to 1 to enable rumble**
 
 Logging= **Turn On (1) to allow log.txt to be made to log plugin. Device GUID is given in here**
 

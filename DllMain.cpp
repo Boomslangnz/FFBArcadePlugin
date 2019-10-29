@@ -850,7 +850,7 @@ wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 int configMinForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForce"), 0, settingsFilename);
 int configMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForce"), 100, settingsFilename);
 int enableLogging = GetPrivateProfileInt(TEXT("Settings"), TEXT("Logging"), 0, settingsFilename);
-int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 0, settingsFilename);
+int FFBorRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBorRumble"), 0, settingsFilename);
 int ReverseRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumble"), 0, settingsFilename);
 wchar_t *deviceGUIDString = new wchar_t[256];
 int DeviceGUID = GetPrivateProfileString(TEXT("Settings"), TEXT("DeviceGUID"), NULL, deviceGUIDString, 256, settingsFilename);
@@ -982,7 +982,7 @@ void Initialize(int device_index)
 		hlp.log(firstJoystickSelectedText);
 	}
 	haptic = ControllerHaptic;
-	if ((SDL_HapticRumbleSupported(haptic) == SDL_TRUE && EnableRumble == 1)) 
+	if ((SDL_HapticRumbleSupported(haptic) == SDL_TRUE && FFBorRumble == 1))
 	{
 		SDL_HapticRumbleInit(ControllerHaptic);	
 		hlp.log("Rumble Init");
@@ -1081,434 +1081,455 @@ double lastSineEffectStrength = 0;
 double lastSineEffectPeriod = 0;
 void TriggerConstantEffect(int direction, double strength)
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_CONSTANT;
-	tempEffect.constant.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.constant.direction.dir[0] = direction;
-	tempEffect.constant.length = configFeedbackLength;
-	tempEffect.constant.delay = 0;
-
-	int confMinForce = configMinForce;
-	int confMaxForce = configMaxForce;
-
-	if (AlternativeFFB == 1)
+	if (FFBorRumble == 0)
 	{
-		if (direction == -1)
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_CONSTANT;
+		tempEffect.constant.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.constant.direction.dir[0] = direction;
+		tempEffect.constant.length = configFeedbackLength;
+		tempEffect.constant.delay = 0;
+
+		int confMinForce = configMinForce;
+		int confMaxForce = configMaxForce;
+
+		if (AlternativeFFB == 1)
 		{
-			confMinForce = configAlternativeMinForceLeft;
-			confMaxForce = configAlternativeMaxForceLeft;
+			if (direction == -1)
+			{
+				confMinForce = configAlternativeMinForceLeft;
+				confMaxForce = configAlternativeMaxForceLeft;
+			}
+			else
+			{
+				confMinForce = configAlternativeMinForceRight;
+				confMaxForce = configAlternativeMaxForceRight;
+			}
 		}
-		else
+
+		SHORT MinForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0);
+		SHORT MaxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
+		SHORT range = MaxForce - MinForce;
+		SHORT level = (SHORT)(strength * range + MinForce);
+
+		if (range > 0 && level < 0)
 		{
-			confMinForce = configAlternativeMinForceRight;
-			confMaxForce = configAlternativeMaxForceRight;
+			level = 32767;
 		}
-	}
+		else if (range < 0 && level > 0)
+		{
+			level = -32767;
+		}
 
-	SHORT MinForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0);
-	SHORT MaxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
-	SHORT range = MaxForce - MinForce;
-	SHORT level = (SHORT)(strength * range + MinForce);
-
-	if (range > 0 && level < 0)
-	{
-		level = 32767;
-	}
-	else if (range < 0 && level > 0)
-	{
-		level = -32767;
-	}
-
-	tempEffect.constant.level = level;
-	hlp.log((char *)(std::to_string(level)).c_str());
-	SDL_HapticUpdateEffect(haptic, effects.effect_constant_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_constant_id, 1);
+		tempEffect.constant.level = level;
+		hlp.log((char*)(std::to_string(level)).c_str());
+		SDL_HapticUpdateEffect(haptic, effects.effect_constant_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_constant_id, 1);
+	}	
 }
 
 void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault)
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_FRICTION;
-	tempEffect.condition.type = SDL_HAPTIC_FRICTION;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.condition.delay = 0;
-	tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
-	tempEffect.condition.left_sat[0] = 0xFFFF;
-	tempEffect.condition.right_sat[0] = 0xFFFF;
-
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT coeff = (SHORT)(strength * range + minForce);
-	if (coeff < 0)
+	if (FFBorRumble == 0)
 	{
-		coeff = 32767;
-	}
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_FRICTION;
+		tempEffect.condition.type = SDL_HAPTIC_FRICTION;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.condition.delay = 0;
+		tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
+		tempEffect.condition.left_sat[0] = 0xFFFF;
+		tempEffect.condition.right_sat[0] = 0xFFFF;
 
-	tempEffect.condition.left_coeff[0] = (short)(coeff);
-	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	SDL_HapticUpdateEffect(haptic, effects.effect_friction_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_friction_id, 1);
+		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT coeff = (SHORT)(strength * range + minForce);
+		if (coeff < 0)
+		{
+			coeff = 32767;
+		}
+
+		tempEffect.condition.left_coeff[0] = (short)(coeff);
+		tempEffect.condition.right_coeff[0] = (short)(coeff);
+		SDL_HapticUpdateEffect(haptic, effects.effect_friction_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_friction_id, 1);
+	}	
 }
 
 void TriggerInertiaEffect(double strength) 
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_INERTIA;
-	tempEffect.condition.type = SDL_HAPTIC_INERTIA;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.condition.delay = 0;
-	tempEffect.condition.length = configFeedbackLength;
-	tempEffect.condition.direction.dir[0] = 1;
-	tempEffect.condition.direction.dir[1] = 1; //Y Position
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT coeff = (SHORT)(strength * range + minForce);
-	if (coeff < 0)
+	if (FFBorRumble == 0)
 	{
-		coeff = 32767;
-	}
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_INERTIA;
+		tempEffect.condition.type = SDL_HAPTIC_INERTIA;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.condition.delay = 0;
+		tempEffect.condition.length = configFeedbackLength;
+		tempEffect.condition.direction.dir[0] = 1;
+		tempEffect.condition.direction.dir[1] = 1; //Y Position
+		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT coeff = (SHORT)(strength * range + minForce);
+		if (coeff < 0)
+		{
+			coeff = 32767;
+		}
 
-	tempEffect.condition.left_coeff[0] = (short)(coeff);
-	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
-	tempEffect.condition.right_sat[0] = (short)(coeff) * 10;
-	tempEffect.condition.center[0] = 0;
+		tempEffect.condition.left_coeff[0] = (short)(coeff);
+		tempEffect.condition.right_coeff[0] = (short)(coeff);
+		tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
+		tempEffect.condition.right_sat[0] = (short)(coeff) * 10;
+		tempEffect.condition.center[0] = 0;
 
-	SDL_HapticUpdateEffect(haptic, effects.effect_inertia_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_inertia_id, 1);
+		SDL_HapticUpdateEffect(haptic, effects.effect_inertia_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_inertia_id, 1);
+	}	
 }
 
 void TriggerTriangleEffect(double strength, double length)
 {
-	int direction = 1;
-	if (strength <= -0.001) {
-		strength *= -1;
-		direction = -1;
-	}
-
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_TRIANGLE;
-	tempEffect.condition.type = SDL_HAPTIC_TRIANGLE;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.condition.direction.dir[0] = direction;
-	tempEffect.condition.direction.dir[1] = 0; //Y Position
-	tempEffect.periodic.period = 500;
-
-	int confMinForce = configMinForce;
-	int confMaxForce = configMaxForce;
-	if (AlternativeFFB == 1)
+	if (FFBorRumble == 0)
 	{
-		if (direction == -1)
-		{
-			confMinForce = configAlternativeMinForceLeft;
-			confMaxForce = configAlternativeMaxForceLeft;
+		int direction = 1;
+		if (strength <= -0.001) {
+			strength *= -1;
+			direction = -1;
 		}
-		else
+
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_TRIANGLE;
+		tempEffect.condition.type = SDL_HAPTIC_TRIANGLE;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.condition.direction.dir[0] = direction;
+		tempEffect.condition.direction.dir[1] = 0; //Y Position
+		tempEffect.periodic.period = 500;
+
+		int confMinForce = configMinForce;
+		int confMaxForce = configMaxForce;
+		if (AlternativeFFB == 1)
 		{
-			confMinForce = configAlternativeMinForceRight;
-			confMaxForce = configAlternativeMaxForceRight;
+			if (direction == -1)
+			{
+				confMinForce = configAlternativeMinForceLeft;
+				confMaxForce = configAlternativeMaxForceLeft;
+			}
+			else
+			{
+				confMinForce = configAlternativeMinForceRight;
+				confMaxForce = configAlternativeMaxForceRight;
+			}
 		}
+		SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT power = (SHORT)(strength * range + minForce);
+		if (range > 0 && power < 0)
+		{
+			power = 32767;
+		}
+		else if (range < 0 && power > 0)
+		{
+			power = -32767;
+		}
+		tempEffect.periodic.magnitude = power;
+		tempEffect.periodic.length = length;
+		tempEffect.periodic.attack_length = 1000;
+		tempEffect.periodic.fade_length = 1000;
+
+		SDL_HapticUpdateEffect(haptic, effects.effect_triangle_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_triangle_id, 1);
 	}
-	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT power = (SHORT)(strength * range + minForce);
-	if (range > 0 && power < 0)
-	{
-		power = 32767;
-	}
-	else if (range < 0 && power > 0)
-	{
-		power = -32767;
-	}
-	tempEffect.periodic.magnitude = power;
-	tempEffect.periodic.length = length;
-	tempEffect.periodic.attack_length = 1000;
-	tempEffect.periodic.fade_length = 1000;
-	
-	SDL_HapticUpdateEffect(haptic, effects.effect_triangle_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_triangle_id, 1);
 }
 
 void TriggerDamperEffect(double strength) 
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_DAMPER;
-	tempEffect.condition.type = SDL_HAPTIC_DAMPER;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.condition.delay = 0;
-	tempEffect.condition.length = configFeedbackLength;
-	tempEffect.condition.direction.dir[0] = 1; // not used
-	tempEffect.condition.direction.dir[1] = 0; //Y Position
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT coeff = (SHORT)(strength * range + minForce);
-	if (coeff < 0)
+	if (FFBorRumble == 0)
 	{
-		coeff = 32767;
-	}
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_DAMPER;
+		tempEffect.condition.type = SDL_HAPTIC_DAMPER;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.condition.delay = 0;
+		tempEffect.condition.length = configFeedbackLength;
+		tempEffect.condition.direction.dir[0] = 1; // not used
+		tempEffect.condition.direction.dir[1] = 0; //Y Position
+		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT coeff = (SHORT)(strength * range + minForce);
+		if (coeff < 0)
+		{
+			coeff = 32767;
+		}
 
-	tempEffect.condition.left_coeff[0] = (short)(coeff);
-	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
-	tempEffect.condition.right_sat[0] = (short)(coeff) * 10;
+		tempEffect.condition.left_coeff[0] = (short)(coeff);
+		tempEffect.condition.right_coeff[0] = (short)(coeff);
+		tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
+		tempEffect.condition.right_sat[0] = (short)(coeff) * 10;
 
-	SDL_HapticUpdateEffect(haptic, effects.effect_damper_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_damper_id, 1);
+		SDL_HapticUpdateEffect(haptic, effects.effect_damper_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_damper_id, 1);
+	}	
 }
 
 void TriggerRampEffect(double start,double end,double length) 
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_RAMP;
-	tempEffect.ramp.type = SDL_HAPTIC_RAMP;
-	tempEffect.ramp.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.ramp.length = length;
-	SHORT minForce = (SHORT)(start > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT start1 = (SHORT)(start * range + minForce);
-	if (start1 < 0)
+	if (FFBorRumble == 0)
 	{
-		start1 = 32767;
-	}
-	SHORT minForce2 = (SHORT)(end > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce2 = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range2 = maxForce - minForce;
-	SHORT start2 = (SHORT)(end * range + minForce);
-	if (start2 < 0)
-	{
-		start2 = 32767;
-	}
-	tempEffect.ramp.delay = 0;
-	tempEffect.ramp.start = start1;
-	tempEffect.ramp.end = -start2;
-	
-	SDL_HapticUpdateEffect(haptic, effects.effect_ramp_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_ramp_id, 1);
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_RAMP;
+		tempEffect.ramp.type = SDL_HAPTIC_RAMP;
+		tempEffect.ramp.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.ramp.length = length;
+		SHORT minForce = (SHORT)(start > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT start1 = (SHORT)(start * range + minForce);
+		if (start1 < 0)
+		{
+			start1 = 32767;
+		}
+		SHORT minForce2 = (SHORT)(end > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce2 = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range2 = maxForce - minForce;
+		SHORT start2 = (SHORT)(end * range + minForce);
+		if (start2 < 0)
+		{
+			start2 = 32767;
+		}
+		tempEffect.ramp.delay = 0;
+		tempEffect.ramp.start = start1;
+		tempEffect.ramp.end = -start2;
+
+		SDL_HapticUpdateEffect(haptic, effects.effect_ramp_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_ramp_id, 1);
+	}	
 }
 
 void TriggerSawtoothUpEffect(double strength, double length) 
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_SAWTOOTHUP;
-	tempEffect.condition.type = SDL_HAPTIC_SAWTOOTHUP;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.periodic.period = 500;
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT power = (SHORT)(strength * range + minForce);
-	if (power < 0)
+	if (FFBorRumble == 0)
 	{
-		power = 32767;
-	}
-	tempEffect.periodic.magnitude = power;
-	tempEffect.periodic.length = length;
-	tempEffect.periodic.attack_length = 1000;
-	tempEffect.periodic.fade_length = 1000;
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_SAWTOOTHUP;
+		tempEffect.condition.type = SDL_HAPTIC_SAWTOOTHUP;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.periodic.period = 500;
+		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT power = (SHORT)(strength * range + minForce);
+		if (power < 0)
+		{
+			power = 32767;
+		}
+		tempEffect.periodic.magnitude = power;
+		tempEffect.periodic.length = length;
+		tempEffect.periodic.attack_length = 1000;
+		tempEffect.periodic.fade_length = 1000;
 
-	SDL_HapticUpdateEffect(haptic, effects.effect_sawtoothup_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_sawtoothup_id, 1);
+		SDL_HapticUpdateEffect(haptic, effects.effect_sawtoothup_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_sawtoothup_id, 1);
+	}	
 }
 
-void TriggerSawtoothDownEffect(double strength, double length) {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_SAWTOOTHDOWN;
-	tempEffect.condition.type = SDL_HAPTIC_SAWTOOTHDOWN;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.periodic.period = 500;
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT power = (SHORT)(strength * range + minForce);
-	if (power < 0)
+void TriggerSawtoothDownEffect(double strength, double length) 
+{
+	if (FFBorRumble == 0)
 	{
-		power = 32767;
-	}
-	tempEffect.periodic.magnitude = power;
-	tempEffect.periodic.length = length;
-	tempEffect.periodic.attack_length = 1000;
-	tempEffect.periodic.fade_length = 1000;
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_SAWTOOTHDOWN;
+		tempEffect.condition.type = SDL_HAPTIC_SAWTOOTHDOWN;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.periodic.period = 500;
+		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT power = (SHORT)(strength * range + minForce);
+		if (power < 0)
+		{
+			power = 32767;
+		}
+		tempEffect.periodic.magnitude = power;
+		tempEffect.periodic.length = length;
+		tempEffect.periodic.attack_length = 1000;
+		tempEffect.periodic.fade_length = 1000;
 
-	SDL_HapticUpdateEffect(haptic, effects.effect_sawtoothdown_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_sawtoothdown_id, 1);
+		SDL_HapticUpdateEffect(haptic, effects.effect_sawtoothdown_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_sawtoothdown_id, 1);
+	}	
 }
 
 void TriggerFrictionEffect(double strength)
 {
-	TriggerFrictionEffectWithDefaultOption(strength, false);
+	if (FFBorRumble == 0)
+	{
+		TriggerFrictionEffectWithDefaultOption(strength, false);
+	}	
 }
 
 void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 {
-	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
-	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffect)).count();
-
-	int direction = 1;
-	if (strength <= -0.001) {
-		strength *= -1;
-		direction = -1;
-	}
-
-	// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
-	if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 2.0)) {
-		return;
-	}
-
-	// if no strength, we do nothing
-	if (strength <= 0.001) {
-		return;
-	}
-
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	hlp.log("Doing sine...");
-	tempEffect.type = SDL_HAPTIC_SINE;
-	tempEffect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.periodic.direction.dir[0] = direction;
-	tempEffect.constant.direction.dir[1] = 0; //Y Position
-	tempEffect.periodic.period = period;
-
-	int confMinForce = configMinForce;
-	int confMaxForce = configMaxForce;
-	if (AlternativeFFB == 1)
+	if (FFBorRumble == 0)
 	{
-		if (direction == -1)
-		{
-			confMinForce = configAlternativeMinForceLeft;
-			confMaxForce = configAlternativeMaxForceLeft;
+		std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+		long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffect)).count();
+
+		int direction = 1;
+		if (strength <= -0.001) {
+			strength *= -1;
+			direction = -1;
 		}
-		else
-		{
-			confMinForce = configAlternativeMinForceRight;
-			confMaxForce = configAlternativeMaxForceRight;
+
+		// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
+		if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 2.0)) {
+			return;
 		}
-	}
-	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT magnitude = (SHORT)(strength * range + minForce);
-	if (range > 0 && magnitude < 0)
-	{
-		magnitude = 32767;
-	}
-	else if (range < 0 && magnitude > 0)
-	{
-		magnitude = -32767;
-	}
 
-	tempEffect.periodic.magnitude = (SHORT)(magnitude);
-	tempEffect.periodic.length = period;
-	tempEffect.periodic.attack_length = fadePeriod;
-	tempEffect.periodic.fade_length = fadePeriod;
+		// if no strength, we do nothing
+		if (strength <= 0.001) {
+			return;
+		}
 
-	SDL_HapticUpdateEffect(haptic, effects.effect_sine_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_sine_id, 1);
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		hlp.log("Doing sine...");
+		tempEffect.type = SDL_HAPTIC_SINE;
+		tempEffect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.periodic.direction.dir[0] = direction;
+		tempEffect.constant.direction.dir[1] = 0; //Y Position
+		tempEffect.periodic.period = period;
 
-	/*int supported = SDL_HapticEffectSupported(haptic, &tempEffect);
-	hlp.log((char *)std::to_string(supported).c_str());*/
+		int confMinForce = configMinForce;
+		int confMaxForce = configMaxForce;
+		if (AlternativeFFB == 1)
+		{
+			if (direction == -1)
+			{
+				confMinForce = configAlternativeMinForceLeft;
+				confMaxForce = configAlternativeMaxForceLeft;
+			}
+			else
+			{
+				confMinForce = configAlternativeMinForceRight;
+				confMaxForce = configAlternativeMaxForceRight;
+			}
+		}
+		SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT magnitude = (SHORT)(strength * range + minForce);
+		if (range > 0 && magnitude < 0)
+		{
+			magnitude = 32767;
+		}
+		else if (range < 0 && magnitude > 0)
+		{
+			magnitude = -32767;
+		}
 
-	timeOfLastSineEffect = now;
-	lastSineEffectStrength = strength;
-	lastSineEffectPeriod = period;
+		tempEffect.periodic.magnitude = (SHORT)(magnitude);
+		tempEffect.periodic.length = period;
+		tempEffect.periodic.attack_length = fadePeriod;
+		tempEffect.periodic.fade_length = fadePeriod;
+
+		SDL_HapticUpdateEffect(haptic, effects.effect_sine_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_sine_id, 1);
+
+		/*int supported = SDL_HapticEffectSupported(haptic, &tempEffect);
+		hlp.log((char *)std::to_string(supported).c_str());*/
+
+		timeOfLastSineEffect = now;
+		lastSineEffectStrength = strength;
+		lastSineEffectPeriod = period;
+	}	
 }
 
 void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault)
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-	tempEffect.type = SDL_HAPTIC_SPRING;
-	tempEffect.condition.type = SDL_HAPTIC_SPRING;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.condition.delay = 0;
-	tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
-	tempEffect.condition.direction.dir[0] = 1;
-	tempEffect.constant.direction.dir[1] = 0; //Y Position
-	
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT coeff = (SHORT)(strength * range + minForce);
-	if (coeff < 0)
+	if (FFBorRumble == 0)
 	{
-		coeff = 32767;
-	}
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+		tempEffect.type = SDL_HAPTIC_SPRING;
+		tempEffect.condition.type = SDL_HAPTIC_SPRING;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.condition.delay = 0;
+		tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
+		tempEffect.condition.direction.dir[0] = 1;
+		tempEffect.constant.direction.dir[1] = 0; //Y Position
 
-	tempEffect.condition.left_coeff[0] = (short)(coeff);
-	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	tempEffect.condition.left_sat[0] = (short)(coeff); //Needed for Logitech G920 wheel
-	tempEffect.condition.right_sat[0] = (short)(coeff); //Needed for Logitech G920 wheel
-	tempEffect.condition.center[0] = 0;
+		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT coeff = (SHORT)(strength * range + minForce);
+		if (coeff < 0)
+		{
+			coeff = 32767;
+		}
 
-	SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_spring_id, 1);
+		tempEffect.condition.left_coeff[0] = (short)(coeff);
+		tempEffect.condition.right_coeff[0] = (short)(coeff);
+		tempEffect.condition.left_sat[0] = (short)(coeff); //Needed for Logitech G920 wheel
+		tempEffect.condition.right_sat[0] = (short)(coeff); //Needed for Logitech G920 wheel
+		tempEffect.condition.center[0] = 0;
+
+		SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_spring_id, 1);
+	}	
 }
 
 void TriggerSpringEffectInfinite(double strength)
 {
-	SDL_HapticEffect tempEffect;
-	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
-
-	tempEffect.type = SDL_HAPTIC_SPRING;
-	tempEffect.condition.type = SDL_HAPTIC_SPRING;
-	tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
-	tempEffect.condition.delay = 0;
-	tempEffect.condition.length = SDL_HAPTIC_INFINITY;
-	tempEffect.condition.direction.dir[0] = 1;
-	tempEffect.constant.direction.dir[1] = 1; //Y Position
-
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-	SHORT range = maxForce - minForce;
-	SHORT coeff = (SHORT)(strength * range + minForce);
-	if (coeff < 0)
+	if (FFBorRumble == 0)
 	{
-		coeff = 32767;
-	}
+		SDL_HapticEffect tempEffect;
+		SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
 
-	tempEffect.condition.left_coeff[0] = (short)(coeff);
-	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	tempEffect.condition.left_sat[0] = (short)(coeff) * 10; //Needed for Logitech G920 wheel
-	tempEffect.condition.right_sat[0] = (short)(coeff) * 10; //Needed for Logitech G920 wheel
-	tempEffect.condition.center[0] = 0;
+		tempEffect.type = SDL_HAPTIC_SPRING;
+		tempEffect.condition.type = SDL_HAPTIC_SPRING;
+		tempEffect.condition.direction.type = SDL_HAPTIC_CARTESIAN;
+		tempEffect.condition.delay = 0;
+		tempEffect.condition.length = SDL_HAPTIC_INFINITY;
+		tempEffect.condition.direction.dir[0] = 1;
+		tempEffect.constant.direction.dir[1] = 1; //Y Position
 
-	SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
-	SDL_HapticRunEffect(haptic, effects.effect_spring_id, 1);
+		SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+		SHORT range = maxForce - minForce;
+		SHORT coeff = (SHORT)(strength * range + minForce);
+		if (coeff < 0)
+		{
+			coeff = 32767;
+		}
+
+		tempEffect.condition.left_coeff[0] = (short)(coeff);
+		tempEffect.condition.right_coeff[0] = (short)(coeff);
+		tempEffect.condition.left_sat[0] = (short)(coeff) * 10; //Needed for Logitech G920 wheel
+		tempEffect.condition.right_sat[0] = (short)(coeff) * 10; //Needed for Logitech G920 wheel
+		tempEffect.condition.center[0] = 0;
+
+		SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
+		SDL_HapticRunEffect(haptic, effects.effect_spring_id, 1);
+	}	
 }
 
 void TriggerLeftRightEffect(double smallstrength, double largestrength, double length)
 {
-	if (EnableRumble == 1)
+	if (FFBorRumble == 1)
 	{
-		if (ReverseRumble == 0)
-		{
-			SDL_HapticEffect tempEffect;
-			tempEffect.type = SDL_HAPTIC_LEFTRIGHT;
-			tempEffect.leftright.length = length;
-			SHORT minForce = (SHORT)(smallstrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-			SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-			SHORT range = maxForce - minForce;
-			tempEffect.leftright.small_magnitude = (SHORT)(smallstrength * range + minForce);
-			SHORT minForce1 = (SHORT)(largestrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-			SHORT maxForce1 = (SHORT)(configMaxForce / 100.0 * 32767.0);
-			SHORT range1 = maxForce1 - minForce1;
-			tempEffect.leftright.large_magnitude = (SHORT)(largestrength * range1 + minForce1);
-			SDL_HapticUpdateEffect(haptic, effects.effect_leftright_id, &tempEffect);
-			SDL_HapticRunEffect(haptic, effects.effect_leftright_id, 1);
-		}
-		else if (ReverseRumble == 1)
+		if (ReverseRumble == 1)
 		{
 			SDL_HapticEffect tempEffect;
 			tempEffect.type = SDL_HAPTIC_LEFTRIGHT;
@@ -1521,6 +1542,23 @@ void TriggerLeftRightEffect(double smallstrength, double largestrength, double l
 			SHORT maxForce1 = (SHORT)(configMaxForce / 100.0 * 32767.0);
 			SHORT range1 = maxForce1 - minForce1;
 			tempEffect.leftright.large_magnitude = (SHORT)(smallstrength * range1 + minForce1);
+			SDL_HapticUpdateEffect(haptic, effects.effect_leftright_id, &tempEffect);
+			SDL_HapticRunEffect(haptic, effects.effect_leftright_id, 1);
+			
+		}
+		else
+		{
+			SDL_HapticEffect tempEffect;
+			tempEffect.type = SDL_HAPTIC_LEFTRIGHT;
+			tempEffect.leftright.length = length;
+			SHORT minForce = (SHORT)(smallstrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+			SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+			SHORT range = maxForce - minForce;
+			tempEffect.leftright.small_magnitude = (SHORT)(smallstrength * range + minForce);
+			SHORT minForce1 = (SHORT)(largestrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+			SHORT maxForce1 = (SHORT)(configMaxForce / 100.0 * 32767.0);
+			SHORT range1 = maxForce1 - minForce1;
+			tempEffect.leftright.large_magnitude = (SHORT)(largestrength * range1 + minForce1);
 			SDL_HapticUpdateEffect(haptic, effects.effect_leftright_id, &tempEffect);
 			SDL_HapticRunEffect(haptic, effects.effect_leftright_id, 1);
 		}
@@ -1529,9 +1567,26 @@ void TriggerLeftRightEffect(double smallstrength, double largestrength, double l
 
 void TriggerLeftRightDevice2Effect(double smallstrength, double largestrength, double length)
 {
-	if (EnableRumble == 1)
+	if (FFBorRumble == 1)
 	{
-		if (ReverseRumble == 0)
+		if (ReverseRumble == 1)
+		{
+			SDL_HapticEffect tempEffect;
+			tempEffect.type = SDL_HAPTIC_LEFTRIGHT;
+			tempEffect.leftright.length = length;
+			SHORT minForce = (SHORT)(largestrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+			SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+			SHORT range = maxForce - minForce;
+			tempEffect.leftright.small_magnitude = (SHORT)(largestrength * range + minForce);
+			SHORT minForce1 = (SHORT)(smallstrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+			SHORT maxForce1 = (SHORT)(configMaxForce / 100.0 * 32767.0);
+			SHORT range1 = maxForce1 - minForce1;
+			tempEffect.leftright.large_magnitude = (SHORT)(smallstrength * range1 + minForce1);
+			SDL_HapticUpdateEffect(haptic2, effects.effect_leftright_id, &tempEffect);
+			SDL_HapticRunEffect(haptic2, effects.effect_leftright_id, 1);
+			
+		}
+		else
 		{
 			SDL_HapticEffect tempEffect;
 			tempEffect.type = SDL_HAPTIC_LEFTRIGHT;
@@ -1547,28 +1602,12 @@ void TriggerLeftRightDevice2Effect(double smallstrength, double largestrength, d
 			SDL_HapticUpdateEffect(haptic2, effects.effect_leftright_id, &tempEffect);
 			SDL_HapticRunEffect(haptic2, effects.effect_leftright_id, 1);
 		}
-		else if (ReverseRumble == 1)
-		{
-			SDL_HapticEffect tempEffect;
-			tempEffect.type = SDL_HAPTIC_LEFTRIGHT;
-			tempEffect.leftright.length = length;
-			SHORT minForce = (SHORT)(largestrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-			SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
-			SHORT range = maxForce - minForce;
-			tempEffect.leftright.small_magnitude = (SHORT)(largestrength * range + minForce);
-			SHORT minForce1 = (SHORT)(smallstrength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-			SHORT maxForce1 = (SHORT)(configMaxForce / 100.0 * 32767.0);
-			SHORT range1 = maxForce1 - minForce1;
-			tempEffect.leftright.large_magnitude = (SHORT)(smallstrength * range1 + minForce1);
-			SDL_HapticUpdateEffect(haptic2, effects.effect_leftright_id, &tempEffect);
-			SDL_HapticRunEffect(haptic2, effects.effect_leftright_id, 1);
-		}
 	}
 }
 
 void TriggerRumbleEffect(double strength, double length)
 {
-	if (EnableRumble == 1)
+	if (FFBorRumble == 1)
 	{
 		SDL_HapticRumblePlay(haptic, strength, length);
 	}
@@ -1576,7 +1615,10 @@ void TriggerRumbleEffect(double strength, double length)
 
 void TriggerSpringEffect(double strength)
 {
-	TriggerSpringEffectWithDefaultOption(strength, false);
+	if (FFBorRumble == 0)
+	{
+		TriggerSpringEffectWithDefaultOption(strength, false);
+	}	
 }
 
 DWORD WINAPI FFBLoop(LPVOID lpParam)
@@ -1588,7 +1630,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		Sleep(2500);
 	}
 
-	if (EnableRumble == 1)
+	if (FFBorRumble == 1)
 	{
 		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
 		char RumbleDisableChar[256];
