@@ -61,7 +61,7 @@ static int RunningThread(void *ptr)
 		UINT8 static oldHealth2p = 0;
 		UINT8 static oldBullet2p = 0;
 		UINT8 newHealth1p = Health1p;
-		UINT8 newBullet1p = Bullet1p;		
+		UINT8 newBullet1p = Bullet1p;
 		UINT8 newHealth2p = Health2p;
 		UINT8 newBullet2p = Bullet2p;
 
