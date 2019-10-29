@@ -25,9 +25,11 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Fixed & Improved Sine Effect (pinkimo)
 
-- Added AlternativeFFB for Sine & Triangle Effects (pinkimo) 
+- Added AlternativeFFB for Sine & Triangle Effects (pinkimo)
 
-- Disabled Rumble by default now as it caused issues with wheel rotation. Enable if using controller!! (unless using Rumble ONLY games eg LGI,LGI3D & ABC etc)
+- Removed ResetFeedback as not necessary (pinkimo)
+
+- Changed Enable Rumble to select Force Feedback or Rumble and never both to avoid issues with conflicting effects (read below for details if using ini directly)
 
 - Replaced code for ShowButtonNumbersForSetup & ShowAxisForSetup if not using GUI to use every button/axis available
 
@@ -48,10 +50,11 @@ BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 
 - Modified Button Rumble Plugin to work better as previously could have slight lag on rumble
 
+- Added FFB Support for GRID
+
 - Modified and cleaned constant effect up
 
 - General code cleanup
-
 
 ***1.0 Changes***
 
