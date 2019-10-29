@@ -58,6 +58,65 @@ static int RunningThread(void* ptr)
 	int cnt;
 	for (cnt = 0; cnt >= 0; ++cnt)
 	{
+		
+	}
+	return 0;
+}
+
+void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	SDL_Thread* thread;
+	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
+
+	for (int i = 0; i < SDL_NumJoysticks(); i++)
+	{
+		wchar_t* deviceGUIDString2 = new wchar_t[256];
+		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
+		char joystick_guid[256];
+		sprintf(joystick_guid, "%S", deviceGUIDString2);
+		SDL_JoystickGUID guid, dev_guid;
+		int numJoysticks = SDL_NumJoysticks();
+		std::string njs = std::to_string(numJoysticks);
+		((char)njs.c_str());
+		for (int i = 0; i < SDL_NumJoysticks(); i++)
+		{
+			extern int joystick1Index;
+			if (i == joystick1Index)
+			{
+				continue;
+			}
+			SDL_Joystick* js2 = SDL_JoystickOpen(i);
+			joystick_index2 = SDL_JoystickInstanceID(js2);
+			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
+			char guid_str[1024];
+			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
+			const char* name = SDL_JoystickName(js2);
+			char text[256];
+			sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+			guid = SDL_JoystickGetGUIDFromString(joystick_guid);
+			dev_guid = SDL_JoystickGetGUID(js2);
+			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+			{
+				GameController2 = SDL_JoystickOpen(i);
+				ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
+				break;
+			}
+			SDL_JoystickClose(js2);
+		}
+		haptic2 = ControllerHaptic2;
+		if ((SDL_HapticRumbleSupported(haptic2) == SDL_TRUE))
+		{
+			SDL_HapticRumbleInit;
+			SDL_HapticRumbleInit(ControllerHaptic2);
+		}
+	}
+
+	while (SDL_WaitEvent(&e) != 0)
+	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
+
 		if (ShowButtonNumbersForSetup == 1)
 		{
 			if (e.type == SDL_JOYBUTTONDOWN)
@@ -174,63 +233,6 @@ static int RunningThread(void* ptr)
 				}
 			}
 		}
-	}
-	return 0;
-}
-
-void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
-
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	for (int i = 0; i < SDL_NumJoysticks(); i++)
-	{
-		wchar_t* deviceGUIDString2 = new wchar_t[256];
-		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
-		char joystick_guid[256];
-		sprintf(joystick_guid, "%S", deviceGUIDString2);
-		SDL_JoystickGUID guid, dev_guid;
-		int numJoysticks = SDL_NumJoysticks();
-		std::string njs = std::to_string(numJoysticks);
-		((char)njs.c_str());
-		for (int i = 0; i < SDL_NumJoysticks(); i++)
-		{
-			extern int joystick1Index;
-			if (i == joystick1Index)
-			{
-				continue;
-			}
-			SDL_Joystick* js2 = SDL_JoystickOpen(i);
-			joystick_index2 = SDL_JoystickInstanceID(js2);
-			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
-			char guid_str[1024];
-			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
-			const char* name = SDL_JoystickName(js2);
-			char text[256];
-			sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
-			guid = SDL_JoystickGetGUIDFromString(joystick_guid);
-			dev_guid = SDL_JoystickGetGUID(js2);
-			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
-			{
-				GameController2 = SDL_JoystickOpen(i);
-				ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
-				break;
-			}
-			SDL_JoystickClose(js2);
-		}
-		haptic2 = ControllerHaptic2;
-		if ((SDL_HapticRumbleSupported(haptic2) == SDL_TRUE))
-		{
-			SDL_HapticRumbleInit;
-			SDL_HapticRumbleInit(ControllerHaptic2);
-		}
-	}
-
-	while (SDL_WaitEvent(&e) != 0)
-	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
 	}
 	myTriggers = triggers;
 	myConstants = constants;
