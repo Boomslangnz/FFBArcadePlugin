@@ -844,6 +844,8 @@ HINSTANCE gl_hlibavs = NULL;
 int joystick_index1;
 int joystick1Index = -1;
 int joystick_index2 = -1;
+int lengthRumbleEffect;
+int lengthRumbleEffectDevice2;
 
 // settings
 wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -1566,10 +1568,18 @@ void TriggerLeftRightDevice2Effect(double smallstrength, double largestrength, d
 	}
 }
 
+static int StopRumbleEffectThread(void* ptr)
+{
+	Sleep(lengthRumbleEffect);
+	SDL_JoystickRumble(GameController, 0, 0, 0);
+	return 0;
+}
+
 void TriggerRumbleEffect(double lowfrequency, double highfrequency, double length)
 {
 	if (EnableRumble == 1)
 	{
+		lengthRumbleEffect = length;
 		DWORD minForceLow = (DWORD)(lowfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
 		DWORD minForceHigh = (DWORD)(highfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
 		DWORD maxForce = (DWORD)(configMaxForce / 100.0 * 65535.0);
@@ -1583,16 +1593,26 @@ void TriggerRumbleEffect(double lowfrequency, double highfrequency, double lengt
 			SDL_JoystickRumble(GameController, HighMotor, LowMotor, length);
 		}
 		else
-		{
+		{	
 			SDL_JoystickRumble(GameController, LowMotor, HighMotor, length);
-		}		
+			
+		}	
+		SDL_Thread* StopRumblethread = SDL_CreateThread(StopRumbleEffectThread, "StopRumbleEffectThread", (void*)NULL);
 	}
+}
+
+static int StopRumbleEffectDevice2Thread(void* ptr)
+{
+	Sleep(lengthRumbleEffectDevice2);
+	SDL_JoystickRumble(GameController2, 0, 0, 0);
+	return 0;
 }
 
 void TriggerRumbleEffectDevice2(double lowfrequency, double highfrequency, double length)
 {
 	if (EnableRumble == 1)
 	{
+		lengthRumbleEffectDevice2 = length;
 		DWORD minForceLow = (DWORD)(lowfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
 		DWORD minForceHigh = (DWORD)(highfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
 		DWORD maxForce = (DWORD)(configMaxForce / 100.0 * 65535.0);
@@ -1609,6 +1629,7 @@ void TriggerRumbleEffectDevice2(double lowfrequency, double highfrequency, doubl
 		{
 			SDL_JoystickRumble(GameController2, LowMotor, HighMotor, length);
 		}
+		SDL_Thread* StopRumbleDevice2thread = SDL_CreateThread(StopRumbleEffectDevice2Thread, "StopRumbleEffectDevice2Thread", (void*)NULL);
 	}
 }
 
