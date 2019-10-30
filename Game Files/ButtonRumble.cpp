@@ -144,7 +144,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->LeftRight(percentForce, percentForce, percentLength);
+							myTriggers->Rumble(percentForce, percentForce, percentLength);
 						}
 					}
 				}
@@ -155,7 +155,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->LeftRight(0, percentForce, percentLength);
+							myTriggers->Rumble(0, percentForce, percentLength);
 						}
 					}
 				}
@@ -166,7 +166,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->LeftRight(percentForce, 0, percentLength);
+							myTriggers->Rumble(percentForce, 0, percentLength);
 						}
 					}
 				}
@@ -180,7 +180,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->LeftRightDevice2(percentForce, percentForce, percentLength);
+							myTriggers->RumbleDevice2(percentForce, percentForce, percentLength);
 						}
 					}
 				}
@@ -191,7 +191,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->LeftRightDevice2(0, percentForce, percentLength);
+							myTriggers->RumbleDevice2(0, percentForce, percentLength);
 						}
 					}
 				}
@@ -202,7 +202,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->LeftRightDevice2(percentForce, 0, percentLength);
+							myTriggers->RumbleDevice2(percentForce, 0, percentLength);
 						}
 					}
 				}
@@ -217,7 +217,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 					{
 						double percentForce = ((RumbleStrength) / 100.0);
 						double percentLength = (RumbleLength);
-						myTriggers->LeftRight(0, 0, percentLength);
+						myTriggers->Rumble(0, 0, percentLength);
 					}
 				}
 			}
@@ -228,7 +228,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 					{
 						double percentForce = ((RumbleStrength) / 100.0);
 						double percentLength = (RumbleLength);
-						myTriggers->LeftRightDevice2(0, 0, percentLength);
+						myTriggers->RumbleDevice2(0, 0, percentLength);
 					}
 				}
 			}

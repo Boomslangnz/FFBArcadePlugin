@@ -238,7 +238,7 @@ static int RunningThread(void *ptr)
 					{
 						double percentForce = (ff2) / 63.0;
 						double percentLength = 100;
-						myTriggers->LeftRight(percentForce, percentForce, percentLength);
+						myTriggers->Rumble(percentForce, percentForce, percentLength);
 						myTriggers->Sine(120, 120, percentForce);
 					}
 					if ((ff1 > 0x00) & (ff1 < 0x08))
@@ -246,7 +246,7 @@ static int RunningThread(void *ptr)
 						//helpers->log("moving wheel left");
 						double percentForce = (ff1) / 7.0;
 						double percentLength = 100;
-						myTriggers->LeftRight(0, percentForce, percentLength);
+						myTriggers->Rumble(0, percentForce, percentLength);
 						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 					}
 					else if ((ff1 > 0x07) & (ff1 < 0x10))
@@ -254,7 +254,7 @@ static int RunningThread(void *ptr)
 						//helpers->log("moving wheel right");
 						double percentForce = (16 - ff1) / 8.0;
 						double percentLength = 100;
-						myTriggers->LeftRight(percentForce, 0, percentLength);
+						myTriggers->Rumble(percentForce, 0, percentLength);
 						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 					}
 				}
@@ -264,7 +264,7 @@ static int RunningThread(void *ptr)
 					{
 						double percentForce = (ff2) / 63.0;
 						double percentLength = 100;
-						myTriggers->LeftRight(pow(percentForce, 0.5), pow(percentForce, 0.5), percentLength);
+						myTriggers->Rumble(pow(percentForce, 0.5), pow(percentForce, 0.5), percentLength);
 						myTriggers->Sine(120, 120, pow(percentForce, 0.5));
 					}
 					if ((ff1 > 0x00) & (ff1 < 0x08))
@@ -272,7 +272,7 @@ static int RunningThread(void *ptr)
 						//helpers->log("moving wheel left");
 						double percentForce = (ff1) / 7.0;
 						double percentLength = 100;
-						myTriggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 					}
 					else if ((ff1 > 0x07) & (ff1 < 0x10))
@@ -280,7 +280,7 @@ static int RunningThread(void *ptr)
 						//helpers->log("moving wheel right");
 						double percentForce = (16 - ff1) / 8.0;
 						double percentLength = 100;
-						myTriggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 					}
 				}

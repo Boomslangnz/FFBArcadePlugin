@@ -147,7 +147,7 @@ void InitialD8::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 			triggers->Inertia(percentForce);
 			triggers->Friction(percentForce);
 			triggers->Damper(percentForce);
-			triggers->LeftRight(percentForce, percentForce, percentLength);
+			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 		if (ffcarcollision > 0) //cars colliding or rubbing with each other
 		{
@@ -156,7 +156,7 @@ void InitialD8::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 			triggers->Inertia(percentForce);
 			triggers->Friction(percentForce);
 			triggers->Damper(percentForce);
-			triggers->LeftRight(percentForce, percentForce, percentLength);
+			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 		if (FFBMode == 1)
 		{
@@ -165,7 +165,7 @@ void InitialD8::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 				double percentForce = (262272 - ff) / 72.0;
 				double percentLength = 100;
 				double powforce = (ff - 262199) / 72.0;
-				triggers->LeftRight(pow(percentForce, powforce), 0, percentLength);
+				triggers->Rumble(pow(percentForce, powforce), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, powforce)));
 			}
 			else if ((ff > 0x40100) & (ff < 0x40149))
@@ -173,7 +173,7 @@ void InitialD8::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 				double percentForce = (ff - 262400) / 72.0;
 				double percentLength = 100;
 				double powforce = (262473 - ff) / 72.0;
-				triggers->LeftRight(0, pow(percentForce, powforce), percentLength);
+				triggers->Rumble(0, pow(percentForce, powforce), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, powforce)));
 			}
 		}
@@ -183,14 +183,14 @@ void InitialD8::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 			{
 				double percentForce = (262272 - ff) / 72.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 			else if ((ff > 0x40100) & (ff < 0x40149))
 			{
 				double percentForce = (ff - 262400) / 72.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}

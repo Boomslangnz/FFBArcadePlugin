@@ -40,7 +40,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		double percentForce = 1.0;
 		double percentForce1 = 3.5;
 		double percentLength = (500);
-		triggers->LeftRight(percentForce1, percentForce1, percentLength);
+		triggers->Rumble(percentForce1, percentForce1, percentLength);
 		triggers->Sine(200, 200, percentForce);
 	}
 
@@ -49,7 +49,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	{
 		double percentForce = (0.3);
 		double percentLength = (100);
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Friction(percentForce);
 	}
 	//	Small constant when hitting bumps
@@ -58,7 +58,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		double percentForce = (0.2);
 		double percentLength = (50);
 		double percentForce1 = 3.0;
-		triggers->LeftRight(percentForce1, percentForce1, percentLength);
+		triggers->Rumble(percentForce1, percentForce1, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 	// Wheel rumbles while driving on grass
@@ -67,7 +67,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	{
 		double percentForce = 0.2;
 		double percentLength = (50);
-		triggers->LeftRight(0, percentForce, percentLength);
+		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Sine(50, 50, percentForce);
 	}
 	//wheel hard to turn while driving through water
@@ -83,7 +83,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		double percentForce = 0.1;
 		double percentForce1 = 0.2;
 		double percentLength = (150);
-		triggers->LeftRight(percentForce1, 0, percentLength);
+		triggers->Rumble(percentForce1, 0, percentLength);
 		triggers->Sine(70, 70, percentForce);
 	}
 	//Wheel rumbles lightly when driving over sand
@@ -93,7 +93,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		double percentForce = 0.1;
 		double percentForce1 = 0.2;
 		double percentLength = (50);
-		triggers->LeftRight(percentForce1, 0, percentLength);
+		triggers->Rumble(percentForce1, 0, percentLength);
 		triggers->Sine(70, 70, percentForce);
 	}
 	//Wheel rumbles lightly when driving over rough part of track
@@ -103,7 +103,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		double percentForce = 0.1;
 		double percentForce1 = 0.2;
 		double percentLength = (250);
-		triggers->LeftRight(0, percentForce1, percentLength);
+		triggers->Rumble(0, percentForce1, percentLength);
 		triggers->Sine(40, 50, percentForce);
 	}
 	//Wheel rumbles moderately when driving over wooden bridges
@@ -112,7 +112,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	{
 		double percentForce = 0.4;
 		double percentLength = (100);
-		triggers->LeftRight(percentForce, percentForce, percentLength);
+		triggers->Rumble(percentForce, percentForce, percentLength);
 		triggers->Sine(120, 120, percentForce);
 	}
 }

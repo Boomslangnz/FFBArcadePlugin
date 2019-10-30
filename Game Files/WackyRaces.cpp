@@ -110,7 +110,7 @@ void WackyRaces::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTri
 		double percentForce = (31 - ff) / 15.0;
 		double percentLength = 100;
 		// direction from left => makes wheel turn right
-		triggers->LeftRight(0, percentForce, percentLength);
+		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce); // old logic: 31 - ff
 		lastWasStop = 0;
 	}
@@ -121,7 +121,7 @@ void WackyRaces::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTri
 		double percentForce = (16 - ff) / 15.0;
 		double percentLength = 100;
 		// direction from right => makes wheel turn left
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce); // old logic: 15 - ff
 		lastWasStop = 0;
 	}

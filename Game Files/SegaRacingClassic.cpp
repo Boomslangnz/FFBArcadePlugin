@@ -50,7 +50,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 			//Roll Left
 			double percentForce = (176 - ff) / 8.0;
 			double percentLength = 100;
-			triggers->LeftRight(0, percentForce, percentLength);
+			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 		else if ((ff > 0x97) & (ff < 0xA0))
@@ -58,7 +58,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 			//Roll Right
 			double percentForce = (160 - ff) / 8.0;
 			double percentLength = 100;
-			triggers->LeftRight(percentForce, 0, percentLength);
+			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
 	}
@@ -90,7 +90,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 			//Roll Left
 			double percentForce = (176 - ff) / 8.0;
 			double percentLength = 100;
-			triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+			triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 		}
 		else if ((ff > 0x97) & (ff < 0xA0))
@@ -98,7 +98,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 			//Roll Right
 			double percentForce = (160 - ff) / 8.0;
 			double percentLength = 100;
-			triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+			triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 		}
 	}

@@ -1589,6 +1589,29 @@ void TriggerRumbleEffect(double lowfrequency, double highfrequency, double lengt
 	}
 }
 
+void TriggerRumbleEffectDevice2(double lowfrequency, double highfrequency, double length)
+{
+	if (EnableRumble == 1)
+	{
+		DWORD minForceLow = (DWORD)(lowfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD minForceHigh = (DWORD)(highfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD maxForce = (DWORD)(configMaxForce / 100.0 * 65535.0);
+		DWORD rangeLow = maxForce - minForceLow;
+		DWORD rangeHigh = maxForce - minForceHigh;
+		DWORD LowMotor = (DWORD)(lowfrequency * rangeLow + minForceLow);
+		DWORD HighMotor = (DWORD)(highfrequency * rangeHigh + minForceHigh);
+
+		if (ReverseRumble == 1)
+		{
+			SDL_JoystickRumble(GameController2, HighMotor, LowMotor, length);
+		}
+		else
+		{
+			SDL_JoystickRumble(GameController2, LowMotor, HighMotor, length);
+		}
+	}
+}
+
 void TriggerSpringEffect(double strength)
 {
 	TriggerSpringEffectWithDefaultOption(strength, false);
@@ -1630,6 +1653,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	t.Friction = &TriggerFrictionEffect;
 	t.Sine = &TriggerSineEffect;
 	t.Rumble = &TriggerRumbleEffect;
+	t.RumbleDevice2 = &TriggerRumbleEffectDevice2;
 	t.LeftRight = &TriggerLeftRightEffect;
 	t.LeftRightDevice2 = &TriggerLeftRightDevice2Effect;
 	t.Springi = &TriggerSpringEffectInfinite;
@@ -2598,9 +2622,28 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			FreeLibrary(gl_hlibavs);
 		}
 
+		if (GameController)
+		{
+			if (EnableRumble == 1)
+			{
+				SDL_JoystickRumble(GameController, 0, 0, 0);
+			}			
+		}
+
+		if (GameController2)
+		{
+			if (EnableRumble == 1)
+			{
+				SDL_JoystickRumble(GameController2, 0, 0, 0);
+			}
+		}
+
 		// this doesn't seem to really work...hmm...if i ALT+F4, then the program quits and haptic is still set.
 		// try setting GameId to HEAVY (-5 or -6..can't remember) and then force quit. Wheel will stay heavy :/.
-		if (haptic) {
+		if (haptic)
+		{
+			
+			SDL_JoystickRumble(GameController2, 0, 0, 0);
 			SDL_HapticStopEffect(haptic, effects.effect_constant_id);
 			SDL_HapticStopEffect(haptic, effects.effect_friction_id);
 			SDL_HapticStopEffect(haptic, effects.effect_leftright_id);

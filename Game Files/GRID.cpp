@@ -28,7 +28,7 @@ static int GearChangeThread(void* ptr)
 	myHelpers->log("gear change");
 	double percentForce = GearChangeStrength / 100.0;
 	myTriggers->Sine(GearChangeLength, 0, percentForce);
-	myTriggers->LeftRight(0, percentForce, 150);
+	myTriggers->Rumble(0, percentForce, 150);
 	return 0;
 }
 
@@ -70,7 +70,7 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	{
 		double percentForce = Wheels / 37.0;
 		double percentLength = 100;
-		triggers->LeftRight(percentForce, percentForce, percentLength);
+		triggers->Rumble(percentForce, percentForce, percentLength);
 		triggers->Sine(80, 80, percentForce);
 	}
 
@@ -78,28 +78,28 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	{
 		double percentForce = ((Skids - 12) / 8.0);
 		double percentLength = 100;
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 	}
 
 	if ((AI > 0) && (PanelBase4 > 0))
 	{
 		double percentForce = (PanelBase4) / 8.0;
 		double percentLength = 100;
-		triggers->LeftRight(percentForce, percentForce, percentLength);
+		triggers->Rumble(percentForce, percentForce, percentLength);
 	}
 
 	if ((WallBase4 > 0) && (PanelBase4 > 0))
 	{
 		double percentForce = (PanelBase4) / 8.0;
 		double percentLength = 100;
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 	else if ((WallBase4 < 0) && (PanelBase4 > 0))
 	{
 		double percentForce = (PanelBase4) / 8.0;
 		double percentLength = 100;
-		triggers->LeftRight(0, percentForce, percentLength);
+		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 	}
 	oldgear = newgear;

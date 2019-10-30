@@ -39,7 +39,7 @@ void InitialD4::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 			triggers->Inertia(percentForce);
 			triggers->Friction(percentForce);
 			triggers->Damper(percentForce);
-			triggers->LeftRight(percentForce, percentForce, percentLength);
+			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 	}
 	if (FFBMode == 1)
@@ -52,7 +52,7 @@ void InitialD4::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 				double percentForce = (128 - ff) / 72.0;
 				double percentLength = 100;
 				double powforce = (ff - 55) / 72.0;
-				triggers->LeftRight(pow(percentForce, powforce), 0, percentLength);
+				triggers->Rumble(pow(percentForce, powforce), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, powforce)));
 			}
 			else if ((ff > 0x00) && (ff < 0x49) && (ff1 == 1))
@@ -61,7 +61,7 @@ void InitialD4::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 				double percentForce = (ff) / 72.0;
 				double percentLength = 100;
 				double powforce = (73 - ff) / 72.0;
-				triggers->LeftRight(0, pow(percentForce, powforce), percentLength);
+				triggers->Rumble(0, pow(percentForce, powforce), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, powforce)));
 			}
 		}
@@ -75,7 +75,7 @@ void InitialD4::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 				helpers->log("moving wheel right");
 				double percentForce = (128 - ff) / 72.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 			else if ((ff > 0x00) && (ff < 0x49) && (ff1 == 1))
@@ -83,7 +83,7 @@ void InitialD4::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 				helpers->log("moving wheel left");
 				double percentForce = (ff) / 72.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}

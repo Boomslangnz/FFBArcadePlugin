@@ -68,28 +68,28 @@ void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	{
 		double percentForce = SpeedStrength / 100.0;
 		double percentLength = 150;
-		triggers->LeftRight(0, percentForce, percentLength);
+		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 	else if ((1000000 < ff) && (ff < 1600000))
 	{
 		double percentForce = SpeedStrength / 100.0;
 		double percentLength = 150;
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 	}
 	else if ((0.00000000000000000001 < ff2) && (ffspeed > 0.01))
 	{
 		double percentForce = (0.1);
 		double percentLength = (50);
-		triggers->LeftRight(0, percentForce, percentLength);
+		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 	else if ((0.00000000000000000001 > ff2) && (ffspeed > 0.01))
 	{
 		double percentForce = (0.1);
 		double percentLength = (50);
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 	}
 }

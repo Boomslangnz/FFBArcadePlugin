@@ -45,19 +45,19 @@ void PokkenTournament::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		{
 			double percentForce = ((RumbleStrength) / 100.0);
 			double percentLength = (RumbleLength);
-			triggers->LeftRight(percentForce, percentForce, percentLength);
+			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 		else if (HowtoRumble == 1)
 		{
 			double percentForce = ((RumbleStrength) / 100.0);
 			double percentLength = (RumbleLength);
-			triggers->LeftRight(0, percentForce, percentLength);
+			triggers->Rumble(0, percentForce, percentLength);
 		}
 		else if (HowtoRumble == 2)
 		{
 			double percentForce = ((RumbleStrength) / 100.0);
 			double percentLength = (RumbleLength);
-			triggers->LeftRight(percentForce, 0, percentLength);
+			triggers->Rumble(percentForce, 0, percentLength);
 		}
 	}
 	oldFloat = newFloat;

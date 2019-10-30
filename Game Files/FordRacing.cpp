@@ -30,7 +30,7 @@ void FordRacing::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTri
 		double percentForce = (-65505 - ff) / 9.0;
 		double percentLength = 50;
 		// direction from left => makes wheel turn right
-		triggers->LeftRight(0, percentForce, percentLength);
+		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		lastWasStop = 0;
 	}
@@ -41,7 +41,7 @@ void FordRacing::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTri
 		double percentForce = (16 - ff) / 9.0;
 		double percentLength = 50;
 		// direction from right => makes wheel turn left
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		lastWasStop = 0;
 	}

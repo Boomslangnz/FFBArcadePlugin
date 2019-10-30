@@ -105,7 +105,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel left");
 				double percentForce = (ff - 191) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x7F) & (ff < 0x9F))
@@ -113,7 +113,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel right");
 				double percentForce = (ff - 127) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -124,7 +124,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel left");
 				double percentForce = (ff - 191) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x7F) & (ff < 0x9F))
@@ -132,7 +132,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel right");
 				double percentForce = (ff - 127) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -757,7 +757,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -765,7 +765,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -804,7 +804,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -812,7 +812,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -865,7 +865,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -873,7 +873,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -919,7 +919,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -927,7 +927,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -980,7 +980,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -988,7 +988,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -1034,7 +1034,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -1042,7 +1042,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -1095,7 +1095,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -1103,7 +1103,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -1149,7 +1149,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -1157,7 +1157,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -1210,7 +1210,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -1218,7 +1218,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -1264,7 +1264,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -1272,7 +1272,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -1326,7 +1326,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -1334,7 +1334,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -1373,7 +1373,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -1381,7 +1381,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2004,7 +2004,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -2012,7 +2012,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2051,7 +2051,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -2059,7 +2059,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2682,7 +2682,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -2690,7 +2690,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2729,7 +2729,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -2737,7 +2737,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -3360,7 +3360,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -3368,7 +3368,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -3407,7 +3407,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -3415,7 +3415,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -4038,7 +4038,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -4046,7 +4046,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -4085,7 +4085,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -4093,7 +4093,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -4716,7 +4716,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -4724,7 +4724,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -4763,7 +4763,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -4771,7 +4771,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -5394,7 +5394,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5402,7 +5402,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -5441,7 +5441,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5449,7 +5449,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -5467,7 +5467,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel left");
 				double percentForce = (ff - 191) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x7F) & (ff < 0x9F))
@@ -5475,7 +5475,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel right");
 				double percentForce = (ff - 127) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -5486,7 +5486,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel left");
 				double percentForce = (ff - 191) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x7F) & (ff < 0x9F))
@@ -5494,7 +5494,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel right");
 				double percentForce = (ff - 127) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -5512,7 +5512,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel left");
 				double percentForce = (ff - 191) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x7F) & (ff < 0x9F))
@@ -5520,7 +5520,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel right");
 				double percentForce = (ff - 127) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -5531,7 +5531,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel left");
 				double percentForce = (ff - 191) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x7F) & (ff < 0x9F))
@@ -5539,7 +5539,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				helpers->log("moving wheel right");
 				double percentForce = (ff - 127) / 31.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -5592,7 +5592,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5600,7 +5600,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -5646,7 +5646,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5654,7 +5654,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -5707,7 +5707,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5715,7 +5715,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -5761,7 +5761,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5769,7 +5769,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -5822,7 +5822,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5830,7 +5830,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -5876,7 +5876,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5884,7 +5884,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -5937,7 +5937,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5945,7 +5945,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -5991,7 +5991,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -5999,7 +5999,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -6052,7 +6052,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -6060,7 +6060,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -6106,7 +6106,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Left
 				double percentForce = (ff - 79) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff > 0x5F) & (ff < 0x68))
@@ -6114,7 +6114,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				//Roll Right
 				double percentForce = (ff - 95) / 8.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}

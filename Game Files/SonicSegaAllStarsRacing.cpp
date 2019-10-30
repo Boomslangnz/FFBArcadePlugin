@@ -32,7 +32,7 @@ void SonicSegaAllStarsRacing::FFBLoop(EffectConstants *constants, Helpers *helpe
 		helpers->log("moving wheel right");
 		double percentForce = (FFB) / 18.0;
 		double percentLength = 100;
-		triggers->LeftRight(0, percentForce, percentLength);
+		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		lastWasStop = 0;
 
@@ -42,7 +42,7 @@ void SonicSegaAllStarsRacing::FFBLoop(EffectConstants *constants, Helpers *helpe
 		helpers->log("moving wheel right");
 		double percentForce = (256 - FFB) / 18.0;
 		double percentLength = 100;
-		triggers->LeftRight(percentForce, 0, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		lastWasStop = 0;
 	}

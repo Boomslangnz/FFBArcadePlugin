@@ -107,14 +107,14 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = ((127 - ff6) / 127.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 				if ((ff6 > 0x7F) & (ff6 < 0x100))
 				{
 					double percentForce = ((ff6 - 127) / 128.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -124,14 +124,14 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = ((127 - ff6) / 127.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 				if ((ff6 > 0x7F) & (ff6 < 0x100))
 				{
 					double percentForce = ((ff6 - 127) / 128.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -141,7 +141,7 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = SpeedStrength / 100.0;
 					double percentLength = 100;
-					myTriggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -151,7 +151,7 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = SpeedStrength / 100.0;
 					double percentLength = 100;
-					myTriggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -164,14 +164,14 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = ((127 - ff6) / 127.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(percentForce, 0, percentLength);
+					myTriggers->Rumble(percentForce, 0, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 				}
 				if ((ff6 > 0x7F) & (ff6 < 0x100))
 				{
 					double percentForce = ((ff6 - 127) / 128.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(0, percentForce, percentLength);
+					myTriggers->Rumble(0, percentForce, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
@@ -181,14 +181,14 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = ((127 - ff6) / 127.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(percentForce, 0, percentLength);
+					myTriggers->Rumble(percentForce, 0, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 				}
 				if ((ff6 > 0x7F) & (ff6 < 0x100))
 				{
 					double percentForce = ((ff6 - 127) / 128.0);
 					double percentLength = 100;
-					myTriggers->LeftRight(0, percentForce, percentLength);
+					myTriggers->Rumble(0, percentForce, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
@@ -198,7 +198,7 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = SpeedStrength / 100.0;
 					double percentLength = 100;
-					myTriggers->LeftRight(0, percentForce, percentLength);
+					myTriggers->Rumble(0, percentForce, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
@@ -208,7 +208,7 @@ static int RunningThread(void *ptr)
 				{
 					double percentForce = SpeedStrength / 100.0;
 					double percentLength = 100;
-					myTriggers->LeftRight(percentForce, 0, percentLength);
+					myTriggers->Rumble(percentForce, 0, percentLength);
 					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -217,7 +217,7 @@ static int RunningThread(void *ptr)
 		{
 			double percentForce = SpeedStrength / 100.0;
 			double percentLength = 100;
-			myTriggers->LeftRight(percentForce, percentForce, percentLength);
+			myTriggers->Rumble(percentForce, percentForce, percentLength);
 			myTriggers->Sine(200, 200, percentForce);
 		}		
 		else if (ff == 8)
@@ -226,7 +226,7 @@ static int RunningThread(void *ptr)
 			{
 				double percentForce = 0.1;
 				double percentLength = 100;
-				myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				myTriggers->Rumble(percentForce, percentForce, percentLength);
 				myTriggers->Sine(70, 70, percentForce);
 			}			
 		}
@@ -236,7 +236,7 @@ static int RunningThread(void *ptr)
 			{
 				double percentForce = 0.2;
 				double percentLength = 50;
-				myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				myTriggers->Rumble(percentForce, percentForce, percentLength);
 				myTriggers->Sine(50, 50, percentForce);
 			}			
 		}
@@ -246,7 +246,7 @@ static int RunningThread(void *ptr)
 			{
 				double percentForce = 0.2;
 				double percentLength = 50;
-				myTriggers->LeftRight(percentForce, percentForce, percentLength);
+				myTriggers->Rumble(percentForce, percentForce, percentLength);
 				myTriggers->Sine(100, 50, percentForce);
 			}			
 		}

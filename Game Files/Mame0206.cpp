@@ -1698,7 +1698,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
@@ -1706,7 +1706,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -1717,7 +1717,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
@@ -1725,7 +1725,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -1751,7 +1751,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1759,7 +1759,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -1770,7 +1770,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1778,7 +1778,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -1805,7 +1805,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1813,7 +1813,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -1824,7 +1824,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1832,7 +1832,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -1859,7 +1859,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1867,7 +1867,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -1878,7 +1878,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1886,7 +1886,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -1909,7 +1909,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
@@ -1917,7 +1917,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -1928,7 +1928,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
@@ -1936,7 +1936,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -1962,7 +1962,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1970,7 +1970,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -1981,7 +1981,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
@@ -1989,7 +1989,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2016,7 +2016,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (124 - ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 			else if ((ffrave > 0) && (ffrave < 62))
@@ -2024,7 +2024,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}
@@ -2035,7 +2035,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (124 - ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffrave > 0) && (ffrave < 62))
@@ -2043,7 +2043,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2071,7 +2071,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (124 - ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 			else if ((ffrave > 0) && (ffrave < 62))
@@ -2079,7 +2079,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}
@@ -2090,7 +2090,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (124 - ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffrave > 0) && (ffrave < 62))
@@ -2098,7 +2098,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2125,7 +2125,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (124 - ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 			else if ((ffrave > 0) && (ffrave < 62))
@@ -2133,7 +2133,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}
@@ -2144,7 +2144,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (124 - ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffrave > 0) && (ffrave < 62))
@@ -2152,7 +2152,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (ffrave) / 61.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2173,7 +2173,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
@@ -2181,7 +2181,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2192,7 +2192,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
@@ -2200,7 +2200,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ff20495) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2223,7 +2223,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
@@ -2231,7 +2231,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2242,7 +2242,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
@@ -2250,7 +2250,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2271,7 +2271,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
@@ -2279,7 +2279,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2290,7 +2290,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
@@ -2298,7 +2298,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2320,7 +2320,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
@@ -2328,7 +2328,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2339,7 +2339,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
@@ -2347,7 +2347,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffcal6) / 126.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2372,7 +2372,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2380,7 +2380,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2391,7 +2391,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2399,7 +2399,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2425,7 +2425,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2433,7 +2433,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2444,7 +2444,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2452,7 +2452,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2478,7 +2478,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2486,7 +2486,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2497,7 +2497,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2505,7 +2505,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2531,7 +2531,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2539,7 +2539,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2550,7 +2550,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2558,7 +2558,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2584,7 +2584,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2592,7 +2592,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2603,7 +2603,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2611,7 +2611,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2637,7 +2637,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2645,7 +2645,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2656,7 +2656,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2664,7 +2664,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2690,7 +2690,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2698,7 +2698,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2709,7 +2709,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (225 - ffcrusnwld) / 114.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
@@ -2717,7 +2717,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnwld) / 110.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2743,7 +2743,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (214 - ffcrusnusa) / 109.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
@@ -2751,7 +2751,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnusa) / 104.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2762,7 +2762,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (214 - ffcrusnusa) / 109.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
@@ -2770,7 +2770,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnusa) / 104.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2796,7 +2796,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (214 - ffcrusnusa) / 109.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
@@ -2804,7 +2804,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnusa) / 104.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2815,7 +2815,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (214 - ffcrusnusa) / 109.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
@@ -2823,7 +2823,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnusa) / 104.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2849,7 +2849,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (214 - ffcrusnusa) / 109.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, percentForce, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
@@ -2857,7 +2857,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnusa) / 104.0;
 					double percentLength = 100;
-					triggers->LeftRight(percentForce, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
@@ -2868,7 +2868,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel left");
 					double percentForce = (214 - ffcrusnusa) / 109.0;
 					double percentLength = 100;
-					triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
 				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
@@ -2876,7 +2876,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 					helpers->log("moving wheel right");
 					double percentForce = (ffcrusnusa) / 104.0;
 					double percentLength = 100;
-					triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
@@ -2898,7 +2898,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -2906,7 +2906,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2917,7 +2917,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -2925,7 +2925,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2947,7 +2947,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -2955,7 +2955,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2966,7 +2966,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -2974,7 +2974,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -2996,7 +2996,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -3004,7 +3004,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -3015,7 +3015,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -3023,7 +3023,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -3045,7 +3045,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -3053,7 +3053,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -3064,7 +3064,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -3072,7 +3072,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
@@ -3094,7 +3094,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -3102,7 +3102,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -3113,7 +3113,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel left");
 				double percentForce = (255 - ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 			}
 			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
@@ -3121,7 +3121,7 @@ void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTri
 				helpers->log("moving wheel right");
 				double percentForce = (ffoff6) / 124.0;
 				double percentLength = 100;
-				triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}

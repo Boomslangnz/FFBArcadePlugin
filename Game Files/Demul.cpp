@@ -135,7 +135,7 @@ void Demul::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrigge
 						helpers->log("moving wheel left");
 						double percentForce = (ffnascar - 16) / 16.0;
 						double percentLength = 100;
-						triggers->LeftRight(percentForce, 0, percentLength);
+						triggers->Rumble(percentForce, 0, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 					}
 					else if ((ffnascar > 0) & (ffnascar < 17))
@@ -143,7 +143,7 @@ void Demul::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrigge
 						helpers->log("moving wheel right");
 						double percentForce = (17 - ffnascar) / 16.0;
 						double percentLength = 100;
-						triggers->LeftRight(0, percentForce, percentLength);
+						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 					}
 				}
@@ -154,7 +154,7 @@ void Demul::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrigge
 						helpers->log("moving wheel left");
 						double percentForce = (ffnascar - 16) / 16.0;
 						double percentLength = 100;
-						triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+						triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 					}
 					else if ((ffnascar > 0) & (ffnascar < 17))
@@ -162,7 +162,7 @@ void Demul::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrigge
 						helpers->log("moving wheel right");
 						double percentForce = (17 - ffnascar) / 16.0;
 						double percentLength = 100;
-						triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+						triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 					}
 				}

@@ -28,7 +28,7 @@ void KODrive::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrig
 		double percentForce = 0.4;
 		double percentForce1 = 2.7;
 		double percentLength = 100;
-		triggers->LeftRight(percentForce1, percentForce1, percentLength);
+		triggers->Rumble(percentForce1, percentForce1, percentLength);
 		triggers->Sine(80, 80, percentForce);
 	}
 	if (FFBMode == 1)
@@ -38,7 +38,7 @@ void KODrive::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrig
 			helpers->log("moving wheel right");
 			double percentForce = (128 - ff) / 24.0;
 			double percentLength = 100;
-			triggers->LeftRight(pow(percentForce, 0.5), 0, percentLength);
+			triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 		}
 		else if ((ff > 0x00) & (ff < 0x19) & (ff1 == 1))
@@ -46,7 +46,7 @@ void KODrive::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrig
 			helpers->log("moving wheel left");
 			double percentForce = (ff) / 24.0;
 			double percentLength = 100;
-			triggers->LeftRight(0, pow(percentForce, 0.5), percentLength);
+			triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 		}
 	}
@@ -57,7 +57,7 @@ void KODrive::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrig
 			helpers->log("moving wheel right");
 			double percentForce = (128 - ff) / 24.0;
 			double percentLength = 100;
-			triggers->LeftRight(percentForce, 0, percentLength);
+			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
 		else if ((ff > 0x00) & (ff < 0x19) & (ff1 == 1))
@@ -65,7 +65,7 @@ void KODrive::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTrig
 			helpers->log("moving wheel left");
 			double percentForce = (ff) / 24.0;
 			double percentLength = 100;
-			triggers->LeftRight(0, percentForce, percentLength);
+			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 	}	

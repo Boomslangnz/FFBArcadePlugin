@@ -51,7 +51,7 @@ void TestGame::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		triggers->Spring(0);
 		break;
 	case -7:
-		triggers->LeftRight(1.0, 1.0, SDL_HAPTIC_INFINITY);
+		triggers->Rumble(1.0, 1.0, SDL_HAPTIC_INFINITY);
 		break;
 	}
 }

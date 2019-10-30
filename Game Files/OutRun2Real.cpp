@@ -46,21 +46,21 @@ void SendForceFeedback(__int8 force)
 	{
 		double percentForce = SpeedStrength / 100.0;
 		double percentLength = 100;
-		myTriggers->LeftRight(0, percentForce, percentLength);
+		myTriggers->Rumble(0, percentForce, percentLength);
 		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 	if ((force == 0x00) || (force == 0x1B) || (force == 0x14))
 	{
 		double percentForce = SpeedStrength / 100.0;
 		double percentLength = 100;
-		myTriggers->LeftRight(percentForce, 0, percentLength);
+		myTriggers->Rumble(percentForce, 0, percentLength);
 		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 	}
 	if (force == 0x02)
 	{
 		double percentForce = SpeedStrength / 100.0;
 		double percentLength = 100;
-		myTriggers->LeftRight(percentForce, percentForce, percentLength);
+		myTriggers->Rumble(percentForce, percentForce, percentLength);
 		myTriggers->Sine(70, 80, percentForce);
 	}
 }
@@ -145,7 +145,7 @@ static int RunningThread(void *ptr)
 			double percentForce = 0.1;
 			double percentLength = 100;
 			myTriggers->Sine(240, 320, percentForce);
-			myTriggers->LeftRight(percentForce, percentForce, percentLength);
+			myTriggers->Rumble(percentForce, percentForce, percentLength);
 		}
 		oldgear = newgear;
 	}

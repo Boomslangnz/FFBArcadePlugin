@@ -31,12 +31,12 @@ void AfterburnerClimax::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 		{
 			double percentForce = ((Rumble1Strength) / 100.0);
 			double percentLength = (Rumble1Length);
-			triggers->LeftRight(percentForce, percentForce, percentLength);
+			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 	else if (ff == 80)
 		{
 			double percentForce = ((Rumble2Strength) / 100.0);
 			double percentLength = (Rumble2Length);
-			triggers->LeftRight(percentForce, percentForce, percentLength);
+			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 }
