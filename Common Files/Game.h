@@ -6,7 +6,7 @@ struct EffectTriggers {
 	void(*Spring)(double strength);
 	void(*Friction)(double strength);
 	void(*Sine)(UINT16 period, UINT16 fadePeriod, double strength);
-	void(*Rumble)(double strength, double length);
+	void(*Rumble)(double lowfrequency, double highfrequency, double length);
 	void(*LeftRight)(double smallstrength, double largestrength, double length);
 	void(*LeftRightDevice2)(double smallstrength, double largestrength, double length);
 	void(*Springi)(double strength);

@@ -1566,11 +1566,19 @@ void TriggerLeftRightDevice2Effect(double smallstrength, double largestrength, d
 	}
 }
 
-void TriggerRumbleEffect(double strength, double length)
+void TriggerRumbleEffect(double lowfrequency, double highfrequency, double length)
 {
 	if (EnableRumble == 1)
 	{
-		SDL_HapticRumblePlay(haptic, strength, length);
+		DWORD minForceLow = (DWORD)(lowfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD minForceHigh = (DWORD)(highfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD maxForce = (DWORD)(configMaxForce / 100.0 * 65535.0);
+		DWORD rangeLow = maxForce - minForceLow;
+		DWORD rangeHigh = maxForce - minForceHigh;
+		DWORD LowMotor = (DWORD)(lowfrequency * rangeLow + minForceLow);
+		DWORD HighMotor = (DWORD)(highfrequency * rangeHigh + minForceHigh);
+
+		SDL_JoystickRumble(GameController, LowMotor, HighMotor, length);
 	}
 }
 
