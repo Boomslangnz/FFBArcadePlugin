@@ -15,6 +15,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "HOTD4.h"
 #include "SDL.h"
 #include <Windows.h>
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 extern int joystick_index1;
 extern int joystick_index2;
 extern SDL_Joystick* GameController2;
@@ -40,16 +41,15 @@ static int RunningThread(void *ptr)
 		UINT8 Health1p = myHelpers->ReadByte(Base31p + 0x3C, false);
 		UINT8 Bullet1p = myHelpers->ReadByte(Base31p + 0x274, false);
 		UINT8 GrenadeExplode1p = myHelpers->ReadByte(Base31p + 0x2B3, false);
-		INT_PTR Base2p = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x1219C, false);
-		INT_PTR Base12p = myHelpers->ReadIntPtr(Base2p + 0x69C, false);
-		INT_PTR Base22p = myHelpers->ReadIntPtr(Base12p + 0x4CC, false);
-		INT_PTR Base32p = myHelpers->ReadIntPtr(Base22p + 0xD0, false);
-		INT_PTR Base42p = myHelpers->ReadIntPtr(Base32p + 0x38, false);
-		UINT8 Health2p = myHelpers->ReadByte(Base42p + 0x3C, false);
-		UINT8 Bullet2p = myHelpers->ReadByte(Base42p + 0x274, false);
-		UINT8 GrenadeExplode2p = myHelpers->ReadByte(Base42p + 0x2B3, false);
+		INT_PTR Base2p = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x9164, false);
+		INT_PTR Base12p = myHelpers->ReadIntPtr(Base2p + 0x11C, false);
+		INT_PTR Base22p = myHelpers->ReadIntPtr(Base12p + 0x50, false);
+		INT_PTR Base32p = myHelpers->ReadIntPtr(Base22p + 0x38, false);
+		UINT8 Health2p = myHelpers->ReadByte(Base32p + 0x3C, false);
+		UINT8 Bullet2p = myHelpers->ReadByte(Base32p + 0x274, false);
+		UINT8 GrenadeExplode2p = myHelpers->ReadByte(Base32p + 0x2B3, false);
 		UINT8 IngameValue1p = myHelpers->ReadByte(Base31p + 0x38, false);
-		UINT8 IngameValue2p = myHelpers->ReadByte(Base42p + 0x38, false);
+		UINT8 IngameValue2p = myHelpers->ReadByte(Base32p + 0x38, false);
 		INT_PTR StartBase = myHelpers->ReadIntPtr((INT_PTR)gl_cgGLDll + 0x3C40, false);
 		INT_PTR StartBase1 = myHelpers->ReadIntPtr(StartBase + 0x130, false);
 		INT_PTR StartBase2 = myHelpers->ReadIntPtr(StartBase1 + 0x234, false);
@@ -279,8 +279,7 @@ void HOTD4::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 
 	for (int i = 0; i < SDL_NumJoysticks(); i++)
 	{
-		wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-		wchar_t * deviceGUIDString2 = new wchar_t[256];
+		wchar_t* deviceGUIDString2 = new wchar_t[256];
 		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
 		char joystick_guid[256];
 		sprintf(joystick_guid, "%S", deviceGUIDString2);
