@@ -1578,7 +1578,14 @@ void TriggerRumbleEffect(double lowfrequency, double highfrequency, double lengt
 		DWORD LowMotor = (DWORD)(lowfrequency * rangeLow + minForceLow);
 		DWORD HighMotor = (DWORD)(highfrequency * rangeHigh + minForceHigh);
 
-		SDL_JoystickRumble(GameController, LowMotor, HighMotor, length);
+		if (ReverseRumble == 1)
+		{
+			SDL_JoystickRumble(GameController, HighMotor, LowMotor, length);
+		}
+		else
+		{
+			SDL_JoystickRumble(GameController, LowMotor, HighMotor, length);
+		}		
 	}
 }
 
