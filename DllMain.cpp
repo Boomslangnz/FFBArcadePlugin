@@ -79,7 +79,7 @@ typedef LPCDIDATAFORMAT(WINAPI* pfnDirectInputGetdfDIJoystick)();
 // DINPUT FUNCTION DEFINITIONS
 typedef HRESULT(WINAPI* pfnDirectInputDirectInputCreateA)(HINSTANCE hinst, DWORD dwVersion, LPDIRECTINPUTA* ppDI, LPUNKNOWN punkOuter);
 typedef HRESULT(WINAPI* pfnDirectInputDirectInputCreateW)(HINSTANCE hinst, DWORD dwVersion, LPDIRECTINPUTW* ppDI, LPUNKNOWN punkOuter);
-typedef HRESULT(WINAPI* pfnDirectInputDirectInputCreateEx)(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter);
+typedef HRESULT(WINAPI* pfnDirectInputDirectInputCreateEx)(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter);
 
 // DINPUT8 REAL FUNCTIONS
 pfnDirectInputDirectInput8Create originalDirectInputDirectInput8Create = NULL;
@@ -784,7 +784,7 @@ HRESULT WINAPI DirectInputDirectInputCreateW(HINSTANCE hinst, DWORD dwVersion, L
 	HRESULT res = originalDirectInputDirectInputCreateW(hinst, dwVersion, ppDI, punkOuter);
 	return res;
 }
-HRESULT WINAPI DirectInputDirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID *ppvOut, LPUNKNOWN punkOuter)
+HRESULT WINAPI DirectInputDirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
 {
 	HRESULT res = originalDirectInputDirectInputCreateEx(hinst, dwVersion, riidltf, ppvOut, punkOuter);
 	return res;
@@ -792,10 +792,10 @@ HRESULT WINAPI DirectInputDirectInputCreateEx(HINSTANCE hinst, DWORD dwVersion, 
 // DINPUT8 WRAPPER
 HRESULT WINAPI DirectInputDirectInput8Create(HINSTANCE hinst, DWORD dwVersion, REFIID riidltf, LPVOID* ppvOut, LPUNKNOWN punkOuter)
 {
-		LPVOID val;
-		HRESULT res = originalDirectInputDirectInput8Create(hinst, dwVersion, riidltf, &val, punkOuter);
-		*ppvOut = new DirectInputDeviceWrapper(val, (IID_IDirectInput8W == riidltf));
-		return res;	
+	LPVOID val;
+	HRESULT res = originalDirectInputDirectInput8Create(hinst, dwVersion, riidltf, &val, punkOuter);
+	*ppvOut = new DirectInputDeviceWrapper(val, (IID_IDirectInput8W == riidltf));
+	return res;
 }
 
 HRESULT WINAPI DirectInputDllRegisterServer(void)
@@ -846,13 +846,13 @@ int joystick1Index = -1;
 int joystick_index2 = -1;
 
 // settings
-wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 int configMinForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForce"), 0, settingsFilename);
 int configMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForce"), 100, settingsFilename);
 int enableLogging = GetPrivateProfileInt(TEXT("Settings"), TEXT("Logging"), 0, settingsFilename);
 int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 0, settingsFilename);
 int ReverseRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumble"), 0, settingsFilename);
-wchar_t *deviceGUIDString = new wchar_t[256];
+wchar_t* deviceGUIDString = new wchar_t[256];
 int DeviceGUID = GetPrivateProfileString(TEXT("Settings"), TEXT("DeviceGUID"), NULL, deviceGUIDString, 256, settingsFilename);
 int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
 int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 0, settingsFilename);
@@ -931,10 +931,10 @@ void Initialize(int device_index)
 	int numJoysticks = SDL_NumJoysticks();
 	hlp.log("numJoysticks = ");
 	std::string njs = std::to_string(numJoysticks);
-	hlp.log((char *)njs.c_str());
+	hlp.log((char*)njs.c_str());
 	char firstJoystickSelectedText[256];
 	SDL_Joystick* FirstGameController = NULL;
-	for (int i = 0; i< SDL_NumJoysticks(); i++)
+	for (int i = 0; i < SDL_NumJoysticks(); i++)
 	{
 		SDL_Joystick* js = SDL_JoystickOpen(i);
 		const char* name = SDL_JoystickName(js);
@@ -982,9 +982,9 @@ void Initialize(int device_index)
 		hlp.log(firstJoystickSelectedText);
 	}
 	haptic = ControllerHaptic;
-	if ((SDL_HapticRumbleSupported(haptic) == SDL_TRUE && EnableRumble == 1)) 
+	if ((SDL_HapticRumbleSupported(haptic) == SDL_TRUE && EnableRumble == 1))
 	{
-		SDL_HapticRumbleInit(ControllerHaptic);	
+		SDL_HapticRumbleInit(ControllerHaptic);
 		hlp.log("Rumble Init");
 	}
 	hlp.log("disabling all current FFB effects");
@@ -993,7 +993,7 @@ void Initialize(int device_index)
 	SDL_HapticSetGain(haptic, 100); // HapticSetGain should be between 0 and 100 as per https://wiki.libsdl.org/SDL_HapticSetGain
 	hlp.log("setting haptic auto center to 0");
 	SDL_HapticSetAutocenter(haptic, 0); // 0 disables autocenter https://wiki.libsdl.org/SDL_HapticSetAutocenter
-										
+
 
 	SDL_HapticEffect tempEffect;
 	hlp.log("creating base effects...");
@@ -1072,7 +1072,7 @@ void Initialize(int device_index)
 	// Was there a reason to put it here?
 //	extern bool hackFix;
 //	hackFix = true;
-	
+
 }
 
 using namespace std::chrono;
@@ -1121,7 +1121,7 @@ void TriggerConstantEffect(int direction, double strength)
 	}
 
 	tempEffect.constant.level = level;
-	hlp.log((char *)(std::to_string(level)).c_str());
+	hlp.log((char*)(std::to_string(level)).c_str());
 	SDL_HapticUpdateEffect(haptic, effects.effect_constant_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_constant_id, 1);
 }
@@ -1153,7 +1153,7 @@ void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault)
 	SDL_HapticRunEffect(haptic, effects.effect_friction_id, 1);
 }
 
-void TriggerInertiaEffect(double strength) 
+void TriggerInertiaEffect(double strength)
 {
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1185,21 +1185,11 @@ void TriggerInertiaEffect(double strength)
 
 void TriggerTriangleEffect(double strength, double length)
 {
-<<<<<<< HEAD
-	if (FFBorRumble == 0)
-	{
-		int direction = 1;
-		if (strength < -0.001) {
-			strength *= -1;
-			direction = -1;
-		}
-=======
 	int direction = 1;
-	if (strength <= -0.001) {
+	if (strength < -0.001) {
 		strength *= -1;
 		direction = -1;
 	}
->>>>>>> parent of 779758b... Now Choose FFB or Rumble
 
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1241,12 +1231,12 @@ void TriggerTriangleEffect(double strength, double length)
 	tempEffect.periodic.length = length;
 	tempEffect.periodic.attack_length = 1000;
 	tempEffect.periodic.fade_length = 1000;
-	
+
 	SDL_HapticUpdateEffect(haptic, effects.effect_triangle_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_triangle_id, 1);
 }
 
-void TriggerDamperEffect(double strength) 
+void TriggerDamperEffect(double strength)
 {
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1275,7 +1265,7 @@ void TriggerDamperEffect(double strength)
 	SDL_HapticRunEffect(haptic, effects.effect_damper_id, 1);
 }
 
-void TriggerRampEffect(double start,double end,double length) 
+void TriggerRampEffect(double start, double end, double length)
 {
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1302,12 +1292,12 @@ void TriggerRampEffect(double start,double end,double length)
 	tempEffect.ramp.delay = 0;
 	tempEffect.ramp.start = start1;
 	tempEffect.ramp.end = -start2;
-	
+
 	SDL_HapticUpdateEffect(haptic, effects.effect_ramp_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_ramp_id, 1);
 }
 
-void TriggerSawtoothUpEffect(double strength, double length) 
+void TriggerSawtoothUpEffect(double strength, double length)
 {
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1366,39 +1356,21 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffect)).count();
 
-<<<<<<< HEAD
-		int direction = 1;
-		if (strength < -0.001) {
-			strength *= -1;
-			direction = -1;
-		}
-
-		// if no strength, we do nothing
-		if (strength <= 0.001) {
-			return;
-		}
-
-		// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
-		if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 1.5)) {
-			return;
-		}
-=======
 	int direction = 1;
-	if (strength <= -0.001) {
+	if (strength < -0.001) {
 		strength *= -1;
 		direction = -1;
-	}
-
-	// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
-	if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 2.0)) {
-		return;
 	}
 
 	// if no strength, we do nothing
 	if (strength <= 0.001) {
 		return;
 	}
->>>>>>> parent of 779758b... Now Choose FFB or Rumble
+
+	// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
+	if (elapsedTime < lastSineEffectPeriod && strength < (lastSineEffectStrength * 1.5)) {
+		return;
+	}
 
 	SDL_HapticEffect tempEffect;
 	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
@@ -1464,7 +1436,7 @@ void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault)
 	tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
 	tempEffect.condition.direction.dir[0] = 1;
 	tempEffect.constant.direction.dir[1] = 0; //Y Position
-	
+
 	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
@@ -1611,7 +1583,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if (configGameId == 4 || configGameId == 12 || configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24 ||configGameId == 35) //Lindbergh Games which require Sleep until loaded enough
+	if (configGameId == 4 || configGameId == 12 || configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24 || configGameId == 35) //Lindbergh Games which require Sleep until loaded enough
 	{
 		Sleep(2500);
 	}
@@ -1631,7 +1603,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 			WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
 		}
 	}
-		
+
 	SDL_HapticStopAll(haptic);
 	Initialize(0);
 	hlp.log("Initialize() complete");
@@ -1788,7 +1760,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		{
 			game->FFBLoop(&effectConst, &hlp, &t);
 			Sleep(16);
-		}			
+		}
 	}
 	hlp.log("about to exit FFBLoop");
 	return 0;
@@ -1810,7 +1782,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 	GetModuleFileNameA(NULL, buff, MAX_PATH);
 	std::string processName = std::string(buff);
 	hlp.log("process name:");
-	hlp.log((char *)processName.c_str());
+	hlp.log((char*)processName.c_str());
 	hlp.log("default centering & friction values:");
 	hlp.logInt(configDefaultCentering);
 	hlp.logInt(configDefaultFriction);
@@ -1820,9 +1792,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 	case DLL_PROCESS_ATTACH:
 		// log, etc.
 		hlp.log("dll process attach:");
-		hlp.log((char *)processName.c_str());
-		hlp.log((char *)(std::to_string(configMinForce)).c_str());
-		hlp.log((char *)(std::to_string(configMaxForce)).c_str());
+		hlp.log((char*)processName.c_str());
+		hlp.log((char*)(std::to_string(configMinForce)).c_str());
+		hlp.log((char*)(std::to_string(configMaxForce)).c_str());
 		DisableThreadLibraryCalls(hModule);
 		hlp.log("loading original library...");
 
@@ -1991,7 +1963,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		}
 
 		if (currentLibrary == lib::d3d9)
-		{		
+		{
 			originalDirect3DShaderValidatorCreate9 = GetProcAddress(gl_hOriginalDll, "Direct3DShaderValidatorCreate9");
 			originalPSGPError = GetProcAddress(gl_hOriginalDll, "PSGPError");
 			originalPSGPSampleTexture = GetProcAddress(gl_hOriginalDll, "PSGPSampleTexture");
@@ -2006,7 +1978,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			originalDebugSetMute = GetProcAddress(gl_hOriginalDll, "DebugSetMute");
 			originalDirect3D9EnableMaximizedWindowedModeShim = GetProcAddress(gl_hOriginalDll, "Direct3D9EnableMaximizedWindowedModeShim");
 			originalDirect3DCreate9 = GetProcAddress(gl_hOriginalDll, "Direct3DCreate9");
-			originalDirect3DCreate9Ex = GetProcAddress(gl_hOriginalDll, "Direct3DCreate9Ex");		 
+			originalDirect3DCreate9Ex = GetProcAddress(gl_hOriginalDll, "Direct3DCreate9Ex");
 		}
 
 		if (currentLibrary == lib::opengl32)
@@ -2379,210 +2351,210 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			originalglPrioritizeTextures = GetProcAddress(gl_hOriginalDll, "glPrioritizeTextures");
 			originalglTexSubImage1D = GetProcAddress(gl_hOriginalDll, "glTexSubImage1D");
 			originalglTexSubImage2D = GetProcAddress(gl_hOriginalDll, "glTexSubImage2D");
-}
+		}
 
-if (currentLibrary == lib::winmm)
-{
-	originalPlaySoundW = GetProcAddress(gl_hOriginalDll, "PlaySoundW");
-	originaltimeSetEvent = GetProcAddress(gl_hOriginalDll, "timeSetEvent");
-	originaltimeKillEvent = GetProcAddress(gl_hOriginalDll, "timeKillEvent");
-	originalmidiOutMessage = GetProcAddress(gl_hOriginalDll, "midiOutMessage");
-	originaltimeBeginPeriod = GetProcAddress(gl_hOriginalDll, "timeBeginPeriod");
-	originaltimeGetTime = GetProcAddress(gl_hOriginalDll, "timeGetTime");
-	originalNotifyCallbackData = GetProcAddress(gl_hOriginalDll, "NotifyCallbackData");
-	originalWOW32DriverCallback = GetProcAddress(gl_hOriginalDll, "WOW32DriverCallback");
-	originalWOW32ResolveMultiMediaHandle = GetProcAddress(gl_hOriginalDll, "WOW32ResolveMultiMediaHandle");
-	originalaux32Message = GetProcAddress(gl_hOriginalDll, "aux32Message");
-	originaljoy32Message = GetProcAddress(gl_hOriginalDll, "joy32Message");
-	originalmid32Message = GetProcAddress(gl_hOriginalDll, "mid32Message");
-	originalmod32Message = GetProcAddress(gl_hOriginalDll, "mod32Message");
-	originalmxd32Message = GetProcAddress(gl_hOriginalDll, "mxd32Message");
-	originaltid32Message = GetProcAddress(gl_hOriginalDll, "tid32Message");
-	originalwid32Message = GetProcAddress(gl_hOriginalDll, "wid32Message");
-	originalwod32Message = GetProcAddress(gl_hOriginalDll, "wod32Message");
-	originalmci32Message = GetProcAddress(gl_hOriginalDll, "mci32Message");
-	originalCloseDriver = GetProcAddress(gl_hOriginalDll, "CloseDriver");
-	originalDefDriverProc = GetProcAddress(gl_hOriginalDll, "DefDriverProc");
-	originalDriverCallback = GetProcAddress(gl_hOriginalDll, "DriverCallback");
-	originalDrvGetModuleHandle = GetProcAddress(gl_hOriginalDll, "DrvGetModuleHandle");
-	originalGetDriverModuleHandle = GetProcAddress(gl_hOriginalDll, "GetDriverModuleHandle");
-	originalOpenDriver = GetProcAddress(gl_hOriginalDll, "OpenDriver");
-	originalPlaySound = GetProcAddress(gl_hOriginalDll, "PlaySound");
-	originalOrdinal2 = GetProcAddress(gl_hOriginalDll, "Ordinal2");
-	originalSendDriverMessage = GetProcAddress(gl_hOriginalDll, "SendDriverMessage");
-	originalauxGetDevCapsA = GetProcAddress(gl_hOriginalDll, "auxGetDevCapsA");
-	originalauxGetDevCapsW = GetProcAddress(gl_hOriginalDll, "auxGetDevCapsW");
-	originalauxGetNumDevs = GetProcAddress(gl_hOriginalDll, "auxGetNumDevs");
-	originalauxGetVolume = GetProcAddress(gl_hOriginalDll, "auxGetVolume");
-	originalauxOutMessage = GetProcAddress(gl_hOriginalDll, "auxOutMessage");
-	originalauxSetVolume = GetProcAddress(gl_hOriginalDll, "auxSetVolume");
-	originaljoyConfigChanged = GetProcAddress(gl_hOriginalDll, "joyConfigChanged");
-	originaljoyGetDevCapsA = GetProcAddress(gl_hOriginalDll, "joyGetDevCapsA");
-	originaljoyGetDevCapsW = GetProcAddress(gl_hOriginalDll, "joyGetDevCapsW");
-	originaljoyGetNumDevs = GetProcAddress(gl_hOriginalDll, "joyGetNumDevs");
-	originaljoyGetPosEx = GetProcAddress(gl_hOriginalDll, "joyGetPosEx");
-	originaljoyGetPos = GetProcAddress(gl_hOriginalDll, "joyGetPos");
-	originaljoyGetThreshold = GetProcAddress(gl_hOriginalDll, "joyGetThreshold");
-	originaljoyReleaseCapture = GetProcAddress(gl_hOriginalDll, "joyReleaseCapture");
-	originaljoySetCapture = GetProcAddress(gl_hOriginalDll, "joySetCapture");
-	originaljoySetThreshold = GetProcAddress(gl_hOriginalDll, "joySetThreshold");
-	originalmidiConnect = GetProcAddress(gl_hOriginalDll, "midiConnect");
-	originalmidiDisconnect = GetProcAddress(gl_hOriginalDll, "midiDisconnect");
-	originalmidiInAddBuffer = GetProcAddress(gl_hOriginalDll, "midiInAddBuffer");
-	originalmidiInClose = GetProcAddress(gl_hOriginalDll, "midiInClose");
-	originalmidiInGetDevCapsA = GetProcAddress(gl_hOriginalDll, "midiInGetDevCapsA");
-	originalmidiInGetDevCapsW = GetProcAddress(gl_hOriginalDll, "midiInGetDevCapsW");
-	originalmidiInGetErrorTextA = GetProcAddress(gl_hOriginalDll, "midiInGetErrorTextA");
-	originalmidiInGetErrorTextW = GetProcAddress(gl_hOriginalDll, "midiInGetErrorTextW");
-	originalmidiInGetID = GetProcAddress(gl_hOriginalDll, "midiInGetID");
-	originalmidiInGetNumDevs = GetProcAddress(gl_hOriginalDll, "midiInGetNumDevs");
-	originalmidiInMessage = GetProcAddress(gl_hOriginalDll, "midiInMessage");
-	originalmidiInOpen = GetProcAddress(gl_hOriginalDll, "midiInOpen");
-	originalmidiInPrepareHeader = GetProcAddress(gl_hOriginalDll, "midiInPrepareHeader");
-	originalmidiInReset = GetProcAddress(gl_hOriginalDll, "midiInReset");
-	originalmidiInStart = GetProcAddress(gl_hOriginalDll, "midiInStart");
-	originalmidiInStop = GetProcAddress(gl_hOriginalDll, "midiInStop");
-	originalmidiInUnprepareHeader = GetProcAddress(gl_hOriginalDll, "midiInUnprepareHeader");
-	originalmidiOutCacheDrumPatches = GetProcAddress(gl_hOriginalDll, "midiOutCacheDrumPatches");
-	originalmidiOutCachePatches = GetProcAddress(gl_hOriginalDll, "midiOutCachePatches");
-	originalmidiOutClose = GetProcAddress(gl_hOriginalDll, "midiOutClose");
-	originalmidiOutGetDevCapsA = GetProcAddress(gl_hOriginalDll, "midiOutGetDevCapsA");
-	originalmidiOutGetDevCapsW = GetProcAddress(gl_hOriginalDll, "midiOutGetDevCapsW");
-	originalmidiOutGetErrorTextA = GetProcAddress(gl_hOriginalDll, "midiOutGetErrorTextA");
-	originalmidiOutGetErrorTextW = GetProcAddress(gl_hOriginalDll, "midiOutGetErrorTextW");
-	originalmidiOutGetID = GetProcAddress(gl_hOriginalDll, "midiOutGetID");
-	originalmidiOutGetNumDevs = GetProcAddress(gl_hOriginalDll, "midiOutGetNumDevs");
-	originalmidiOutGetVolume = GetProcAddress(gl_hOriginalDll, "midiOutGetVolume");
-	originalmidiOutLongMsg = GetProcAddress(gl_hOriginalDll, "midiOutLongMsg");
-	originalmidiOutOpen = GetProcAddress(gl_hOriginalDll, "midiOutOpen");
-	originalmidiOutPrepareHeader = GetProcAddress(gl_hOriginalDll, "midiOutPrepareHeader");
-	originalmidiOutReset = GetProcAddress(gl_hOriginalDll, "midiOutReset");
-	originalmidiOutSetVolume = GetProcAddress(gl_hOriginalDll, "midiOutSetVolume");
-	originalmidiOutShortMsg = GetProcAddress(gl_hOriginalDll, "midiOutShortMsg");
-	originalmidiOutUnprepareHeader = GetProcAddress(gl_hOriginalDll, "midiOutUnprepareHeader");
-	originalmidiStreamClose = GetProcAddress(gl_hOriginalDll, "midiStreamClose");
-	originalmidiStreamOpen = GetProcAddress(gl_hOriginalDll, "midiStreamOpen");
-	originalmidiStreamOut = GetProcAddress(gl_hOriginalDll, "midiStreamOut");
-	originalmidiStreamPause = GetProcAddress(gl_hOriginalDll, "midiStreamPause");
-	originalmidiStreamPosition = GetProcAddress(gl_hOriginalDll, "midiStreamPosition");
-	originalmidiStreamProperty = GetProcAddress(gl_hOriginalDll, "midiStreamProperty");
-	originalmidiStreamRestart = GetProcAddress(gl_hOriginalDll, "midiStreamRestart");
-	originalmidiStreamStop = GetProcAddress(gl_hOriginalDll, "midiStreamStop");
-	originalmixerClose = GetProcAddress(gl_hOriginalDll, "mixerClose");
-	originalmixerGetControlDetailsA = GetProcAddress(gl_hOriginalDll, "mixerGetControlDetailsA");
-	originalmixerGetControlDetailsW = GetProcAddress(gl_hOriginalDll, "mixerGetControlDetailsW");
-	originalmixerGetDevCapsA = GetProcAddress(gl_hOriginalDll, "mixerGetDevCapsA");
-	originalmixerGetDevCapsW = GetProcAddress(gl_hOriginalDll, "mixerGetDevCapsW");
-	originalmixerGetID = GetProcAddress(gl_hOriginalDll, "mixerGetID");
-	originalmixerGetLineControlsA = GetProcAddress(gl_hOriginalDll, "mixerGetLineControlsA");
-	originalmixerGetLineControlsW = GetProcAddress(gl_hOriginalDll, "mixerGetLineControlsW");
-	originalmixerGetLineInfoA = GetProcAddress(gl_hOriginalDll, "mixerGetLineInfoA");
-	originalmixerGetLineInfoW = GetProcAddress(gl_hOriginalDll, "mixerGetLineInfoW");
-	originalmixerGetNumDevs = GetProcAddress(gl_hOriginalDll, "mixerGetNumDevs");
-	originalmixerMessage = GetProcAddress(gl_hOriginalDll, "mixerMessage");
-	originalmixerOpen = GetProcAddress(gl_hOriginalDll, "mixerOpen");
-	originalmixerSetControlDetails = GetProcAddress(gl_hOriginalDll, "mixerSetControlDetails");
-	originalmmDrvInstall = GetProcAddress(gl_hOriginalDll, "mmDrvInstall");
-	originalmmGetCurrentTask = GetProcAddress(gl_hOriginalDll, "mmGetCurrentTask");
-	originalmmTaskBlock = GetProcAddress(gl_hOriginalDll, "mmTaskBlock");
-	originalmmTaskCreate = GetProcAddress(gl_hOriginalDll, "mmTaskCreate");
-	originalmmTaskSignal = GetProcAddress(gl_hOriginalDll, "mmTaskSignal");
-	originalmmTaskYield = GetProcAddress(gl_hOriginalDll, "mmTaskYield");
-	originalmmioAdvance = GetProcAddress(gl_hOriginalDll, "mmioAdvance");
-	originalmmioAscend = GetProcAddress(gl_hOriginalDll, "mmioAscend");
-	originalmmioClose = GetProcAddress(gl_hOriginalDll, "mmioClose");
-	originalmmioCreateChunk = GetProcAddress(gl_hOriginalDll, "mmioCreateChunk");
-	originalmmioDescend = GetProcAddress(gl_hOriginalDll, "mmioDescend");
-	originalmmioFlush = GetProcAddress(gl_hOriginalDll, "mmioFlush");
-	originalmmioGetInfo = GetProcAddress(gl_hOriginalDll, "mmioGetInfo");
-	originalmmioInstallIOProcA = GetProcAddress(gl_hOriginalDll, "mmioInstallIOProcA");
-	originalmmioInstallIOProcW = GetProcAddress(gl_hOriginalDll, "mmioInstallIOProcW");
-	originalmmioOpenA = GetProcAddress(gl_hOriginalDll, "mmioOpenA");
-	originalmmioOpenW = GetProcAddress(gl_hOriginalDll, "mmioOpenW");
-	originalmmioRead = GetProcAddress(gl_hOriginalDll, "mmioRead");
-	originalmmioRenameA = GetProcAddress(gl_hOriginalDll, "mmioRenameA");
-	originalmmioRenameW = GetProcAddress(gl_hOriginalDll, "mmioRenameW");
-	originalmmioSeek = GetProcAddress(gl_hOriginalDll, "mmioSeek");
-	originalmmioSendMessage = GetProcAddress(gl_hOriginalDll, "mmioSendMessage");
-	originalmmioSetBuffer = GetProcAddress(gl_hOriginalDll, "mmioSetBuffer");
-	originalmmioSetInfo = GetProcAddress(gl_hOriginalDll, "mmioSetInfo");
-	originalmmioStringToFOURCCA = GetProcAddress(gl_hOriginalDll, "mmioStringToFOURCCA");
-	originalmmioStringToFOURCCW = GetProcAddress(gl_hOriginalDll, "mmioStringToFOURCCW");
-	originalmmioWrite = GetProcAddress(gl_hOriginalDll, "mmioWrite");
-	originaltimeEndPeriod = GetProcAddress(gl_hOriginalDll, "timeEndPeriod");
-	originaltimeGetDevCaps = GetProcAddress(gl_hOriginalDll, "timeGetDevCaps");
-	originaltimeGetSystemTime = GetProcAddress(gl_hOriginalDll, "timeGetSystemTime");
-	originalwaveInAddBuffer = GetProcAddress(gl_hOriginalDll, "waveInAddBuffer");
-	originalwaveInClose = GetProcAddress(gl_hOriginalDll, "waveInClose");
-	originalwaveInGetDevCapsA = GetProcAddress(gl_hOriginalDll, "waveInGetDevCapsA");
-	originalwaveInGetDevCapsW = GetProcAddress(gl_hOriginalDll, "waveInGetDevCapsW");
-	originalwaveInGetErrorTextA = GetProcAddress(gl_hOriginalDll, "waveInGetErrorTextA");
-	originalwaveInGetErrorTextW = GetProcAddress(gl_hOriginalDll, "waveInGetErrorTextW");
-	originalwaveInGetID = GetProcAddress(gl_hOriginalDll, "waveInGetID");
-	originalwaveInGetNumDevs = GetProcAddress(gl_hOriginalDll, "waveInGetNumDevs");
-	originalwaveInGetPosition = GetProcAddress(gl_hOriginalDll, "waveInGetPosition");
-	originalwaveInMessage = GetProcAddress(gl_hOriginalDll, "waveInMessage");
-	originalwaveInOpen = GetProcAddress(gl_hOriginalDll, "waveInOpen");
-	originalwaveInPrepareHeader = GetProcAddress(gl_hOriginalDll, "waveInPrepareHeader");
-	originalwaveInReset = GetProcAddress(gl_hOriginalDll, "waveInReset");
-	originalwaveInStart = GetProcAddress(gl_hOriginalDll, "waveInStart");
-	originalwaveInStop = GetProcAddress(gl_hOriginalDll, "waveInStop");
-	originalwaveInUnprepareHeader = GetProcAddress(gl_hOriginalDll, "waveInUnprepareHeader");
-	originalwaveOutBreakLoop = GetProcAddress(gl_hOriginalDll, "waveOutBreakLoop");
-	originalwaveOutClose = GetProcAddress(gl_hOriginalDll, "waveOutClose");
-	originalwaveOutGetDevCapsA = GetProcAddress(gl_hOriginalDll, "waveOutGetDevCapsA");
-	originalwaveOutGetDevCapsW = GetProcAddress(gl_hOriginalDll, "waveOutGetDevCapsW");
-	originalwaveOutGetErrorTextA = GetProcAddress(gl_hOriginalDll, "waveOutGetErrorTextA");
-	originalwaveOutGetErrorTextW = GetProcAddress(gl_hOriginalDll, "waveOutGetErrorTextW");
-	originalwaveOutGetID = GetProcAddress(gl_hOriginalDll, "waveOutGetID");
-	originalwaveOutGetNumDevs = GetProcAddress(gl_hOriginalDll, "waveOutGetNumDevs");
-	originalwaveOutGetPitch = GetProcAddress(gl_hOriginalDll, "waveOutGetPitch");
-	originalwaveOutGetPlaybackRate = GetProcAddress(gl_hOriginalDll, "waveOutGetPlaybackRate");
-	originalwaveOutGetPosition = GetProcAddress(gl_hOriginalDll, "waveOutGetPosition");
-	originalwaveOutGetVolume = GetProcAddress(gl_hOriginalDll, "waveOutGetVolume");
-	originalwaveOutMessage = GetProcAddress(gl_hOriginalDll, "waveOutMessage");
-	originalwaveOutOpen = GetProcAddress(gl_hOriginalDll, "waveOutOpen");
-	originalwaveOutPause = GetProcAddress(gl_hOriginalDll, "waveOutPause");
-	originalwaveOutPrepareHeader = GetProcAddress(gl_hOriginalDll, "waveOutPrepareHeader");
-	originalwaveOutReset = GetProcAddress(gl_hOriginalDll, "waveOutReset");
-	originalwaveOutRestart = GetProcAddress(gl_hOriginalDll, "waveOutRestart");
-	originalwaveOutSetPitch = GetProcAddress(gl_hOriginalDll, "waveOutSetPitch");
-	originalwaveOutSetPlaybackRate = GetProcAddress(gl_hOriginalDll, "waveOutSetPlaybackRate");
-	originalwaveOutSetVolume = GetProcAddress(gl_hOriginalDll, "waveOutSetVolume");
-	originalwaveOutUnprepareHeader = GetProcAddress(gl_hOriginalDll, "waveOutUnprepareHeader");
-	originalwaveOutWrite = GetProcAddress(gl_hOriginalDll, "waveOutWrite");
-	originalmciExecute = GetProcAddress(gl_hOriginalDll, "mciExecute");
-	originalmciGetErrorStringA = GetProcAddress(gl_hOriginalDll, "mciGetErrorStringA");
-	originalmciGetErrorStringW = GetProcAddress(gl_hOriginalDll, "mciGetErrorStringW");
-	originalmciSendCommandA = GetProcAddress(gl_hOriginalDll, "mciSendCommandA");
-	originalmciSendCommandW = GetProcAddress(gl_hOriginalDll, "mciSendCommandW");
-	originalmciSendStringA = GetProcAddress(gl_hOriginalDll, "mciSendStringA");
-	originalmciSendStringW = GetProcAddress(gl_hOriginalDll, "mciSendStringW");
-	originalmciFreeCommandResource = GetProcAddress(gl_hOriginalDll, "mciFreeCommandResource");
-	originalmciLoadCommandResource = GetProcAddress(gl_hOriginalDll, "mciLoadCommandResource");
-	originalmciDriverNotify = GetProcAddress(gl_hOriginalDll, "mciDriverNotify");
-	originalmciDriverYield = GetProcAddress(gl_hOriginalDll, "mciDriverYield");
-	originalmciGetCreatorTask = GetProcAddress(gl_hOriginalDll, "mciGetCreatorTask");
-	originalmciGetDeviceIDA = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDA");
-	originalmciGetDeviceIDFromElementIDA = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDFromElementIDA");
-	originalmciGetDeviceIDFromElementIDW = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDFromElementIDW");
-	originalmciGetDeviceIDW = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDW");
-	originalmciGetDriverData = GetProcAddress(gl_hOriginalDll, "mciGetDriverData");
-	originalmciGetYieldProc = GetProcAddress(gl_hOriginalDll, "mciGetYieldProc");
-	originalmciSetDriverData = GetProcAddress(gl_hOriginalDll, "mciSetDriverData");
-	originalmciSetYieldProc = GetProcAddress(gl_hOriginalDll, "mciSetYieldProc");
-	originalPlaySoundA = GetProcAddress(gl_hOriginalDll, "PlaySoundA");
-	originalsndPlaySoundA = GetProcAddress(gl_hOriginalDll, "sndPlaySoundA");
-	originalsndPlaySoundW = GetProcAddress(gl_hOriginalDll, "sndPlaySoundW");
-	originalWOWAppExit = GetProcAddress(gl_hOriginalDll, "WOWAppExit");
-	originalmmsystemGetVersion = GetProcAddress(gl_hOriginalDll, "mmsystemGetVersion");
-}
+		if (currentLibrary == lib::winmm)
+		{
+			originalPlaySoundW = GetProcAddress(gl_hOriginalDll, "PlaySoundW");
+			originaltimeSetEvent = GetProcAddress(gl_hOriginalDll, "timeSetEvent");
+			originaltimeKillEvent = GetProcAddress(gl_hOriginalDll, "timeKillEvent");
+			originalmidiOutMessage = GetProcAddress(gl_hOriginalDll, "midiOutMessage");
+			originaltimeBeginPeriod = GetProcAddress(gl_hOriginalDll, "timeBeginPeriod");
+			originaltimeGetTime = GetProcAddress(gl_hOriginalDll, "timeGetTime");
+			originalNotifyCallbackData = GetProcAddress(gl_hOriginalDll, "NotifyCallbackData");
+			originalWOW32DriverCallback = GetProcAddress(gl_hOriginalDll, "WOW32DriverCallback");
+			originalWOW32ResolveMultiMediaHandle = GetProcAddress(gl_hOriginalDll, "WOW32ResolveMultiMediaHandle");
+			originalaux32Message = GetProcAddress(gl_hOriginalDll, "aux32Message");
+			originaljoy32Message = GetProcAddress(gl_hOriginalDll, "joy32Message");
+			originalmid32Message = GetProcAddress(gl_hOriginalDll, "mid32Message");
+			originalmod32Message = GetProcAddress(gl_hOriginalDll, "mod32Message");
+			originalmxd32Message = GetProcAddress(gl_hOriginalDll, "mxd32Message");
+			originaltid32Message = GetProcAddress(gl_hOriginalDll, "tid32Message");
+			originalwid32Message = GetProcAddress(gl_hOriginalDll, "wid32Message");
+			originalwod32Message = GetProcAddress(gl_hOriginalDll, "wod32Message");
+			originalmci32Message = GetProcAddress(gl_hOriginalDll, "mci32Message");
+			originalCloseDriver = GetProcAddress(gl_hOriginalDll, "CloseDriver");
+			originalDefDriverProc = GetProcAddress(gl_hOriginalDll, "DefDriverProc");
+			originalDriverCallback = GetProcAddress(gl_hOriginalDll, "DriverCallback");
+			originalDrvGetModuleHandle = GetProcAddress(gl_hOriginalDll, "DrvGetModuleHandle");
+			originalGetDriverModuleHandle = GetProcAddress(gl_hOriginalDll, "GetDriverModuleHandle");
+			originalOpenDriver = GetProcAddress(gl_hOriginalDll, "OpenDriver");
+			originalPlaySound = GetProcAddress(gl_hOriginalDll, "PlaySound");
+			originalOrdinal2 = GetProcAddress(gl_hOriginalDll, "Ordinal2");
+			originalSendDriverMessage = GetProcAddress(gl_hOriginalDll, "SendDriverMessage");
+			originalauxGetDevCapsA = GetProcAddress(gl_hOriginalDll, "auxGetDevCapsA");
+			originalauxGetDevCapsW = GetProcAddress(gl_hOriginalDll, "auxGetDevCapsW");
+			originalauxGetNumDevs = GetProcAddress(gl_hOriginalDll, "auxGetNumDevs");
+			originalauxGetVolume = GetProcAddress(gl_hOriginalDll, "auxGetVolume");
+			originalauxOutMessage = GetProcAddress(gl_hOriginalDll, "auxOutMessage");
+			originalauxSetVolume = GetProcAddress(gl_hOriginalDll, "auxSetVolume");
+			originaljoyConfigChanged = GetProcAddress(gl_hOriginalDll, "joyConfigChanged");
+			originaljoyGetDevCapsA = GetProcAddress(gl_hOriginalDll, "joyGetDevCapsA");
+			originaljoyGetDevCapsW = GetProcAddress(gl_hOriginalDll, "joyGetDevCapsW");
+			originaljoyGetNumDevs = GetProcAddress(gl_hOriginalDll, "joyGetNumDevs");
+			originaljoyGetPosEx = GetProcAddress(gl_hOriginalDll, "joyGetPosEx");
+			originaljoyGetPos = GetProcAddress(gl_hOriginalDll, "joyGetPos");
+			originaljoyGetThreshold = GetProcAddress(gl_hOriginalDll, "joyGetThreshold");
+			originaljoyReleaseCapture = GetProcAddress(gl_hOriginalDll, "joyReleaseCapture");
+			originaljoySetCapture = GetProcAddress(gl_hOriginalDll, "joySetCapture");
+			originaljoySetThreshold = GetProcAddress(gl_hOriginalDll, "joySetThreshold");
+			originalmidiConnect = GetProcAddress(gl_hOriginalDll, "midiConnect");
+			originalmidiDisconnect = GetProcAddress(gl_hOriginalDll, "midiDisconnect");
+			originalmidiInAddBuffer = GetProcAddress(gl_hOriginalDll, "midiInAddBuffer");
+			originalmidiInClose = GetProcAddress(gl_hOriginalDll, "midiInClose");
+			originalmidiInGetDevCapsA = GetProcAddress(gl_hOriginalDll, "midiInGetDevCapsA");
+			originalmidiInGetDevCapsW = GetProcAddress(gl_hOriginalDll, "midiInGetDevCapsW");
+			originalmidiInGetErrorTextA = GetProcAddress(gl_hOriginalDll, "midiInGetErrorTextA");
+			originalmidiInGetErrorTextW = GetProcAddress(gl_hOriginalDll, "midiInGetErrorTextW");
+			originalmidiInGetID = GetProcAddress(gl_hOriginalDll, "midiInGetID");
+			originalmidiInGetNumDevs = GetProcAddress(gl_hOriginalDll, "midiInGetNumDevs");
+			originalmidiInMessage = GetProcAddress(gl_hOriginalDll, "midiInMessage");
+			originalmidiInOpen = GetProcAddress(gl_hOriginalDll, "midiInOpen");
+			originalmidiInPrepareHeader = GetProcAddress(gl_hOriginalDll, "midiInPrepareHeader");
+			originalmidiInReset = GetProcAddress(gl_hOriginalDll, "midiInReset");
+			originalmidiInStart = GetProcAddress(gl_hOriginalDll, "midiInStart");
+			originalmidiInStop = GetProcAddress(gl_hOriginalDll, "midiInStop");
+			originalmidiInUnprepareHeader = GetProcAddress(gl_hOriginalDll, "midiInUnprepareHeader");
+			originalmidiOutCacheDrumPatches = GetProcAddress(gl_hOriginalDll, "midiOutCacheDrumPatches");
+			originalmidiOutCachePatches = GetProcAddress(gl_hOriginalDll, "midiOutCachePatches");
+			originalmidiOutClose = GetProcAddress(gl_hOriginalDll, "midiOutClose");
+			originalmidiOutGetDevCapsA = GetProcAddress(gl_hOriginalDll, "midiOutGetDevCapsA");
+			originalmidiOutGetDevCapsW = GetProcAddress(gl_hOriginalDll, "midiOutGetDevCapsW");
+			originalmidiOutGetErrorTextA = GetProcAddress(gl_hOriginalDll, "midiOutGetErrorTextA");
+			originalmidiOutGetErrorTextW = GetProcAddress(gl_hOriginalDll, "midiOutGetErrorTextW");
+			originalmidiOutGetID = GetProcAddress(gl_hOriginalDll, "midiOutGetID");
+			originalmidiOutGetNumDevs = GetProcAddress(gl_hOriginalDll, "midiOutGetNumDevs");
+			originalmidiOutGetVolume = GetProcAddress(gl_hOriginalDll, "midiOutGetVolume");
+			originalmidiOutLongMsg = GetProcAddress(gl_hOriginalDll, "midiOutLongMsg");
+			originalmidiOutOpen = GetProcAddress(gl_hOriginalDll, "midiOutOpen");
+			originalmidiOutPrepareHeader = GetProcAddress(gl_hOriginalDll, "midiOutPrepareHeader");
+			originalmidiOutReset = GetProcAddress(gl_hOriginalDll, "midiOutReset");
+			originalmidiOutSetVolume = GetProcAddress(gl_hOriginalDll, "midiOutSetVolume");
+			originalmidiOutShortMsg = GetProcAddress(gl_hOriginalDll, "midiOutShortMsg");
+			originalmidiOutUnprepareHeader = GetProcAddress(gl_hOriginalDll, "midiOutUnprepareHeader");
+			originalmidiStreamClose = GetProcAddress(gl_hOriginalDll, "midiStreamClose");
+			originalmidiStreamOpen = GetProcAddress(gl_hOriginalDll, "midiStreamOpen");
+			originalmidiStreamOut = GetProcAddress(gl_hOriginalDll, "midiStreamOut");
+			originalmidiStreamPause = GetProcAddress(gl_hOriginalDll, "midiStreamPause");
+			originalmidiStreamPosition = GetProcAddress(gl_hOriginalDll, "midiStreamPosition");
+			originalmidiStreamProperty = GetProcAddress(gl_hOriginalDll, "midiStreamProperty");
+			originalmidiStreamRestart = GetProcAddress(gl_hOriginalDll, "midiStreamRestart");
+			originalmidiStreamStop = GetProcAddress(gl_hOriginalDll, "midiStreamStop");
+			originalmixerClose = GetProcAddress(gl_hOriginalDll, "mixerClose");
+			originalmixerGetControlDetailsA = GetProcAddress(gl_hOriginalDll, "mixerGetControlDetailsA");
+			originalmixerGetControlDetailsW = GetProcAddress(gl_hOriginalDll, "mixerGetControlDetailsW");
+			originalmixerGetDevCapsA = GetProcAddress(gl_hOriginalDll, "mixerGetDevCapsA");
+			originalmixerGetDevCapsW = GetProcAddress(gl_hOriginalDll, "mixerGetDevCapsW");
+			originalmixerGetID = GetProcAddress(gl_hOriginalDll, "mixerGetID");
+			originalmixerGetLineControlsA = GetProcAddress(gl_hOriginalDll, "mixerGetLineControlsA");
+			originalmixerGetLineControlsW = GetProcAddress(gl_hOriginalDll, "mixerGetLineControlsW");
+			originalmixerGetLineInfoA = GetProcAddress(gl_hOriginalDll, "mixerGetLineInfoA");
+			originalmixerGetLineInfoW = GetProcAddress(gl_hOriginalDll, "mixerGetLineInfoW");
+			originalmixerGetNumDevs = GetProcAddress(gl_hOriginalDll, "mixerGetNumDevs");
+			originalmixerMessage = GetProcAddress(gl_hOriginalDll, "mixerMessage");
+			originalmixerOpen = GetProcAddress(gl_hOriginalDll, "mixerOpen");
+			originalmixerSetControlDetails = GetProcAddress(gl_hOriginalDll, "mixerSetControlDetails");
+			originalmmDrvInstall = GetProcAddress(gl_hOriginalDll, "mmDrvInstall");
+			originalmmGetCurrentTask = GetProcAddress(gl_hOriginalDll, "mmGetCurrentTask");
+			originalmmTaskBlock = GetProcAddress(gl_hOriginalDll, "mmTaskBlock");
+			originalmmTaskCreate = GetProcAddress(gl_hOriginalDll, "mmTaskCreate");
+			originalmmTaskSignal = GetProcAddress(gl_hOriginalDll, "mmTaskSignal");
+			originalmmTaskYield = GetProcAddress(gl_hOriginalDll, "mmTaskYield");
+			originalmmioAdvance = GetProcAddress(gl_hOriginalDll, "mmioAdvance");
+			originalmmioAscend = GetProcAddress(gl_hOriginalDll, "mmioAscend");
+			originalmmioClose = GetProcAddress(gl_hOriginalDll, "mmioClose");
+			originalmmioCreateChunk = GetProcAddress(gl_hOriginalDll, "mmioCreateChunk");
+			originalmmioDescend = GetProcAddress(gl_hOriginalDll, "mmioDescend");
+			originalmmioFlush = GetProcAddress(gl_hOriginalDll, "mmioFlush");
+			originalmmioGetInfo = GetProcAddress(gl_hOriginalDll, "mmioGetInfo");
+			originalmmioInstallIOProcA = GetProcAddress(gl_hOriginalDll, "mmioInstallIOProcA");
+			originalmmioInstallIOProcW = GetProcAddress(gl_hOriginalDll, "mmioInstallIOProcW");
+			originalmmioOpenA = GetProcAddress(gl_hOriginalDll, "mmioOpenA");
+			originalmmioOpenW = GetProcAddress(gl_hOriginalDll, "mmioOpenW");
+			originalmmioRead = GetProcAddress(gl_hOriginalDll, "mmioRead");
+			originalmmioRenameA = GetProcAddress(gl_hOriginalDll, "mmioRenameA");
+			originalmmioRenameW = GetProcAddress(gl_hOriginalDll, "mmioRenameW");
+			originalmmioSeek = GetProcAddress(gl_hOriginalDll, "mmioSeek");
+			originalmmioSendMessage = GetProcAddress(gl_hOriginalDll, "mmioSendMessage");
+			originalmmioSetBuffer = GetProcAddress(gl_hOriginalDll, "mmioSetBuffer");
+			originalmmioSetInfo = GetProcAddress(gl_hOriginalDll, "mmioSetInfo");
+			originalmmioStringToFOURCCA = GetProcAddress(gl_hOriginalDll, "mmioStringToFOURCCA");
+			originalmmioStringToFOURCCW = GetProcAddress(gl_hOriginalDll, "mmioStringToFOURCCW");
+			originalmmioWrite = GetProcAddress(gl_hOriginalDll, "mmioWrite");
+			originaltimeEndPeriod = GetProcAddress(gl_hOriginalDll, "timeEndPeriod");
+			originaltimeGetDevCaps = GetProcAddress(gl_hOriginalDll, "timeGetDevCaps");
+			originaltimeGetSystemTime = GetProcAddress(gl_hOriginalDll, "timeGetSystemTime");
+			originalwaveInAddBuffer = GetProcAddress(gl_hOriginalDll, "waveInAddBuffer");
+			originalwaveInClose = GetProcAddress(gl_hOriginalDll, "waveInClose");
+			originalwaveInGetDevCapsA = GetProcAddress(gl_hOriginalDll, "waveInGetDevCapsA");
+			originalwaveInGetDevCapsW = GetProcAddress(gl_hOriginalDll, "waveInGetDevCapsW");
+			originalwaveInGetErrorTextA = GetProcAddress(gl_hOriginalDll, "waveInGetErrorTextA");
+			originalwaveInGetErrorTextW = GetProcAddress(gl_hOriginalDll, "waveInGetErrorTextW");
+			originalwaveInGetID = GetProcAddress(gl_hOriginalDll, "waveInGetID");
+			originalwaveInGetNumDevs = GetProcAddress(gl_hOriginalDll, "waveInGetNumDevs");
+			originalwaveInGetPosition = GetProcAddress(gl_hOriginalDll, "waveInGetPosition");
+			originalwaveInMessage = GetProcAddress(gl_hOriginalDll, "waveInMessage");
+			originalwaveInOpen = GetProcAddress(gl_hOriginalDll, "waveInOpen");
+			originalwaveInPrepareHeader = GetProcAddress(gl_hOriginalDll, "waveInPrepareHeader");
+			originalwaveInReset = GetProcAddress(gl_hOriginalDll, "waveInReset");
+			originalwaveInStart = GetProcAddress(gl_hOriginalDll, "waveInStart");
+			originalwaveInStop = GetProcAddress(gl_hOriginalDll, "waveInStop");
+			originalwaveInUnprepareHeader = GetProcAddress(gl_hOriginalDll, "waveInUnprepareHeader");
+			originalwaveOutBreakLoop = GetProcAddress(gl_hOriginalDll, "waveOutBreakLoop");
+			originalwaveOutClose = GetProcAddress(gl_hOriginalDll, "waveOutClose");
+			originalwaveOutGetDevCapsA = GetProcAddress(gl_hOriginalDll, "waveOutGetDevCapsA");
+			originalwaveOutGetDevCapsW = GetProcAddress(gl_hOriginalDll, "waveOutGetDevCapsW");
+			originalwaveOutGetErrorTextA = GetProcAddress(gl_hOriginalDll, "waveOutGetErrorTextA");
+			originalwaveOutGetErrorTextW = GetProcAddress(gl_hOriginalDll, "waveOutGetErrorTextW");
+			originalwaveOutGetID = GetProcAddress(gl_hOriginalDll, "waveOutGetID");
+			originalwaveOutGetNumDevs = GetProcAddress(gl_hOriginalDll, "waveOutGetNumDevs");
+			originalwaveOutGetPitch = GetProcAddress(gl_hOriginalDll, "waveOutGetPitch");
+			originalwaveOutGetPlaybackRate = GetProcAddress(gl_hOriginalDll, "waveOutGetPlaybackRate");
+			originalwaveOutGetPosition = GetProcAddress(gl_hOriginalDll, "waveOutGetPosition");
+			originalwaveOutGetVolume = GetProcAddress(gl_hOriginalDll, "waveOutGetVolume");
+			originalwaveOutMessage = GetProcAddress(gl_hOriginalDll, "waveOutMessage");
+			originalwaveOutOpen = GetProcAddress(gl_hOriginalDll, "waveOutOpen");
+			originalwaveOutPause = GetProcAddress(gl_hOriginalDll, "waveOutPause");
+			originalwaveOutPrepareHeader = GetProcAddress(gl_hOriginalDll, "waveOutPrepareHeader");
+			originalwaveOutReset = GetProcAddress(gl_hOriginalDll, "waveOutReset");
+			originalwaveOutRestart = GetProcAddress(gl_hOriginalDll, "waveOutRestart");
+			originalwaveOutSetPitch = GetProcAddress(gl_hOriginalDll, "waveOutSetPitch");
+			originalwaveOutSetPlaybackRate = GetProcAddress(gl_hOriginalDll, "waveOutSetPlaybackRate");
+			originalwaveOutSetVolume = GetProcAddress(gl_hOriginalDll, "waveOutSetVolume");
+			originalwaveOutUnprepareHeader = GetProcAddress(gl_hOriginalDll, "waveOutUnprepareHeader");
+			originalwaveOutWrite = GetProcAddress(gl_hOriginalDll, "waveOutWrite");
+			originalmciExecute = GetProcAddress(gl_hOriginalDll, "mciExecute");
+			originalmciGetErrorStringA = GetProcAddress(gl_hOriginalDll, "mciGetErrorStringA");
+			originalmciGetErrorStringW = GetProcAddress(gl_hOriginalDll, "mciGetErrorStringW");
+			originalmciSendCommandA = GetProcAddress(gl_hOriginalDll, "mciSendCommandA");
+			originalmciSendCommandW = GetProcAddress(gl_hOriginalDll, "mciSendCommandW");
+			originalmciSendStringA = GetProcAddress(gl_hOriginalDll, "mciSendStringA");
+			originalmciSendStringW = GetProcAddress(gl_hOriginalDll, "mciSendStringW");
+			originalmciFreeCommandResource = GetProcAddress(gl_hOriginalDll, "mciFreeCommandResource");
+			originalmciLoadCommandResource = GetProcAddress(gl_hOriginalDll, "mciLoadCommandResource");
+			originalmciDriverNotify = GetProcAddress(gl_hOriginalDll, "mciDriverNotify");
+			originalmciDriverYield = GetProcAddress(gl_hOriginalDll, "mciDriverYield");
+			originalmciGetCreatorTask = GetProcAddress(gl_hOriginalDll, "mciGetCreatorTask");
+			originalmciGetDeviceIDA = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDA");
+			originalmciGetDeviceIDFromElementIDA = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDFromElementIDA");
+			originalmciGetDeviceIDFromElementIDW = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDFromElementIDW");
+			originalmciGetDeviceIDW = GetProcAddress(gl_hOriginalDll, "mciGetDeviceIDW");
+			originalmciGetDriverData = GetProcAddress(gl_hOriginalDll, "mciGetDriverData");
+			originalmciGetYieldProc = GetProcAddress(gl_hOriginalDll, "mciGetYieldProc");
+			originalmciSetDriverData = GetProcAddress(gl_hOriginalDll, "mciSetDriverData");
+			originalmciSetYieldProc = GetProcAddress(gl_hOriginalDll, "mciSetYieldProc");
+			originalPlaySoundA = GetProcAddress(gl_hOriginalDll, "PlaySoundA");
+			originalsndPlaySoundA = GetProcAddress(gl_hOriginalDll, "sndPlaySoundA");
+			originalsndPlaySoundW = GetProcAddress(gl_hOriginalDll, "sndPlaySoundW");
+			originalWOWAppExit = GetProcAddress(gl_hOriginalDll, "WOWAppExit");
+			originalmmsystemGetVersion = GetProcAddress(gl_hOriginalDll, "mmsystemGetVersion");
+		}
 
 		hlp.log("creating ffb loop thread...");
 		CreateFFBLoopThread();
 		if (BeepWhenHook == 1)
 		{
-		MessageBeep(MB_ICONASTERISK);
+			MessageBeep(MB_ICONASTERISK);
 		}
 		break;
 
@@ -2596,7 +2568,7 @@ if (currentLibrary == lib::winmm)
 
 	case DLL_PROCESS_DETACH:
 		hlp.log("detaching from process:");
-		hlp.log((char *)processName.c_str());
+		hlp.log((char*)processName.c_str());
 		keepRunning = false;
 		if (gl_hOriginalDll)
 		{
@@ -2610,7 +2582,7 @@ if (currentLibrary == lib::winmm)
 		{
 			FreeLibrary(gl_hlibavs);
 		}
-		
+
 		// this doesn't seem to really work...hmm...if i ALT+F4, then the program quits and haptic is still set.
 		// try setting GameId to HEAVY (-5 or -6..can't remember) and then force quit. Wheel will stay heavy :/.
 		if (haptic) {
