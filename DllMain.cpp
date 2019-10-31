@@ -2663,8 +2663,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		// try setting GameId to HEAVY (-5 or -6..can't remember) and then force quit. Wheel will stay heavy :/.
 		if (haptic)
 		{
-			
-			SDL_JoystickRumble(GameController2, 0, 0, 0);
 			SDL_HapticStopEffect(haptic, effects.effect_constant_id);
 			SDL_HapticStopEffect(haptic, effects.effect_friction_id);
 			SDL_HapticStopEffect(haptic, effects.effect_leftright_id);
