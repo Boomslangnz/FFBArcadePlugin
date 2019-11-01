@@ -1611,11 +1611,19 @@ void TriggerRumbleEffectDevice2(double lowfrequency, double highfrequency, doubl
 
 		if (ReverseRumble == 1)
 		{
-			SDL_JoystickRumble(GameController2, HighMotor, LowMotor, length);
+			int ReverseRumble2 = SDL_JoystickRumble(GameController2, HighMotor, LowMotor, length);
+			if (ReverseRumble2 == -1)
+			{
+				EnableRumble = 0;
+			}
 		}
 		else
 		{
-			SDL_JoystickRumble(GameController2, LowMotor, HighMotor, length);
+			int Rumble2 = SDL_JoystickRumble(GameController2, LowMotor, HighMotor, length);
+			if (Rumble2 == -1)
+			{
+				EnableRumble = 0;
+			}
 		}
 	}
 }
