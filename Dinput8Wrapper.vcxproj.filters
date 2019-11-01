@@ -47,7 +47,6 @@
     <ClCompile Include="Game Files\ChaseHQ2.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="Common Files\TeknoParrotGame.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
@@ -151,9 +150,6 @@
     </ClInclude>
     <ClInclude Include="Game Files\ChaseHQ2.h">
       <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Common Files\TeknoParrotGame.h">
-      <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\MarioKartGPDX.h">
       <Filter>Game Files</Filter>

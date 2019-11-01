@@ -112,6 +112,10 @@ static int RunningThread(void* ptr)
 
 void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
+
 	SDL_Thread* thread;
 	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
 
@@ -121,8 +125,4 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		myConstants = constants;
 		myHelpers = helpers;
 	}
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
 }

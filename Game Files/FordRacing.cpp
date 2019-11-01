@@ -13,43 +13,73 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "FordRacing.h"
+#include "SDL.h"
+static EffectTriggers* myTriggers;
+static EffectConstants* myConstants;
+static Helpers* myHelpers;
+static SDL_Event e;
+static HANDLE hSection;
+static LPVOID secData;
+static int ffbOffset = 0;
 
-void FordRacing::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-	helpers->log("in FR Ffbloop");
-	const int ff = GetTeknoParrotFFB();
-	std::string ffs = std::to_string(ff);
-	helpers->log((char *)ffs.c_str());
+static int TeknoParrotGame()
+{
+	hSection = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, 64, L"TeknoParrot_JvsState");
+	secData = MapViewOfFile(hSection, FILE_MAP_ALL_ACCESS, 0, 0, 64);
+	ffbOffset = *((int*)secData + 2);
+	return 0;
+}
 
-	if (ff < -65505 && ff > -65515)
-	{
-		helpers->log("moving wheel left");
-		// -65507 => 9
-		// -65508 => 8
-		// -65515 => 1
-		// weirdly, FR has 9 levels, not 15, utilizing only -65506 (weakest) to -65514 (strongest)
-		double percentForce = (-65505 - ff) / 9.0;
-		double percentLength = 50;
-		// direction from left => makes wheel turn right
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		lastWasStop = 0;
-	}
-	else if (ff > 0 && ff < 16)
-	{
-		helpers->log("moving wheel right");
-		// weirdly, FR has 9 levels, not 15, utilizing 15 (weakest) through 7 (strongest)
-		double percentForce = (16 - ff) / 9.0;
-		double percentLength = 50;
-		// direction from right => makes wheel turn left
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		lastWasStop = 0;
-	}
-	else
-	{
-		if (lastWasStop == 0) {
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0); // just pass the hash of 0 strength so we update lastEffectHash & lastEffectTime
-			lastWasStop = 1;
+static int GetTeknoParrotFFB()
+{
+	ffbOffset = *((int*)secData + 2);
+	return ffbOffset;
+}
+
+static int RunningThread(void* ptr)
+{
+	int cnt;
+	for (cnt = 0; cnt >= 0; ++cnt)
+	{		
+		int const ff = GetTeknoParrotFFB();
+		myHelpers->log("in FR Ffbloop");
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+
+		if (ff < -65505 && ff > -65515)
+		{
+			myHelpers->log("moving wheel left");
+			double percentForce = (-65505 - ff) / 9.0;
+			double percentLength = 100;
+			myTriggers->Rumble(0, percentForce, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 		}
+		else if (ff > 0 && ff < 16)
+		{
+			myHelpers->log("moving wheel right");
+			double percentForce = (16 - ff) / 9.0;
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, 0, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+		}
+	}
+}
+
+void FordRacing::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
+
+	TeknoParrotGame();
+
+	SDL_Thread* thread;
+	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
+
+	while (SDL_WaitEvent(&e) != 0)
+	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
 	}
 }

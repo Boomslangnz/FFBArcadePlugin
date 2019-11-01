@@ -50,7 +50,6 @@
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\ButtonRumble.cpp" />
-    <ClCompile Include="Common Files\TeknoParrotGame.cpp" />
     <ClCompile Include="Game Files\Demul.cpp" />
     <ClCompile Include="Game Files\AfterburnerClimax.cpp" />
     <ClCompile Include="Game Files\BG4JP.cpp" />
@@ -86,7 +85,6 @@
     <ClCompile Include="Game Files\LGI3D.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Common Files\TeknoParrotGame.h" />
     <ClInclude Include="Game Files\AfterburnerClimax.h" />
     <ClInclude Include="Game Files\BG4JP.h" />
     <ClInclude Include="Game Files\Daytona3.h" />

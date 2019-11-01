@@ -255,7 +255,13 @@ static int RunningThread(void *ptr)
 	}
 	return 0;
 }
+
 void OutRun2Fake::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
+
 	SDL_Thread *thread;
 	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
 	int ff = myHelpers->ReadInt32(0x0827A1A0, /* isRelativeOffset */ false);	

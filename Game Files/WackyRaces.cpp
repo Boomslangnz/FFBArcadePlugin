@@ -13,6 +13,11 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "WackyRaces.h"
+#include "SDL.h"
+static EffectTriggers* myTriggers;
+static EffectConstants* myConstants;
+static Helpers* myHelpers;
+static SDL_Event e;
 
 int ttx2wr(int ffRaw) {
 	switch (ffRaw) {
@@ -83,53 +88,58 @@ int ttx2wr(int ffRaw) {
 	}
 }
 
+static int RunningThread(void* ptr)
+{
+	int cnt;
+	for (cnt = 0; cnt >= 0; ++cnt)
+	{
+		int ff = 0;
+
+		{
+			long ffAddress = myHelpers->ReadInt32(0x7E00590, /* isRelativeOffset*/ true);
+			int ffRaw = myHelpers->ReadInt32(ffAddress + 0x45, /* isRelativeOffset */ false);
+			int lampArray[7] = { 16, 1024, 512, 128, 8, 256, 16384 };
+			for (int i = 0; i < 7; i++) {
+				if ((ffRaw & lampArray[i]) == lampArray[i]) {
+					ffRaw -= lampArray[i];
+				}
+			};
+			ff = ttx2wr(ffRaw);
+		}
+
+		if (ff > 15)
+		{
+			myHelpers->log("moving wheel left");
+			double percentForce = (31 - ff) / 15.0;
+			double percentLength = 100;
+			myTriggers->Rumble(0, percentForce, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+		else if (ff > 0)
+		{
+			myHelpers->log("moving wheel right");
+			double percentForce = (16 - ff) / 15.0;
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, 0, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+		}
+	}
+	return 0;
+}
+
 void WackyRaces::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-	int ff = 0;
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
 
-	{
-		long ffAddress = helpers->ReadInt32(0x7E00590, /* isRelativeOffset*/ true);
-		int ffRaw = helpers->ReadInt32(ffAddress + 0x45, /* isRelativeOffset */ false);
-		int lampArray[7] = { 16, 1024, 512, 128, 8, 256, 16384 };
-		for (int i = 0; i < 7; i++) {
-			if ((ffRaw & lampArray[i]) == lampArray[i]) {
-				ffRaw -= lampArray[i];
-			}
-		};
-		ff = ttx2wr(ffRaw);
-	}
+	SDL_Thread* thread;
+	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
 
-	//helpers->log("got value: ");
-	//std::string ffs = std::to_string(ff);
-	//helpers->log((char *)ffs.c_str());
-
-	if (ff > 15)
+	while (SDL_WaitEvent(&e) != 0)
 	{
-		helpers->log("moving wheel left");
-		// assume that 30 is the weakest and 16 is the strongest
-		double percentForce = (31 - ff) / 15.0;
-		double percentLength = 100;
-		// direction from left => makes wheel turn right
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce); // old logic: 31 - ff
-		lastWasStop = 0;
-	}
-	else if (ff > 0)
-	{
-		helpers->log("moving wheel right");
-		// assume that 1 is the strongest and 15 is the weakest
-		double percentForce = (16 - ff) / 15.0;
-		double percentLength = 100;
-		// direction from right => makes wheel turn left
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce); // old logic: 15 - ff
-		lastWasStop = 0;
-	}
-	else
-	{
-		if (lastWasStop == 0) {
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0); // just pass the hash of 0 strength so we update lastEffectHash & lastEffectTime
-			lastWasStop = 1;
-		}
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
 	}
 }

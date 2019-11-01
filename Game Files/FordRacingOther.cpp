@@ -13,10 +13,11 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "FordRacingOther.h"
+#include "SDL.h"
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
-
+static SDL_Event e;
 static bool init = false;
 
 static int __stdcall Out32(DWORD device, DWORD data)
@@ -64,24 +65,44 @@ static bool Hook(void * toHook, void * ourFunct, int len) {
 
 static DWORD jmpBackAddy;
 
-void FordRacingOther::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-	HMODULE hMod = GetModuleHandleA("inpout32.dll");
-	if (hMod)
+static int RunningThread(void* ptr)
+{
+	int cnt;
+	for (cnt = 0; cnt >= 0; ++cnt)
 	{
-		if (!init)
+		HMODULE hMod = GetModuleHandleA("inpout32.dll");
+		if (hMod)
 		{
-			int hookLength = 6;
-			DWORD hookAddress = (DWORD)GetProcAddress(GetModuleHandle(L"inpout32.dll"), "Out32");
-			if (hookAddress)
-			{	
-				jmpBackAddy = hookAddress + hookLength;
-				Hook((void*)hookAddress, Out32, hookLength);
-				init = true;
-			}
+			if (!init)
+			{
+				int hookLength = 6;
+				DWORD hookAddress = (DWORD)GetProcAddress(GetModuleHandle(L"inpout32.dll"), "Out32");
+				if (hookAddress)
+				{
+					jmpBackAddy = hookAddress + hookLength;
+					Hook((void*)hookAddress, Out32, hookLength);
+					init = true;
+				}
 
+			}
 		}
 	}
+	return 0;
+}
+
+void FordRacingOther::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+
 	myTriggers = triggers;
 	myConstants = constants;
 	myHelpers = helpers;
+
+	SDL_Thread* thread;
+	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
+
+	while (SDL_WaitEvent(&e) != 0)
+	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
+	}
 }
