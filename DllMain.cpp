@@ -1597,7 +1597,7 @@ void TriggerRumbleEffect(double highfrequency, double lowfrequency, double lengt
 	}
 }
 
-void TriggerRumbleEffectDevice2(double lowfrequency, double highfrequency, double length)
+void TriggerRumbleEffectDevice2(double highfrequency, double lowfrequency, double length)
 {
 	if (EnableRumble == 1)
 	{
