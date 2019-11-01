@@ -829,2308 +829,2307 @@ static int RunningThread(void* ptr)
 		}
 		else if (hWnd3 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Indy500
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Indy500
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd4 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Sega Touring Car Championship
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Sega Touring Car Championship
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd5 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //OverRev
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //OverRev
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd6 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Super GT 24h
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Super GT 24h
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd7 > NULL)
 		{
+		if (DaytonaForcePanoramicAttract == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+		}
 
-			if (DaytonaForcePanoramicAttract == 1)
+		UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA '93 Edition
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-
-			UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA '93 Edition
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
-			else
+			else if ((ff > 0x2F)& (ff < 0x3D))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd8 > NULL)
 		{
-			if (DaytonaForcePanoramicAttract == 1)
+		if (DaytonaForcePanoramicAttract == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+		}
+
+		if (DaytonaAIMultiplayerHack == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
+			UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
+			UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
+			UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
+			UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
+			UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
+			INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
+			UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
+			UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
+			UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
+			float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
+			float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
+			UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
+			UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
+			UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+
+
+			if (gamestate == 0x1A)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+				myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
 			}
 
-			if (DaytonaAIMultiplayerHack == 1)
+			if (trackselect == 0x01)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
-				UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
-				UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
-				UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
-				UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
-				UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
-				INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
-				UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
-				UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
-				UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
-				float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
-				float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
-				UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
-				UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
-				UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
+			}
+			else if (trackselect == 0x02)
+			{
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
+			}
 
-
-				if (gamestate == 0x1A)
+			if (linksize == 0x02)
+			{
+				if (linkID == 0x02)
 				{
-					myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
-				}
-
-				if (trackselect == 0x01)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
-				}
-				else if (trackselect == 0x02)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
-				}
-
-				if (linksize == 0x02)
-				{
-					if (linkID == 0x02)
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
-				else if (linksize == 0x03)
+				else if (linkID == 0x01)
 				{
-					if (linkID == 0x03)
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if (linkID == 0x02)
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
 					}
-					else if (linkID == 0x01)
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-				}
-				else if (linksize == 0x04)
-				{
-					if (linkID == 0x04)
+
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if (linkID == 0x03)
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(350);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x02)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
 			}
+			else if (linksize == 0x03)
+			{
+				if (linkID == 0x03)
+				{
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+				}
+				else if (linkID == 0x02)
+				{
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
 
-			UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA (Saturn Ads)
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
-			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				else if (linkID == 0x01)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
-			else
+			else if (linksize == 0x04)
 			{
-				if ((ff > 0x09)& (ff < 0x18))
+				if (linkID == 0x04)
 				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				if (linkID == 0x03)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(350);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
+				else if (linkID == 0x02)
 				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x3F)& (ff < 0x48))
+				else if (linkID == 0x01)
 				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
+		}
+
+		UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA (Saturn Ads)
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd9 > NULL)
 		{
-			if (DaytonaForcePanoramicAttract == 1)
+		if (DaytonaForcePanoramicAttract == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+		}
+
+		if (DaytonaAIMultiplayerHack == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
+			UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
+			UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
+			UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
+			UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
+			UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
+			INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
+			UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
+			UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
+			UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
+			float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
+			float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
+			UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
+			UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
+			UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+
+
+			if (gamestate == 0x1A)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+				myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
 			}
 
-			if (DaytonaAIMultiplayerHack == 1)
+			if (trackselect == 0x01)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
-				UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
-				UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
-				UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
-				UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
-				UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
-				INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
-				UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
-				UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
-				UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
-				float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
-				float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
-				UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
-				UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
-				UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
+			}
+			else if (trackselect == 0x02)
+			{
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
+			}
 
-
-				if (gamestate == 0x1A)
+			if (linksize == 0x02)
+			{
+				if (linkID == 0x02)
 				{
-					myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
-				}
-
-				if (trackselect == 0x01)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
-				}
-				else if (trackselect == 0x02)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
-				}
-
-				if (linksize == 0x02)
-				{
-					if (linkID == 0x02)
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
-				else if (linksize == 0x03)
+				else if (linkID == 0x01)
 				{
-					if (linkID == 0x03)
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if (linkID == 0x02)
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
 					}
-					else if (linkID == 0x01)
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-				}
-				else if (linksize == 0x04)
-				{
-					if (linkID == 0x04)
+
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if (linkID == 0x03)
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(350);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x02)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
 			}
-
-			UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA Special Edition
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+			else if (linksize == 0x03)
 			{
-				if ((ff > 0x09)& (ff < 0x18))
+				if (linkID == 0x03)
 				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				else if (linkID == 0x02)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
+				else if (linkID == 0x01)
 				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
-			else
+			else if (linksize == 0x04)
 			{
-				if ((ff > 0x09)& (ff < 0x18))
+				if (linkID == 0x04)
 				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				if (linkID == 0x03)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(350);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
+				else if (linkID == 0x02)
 				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x3F)& (ff < 0x48))
+				else if (linkID == 0x01)
 				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
 		}
+
+		UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA Special Edition
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+		}
 		else if (hWnd10 > NULL)
 		{
-			if (DaytonaForcePanoramicAttract == 1)
+		if (DaytonaForcePanoramicAttract == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+		}
+
+		if (DaytonaAIMultiplayerHack == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
+			UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
+			UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
+			UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
+			UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
+			UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
+			INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
+			UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
+			UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
+			UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
+			float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
+			float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
+			UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
+			UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
+			UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+
+
+			if (gamestate == 0x1A)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+				myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
 			}
 
-			if (DaytonaAIMultiplayerHack == 1)
+			if (trackselect == 0x01)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
-				UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
-				UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
-				UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
-				UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
-				UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
-				INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
-				UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
-				UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
-				UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
-				float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
-				float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
-				UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
-				UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
-				UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
+			}
+			else if (trackselect == 0x02)
+			{
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
+			}
 
-
-				if (gamestate == 0x1A)
+			if (linksize == 0x02)
+			{
+				if (linkID == 0x02)
 				{
-					myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
-				}
-
-				if (trackselect == 0x01)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
-				}
-				else if (trackselect == 0x02)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
-				}
-
-				if (linksize == 0x02)
-				{
-					if (linkID == 0x02)
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
-				else if (linksize == 0x03)
+				else if (linkID == 0x01)
 				{
-					if (linkID == 0x03)
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if (linkID == 0x02)
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
 					}
-					else if (linkID == 0x01)
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
 
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
-				else if (linksize == 0x04)
+			}
+			else if (linksize == 0x03)
+			{
+				if (linkID == 0x03)
 				{
-					if (linkID == 0x04)
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if (linkID == 0x03)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+				}
+				else if (linkID == 0x02)
+				{
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+				}
+				else if (linkID == 0x01)
+				{
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+				}
+			}
+			else if (linksize == 0x04)
+			{
+				if (linkID == 0x04)
+				{
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+				}
+				if (linkID == 0x03)
+				{
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 						{
 							Sleep(100);
 							myHelpers->WriteNop(0xC2130, true);
@@ -3428,2707 +3427,2707 @@ static int RunningThread(void* ptr)
 				}
 			}
 		}
+}
 		else if (hWnd11 > NULL)
 		{
-			if (DaytonaForcePanoramicAttract == 1)
+		if (DaytonaForcePanoramicAttract == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+		}
+
+		if (DaytonaAIMultiplayerHack == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
+			UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
+			UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
+			UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
+			UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
+			UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
+			INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
+			UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
+			UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
+			UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
+			float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
+			float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
+			UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
+			UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
+			UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+
+
+			if (gamestate == 0x1A)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+				myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
 			}
 
-			if (DaytonaAIMultiplayerHack == 1)
+			if (trackselect == 0x01)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
-				UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
-				UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
-				UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
-				UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
-				UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
-				INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
-				UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
-				UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
-				UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
-				float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
-				float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
-				UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
-				UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
-				UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
+			}
+			else if (trackselect == 0x02)
+			{
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
+			}
 
-
-				if (gamestate == 0x1A)
+			if (linksize == 0x02)
+			{
+				if (linkID == 0x02)
 				{
-					myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
-				}
-
-				if (trackselect == 0x01)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
-				}
-				else if (trackselect == 0x02)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
-				}
-
-				if (linksize == 0x02)
-				{
-					if (linkID == 0x02)
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
-				else if (linksize == 0x03)
+				else if (linkID == 0x01)
 				{
-					if (linkID == 0x03)
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if (linkID == 0x02)
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
 					}
-					else if (linkID == 0x01)
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-				}
-				else if (linksize == 0x04)
-				{
-					if (linkID == 0x04)
+
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if (linkID == 0x03)
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(350);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x02)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
 			}
+			else if (linksize == 0x03)
+			{
+				if (linkID == 0x03)
+				{
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+				}
+				else if (linkID == 0x02)
+				{
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
 
-			UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA Turbo (Rev A)
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
-			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				else if (linkID == 0x01)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
-			else
+			else if (linksize == 0x04)
 			{
-				if ((ff > 0x09)& (ff < 0x18))
+				if (linkID == 0x04)
 				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				if (linkID == 0x03)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(350);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
+				else if (linkID == 0x02)
 				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x3F)& (ff < 0x48))
+				else if (linkID == 0x01)
 				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
+		}
+
+		UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA Turbo (Rev A)
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd12 > NULL)
 		{
-			if (DaytonaForcePanoramicAttract == 1)
+		if (DaytonaForcePanoramicAttract == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+		}
+
+		if (DaytonaAIMultiplayerHack == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
+			UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
+			UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
+			UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
+			UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
+			UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
+			INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
+			UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
+			UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
+			UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
+			float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
+			float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
+			UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
+			UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
+			UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+
+
+			if (gamestate == 0x1A)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+				myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
 			}
 
-			if (DaytonaAIMultiplayerHack == 1)
+			if (trackselect == 0x01)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
-				UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
-				UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
-				UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
-				UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
-				UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
-				INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
-				UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
-				UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
-				UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
-				float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
-				float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
-				UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
-				UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
-				UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
+			}
+			else if (trackselect == 0x02)
+			{
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
+			}
 
-
-				if (gamestate == 0x1A)
+			if (linksize == 0x02)
+			{
+				if (linkID == 0x02)
 				{
-					myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
-				}
-
-				if (trackselect == 0x01)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
-				}
-				else if (trackselect == 0x02)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
-				}
-
-				if (linksize == 0x02)
-				{
-					if (linkID == 0x02)
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
-				else if (linksize == 0x03)
+				else if (linkID == 0x01)
 				{
-					if (linkID == 0x03)
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if (linkID == 0x02)
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
 					}
-					else if (linkID == 0x01)
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-				}
-				else if (linksize == 0x04)
-				{
-					if (linkID == 0x04)
+
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if (linkID == 0x03)
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(350);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x02)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
 			}
+			else if (linksize == 0x03)
+			{
+				if (linkID == 0x03)
+				{
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+				}
+				else if (linkID == 0x02)
+				{
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
 
-			UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA: GTX 2004
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
-			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				else if (linkID == 0x01)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
-			else
+			else if (linksize == 0x04)
 			{
-				if ((ff > 0x09)& (ff < 0x18))
+				if (linkID == 0x04)
 				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				if (linkID == 0x03)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(350);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
+				else if (linkID == 0x02)
 				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x3F)& (ff < 0x48))
+				else if (linkID == 0x01)
 				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
+		}
+
+		UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA: GTX 2004
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd13 > NULL)
 		{
-			if (DaytonaForcePanoramicAttract == 1)
+		if (DaytonaForcePanoramicAttract == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+		}
+
+		if (DaytonaAIMultiplayerHack == 1)
+		{
+			INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
+			INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
+			UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
+			UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
+			UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
+			UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
+			UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
+			UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
+			INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
+			UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
+			UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
+			UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
+			float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
+			float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
+			UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
+			UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
+			UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+
+
+			if (gamestate == 0x1A)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				myHelpers->WriteByte(Rambase1 + 0x1070, 0x00, /* isRelativeOffset*/ false);
+				myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
 			}
 
-			if (DaytonaAIMultiplayerHack == 1)
+			if (trackselect == 0x01)
 			{
-				INT_PTR Rambase = myHelpers->ReadIntPtr(0x1AA888, /* isRelativeOffset*/ true);
-				INT_PTR Rambase1 = myHelpers->ReadIntPtr(Rambase + 0x100, /* isRelativeOffset */ false);
-				UINT8 gamestate = myHelpers->ReadByte(Rambase1 + 0x10A4, /* isRelativeOffset*/ false);
-				UINT8 track = myHelpers->ReadByte(Rambase1 + 0x1460, /* isRelativeOffset*/ false);
-				UINT8 trackselect = myHelpers->ReadByte(Rambase1 + 0x1468, /* isRelativeOffset*/ false);
-				UINT8 countdown = myHelpers->ReadByte(Rambase1 + 0x1850, /* isRelativeOffset*/ false);
-				UINT8 linksize = myHelpers->ReadByte(Rambase1 + 0x40001, /* isRelativeOffset*/ false);
-				UINT8 linkID = myHelpers->ReadByte(Rambase1 + 0x40002, /* isRelativeOffset*/ false);
-				INT_PTR gamestatetimer = myHelpers->ReadIntPtr(Rambase1 + 0x10A8, /* isRelativeOffset*/ false);
-				UINT8 camhack = myHelpers->ReadByte(Rambase1 + 0x14A4, /* isRelativeOffset*/ false);
-				UINT8 carsinfront = myHelpers->ReadByte(Rambase1 + 0x51EC, /* isRelativeOffset*/ false);
-				UINT8 mpposition = myHelpers->ReadByte(Rambase1 + 0x51ED, /* isRelativeOffset*/ false);
-				float cary = myHelpers->ReadFloat32(Rambase1 + 0x519C, /* isRelativeOffset */ false);
-				float carx = myHelpers->ReadFloat32(Rambase1 + 0x51A4, /* isRelativeOffset */ false);
-				UINT8 nop1 = myHelpers->ReadByte(0xC2130, /* isRelativeOffset*/ true);
-				UINT8 nop2 = myHelpers->ReadByte(0xC2131, /* isRelativeOffset*/ true);
-				UINT8 nop3 = myHelpers->ReadByte(0xC2132, /* isRelativeOffset*/ true);
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
+			}
+			else if (trackselect == 0x02)
+			{
+				myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
+			}
 
-
-				if (gamestate == 0x1A)
+			if (linksize == 0x02)
+			{
+				if (linkID == 0x02)
 				{
-					myHelpers->WriteByte(Rambase1 + 0x51ED, carsinfront, /* isRelativeOffset*/ false);
-				}
-
-				if (trackselect == 0x01)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x02, /* isRelativeOffset*/ false);
-				}
-				else if (trackselect == 0x02)
-				{
-					myHelpers->WriteByte(Rambase1 + 0x1460, 0x01, /* isRelativeOffset*/ false);
-				}
-
-				if (linksize == 0x02)
-				{
-					if (linkID == 0x02)
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
-				else if (linksize == 0x03)
+				else if (linkID == 0x01)
 				{
-					if (linkID == 0x03)
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if (linkID == 0x02)
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
 					}
-					else if (linkID == 0x01)
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-				}
-				else if (linksize == 0x04)
-				{
-					if (linkID == 0x04)
+
+					if (gamestate > 0x07)
 					{
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(250);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if (linkID == 0x03)
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(350);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x02)
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							Sleep(150);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if (linkID == 0x01)
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
 					{
-						if ((gamestate == 0x1A) & (gamestatetimer < 100))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-						else if ((gamestate == 0x1A) & (gamestatetimer > 100))
-						{
-							Sleep(100);
-							myHelpers->WriteNop(0xC2130, true);
-							myHelpers->WriteNop(0xC2131, true);
-							myHelpers->WriteNop(0xC2132, true);
-						}
-
-						if ((gamestate > 0x1A)& (gamestate < 0x1A))
-						{
-							myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
-							myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
-						}
-
-						if (gamestate > 0x07)
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
-							myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
-						}
-						if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
-						{
-							myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
-						}
-						if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
-						else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
-						{
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
-							Sleep(50);
-							myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
-							Sleep(50);
-							myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
-							myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
-						}
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 0.0, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
 				}
 			}
-
-			UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA: To The Maxx
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+			else if (linksize == 0x03)
 			{
-				if ((ff > 0x09)& (ff < 0x18))
+				if (linkID == 0x03)
 				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				else if (linkID == 0x02)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
+				else if (linkID == 0x01)
 				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
-			else
+			else if (linksize == 0x04)
 			{
-				if ((ff > 0x09)& (ff < 0x18))
+				if (linkID == 0x04)
 				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(250);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x1F)& (ff < 0x28))
+				if (linkID == 0x03)
 				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C40, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(350);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x2F)& (ff < 0x3D))
+				else if (linkID == 0x02)
 				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540C80, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x01, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						Sleep(150);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
 				}
-				else if ((ff > 0x3F)& (ff < 0x48))
+				else if (linkID == 0x01)
 				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					{
+						Sleep(100);
+						myHelpers->WriteNop(0xC2130, true);
+						myHelpers->WriteNop(0xC2131, true);
+						myHelpers->WriteNop(0xC2132, true);
+					}
+
+					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					{
+						myHelpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
+						myHelpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
+					}
+
+					if (gamestate > 0x07)
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x40004, 0x00540D00, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x40008, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteIntPtr(Rambase1 + 0x4000C, 0x00540CC0, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5484, 0x00, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5784, 0x02, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5A84, 0x03, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x5D84, 0x04, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6084, 0x05, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
+						myHelpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
+					}
+					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					{
+						myHelpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
+					}
+					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						myHelpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
+					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					{
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x10A4, 0x13, /* isRelativeOffset*/ false); // restart race
+						Sleep(50);
+						myHelpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
+						Sleep(50);
+						myHelpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37E0001, /* isRelativeOffset */ false);
+						myHelpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
+					}
 				}
 			}
 		}
-		if (hWnd14 > NULL)
+
+		UINT8 ff = myHelpers->ReadByte(0x0057285B, /* isRelativeOffset*/ false); //Daytona USA: To The Maxx
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x174CF4, /* isRelativeOffset*/ true); //Sega Rally Championship (Rev B)
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0xBF)& (ff < 0xDF))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ff - 191) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x7F)& (ff < 0x9F))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff - 127) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0xBF)& (ff < 0xDF))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ff - 191) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x7F)& (ff < 0x9F))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff - 127) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
-		if (hWnd15 > NULL)
+		else
 		{
-			UINT8 ff = myHelpers->ReadByte(0x174CF4, /* isRelativeOffset*/ true); //Sega Rally Pro Drivin'
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0xBF)& (ff < 0xDF))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ff - 191) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x7F)& (ff < 0x9F))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff - 127) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 15) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0xBF)& (ff < 0xDF))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ff - 191) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x7F)& (ff < 0x9F))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff - 127) / 31.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x3D))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 13.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+		}
+		else if (hWnd14 > NULL)
+		{
+		UINT8 ff = myHelpers->ReadByte(0x174CF4, /* isRelativeOffset*/ true); //Sega Rally Championship (Rev B)
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0xBF)& (ff < 0xDF))
+			{
+				myHelpers->log("moving wheel left");
+				double percentForce = (ff - 191) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x7F)& (ff < 0x9F))
+			{
+				myHelpers->log("moving wheel right");
+				double percentForce = (ff - 127) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0xBF)& (ff < 0xDF))
+			{
+				myHelpers->log("moving wheel left");
+				double percentForce = (ff - 191) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x7F)& (ff < 0x9F))
+			{
+				myHelpers->log("moving wheel right");
+				double percentForce = (ff - 127) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+		}
+		else if (hWnd15 > NULL)
+		{
+		UINT8 ff = myHelpers->ReadByte(0x174CF4, /* isRelativeOffset*/ true); //Sega Rally Pro Drivin'
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0xBF)& (ff < 0xDF))
+			{
+				myHelpers->log("moving wheel left");
+				double percentForce = (ff - 191) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x7F)& (ff < 0x9F))
+			{
+				myHelpers->log("moving wheel right");
+				double percentForce = (ff - 127) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0xBF)& (ff < 0xDF))
+			{
+				myHelpers->log("moving wheel left");
+				double percentForce = (ff - 191) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x7F)& (ff < 0x9F))
+			{
+				myHelpers->log("moving wheel right");
+				double percentForce = (ff - 127) / 31.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd16 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Indianapolis 500 (Rev A, Twin, Newer rev)
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Indianapolis 500 (Rev A, Twin, Newer rev)
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd17 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Indianapolis 500 (Rev A, Twin, Older rev)
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Indianapolis 500 (Rev A, Twin, Older rev)
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd18 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Sega Touring Car Championship
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Sega Touring Car Championship
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd19 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Sega Touring Car Championship (Rev B)
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Sega Touring Car Championship (Rev B)
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
 			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 		}
 		else if (hWnd20 > NULL)
 		{
-			UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Over Rev (Model 2B)
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			myHelpers->log("got value: ");
-			if (FFBMode == 0)
+		UINT8 ff = myHelpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Over Rev (Model 2B)
+		std::string ffs = std::to_string(ff);
+		myHelpers->log((char*)ffs.c_str());
+		myHelpers->log("got value: ");
+		if (FFBMode == 0)
+		{
+			if ((ff > 0x09)& (ff < 0x18))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
 			}
-			else
+			else if ((ff > 0x1F)& (ff < 0x28))
 			{
-				if ((ff > 0x09)& (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 10) / 14.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x1F)& (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					myTriggers->Friction(percentForce);
-				}
-				else if ((ff > 0x2F)& (ff < 0x38))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x37)& (ff < 0x40))
-				{
-					//Centeringtestmenu
-					double percentForce = (ff - 55) / 8.0;
-					double percentLength = 100;
-					myTriggers->Spring(percentForce);
-				}
-				else if ((ff > 0x3F)& (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					myTriggers->Sine(70, 80, percentForce);
-				}
-				else if ((ff > 0x4F)& (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff > 0x5F)& (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff > 0x09)& (ff < 0x18))
+			{
+				//Spring
+				double percentForce = (ff - 10) / 14.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x1F)& (ff < 0x28))
+			{
+				//Clutch
+				double percentForce = (ff - 31) / 8.0;
+				double percentLength = 100;
+				myTriggers->Friction(percentForce);
+			}
+			else if ((ff > 0x2F)& (ff < 0x38))
+			{
+				//Centering
+				double percentForce = (ff - 47) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x37)& (ff < 0x40))
+			{
+				//Centeringtestmenu
+				double percentForce = (ff - 55) / 8.0;
+				double percentLength = 100;
+				myTriggers->Spring(percentForce);
+			}
+			else if ((ff > 0x3F)& (ff < 0x48))
+			{
+				//Uncentering
+				double percentForce = (ff - 63) / 8.0;
+				double percentLength = 100;
+				myTriggers->Sine(70, 80, percentForce);
+			}
+			else if ((ff > 0x4F)& (ff < 0x58))
+			{
+				//Roll Left
+				double percentForce = (ff - 79) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff > 0x5F)& (ff < 0x68))
+			{
+				//Roll Right
+				double percentForce = (ff - 95) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 			}
 		}
 	}
-}
+}		
 return 0;
 }
 
