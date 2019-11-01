@@ -1633,9 +1633,9 @@ void TriggerSpringEffect(double strength)
 	TriggerSpringEffectWithDefaultOption(strength, false);
 }
 
-static SDL_Event e;
 static int WorkaroundToFixRumble(void* ptr)
 {
+	SDL_Event e;
 	while (SDL_WaitEvent(&e) != 0)
 	{
 	}
@@ -1653,7 +1653,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 
 	if (EnableRumble == 1)
 	{
-		// Workaround for SDL_JoystickRUmble rumble not stopping issue
+		// Workaround for SDL_JoystickRumble rumble not stopping issue
 		SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
 
 		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
