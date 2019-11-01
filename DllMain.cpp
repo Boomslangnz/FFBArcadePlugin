@@ -1593,7 +1593,7 @@ void TriggerRumbleEffect(double lowfrequency, double highfrequency, double lengt
 			{
 				EnableRumble = 0;
 			}
-		}		
+		}
 	}
 }
 

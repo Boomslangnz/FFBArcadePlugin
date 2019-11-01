@@ -74,24 +74,12 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		triggers->Sine(80, 80, percentForce);
 	}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
-=======
->>>>>>> parent of ea7f309... Make every game plugin have Running Thread etc
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-=======
 	if ((Skids > 12) && (speedo > 0))
 	{
 		double percentForce = ((Skids - 12) / 8.0);
 		double percentLength = 100;
 		triggers->Rumble(percentForce, 0, percentLength);
 	}
->>>>>>> parent of ede0f04... Fix GRID for Rumble to use duration of New Rumble
 
 	if ((AI > 0) && (PanelBase4 > 0))
 	{
@@ -99,8 +87,6 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		double percentLength = 100;
 		triggers->Rumble(percentForce, percentForce, percentLength);
 	}
-<<<<<<< HEAD
-=======
 
 	if ((WallBase4 > 0) && (PanelBase4 > 0))
 	{
@@ -116,16 +102,8 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 	}
-<<<<<<< HEAD
 	oldgear = newgear;
 	myTriggers = triggers;
 	myConstants = constants;
 	myHelpers = helpers;
->>>>>>> parent of ede0f04... Fix GRID for Rumble to use duration of New Rumble
-=======
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
->>>>>>> parent of ea7f309... Make every game plugin have Running Thread etc
 }
