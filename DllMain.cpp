@@ -1566,7 +1566,7 @@ void TriggerLeftRightDevice2Effect(double smallstrength, double largestrength, d
 	}
 }
 
-void TriggerRumbleEffect(double lowfrequency, double highfrequency, double length)
+void TriggerRumbleEffect(double highfrequency, double lowfrequency, double length)
 {
 	if (EnableRumble == 1)
 	{
@@ -1633,6 +1633,15 @@ void TriggerSpringEffect(double strength)
 	TriggerSpringEffectWithDefaultOption(strength, false);
 }
 
+static SDL_Event e;
+static int WorkaroundToFixRumble(void* ptr)
+{
+	while (SDL_WaitEvent(&e) != 0)
+	{
+	}
+	return 0;
+}
+
 DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
@@ -1644,6 +1653,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 
 	if (EnableRumble == 1)
 	{
+		// Workaround for SDL_JoystickRUmble rumble not stopping issue
+		SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
+
 		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
 		char RumbleDisableChar[256];
 		GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
