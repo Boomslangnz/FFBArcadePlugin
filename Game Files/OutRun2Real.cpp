@@ -20,7 +20,6 @@ static EffectConstants *myConstants;
 static Helpers *myHelpers;
 static SDL_Event e;
 static int SpeedStrength;
-static bool init = true;
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
 static int ChangeGearsViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("ChangeGearsViaPlugin"), 0, settingsFilename);
@@ -95,16 +94,6 @@ static int RunningThread(void *ptr)
 		float ffspeed = myHelpers->ReadFloat32(0x08273DF0, /* isRelativeOffset */ false); //speedo
 		UINT8 static oldgear = 0;
 		float newgear = gear;
-	
-		if (init)
-		{
-			DWORD tempdw = 0x08105A48;
-			DWORD loadffb = (DWORD)(void*)or2FfbFunction;
-			DWORD tempdw2 = loadffb - tempdw - 5;
-			*(BYTE*)tempdw = 0xE9;
-			*(DWORD*)(tempdw + 1) = tempdw2;
-			init = false;
-		}
 
 		if ((ffspeed >= 0.1) && (ffspeed <= 80))
 		{
@@ -164,16 +153,21 @@ static int RunningThread(void *ptr)
 }
 
 void OutRun2Real::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
 	SDL_Thread *thread;
 	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
 		
 	while (SDL_WaitEvent(&e) != 0)
-	{			
+	{	
+		bool init = true;
+		if (init)
+		{
+			DWORD tempdw = 0x08105A48;
+			DWORD loadffb = (DWORD)(void *)or2FfbFunction;
+			DWORD tempdw2 = loadffb - tempdw - 5;
+			*(BYTE *)tempdw = 0xE9;
+			*(DWORD *)(tempdw + 1) = tempdw2;
+			init = false;
+		}
 		UINT8 transmission = helpers->ReadByte(0x082932C2, /* isRelativeOffset */ false); // Auto or Manual
 		myTriggers = triggers;
 		myConstants = constants;

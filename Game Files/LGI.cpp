@@ -15,242 +15,44 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "LGI.h"
 #include "SDL.h"
 #include <Windows.h>
-#include "SDL.h"
-static EffectTriggers* myTriggers;
-static EffectConstants* myConstants;
-static Helpers* myHelpers;
-static SDL_Event e;
-
 extern int joystick_index1;
 extern int joystick_index2;
 extern SDL_Joystick* GameController2;
 extern SDL_Haptic* ControllerHaptic2;
 extern SDL_Haptic* haptic2;
 
-static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
-
-static int RunningThread(void* ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
-	{
-		int ff = myHelpers->ReadIntPtr(0x0063BF5C, /* isRelativeOffset */ true);
-		UINT8 ff1 = myHelpers->ReadByte(ff + 0x44, /* isRelativeOffset */ false);
-		INT_PTR health1p1 = myHelpers->ReadIntPtr(0x00820024, /* isRelativeOffset*/ true);
-		INT_PTR health1p2 = myHelpers->ReadIntPtr(health1p1 + 0x4, /* isRelativeOffset */ false);
-		INT_PTR health1p3 = myHelpers->ReadIntPtr(health1p2 + 0x58, /* isRelativeOffset */ false);
-		INT_PTR health2p3 = myHelpers->ReadIntPtr(health1p2 + 0x5C, /* isRelativeOffset */ false);
-		float health1p = myHelpers->ReadFloat32(health1p3 + 0x14, /* isRelativeOffset */ false); //1p health
-		float health2p = myHelpers->ReadFloat32(health2p3 + 0x14, /* isRelativeOffset */ false); //2p health
-		myHelpers->log("got value: ");
-		std::string ffs = std::to_string(ff1);
-		myHelpers->log((char*)ffs.c_str());
-		float static oldFloat1 = 0.0;
-		float static oldFloat2 = 0.0;
-		float newFloat1 = health1p;
-		float newFloat2 = health2p;
-
-		int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
-		int HowtoRumbleKnockEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleKnockEffect"), 0, settingsFilename);
-		int HowtoRumbleMotorEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleMotorEffect"), 0, settingsFilename);
-		int HowtoRumbleHealthEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleHealthEffect"), 0, settingsFilename);
-		int Knock1pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Knock1pStrength"), 0, settingsFilename);
-		int Motor1pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Motor1pStrength"), 0, settingsFilename);
-		int Health1pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Health1pStrength"), 0, settingsFilename);
-		int Knock2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Knock2pStrength"), 0, settingsFilename);
-		int Motor2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Motor2pStrength"), 0, settingsFilename);
-		int Health2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Health2pStrength"), 0, settingsFilename);
-
-		
-
-		if ((oldFloat1 != newFloat1) && (health1p != 0x1))
-		{
-			if (HowtoRumbleHealthEffect == 0)
-			{
-				double percentForce = ((Health1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleHealthEffect == 1)
-			{
-				double percentForce = ((Health1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleHealthEffect == 2)
-			{
-				double percentForce = ((Health1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, 0, percentLength);
-			}
-		}
-		if ((oldFloat2 != newFloat2) && (health2p != 0x1))
-		{
-			if (HowtoRumbleHealthEffect == 0)
-			{
-				double percentForce = ((Health2pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleHealthEffect == 1)
-			{
-				double percentForce = ((Health2pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleHealthEffect == 2)
-			{
-				double percentForce = ((Health2pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(percentForce, 0, percentLength);
-			}
-		}
-		if (ff1 == 0x20)
-		{
-			if (HowtoRumbleKnockEffect == 0)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleKnockEffect == 1)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleKnockEffect == 2)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, 0, percentLength);
-			}
-		}
-		if (ff1 == 0x40)
-		{
-			if (HowtoRumbleMotorEffect == 0)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleMotorEffect == 1)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleMotorEffect == 2)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, 0, percentLength);
-			}
-		}
-		if (ff1 == 0x4)
-		{
-			if (HowtoRumbleKnockEffect == 0)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleKnockEffect == 1)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleKnockEffect == 2)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(percentForce, 0, percentLength);
-			}
-		}
-		if (ff1 == 0x8)
-		{
-			if (HowtoRumbleMotorEffect == 0)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleMotorEffect == 1)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleMotorEffect == 2)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->RumbleDevice2(percentForce, 0, percentLength);
-			}
-		}
-		if (ff1 == 0x24)
-		{
-			if (HowtoRumbleKnockEffect == 0)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-				myTriggers->RumbleDevice2(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleKnockEffect == 1)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-				myTriggers->RumbleDevice2(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleKnockEffect == 2)
-			{
-				double percentForce = ((Knock1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-				myTriggers->RumbleDevice2(percentForce, 0, percentLength);
-			}
-		}
-		if (ff1 == 0x48)
-		{
-			if (HowtoRumbleMotorEffect == 0)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-				myTriggers->RumbleDevice2(percentForce, percentForce, percentLength);
-			}
-			else if (HowtoRumbleMotorEffect == 1)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(0, percentForce, percentLength);
-				myTriggers->RumbleDevice2(0, percentForce, percentLength);
-			}
-			else if (HowtoRumbleMotorEffect == 2)
-			{
-				double percentForce = ((Motor1pStrength) / 100.0);
-				double percentLength = configFeedbackLength;
-				myTriggers->Rumble(percentForce, 0, percentLength);
-				myTriggers->RumbleDevice2(percentForce, 0, percentLength);
-			}
-		}
-		oldFloat1 = newFloat1;
-		oldFloat2 = newFloat2;
-	}
-}
-
 void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
+	int ff = helpers->ReadIntPtr(0x0063BF5C, /* isRelativeOffset */ true);
+	UINT8 ff1 = helpers->ReadByte(ff + 0x44, /* isRelativeOffset */ false);
+	INT_PTR health1p1 = helpers->ReadIntPtr(0x00820024, /* isRelativeOffset*/ true);
+	INT_PTR health1p2 = helpers->ReadIntPtr(health1p1 + 0x4, /* isRelativeOffset */ false);
+	INT_PTR health1p3 = helpers->ReadIntPtr(health1p2 + 0x58, /* isRelativeOffset */ false);
+	INT_PTR health2p3 = helpers->ReadIntPtr(health1p2 + 0x5C, /* isRelativeOffset */ false);
+	float health1p = helpers->ReadFloat32(health1p3 + 0x14, /* isRelativeOffset */ false); //1p health
+	float health2p = helpers->ReadFloat32(health2p3 + 0x14, /* isRelativeOffset */ false); //2p health
+	helpers->log("got value: ");
+	std::string ffs = std::to_string(ff1);
+	helpers->log((char *)ffs.c_str());
+	float static oldFloat1 = 0.0;
+	float static oldFloat2 = 0.0;
+	float newFloat1 = health1p;
+	float newFloat2 = health2p;
 
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
+	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+	int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
+	int HowtoRumbleKnockEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleKnockEffect"), 0, settingsFilename);
+	int HowtoRumbleMotorEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleMotorEffect"), 0, settingsFilename);
+	int HowtoRumbleHealthEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("HowtoRumbleHealthEffect"), 0, settingsFilename);
+	int Knock1pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Knock1pStrength"), 0, settingsFilename);
+	int Motor1pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Motor1pStrength"), 0, settingsFilename);
+	int Health1pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Health1pStrength"), 0, settingsFilename);
+	int Knock2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Knock2pStrength"), 0, settingsFilename);
+	int Motor2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Motor2pStrength"), 0, settingsFilename);
+	int Health2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Health2pStrength"), 0, settingsFilename);
 
 	for (int i = 0; i < SDL_NumJoysticks(); i++)
 	{
-		wchar_t* deviceGUIDString2 = new wchar_t[256];
+		wchar_t * deviceGUIDString2 = new wchar_t[256];
 		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
 		char joystick_guid[256];
 		sprintf(joystick_guid, "%S", deviceGUIDString2);
@@ -291,13 +93,180 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 		}
 	}
 
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	while (SDL_WaitEvent(&e) != 0)
-	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
-	}	
+		if ((oldFloat1 != newFloat1) && (health1p != 0x1))
+		{
+			if (HowtoRumbleHealthEffect == 0)
+			{
+				double percentForce = ((Health1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleHealthEffect == 1)
+			{
+				double percentForce = ((Health1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleHealthEffect == 2)
+			{
+				double percentForce = ((Health1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, 0, percentLength);
+			}
+		}
+		if ((oldFloat2 != newFloat2) && (health2p != 0x1))
+		{
+			if (HowtoRumbleHealthEffect == 0)
+			{
+				double percentForce = ((Health2pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleHealthEffect == 1)
+			{
+				double percentForce = ((Health2pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleHealthEffect == 2)
+			{
+				double percentForce = ((Health2pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(percentForce, 0, percentLength);
+			}
+		}
+		if (ff1 == 0x20)
+		{
+			if (HowtoRumbleKnockEffect == 0)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleKnockEffect == 1)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleKnockEffect == 2)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, 0, percentLength);
+			}
+		}
+		if (ff1 == 0x40)
+		{
+			if (HowtoRumbleMotorEffect == 0)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleMotorEffect == 1)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleMotorEffect == 2)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, 0, percentLength);
+			}
+		}
+		if (ff1 == 0x4)
+		{
+			if (HowtoRumbleKnockEffect == 0)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleKnockEffect == 1)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleKnockEffect == 2)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(percentForce, 0, percentLength);
+			}
+		}
+		if (ff1 == 0x8)
+		{
+			if (HowtoRumbleMotorEffect == 0)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleMotorEffect == 1)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleMotorEffect == 2)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->RumbleDevice2(percentForce, 0, percentLength);
+			}
+		}
+		if (ff1 == 0x24)
+		{
+			if (HowtoRumbleKnockEffect == 0)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+				triggers->RumbleDevice2(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleKnockEffect == 1)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+				triggers->RumbleDevice2(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleKnockEffect == 2)
+			{
+				double percentForce = ((Knock1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+				triggers->RumbleDevice2(percentForce, 0, percentLength);
+			}
+		}
+		if (ff1 == 0x48)
+		{
+			if (HowtoRumbleMotorEffect == 0)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+				triggers->RumbleDevice2(percentForce, percentForce, percentLength);
+			}
+			else if (HowtoRumbleMotorEffect == 1)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->RumbleDevice2(0, percentForce, percentLength);
+			}
+			else if (HowtoRumbleMotorEffect == 2)
+			{
+				double percentForce = ((Motor1pStrength) / 100.0);
+				double percentLength = configFeedbackLength;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->RumbleDevice2(percentForce, 0, percentLength);
+			}
+		}
+	 oldFloat1 = newFloat1;
+	 oldFloat2 = newFloat2;
 }

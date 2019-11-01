@@ -15,11 +15,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <tchar.h>
 #include "Mame0206.h"
 #include "math.h"
-#include "SDL.h"
-static EffectTriggers* myTriggers;
-static EffectConstants* myConstants;
-static Helpers* myHelpers;
-static SDL_Event e;
 
 static int sanfran(int ffsan) {
 	switch (ffsan) {
@@ -1654,1504 +1649,1481 @@ static int raveracer(int ffRaw) {
 	}
 }
 
-static int RunningThread(void* ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
+void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
+	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+	int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
+	HWND hWnds = FindWindow(NULL, _T("MAME: San Francisco Rush 2049 [sf2049]"));
+	HWND hWnd = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (boot rom L 1.0, GUTS Oct 6 1997 / MAIN Oct 16 1997) [sfrushrk]"));
+	HWND hWnd1 = FindWindowA(0, ("MAME: San Francisco Rush (boot rom L 1.0) [sfrush]"));
+	HWND hWnd2 = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (Wavenet, boot rom L 1.38, GUTS Aug 6 1997 / MAIN Aug 5 1997) [sfrushrkwo]"));
+	HWND hWnd3 = FindWindowA(0, ("MAME: San Francisco Rush 2049: Special Edition [sf2049se]"));
+	HWND hWnd4 = FindWindowA(0, ("MAME: Rave Racer (Rev. RV2, World) [raveracw]"));
+	HWND hWnd5 = FindWindowA(0, ("MAME: Rave Racer (Rev. RV1 Ver.B, Japan) [raveracj]"));
+	HWND hWnd6 = FindWindowA(0, ("MAME: Rave Racer (Rev. RV1, Japan) [raveracja]"));
+	HWND hWnd7 = FindWindowA(0, ("MAME: San Francisco Rush (boot rom L 1.06A) [sfrusha]"));
+	HWND hWnd8 = FindWindowA(0, ("MAME: San Francisco Rush 2049: Tournament Edition [sf2049te]"));
+	HWND hWnd9 = FindWindowA(0, ("MAME: California Speed (Version 2.1a Apr 17 1998, GUTS 1.25 Apr 17 1998 / MAIN Apr 17 1998) [calspeed]"));
+	HWND hWnd10 = FindWindowA(0, ("MAME: California Speed (Version 1.0r8 Mar 10 1998, GUTS Mar 10 1998 / MAIN Mar 10 1998) [calspeeda]"));
+	HWND hWnd11 = FindWindowA(0, ("MAME: California Speed (Version 1.0r7a Mar 4 1998, GUTS Mar 3 1998 / MAIN Jan 19 1998) [calspeedb]"));
+	HWND hWnd12 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.5) [crusnwld]"));
+	HWND hWnd13 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.4) [crusnwld24]"));
+	HWND hWnd14 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.3) [crusnwld23]"));
+	HWND hWnd15 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.0) [crusnwld20]"));
+	HWND hWnd16 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.9) [crusnwld19]"));
+	HWND hWnd17 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.7) [crusnwld17]"));
+	HWND hWnd18 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.3) [crusnwld13]"));
+	HWND hWnd19 = FindWindowA(0, ("MAME: Cruis'n USA (rev L4.1) [crusnusa]"));
+	HWND hWnd20 = FindWindowA(0, ("MAME: Cruis'n USA (rev L4.0) [crusnusa40]"));
+	HWND hWnd21 = FindWindowA(0, ("MAME: Cruis'n USA (rev L2.1) [crusnusa21]"));
+	HWND hWnd22 = FindWindowA(0, ("MAME: Off Road Challenge (v1.63) [offroadc]"));
+	HWND hWnd23 = FindWindowA(0, ("MAME: Off Road Challenge (v1.63) [offroadc]"));
+	HWND hWnd24 = FindWindowA(0, ("MAME: Off Road Challenge (v1.40) [offroadc4]"));
+	HWND hWnd25 = FindWindowA(0, ("MAME: Off Road Challenge (v1.30) [offroadc3]"));
+	HWND hWnd26 = FindWindowA(0, ("MAME: Off Road Challenge (v1.10) [offroadc1]"));
+
+	if (hWnds > NULL)
 	{
-		wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
-		int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
-		HWND hWnds = FindWindow(NULL, _T("MAME: San Francisco Rush 2049 [sf2049]"));
-		HWND hWnd = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (boot rom L 1.0, GUTS Oct 6 1997 / MAIN Oct 16 1997) [sfrushrk]"));
-		HWND hWnd1 = FindWindowA(0, ("MAME: San Francisco Rush (boot rom L 1.0) [sfrush]"));
-		HWND hWnd2 = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (Wavenet, boot rom L 1.38, GUTS Aug 6 1997 / MAIN Aug 5 1997) [sfrushrkwo]"));
-		HWND hWnd3 = FindWindowA(0, ("MAME: San Francisco Rush 2049: Special Edition [sf2049se]"));
-		HWND hWnd4 = FindWindowA(0, ("MAME: Rave Racer (Rev. RV2, World) [raveracw]"));
-		HWND hWnd5 = FindWindowA(0, ("MAME: Rave Racer (Rev. RV1 Ver.B, Japan) [raveracj]"));
-		HWND hWnd6 = FindWindowA(0, ("MAME: Rave Racer (Rev. RV1, Japan) [raveracja]"));
-		HWND hWnd7 = FindWindowA(0, ("MAME: San Francisco Rush (boot rom L 1.06A) [sfrusha]"));
-		HWND hWnd8 = FindWindowA(0, ("MAME: San Francisco Rush 2049: Tournament Edition [sf2049te]"));
-		HWND hWnd9 = FindWindowA(0, ("MAME: California Speed (Version 2.1a Apr 17 1998, GUTS 1.25 Apr 17 1998 / MAIN Apr 17 1998) [calspeed]"));
-		HWND hWnd10 = FindWindowA(0, ("MAME: California Speed (Version 1.0r8 Mar 10 1998, GUTS Mar 10 1998 / MAIN Mar 10 1998) [calspeeda]"));
-		HWND hWnd11 = FindWindowA(0, ("MAME: California Speed (Version 1.0r7a Mar 4 1998, GUTS Mar 3 1998 / MAIN Jan 19 1998) [calspeedb]"));
-		HWND hWnd12 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.5) [crusnwld]"));
-		HWND hWnd13 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.4) [crusnwld24]"));
-		HWND hWnd14 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.3) [crusnwld23]"));
-		HWND hWnd15 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.0) [crusnwld20]"));
-		HWND hWnd16 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.9) [crusnwld19]"));
-		HWND hWnd17 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.7) [crusnwld17]"));
-		HWND hWnd18 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.3) [crusnwld13]"));
-		HWND hWnd19 = FindWindowA(0, ("MAME: Cruis'n USA (rev L4.1) [crusnusa]"));
-		HWND hWnd20 = FindWindowA(0, ("MAME: Cruis'n USA (rev L4.0) [crusnusa40]"));
-		HWND hWnd21 = FindWindowA(0, ("MAME: Cruis'n USA (rev L2.1) [crusnusa21]"));
-		HWND hWnd22 = FindWindowA(0, ("MAME: Off Road Challenge (v1.63) [offroadc]"));
-		HWND hWnd23 = FindWindowA(0, ("MAME: Off Road Challenge (v1.63) [offroadc]"));
-		HWND hWnd24 = FindWindowA(0, ("MAME: Off Road Challenge (v1.40) [offroadc4]"));
-		HWND hWnd25 = FindWindowA(0, ("MAME: Off Road Challenge (v1.30) [offroadc3]"));
-		HWND hWnd26 = FindWindowA(0, ("MAME: Off Road Challenge (v1.10) [offroadc1]"));
+		INT_PTR ff2049 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x388, /* isRelativeOffset*/ false);
+		INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x6C4, /* isRelativeOffset*/ false);
+		UINT8 ff20495 = helpers->ReadByte(ff20492 + 0x7C, /* isRelativeOffset */ false); //SanFranRush2049
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ff20495);
+		helpers->log((char *)ffs.c_str());
 
-		if (hWnds > NULL)
+		if (FFBMode == 0)
 		{
-			INT_PTR ff2049 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ff20491 = myHelpers->ReadIntPtr(ff2049 + 0x388, /* isRelativeOffset*/ false);
-			INT_PTR ff20492 = myHelpers->ReadIntPtr(ff20491 + 0x6C4, /* isRelativeOffset*/ false);
-			UINT8 ff20495 = myHelpers->ReadByte(ff20492 + 0x7C, /* isRelativeOffset */ false); //SanFranRush2049
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ff20495);
-			myHelpers->log((char*)ffs.c_str());
+			if ((ff20495 > 0x80) & (ff20495 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff20495 > 0x80) & (ff20495 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	else if (hWnd > NULL)
+	{
+		int ffsanfranrush = 0;
+		{
+			INT_PTR ff = helpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
+			INT_PTR ff1 = helpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
+			INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
+			INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
+			UINT8 ffsan = helpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
+			std::string ffs = std::to_string(ffsan);
+			helpers->log((char *)ffs.c_str());
+			helpers->log("got value: ");
+			ffsanfranrush = sanfran(ffsan);
 
 			if (FFBMode == 0)
 			{
-				if ((ff20495 > 0x80)& (ff20495 < 0x100))
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
 				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ff20495) / 126.0;
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
-				else if ((ff20495 > 0x00)& (ff20495 < 0x80))
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
 				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff20495) / 126.0;
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
 			else
 			{
-				if ((ff20495 > 0x80)& (ff20495 < 0x100))
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
 				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ff20495) / 126.0;
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
 					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 				}
-				else if ((ff20495 > 0x00)& (ff20495 < 0x80))
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
 				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff20495) / 126.0;
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
 					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		else if (hWnd > NULL)
-		{
-			int ffsanfranrush = 0;
-			{
-				INT_PTR ff = myHelpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
-				INT_PTR ff1 = myHelpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
-				INT_PTR ff2 = myHelpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
-				INT_PTR ff3 = myHelpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
-				UINT8 ffsan = myHelpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
-				std::string ffs = std::to_string(ffsan);
-				myHelpers->log((char*)ffs.c_str());
-				myHelpers->log("got value: ");
-				ffsanfranrush = sanfran(ffsan);
-
-				if (FFBMode == 0)
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		else if (hWnd1 > NULL)
-		{
-			int ffsanfranrush = 0;
-			{
-				INT_PTR ff = myHelpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
-				INT_PTR ff1 = myHelpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
-				INT_PTR ff2 = myHelpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
-				INT_PTR ff3 = myHelpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
-				UINT8 ffsan = myHelpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
-				std::string ffs = std::to_string(ffsan);
-				myHelpers->log((char*)ffs.c_str());
-				myHelpers->log("got value: ");
-				ffsanfranrush = sanfran(ffsan);
-
-				if (FFBMode == 0)
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		else if (hWnd2 > NULL)
-		{
-			int ffsanfranrush = 0;
-			{
-				INT_PTR ff = myHelpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
-				INT_PTR ff1 = myHelpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
-				INT_PTR ff2 = myHelpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
-				INT_PTR ff3 = myHelpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
-				UINT8 ffsan = myHelpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
-				std::string ffs = std::to_string(ffsan);
-				myHelpers->log((char*)ffs.c_str());
-				myHelpers->log("got value: ");
-				ffsanfranrush = sanfran(ffsan);
-
-				if (FFBMode == 0)
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd3 > NULL)
-		{
-			INT_PTR ff2049 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ff20491 = myHelpers->ReadIntPtr(ff2049 + 0x388, /* isRelativeOffset*/ false);
-			INT_PTR ff20492 = myHelpers->ReadIntPtr(ff20491 + 0x6C4, /* isRelativeOffset*/ false);
-			UINT8 ff20495 = myHelpers->ReadByte(ff20492 + 0x7C, /* isRelativeOffset */ false); //SanFranRush2049
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ff20495);
-			myHelpers->log((char*)ffs.c_str());
-
-			if (FFBMode == 0)
-			{
-				if ((ff20495 > 0x80)& (ff20495 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff20495 > 0x00)& (ff20495 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ff20495 > 0x80)& (ff20495 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff20495 > 0x00)& (ff20495 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		else if (hWnd7 > NULL)
-		{
-			int ffsanfranrush = 0;
-			{
-				INT_PTR ff = myHelpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
-				INT_PTR ff1 = myHelpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
-				INT_PTR ff2 = myHelpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
-				INT_PTR ff3 = myHelpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
-				UINT8 ffsan = myHelpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
-				std::string ffs = std::to_string(ffsan);
-				myHelpers->log((char*)ffs.c_str());
-				myHelpers->log("got value: ");
-				ffsanfranrush = sanfran(ffsan);
-
-				if (FFBMode == 0)
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffsanfranrush > 112)& (ffsanfranrush < 233))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (233 - ffsanfranrush) / 119.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffsanfranrush > 0)& (ffsanfranrush < 113))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffsanfranrush) / 112.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd4 > NULL)
-		{
-			int ffrave = 0;
-			{
-				INT_PTR ffrave0 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffrave1 = myHelpers->ReadIntPtr(ffrave0 + 0x388, /* isRelativeOffset*/ false);
-				INT_PTR ffrave2 = myHelpers->ReadIntPtr(ffrave1 + 0x1A0, /* isRelativeOffset*/ false);
-				INT_PTR ffrave3 = myHelpers->ReadIntPtr(ffrave2 + 0x358, /* isRelativeOffset*/ false);
-				UINT8 ffRaw = myHelpers->ReadByte(ffrave3 + 0x40, /* isRelativeOffset */ false); //Rave Racer 32bit
-				ffrave = raveracer(ffRaw);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffrave);
-				myHelpers->log((char*)ffs.c_str());
-			}
-			if (FFBMode == 0)
-			{
-				if ((ffrave > 61) && (ffrave < 124))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (124 - ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ffrave > 0) && (ffrave < 62))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffrave > 61) && (ffrave < 124))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (124 - ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffrave > 0) && (ffrave < 62))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-
-		if (hWnd5 > NULL)
-		{
-			int ffrave = 0;
-			{
-				INT_PTR ffrave0 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffrave1 = myHelpers->ReadIntPtr(ffrave0 + 0x388, /* isRelativeOffset*/ false);
-				INT_PTR ffrave2 = myHelpers->ReadIntPtr(ffrave1 + 0x1A0, /* isRelativeOffset*/ false);
-				INT_PTR ffrave3 = myHelpers->ReadIntPtr(ffrave2 + 0x358, /* isRelativeOffset*/ false);
-				UINT8 ffRaw = myHelpers->ReadByte(ffrave3 + 0x40, /* isRelativeOffset */ false); //Rave Racer 32bit
-
-				ffrave = raveracer(ffRaw);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffrave);
-				myHelpers->log((char*)ffs.c_str());
-			}
-			if (FFBMode == 0)
-			{
-				if ((ffrave > 61) && (ffrave < 124))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (124 - ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ffrave > 0) && (ffrave < 62))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffrave > 61) && (ffrave < 124))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (124 - ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffrave > 0) && (ffrave < 62))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd6 > NULL)
-		{
-			int ffrave = 0;
-			{
-				INT_PTR ffrave0 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffrave1 = myHelpers->ReadIntPtr(ffrave0 + 0x388, /* isRelativeOffset*/ false);
-				INT_PTR ffrave2 = myHelpers->ReadIntPtr(ffrave1 + 0x1A0, /* isRelativeOffset*/ false);
-				INT_PTR ffrave3 = myHelpers->ReadIntPtr(ffrave2 + 0x358, /* isRelativeOffset*/ false);
-				UINT8 ffRaw = myHelpers->ReadByte(ffrave3 + 0x40, /* isRelativeOffset */ false); //Rave Racer 32bit
-
-				ffrave = raveracer(ffRaw);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffrave);
-				myHelpers->log((char*)ffs.c_str());
-			}
-			if (FFBMode == 0)
-			{
-				if ((ffrave > 61) && (ffrave < 124))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (124 - ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ffrave > 0) && (ffrave < 62))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffrave > 61) && (ffrave < 124))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (124 - ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffrave > 0) && (ffrave < 62))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (ffrave) / 61.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd8 > NULL)
-		{
-			INT_PTR ff2049 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ff20491 = myHelpers->ReadIntPtr(ff2049 + 0x388, /* isRelativeOffset*/ false);
-			INT_PTR ff20492 = myHelpers->ReadIntPtr(ff20491 + 0x6C4, /* isRelativeOffset*/ false);
-			UINT8 ff20495 = myHelpers->ReadByte(ff20492 + 0x7C, /* isRelativeOffset */ false); //SanFranRush2049
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ff20495);
-			myHelpers->log((char*)ffs.c_str());
-			if (FFBMode == 0)
-			{
-				if ((ff20495 > 0x80)& (ff20495 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff20495 > 0x00)& (ff20495 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ff20495 > 0x80)& (ff20495 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ff20495 > 0x00)& (ff20495 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ff20495) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd9 > NULL)
-		{
-			INT_PTR ffcal1 = myHelpers->ReadIntPtr(0x078D624C, /* isRelativeOffset*/ true);
-			INT_PTR ffcal2 = myHelpers->ReadIntPtr(ffcal1 + 0x10, /* isRelativeOffset*/ false);
-			INT_PTR ffcal3 = myHelpers->ReadIntPtr(ffcal2 + 0xE4, /* isRelativeOffset*/ false);
-			INT_PTR ffcal4 = myHelpers->ReadIntPtr(ffcal3 + 0x4, /* isRelativeOffset*/ false);
-			INT_PTR ffcal5 = myHelpers->ReadIntPtr(ffcal4 + 0xC, /* isRelativeOffset*/ false);
-			UINT8 ffcal6 = myHelpers->ReadByte(ffcal5 + 0x1F8, /* isRelativeOffset */ false); //CaliforniaSpeed32bit
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ffcal6);
-			myHelpers->log((char*)ffs.c_str());
-			if (FFBMode == 0)
-			{
-				if ((ffcal6 > 0x80)& (ffcal6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffcal6 > 0x00)& (ffcal6 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffcal6 > 0x80)& (ffcal6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffcal6 > 0x00)& (ffcal6 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd10 > NULL)
-		{
-			INT_PTR ffcal1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ffcal2 = myHelpers->ReadIntPtr(ffcal1 + 0x388, /* isRelativeOffset*/ false);
-			INT_PTR ffcal3 = myHelpers->ReadIntPtr(ffcal2 + 0x640, /* isRelativeOffset*/ false);
-			UINT8 ffcal6 = myHelpers->ReadByte(ffcal3 + 0x104, /* isRelativeOffset */ false); //CaliforniaSpeed32bit
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ffcal6);
-			myHelpers->log((char*)ffs.c_str());
-			if (FFBMode == 0)
-			{
-				if ((ffcal6 > 0x80)& (ffcal6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffcal6 > 0x00)& (ffcal6 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffcal6 > 0x80)& (ffcal6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffcal6 > 0x00)& (ffcal6 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd11 > NULL)
-		{
-			INT_PTR ffcal1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ffcal2 = myHelpers->ReadIntPtr(ffcal1 + 0x388, /* isRelativeOffset*/ false);
-			INT_PTR ffcal3 = myHelpers->ReadIntPtr(ffcal2 + 0x640, /* isRelativeOffset*/ false);
-			UINT8 ffcal6 = myHelpers->ReadByte(ffcal3 + 0x104, /* isRelativeOffset */ false); //CaliforniaSpeed32bit
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ffcal6);
-			myHelpers->log((char*)ffs.c_str());
-
-			if (FFBMode == 0)
-			{
-				if ((ffcal6 > 0x80)& (ffcal6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffcal6 > 0x00)& (ffcal6 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffcal6 > 0x80)& (ffcal6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffcal6 > 0x00)& (ffcal6 < 0x80))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffcal6) / 126.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd12 > NULL)
-		{
-			int ffcrusnwld = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnwld = crusnwld(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd13 > NULL)
-		{
-			int ffcrusnwld = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnwld = crusnwld(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd14 > NULL)
-		{
-			int ffcrusnwld = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnwld = crusnwld(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd15 > NULL)
-		{
-			int ffcrusnwld = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnwld = crusnwld(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd16 > NULL)
-		{
-			int ffcrusnwld = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnwld = crusnwld(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd17 > NULL)
-		{
-			int ffcrusnwld = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnwld = crusnwld(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd18 > NULL)
-		{
-			int ffcrusnwld = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnwld = crusnwld(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (225 - ffcrusnwld) / 114.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnwld) / 110.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd19 > NULL)
-		{
-			int ffcrusnusa = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnusa = crusnusa(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnusa > 104)& (ffcrusnusa < 215))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (214 - ffcrusnusa) / 109.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnusa > 0)& (ffcrusnusa < 105))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnusa) / 104.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnusa > 104)& (ffcrusnusa < 215))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (214 - ffcrusnusa) / 109.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnusa > 0)& (ffcrusnusa < 105))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnusa) / 104.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd20 > NULL)
-		{
-			int ffcrusnusa = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnusa = crusnusa(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnusa > 104)& (ffcrusnusa < 215))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (214 - ffcrusnusa) / 109.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnusa > 0)& (ffcrusnusa < 105))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnusa) / 104.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnusa > 104)& (ffcrusnusa < 215))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (214 - ffcrusnusa) / 109.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnusa > 0)& (ffcrusnusa < 105))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnusa) / 104.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd21 > NULL)
-		{
-			int ffcrusnusa = 0;
-			{
-				INT_PTR ffcru1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = myHelpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = myHelpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = myHelpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				ffcrusnusa = crusnusa(ffcru6);
-				myHelpers->log("got value: ");
-				std::string ffs = std::to_string(ffcru6);
-				myHelpers->log((char*)ffs.c_str());
-
-				if (FFBMode == 0)
-				{
-					if ((ffcrusnusa > 104)& (ffcrusnusa < 215))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (214 - ffcrusnusa) / 109.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ffcrusnusa > 0)& (ffcrusnusa < 105))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnusa) / 104.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffcrusnusa > 104)& (ffcrusnusa < 215))
-					{
-						myHelpers->log("moving wheel left");
-						double percentForce = (214 - ffcrusnusa) / 109.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffcrusnusa > 0)& (ffcrusnusa < 105))
-					{
-						myHelpers->log("moving wheel right");
-						double percentForce = (ffcrusnusa) / 104.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-				}
-			}
-		}
-		if (hWnd22 > NULL)
-		{
-			INT_PTR ffoff1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ffoff2 = myHelpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
-			INT_PTR ffoff3 = myHelpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
-			UINT8 ffoff6 = myHelpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
-			std::string ffs = std::to_string(ffoff6);
-			myHelpers->log((char*)ffs.c_str());
-
-			if (FFBMode == 0)
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd23 > NULL)
-		{
-			INT_PTR ffoff1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ffoff2 = myHelpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
-			INT_PTR ffoff3 = myHelpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
-			UINT8 ffoff6 = myHelpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ffoff6);
-			myHelpers->log((char*)ffs.c_str());
-
-			if (FFBMode == 0)
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd24 > NULL)
-		{
-			INT_PTR ffoff1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ffoff2 = myHelpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
-			INT_PTR ffoff3 = myHelpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
-			UINT8 ffoff6 = myHelpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ffoff6);
-			myHelpers->log((char*)ffs.c_str());
-
-			if (FFBMode == 0)
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd25 > NULL)
-		{
-			INT_PTR ffoff1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ffoff2 = myHelpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
-			INT_PTR ffoff3 = myHelpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
-			UINT8 ffoff6 = myHelpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ffoff6);
-			myHelpers->log((char*)ffs.c_str());
-
-			if (FFBMode == 0)
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-			}
-		}
-		if (hWnd26 > NULL)
-		{
-			INT_PTR ffoff1 = myHelpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ffoff2 = myHelpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
-			INT_PTR ffoff3 = myHelpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
-			UINT8 ffoff6 = myHelpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
-			myHelpers->log("got value: ");
-			std::string ffs = std::to_string(ffoff6);
-			myHelpers->log((char*)ffs.c_str());
-
-			if (FFBMode == 0)
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-			else
-			{
-				if ((ffoff6 > 0x83)& (ffoff6 < 0x100))
-				{
-					myHelpers->log("moving wheel left");
-					double percentForce = (255 - ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-				else if ((ffoff6 > 0x00)& (ffoff6 < 0x7D))
-				{
-					myHelpers->log("moving wheel right");
-					double percentForce = (ffoff6) / 124.0;
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
 				}
 			}
 		}
 	}
-	return 0;
-}
-
-void Mame0206::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	while (SDL_WaitEvent(&e) != 0)
+	else if (hWnd1 > NULL)
 	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
+		int ffsanfranrush = 0;
+		{
+			INT_PTR ff = helpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
+			INT_PTR ff1 = helpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
+			INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
+			INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
+			UINT8 ffsan = helpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
+			std::string ffs = std::to_string(ffsan);
+			helpers->log((char *)ffs.c_str());
+			helpers->log("got value: ");
+			ffsanfranrush = sanfran(ffsan);
+
+			if (FFBMode == 0)
+			{
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	else if (hWnd2 > NULL)
+	{
+		int ffsanfranrush = 0;
+		{
+			INT_PTR ff = helpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
+			INT_PTR ff1 = helpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
+			INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
+			INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
+			UINT8 ffsan = helpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
+			std::string ffs = std::to_string(ffsan);
+			helpers->log((char *)ffs.c_str());
+			helpers->log("got value: ");
+			ffsanfranrush = sanfran(ffsan);
+
+			if (FFBMode == 0)
+			{
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd3 > NULL)
+	{
+		INT_PTR ff2049 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x388, /* isRelativeOffset*/ false);
+		INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x6C4, /* isRelativeOffset*/ false);
+		UINT8 ff20495 = helpers->ReadByte(ff20492 + 0x7C, /* isRelativeOffset */ false); //SanFranRush2049
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ff20495);
+		helpers->log((char *)ffs.c_str());
+
+		if (FFBMode == 0)
+		{
+			if ((ff20495 > 0x80) & (ff20495 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff20495 > 0x80) & (ff20495 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	else if (hWnd7 > NULL)
+	{
+		int ffsanfranrush = 0;
+		{
+			INT_PTR ff = helpers->ReadIntPtr(0x0E2B20A4, /* isRelativeOffset*/ true);
+			INT_PTR ff1 = helpers->ReadIntPtr(ff + 0x134, /* isRelativeOffset*/ false);
+			INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x5E8, /* isRelativeOffset*/ false);
+			INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x42C, /* isRelativeOffset*/ false);
+			UINT8 ffsan = helpers->ReadByte(ff3 + 0x550, /* isRelativeOffset */ false); //SanFranRush
+			std::string ffs = std::to_string(ffsan);
+			helpers->log((char *)ffs.c_str());
+			helpers->log("got value: ");
+			ffsanfranrush = sanfran(ffsan);
+
+			if (FFBMode == 0)
+			{
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffsanfranrush > 112) & (ffsanfranrush < 233))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (233 - ffsanfranrush) / 119.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffsanfranrush > 0) & (ffsanfranrush < 113))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffsanfranrush) / 112.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd4 > NULL)
+	{
+		int ffrave = 0;
+		{
+			INT_PTR ffrave0 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x388, /* isRelativeOffset*/ false);
+			INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x1A0, /* isRelativeOffset*/ false);
+			INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x358, /* isRelativeOffset*/ false);
+			UINT8 ffRaw = helpers->ReadByte(ffrave3 + 0x40, /* isRelativeOffset */ false); //Rave Racer 32bit
+			ffrave = raveracer(ffRaw);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffrave);
+			helpers->log((char *)ffs.c_str());
+		}
+		if (FFBMode == 0)
+		{
+			if ((ffrave > 61) && (ffrave < 124))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (124 - ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((ffrave > 0) && (ffrave < 62))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffrave > 61) && (ffrave < 124))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (124 - ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffrave > 0) && (ffrave < 62))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+
+	if (hWnd5 > NULL)
+	{
+		int ffrave = 0;
+		{
+			INT_PTR ffrave0 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x388, /* isRelativeOffset*/ false);
+			INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x1A0, /* isRelativeOffset*/ false);
+			INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x358, /* isRelativeOffset*/ false);
+			UINT8 ffRaw = helpers->ReadByte(ffrave3 + 0x40, /* isRelativeOffset */ false); //Rave Racer 32bit
+
+			ffrave = raveracer(ffRaw);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffrave);
+			helpers->log((char *)ffs.c_str());
+		}
+		if (FFBMode == 0)
+		{
+			if ((ffrave > 61) && (ffrave < 124))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (124 - ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((ffrave > 0) && (ffrave < 62))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffrave > 61) && (ffrave < 124))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (124 - ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffrave > 0) && (ffrave < 62))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd6 > NULL)
+	{
+		int ffrave = 0;
+		{
+			INT_PTR ffrave0 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x388, /* isRelativeOffset*/ false);
+			INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x1A0, /* isRelativeOffset*/ false);
+			INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x358, /* isRelativeOffset*/ false);
+			UINT8 ffRaw = helpers->ReadByte(ffrave3 + 0x40, /* isRelativeOffset */ false); //Rave Racer 32bit
+
+			ffrave = raveracer(ffRaw);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffrave);
+			helpers->log((char *)ffs.c_str());
+		}
+		if (FFBMode == 0)
+		{
+			if ((ffrave > 61) && (ffrave < 124))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (124 - ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((ffrave > 0) && (ffrave < 62))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffrave > 61) && (ffrave < 124))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (124 - ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffrave > 0) && (ffrave < 62))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ffrave) / 61.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd8 > NULL)
+	{
+		INT_PTR ff2049 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x388, /* isRelativeOffset*/ false);
+		INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x6C4, /* isRelativeOffset*/ false);
+		UINT8 ff20495 = helpers->ReadByte(ff20492 + 0x7C, /* isRelativeOffset */ false); //SanFranRush2049
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ff20495);
+		helpers->log((char *)ffs.c_str());
+		if (FFBMode == 0)
+		{
+			if ((ff20495 > 0x80) & (ff20495 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ff20495 > 0x80) & (ff20495 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ff20495 > 0x00) & (ff20495 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ff20495) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd9 > NULL)
+	{
+		INT_PTR ffcal1 = helpers->ReadIntPtr(0x078D624C, /* isRelativeOffset*/ true);
+		INT_PTR ffcal2 = helpers->ReadIntPtr(ffcal1 + 0x10, /* isRelativeOffset*/ false);
+		INT_PTR ffcal3 = helpers->ReadIntPtr(ffcal2 + 0xE4, /* isRelativeOffset*/ false);
+		INT_PTR ffcal4 = helpers->ReadIntPtr(ffcal3 + 0x4, /* isRelativeOffset*/ false);
+		INT_PTR ffcal5 = helpers->ReadIntPtr(ffcal4 + 0xC, /* isRelativeOffset*/ false);
+		UINT8 ffcal6 = helpers->ReadByte(ffcal5 + 0x1F8, /* isRelativeOffset */ false); //CaliforniaSpeed32bit
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ffcal6);
+		helpers->log((char *)ffs.c_str());
+		if (FFBMode == 0)
+		{
+			if ((ffcal6 > 0x80) & (ffcal6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffcal6 > 0x80) & (ffcal6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd10 > NULL)
+	{
+		INT_PTR ffcal1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ffcal2 = helpers->ReadIntPtr(ffcal1 + 0x388, /* isRelativeOffset*/ false);
+		INT_PTR ffcal3 = helpers->ReadIntPtr(ffcal2 + 0x640, /* isRelativeOffset*/ false);
+		UINT8 ffcal6 = helpers->ReadByte(ffcal3 + 0x104, /* isRelativeOffset */ false); //CaliforniaSpeed32bit
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ffcal6);
+		helpers->log((char *)ffs.c_str());
+		if (FFBMode == 0)
+		{
+			if ((ffcal6 > 0x80) & (ffcal6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffcal6 > 0x80) & (ffcal6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd11 > NULL)
+	{
+		INT_PTR ffcal1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ffcal2 = helpers->ReadIntPtr(ffcal1 + 0x388, /* isRelativeOffset*/ false);
+		INT_PTR ffcal3 = helpers->ReadIntPtr(ffcal2 + 0x640, /* isRelativeOffset*/ false);
+		UINT8 ffcal6 = helpers->ReadByte(ffcal3 + 0x104, /* isRelativeOffset */ false); //CaliforniaSpeed32bit
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ffcal6);
+		helpers->log((char *)ffs.c_str());
+
+		if (FFBMode == 0)
+		{
+			if ((ffcal6 > 0x80) & (ffcal6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffcal6 > 0x80) & (ffcal6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffcal6 > 0x00) & (ffcal6 < 0x80))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffcal6) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd12 > NULL)
+	{
+		int ffcrusnwld = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnwld = crusnwld(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd13 > NULL)
+	{
+		int ffcrusnwld = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnwld = crusnwld(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd14 > NULL)
+	{
+		int ffcrusnwld = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnwld = crusnwld(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd15 > NULL)
+	{
+		int ffcrusnwld = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnwld = crusnwld(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd16 > NULL)
+	{
+		int ffcrusnwld = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnwld = crusnwld(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd17 > NULL)
+	{
+		int ffcrusnwld = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnwld = crusnwld(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd18 > NULL)
+	{
+		int ffcrusnwld = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnwld = crusnwld(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnwld > 110) & (ffcrusnwld < 226))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnwld > 0) & (ffcrusnwld < 111))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd19 > NULL)
+	{
+		int ffcrusnusa = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnusa = crusnusa(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnusa > 104) & (ffcrusnusa < 215))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (214 - ffcrusnusa) / 109.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnusa) / 104.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnusa > 104) & (ffcrusnusa < 215))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (214 - ffcrusnusa) / 109.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnusa) / 104.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd20 > NULL)
+	{
+		int ffcrusnusa = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnusa = crusnusa(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnusa > 104) & (ffcrusnusa < 215))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (214 - ffcrusnusa) / 109.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnusa) / 104.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnusa > 104) & (ffcrusnusa < 215))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (214 - ffcrusnusa) / 109.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnusa) / 104.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd21 > NULL)
+	{
+		int ffcrusnusa = 0;
+		{
+			INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+			INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
+			INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
+			UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
+			ffcrusnusa = crusnusa(ffcru6);
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(ffcru6);
+			helpers->log((char *)ffs.c_str());
+
+			if (FFBMode == 0)
+			{
+				if ((ffcrusnusa > 104) & (ffcrusnusa < 215))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (214 - ffcrusnusa) / 109.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnusa) / 104.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+			else
+			{
+				if ((ffcrusnusa > 104) & (ffcrusnusa < 215))
+				{
+					helpers->log("moving wheel left");
+					double percentForce = (214 - ffcrusnusa) / 109.0;
+					double percentLength = 100;
+					triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+				}
+				else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
+				{
+					helpers->log("moving wheel right");
+					double percentForce = (ffcrusnusa) / 104.0;
+					double percentLength = 100;
+					triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+				}
+			}
+		}
+	}
+	if (hWnd22 > NULL)
+	{
+		INT_PTR ffoff1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ffoff2 = helpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
+		INT_PTR ffoff3 = helpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
+		UINT8 ffoff6 = helpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
+		std::string ffs = std::to_string(ffoff6);
+		helpers->log((char *)ffs.c_str());
+
+		if (FFBMode == 0)
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd23 > NULL)
+	{
+		INT_PTR ffoff1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ffoff2 = helpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
+		INT_PTR ffoff3 = helpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
+		UINT8 ffoff6 = helpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ffoff6);
+		helpers->log((char *)ffs.c_str());
+
+		if (FFBMode == 0)
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd24 > NULL)
+	{
+		INT_PTR ffoff1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ffoff2 = helpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
+		INT_PTR ffoff3 = helpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
+		UINT8 ffoff6 = helpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ffoff6);
+		helpers->log((char *)ffs.c_str());
+
+		if (FFBMode == 0)
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd25 > NULL)
+	{
+		INT_PTR ffoff1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ffoff2 = helpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
+		INT_PTR ffoff3 = helpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
+		UINT8 ffoff6 = helpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ffoff6);
+		helpers->log((char *)ffs.c_str());
+
+		if (FFBMode == 0)
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
+	}
+	if (hWnd26 > NULL)
+	{
+		INT_PTR ffoff1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
+		INT_PTR ffoff2 = helpers->ReadIntPtr(ffoff1 + 0x290, /* isRelativeOffset*/ false);
+		INT_PTR ffoff3 = helpers->ReadIntPtr(ffoff2 + 0x650, /* isRelativeOffset*/ false);
+		UINT8 ffoff6 = helpers->ReadByte(ffoff3 + 0x248, /* isRelativeOffset */ false); //OffRoadChallenge32bit
+		helpers->log("got value: ");
+		std::string ffs = std::to_string(ffoff6);
+		helpers->log((char *)ffs.c_str());
+
+		if (FFBMode == 0)
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		else
+		{
+			if ((ffoff6 > 0x83) & (ffoff6 < 0x100))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (255 - ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
+			}
+			else if ((ffoff6 > 0x00) & (ffoff6 < 0x7D))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ffoff6) / 124.0;
+				double percentLength = 100;
+				triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+			}
+		}
 	}
 }

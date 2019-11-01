@@ -136,197 +136,178 @@ static int GearChangeThread(void* ptr)
 	return 0;
 }
 
-static int RunningThread(void* ptr)
+void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
+	if (!init)
 	{
-		if (!init)
-		{
-			init = true;
-			SDL_CreateThread(InputThread, "InputThread", (void*)NULL);
-			SDL_CreateThread(SpamThread, "SpamThread", (void*)NULL);
-		}
-
-		float spring = myHelpers->ReadFloat32(0x196F18C, true);
-		float friction = myHelpers->ReadFloat32(0x196F190, true);
-		float collisions = myHelpers->ReadFloat32(0x196F194, true);
-		float tiresSlip = myHelpers->ReadFloat32(0x196F188, true);
-		int speed = myHelpers->ReadInt32(0x196FEBC, true);
-		std::string msg = "spring: " + std::to_string(spring) + " | friction: " + std::to_string(friction)
-			+ " | collisions: " + std::to_string(collisions) + " | tires slip: " + std::to_string(tiresSlip)
-			+ " | speed: " + std::to_string(speed);
-		myHelpers->log((char*)msg.c_str());
-
-		double percentForce;
-		if (0.001 > spring && !gameFfbStarted)
-		{
-			myHelpers->log("fake spring+friction until game's FFB starts");
-			percentForce = 0.3 * SpringStrength / 100.0;
-			myTriggers->Spring(percentForce);
-			percentForce = 0.5 * FrictionStrength / 100.0;
-			myTriggers->Friction(percentForce);
-		}
-		else
-		{
-			if (!gameFfbStarted)
-			{
-				myHelpers->log("game's FFB started");
-				gameFfbStarted = true;
-			}
-			percentForce = (1.0 * spring) * SpringStrength / 100.0;
-			myTriggers->Spring(percentForce);
-			percentForce = (1.0 * friction) * FrictionStrength / 100.0;
-			myTriggers->Friction(percentForce);
-		}
-
-		if (0 < collisions)
-		{
-			if (0.209 <= collisions && 0.311 >= collisions)
-			{
-				myHelpers->log("joint/stripe on the right");
-				percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
-				myTriggers->Sine(80, 80, percentForce);
-				myTriggers->Rumble(0, percentForce, 150);
-			}
-			else
-			{
-				myHelpers->log("collision on the right");
-				percentForce = (1.0 * collisions) * CollisionsStrength / 100.0;
-				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				myTriggers->Rumble(0, percentForce, 150);
-			}
-		}
-		else if (0 > collisions)
-		{
-			if (-0.209 >= collisions && -0.311 <= collisions)
-			{
-				myHelpers->log("joint/stripe on the left");
-				percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
-				myTriggers->Sine(80, 80, percentForce);
-				myTriggers->Rumble(0, -1.0 * percentForce, 150);
-			}
-			else
-			{
-				myHelpers->log("collision on the left");
-				percentForce = (-1.0 * collisions) * CollisionsStrength / 100.0;
-				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				myTriggers->Rumble(0, percentForce, 150);
-			}
-		}
-		else
-		{
-			myHelpers->log("resetting collision");
-			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, 0);
-		}
-
-		if (0 < tiresSlip)
-		{
-			myHelpers->log("tires slip left");
-			bool highSpeedVibrations = (294 <= speed) && (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
-			percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
-			myTriggers->Sine(100, 100, percentForce);
-
-			if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
-			{
-				myTriggers->Rumble(0, -1.0 * percentForce, 150);
-			}
-		}
-		else if (0 > tiresSlip)
-		{
-			myHelpers->log("tires slip right");
-			bool highSpeedVibrations = (294 <= speed) && (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
-			percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
-			myTriggers->Sine(100, 100, percentForce);
-
-			if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
-			{
-				myTriggers->Rumble(0, percentForce, 150);
-			}
-		}
-
-		INT_PTR ptr1 = myHelpers->ReadIntPtr(0x199A450, true);
-		UINT8 gear = myHelpers->ReadByte(ptr1 + 0x398, false);
-
-		if (0 < WheelSpinStrength)
-		{
-			INT_PTR ptr1 = myHelpers->ReadIntPtr(0x1948F10, true);
-			INT_PTR ptr2 = myHelpers->ReadIntPtr(ptr1 + 0x180 + 0xa8 + 0x18, false);
-			UINT8 power = myHelpers->ReadByte(ptr2 + 0x98, false);
-			int rpm = myHelpers->ReadInt32(0x1970038, true);
-			int diff = 0x0A <= power ? 0 : 20;
-
-			if (
-				1 == gear && 10 < speed && (
-				((30 - diff) > speed && 3500 < rpm)
-					|| ((55 - diff) > speed && 5500 < rpm)
-					|| ((75 - diff) > speed && 7000 < rpm)
-					|| ((100 - diff) > speed && 7800 < rpm)
-					)
-				)
-			{
-				percentForce = (((100.0 - speed) / 100.0) * ((rpm * 100.0 / 8500.0) / 100.0)) * WheelSpinStrength / 100.0;
-				myTriggers->Sine(120, 120, percentForce);
-				myTriggers->Rumble(0, percentForce, 150);
-
-				msg = "tires spin: gear: " + std::to_string(gear) + " | speed: " + std::to_string(speed)
-					+ " | rpm: " + std::to_string(rpm) + " | force: " + std::to_string(percentForce);
-				myHelpers->log((char*)msg.c_str());
-			}
-			else if (
-				2 == gear && 10 < speed && (
-				((110 - (2 * diff)) > speed && 5000 < rpm)
-					|| ((130 - (2 * diff)) > speed && 6000 < rpm)
-					|| ((145 - (2 * diff)) > speed && 6500 < rpm)
-					|| ((160 - (2 * diff)) > speed && 7000 < rpm)
-					)
-				)
-			{
-				percentForce = (((160.0 - speed) / 150.0) * ((rpm * 100.0 / 8500.0) / 100.0)) * WheelSpinStrength / 100.0;
-				myTriggers->Sine(120, 120, percentForce);
-				myTriggers->Rumble(0, percentForce, 150);
-
-				msg = "tires spin: gear: " + std::to_string(gear) + " | speed: " + std::to_string(speed)
-					+ " | rpm: " + std::to_string(rpm) + " | force: " + std::to_string(percentForce);
-				myHelpers->log((char*)msg.c_str());
-			}
-		}
-
-		if (0 < GearChangeStrength)
-		{
-			ptr1 = myHelpers->ReadIntPtr(0x199A468, true);
-			float time = myHelpers->ReadFloat32(ptr1 + 0x18, false);
-
-			if (oldgear != gear && 0 < gear && 0 < time)
-			{
-				msg = "oldgear: " + std::to_string(oldgear) + " | gear: " + std::to_string(gear)
-					+ " | time: " + std::to_string(time) + " | speed: " + std::to_string(speed);
-				myHelpers->log((char*)msg.c_str());
-			}
-
-			if (oldgear != gear && 0 < gear && 0.5 < time && 0.1 <= speed)
-			{
-				SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
-			}
-			oldgear = gear;
-		}
-	}
-	return 0;
-}
-
-void WMMT5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers){
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	while (SDL_WaitEvent(&e) != 0)
-	{
+		init = true;
 		myTriggers = triggers;
 		myConstants = constants;
 		myHelpers = helpers;
-	}	
+		SDL_CreateThread(InputThread, "InputThread", (void*)NULL);
+		SDL_CreateThread(SpamThread, "SpamThread", (void*)NULL);
+	}
+
+	float spring = helpers->ReadFloat32(0x196F18C, true);
+	float friction = helpers->ReadFloat32(0x196F190, true);
+	float collisions = helpers->ReadFloat32(0x196F194, true);
+	float tiresSlip = helpers->ReadFloat32(0x196F188, true);
+	int speed = helpers->ReadInt32(0x196FEBC, true);
+	std::string msg = "spring: " + std::to_string(spring) + " | friction: " + std::to_string(friction)
+		+ " | collisions: " + std::to_string(collisions) + " | tires slip: " + std::to_string(tiresSlip)
+		+ " | speed: " + std::to_string(speed);
+	helpers->log((char*)msg.c_str());
+
+	double percentForce;
+	if (0.001 > spring && !gameFfbStarted)
+	{
+		helpers->log("fake spring+friction until game's FFB starts");
+		percentForce = 0.3 * SpringStrength / 100.0;
+		triggers->Spring(percentForce);
+		percentForce = 0.5 * FrictionStrength / 100.0;
+		triggers->Friction(percentForce);
+	}
+	else
+	{
+		if (!gameFfbStarted)
+		{
+			helpers->log("game's FFB started");
+			gameFfbStarted = true;
+		}
+		percentForce = (1.0 * spring) * SpringStrength / 100.0;
+		triggers->Spring(percentForce);
+		percentForce = (1.0 * friction) * FrictionStrength / 100.0;
+		triggers->Friction(percentForce);
+	}
+
+	if (0 < collisions)
+	{
+		if (0.209 <= collisions && 0.311 >= collisions)
+		{
+			helpers->log("joint/stripe on the right");
+			percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
+			triggers->Sine(80, 80, percentForce);
+			triggers->Rumble(0, percentForce, 150);
+		}
+		else
+		{
+			helpers->log("collision on the right");
+			percentForce = (1.0 * collisions) * CollisionsStrength / 100.0;
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			triggers->Rumble(0, percentForce, 150);
+		}
+	}
+	else if (0 > collisions)
+	{
+		if (-0.209 >= collisions && -0.311 <= collisions)
+		{
+			helpers->log("joint/stripe on the left");
+			percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
+			triggers->Sine(80, 80, percentForce);
+			triggers->Rumble(0, -1.0 * percentForce, 150);
+		}
+		else
+		{
+			helpers->log("collision on the left");
+			percentForce = (-1.0 * collisions) * CollisionsStrength / 100.0;
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			triggers->Rumble(0, percentForce, 150);
+		}
+	}
+	else
+	{
+		helpers->log("resetting collision");
+		triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+	}
+
+	if (0 < tiresSlip)
+	{
+		helpers->log("tires slip left");
+		bool highSpeedVibrations = (294 <= speed) && (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
+		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
+		triggers->Sine(100, 100, percentForce);
+
+		if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
+		{
+			triggers->Rumble(0, -1.0 * percentForce, 150);
+		}
+	}
+	else if (0 > tiresSlip)
+	{
+		helpers->log("tires slip right");
+		bool highSpeedVibrations = (294 <= speed) && (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
+		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
+		triggers->Sine(100, 100, percentForce);
+
+		if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
+		{
+			triggers->Rumble(0, percentForce, 150);
+		}
+	}
+
+	INT_PTR ptr1 = helpers->ReadIntPtr(0x199A450, true);
+	UINT8 gear = helpers->ReadByte(ptr1 + 0x398, false);
+
+	if (0 < WheelSpinStrength)
+	{
+		INT_PTR ptr1 = myHelpers->ReadIntPtr(0x1948F10, true);
+		INT_PTR ptr2 = myHelpers->ReadIntPtr(ptr1 + 0x180 + 0xa8 + 0x18, false);
+		UINT8 power = myHelpers->ReadByte(ptr2 + 0x98, false);
+		int rpm = helpers->ReadInt32(0x1970038, true);
+		int diff = 0x0A <= power ? 0 : 20;
+
+		if (
+			1 == gear && 10 < speed && (
+				((30 - diff) > speed && 3500 < rpm)
+				|| ((55 - diff) > speed && 5500 < rpm)
+				|| ((75 - diff) > speed && 7000 < rpm)
+				|| ((100 - diff) > speed && 7800 < rpm)
+			)
+		)
+		{
+			percentForce = (((100.0 - speed) / 100.0) * ((rpm * 100.0 / 8500.0) / 100.0)) * WheelSpinStrength / 100.0;
+			triggers->Sine(120, 120, percentForce);
+			triggers->Rumble(0, percentForce, 150);
+
+			msg = "tires spin: gear: " + std::to_string(gear) + " | speed: " + std::to_string(speed)
+				+ " | rpm: " + std::to_string(rpm) + " | force: " + std::to_string(percentForce);
+			helpers->log((char*)msg.c_str());
+		}
+		else if (
+			2 == gear && 10 < speed && (
+				((110 - (2 * diff)) > speed && 5000 < rpm)
+				|| ((130 - (2 * diff)) > speed && 6000 < rpm)
+				|| ((145 - (2 * diff)) > speed && 6500 < rpm)
+				|| ((160 - (2 * diff)) > speed && 7000 < rpm)
+			)
+		)
+		{
+			percentForce = (((160.0 - speed) / 150.0) * ((rpm * 100.0 / 8500.0) / 100.0)) * WheelSpinStrength / 100.0;
+			triggers->Sine(120, 120, percentForce);
+			triggers->Rumble(0, percentForce, 150);
+
+			msg = "tires spin: gear: " + std::to_string(gear) + " | speed: " + std::to_string(speed)
+				+ " | rpm: " + std::to_string(rpm) + " | force: " + std::to_string(percentForce);
+			helpers->log((char*)msg.c_str());
+		}
+	}
+
+	if (0 < GearChangeStrength)
+	{
+		ptr1 = helpers->ReadIntPtr(0x199A468, true);
+		float time = helpers->ReadFloat32(ptr1 + 0x18, false);
+
+		if (oldgear != gear && 0 < gear && 0 < time)
+		{
+			msg = "oldgear: " + std::to_string(oldgear) + " | gear: " + std::to_string(gear)
+				+ " | time: " + std::to_string(time) + " | speed: " + std::to_string(speed);
+			helpers->log((char*)msg.c_str());
+		}
+
+		if (oldgear != gear && 0 < gear && 0.5 < time && 0.1 <= speed)
+		{
+			SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
+		}
+		oldgear = gear;
+	}
 }

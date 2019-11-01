@@ -13,14 +13,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "InitialD8.h"
-#include "SDL.h"
-static EffectTriggers* myTriggers;
-static EffectConstants* myConstants;
-static Helpers* myHelpers;
-static SDL_Event e;
-static HANDLE hSection;
-static LPVOID secData;
-static int ffbOffset = 0;
 
 static int carscollide(int ffcollide) {
 	switch (ffcollide) {
@@ -130,110 +122,77 @@ static int rubbingwalls(int ffwalls) {
 	}
 }
 
-static int TeknoParrotGame()
+void InitialD8::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers)
 {
-	hSection = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, 64, L"TeknoParrot_JvsState");
-	secData = MapViewOfFile(hSection, FILE_MAP_ALL_ACCESS, 0, 0, 64);
-	ffbOffset = *((int*)secData + 2);
-	return 0;
-}
-
-static int GetTeknoParrotFFB()
-{
-	ffbOffset = *((int*)secData + 2);
-	return ffbOffset;
-}
-
-static int RunningThread(void* ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
+	int ffrubbingwalls = 0;
+	int ffcarcollision = 0;
 	{
-		int ffrubbingwalls = 0;
-		int ffcarcollision = 0;
-		{
-			wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
-			int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
-			myHelpers->log("in ID6 Ffbloop");
-			const int ff = GetTeknoParrotFFB();
-			std::string ffs = std::to_string(ff);
-			myHelpers->log((char*)ffs.c_str());
-			ffcarcollision = carscollide(ff);
-			ffrubbingwalls = rubbingwalls(ff);
+		wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+		int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
+		helpers->log("in ID8 Ffbloop");
+		const int ff = GetTeknoParrotFFB();
+		std::string ffs = std::to_string(ff);
+		helpers->log((char *)ffs.c_str());
+		ffcarcollision = carscollide(ff);
+		ffrubbingwalls = rubbingwalls(ff);
 
-			if (ff == 0x60000)
+		if (ff == 0x60000)
+		{
+			triggers->Spring(0.8);
+		}
+		if (ffrubbingwalls > 0) // car rubbing against wall
+		{
+			double percentLength = 200;
+			double percentForce = (ffrubbingwalls / 31.0);
+			triggers->Inertia(percentForce);
+			triggers->Friction(percentForce);
+			triggers->Damper(percentForce);
+			triggers->Rumble(percentForce, percentForce, percentLength);
+		}
+		if (ffcarcollision > 0) //cars colliding or rubbing with each other
+		{
+			double percentLength = 200;
+			double percentForce = (ffcarcollision / 16.0);
+			triggers->Inertia(percentForce);
+			triggers->Friction(percentForce);
+			triggers->Damper(percentForce);
+			triggers->Rumble(percentForce, percentForce, percentLength);
+		}
+		if (FFBMode == 1)
+		{
+			if ((ff > 0x40037) & (ff < 0x40080))
 			{
-				myTriggers->Spring(0.8);
+				double percentForce = (262272 - ff) / 72.0;
+				double percentLength = 100;
+				double powforce = (ff - 262199) / 72.0;
+				triggers->Rumble(pow(percentForce, powforce), 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, powforce)));
 			}
-			if (ffrubbingwalls > 0) // car rubbing against wall
+			else if ((ff > 0x40100) & (ff < 0x40149))
 			{
-				double percentLength = 200;
-				double percentForce = (ffrubbingwalls / 31.0);
-				myTriggers->Friction(percentForce);
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-			}
-			if (ffcarcollision > 0) //cars colliding or rubbing with each other
-			{
-				double percentLength = 200;
-				double percentForce = (ffcarcollision / 16.0);
-				myTriggers->Friction(percentForce);
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-			}
-			if (FFBMode == 1)
-			{
-				if ((ff > 0x40037)& (ff < 0x40080))
-				{
-					double percentForce = (262272 - ff) / 72.0;
-					double percentLength = 100;
-					double powforce = (ff - 262199) / 72.0;
-					myTriggers->Rumble(pow(percentForce, powforce), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, powforce)));
-				}
-				else if ((ff > 0x40100)& (ff < 0x40149))
-				{
-					double percentForce = (ff - 262400) / 72.0;
-					double percentLength = 100;
-					double powforce = (262473 - ff) / 72.0;
-					myTriggers->Rumble(0, pow(percentForce, powforce), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, powforce)));
-				}
-			}
-			else
-			{
-				if ((ff > 0x40037)& (ff < 0x40080))
-				{
-					double percentForce = (262272 - ff) / 72.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ff > 0x40100)& (ff < 0x40149))
-				{
-					double percentForce = (ff - 262400) / 72.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
+				double percentForce = (ff - 262400) / 72.0;
+				double percentLength = 100;
+				double powforce = (262473 - ff) / 72.0;
+				triggers->Rumble(0, pow(percentForce, powforce), percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, powforce)));
 			}
 		}
-	}
-}
-
-void InitialD8::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
-	TeknoParrotGame();
-
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	while (SDL_WaitEvent(&e) != 0)
-	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
+		else
+		{
+			if ((ff > 0x40037) & (ff < 0x40080))
+			{
+				double percentForce = (262272 - ff) / 72.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((ff > 0x40100) & (ff < 0x40149))
+			{
+				double percentForce = (ff - 262400) / 72.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
 	}
 }

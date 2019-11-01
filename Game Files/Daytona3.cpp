@@ -140,14 +140,8 @@ static int RunningThread(void *ptr)
 }
 
 void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
 	SDL_Thread *thread;
 	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
-
 	UINT8 gear = helpers->ReadByte(0x019B468C, /* isRelativeOffset */ false);
 	int ff = helpers->ReadInt32(0x15AFC46, /* isRelativeOffset */ false);
 	helpers->log("got value: ");

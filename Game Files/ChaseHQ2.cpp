@@ -13,15 +13,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "ChaseHQ2.h"
-#include "SDL.h"
-static SDL_Event e;
-static EffectTriggers* myTriggers;
-static EffectConstants* myConstants;
-static Helpers* myHelpers;
 
 int ttx2chasehq2(int ffRaw) {
 	switch (ffRaw) {
-
+		// moving right, from weakest to strongest (30 => 16).
 	case 28672:
 		return 30;
 	case 24640:
@@ -53,6 +48,7 @@ int ttx2chasehq2(int ffRaw) {
 	case 30816:
 		return 16;
 
+		// moving left, from weakest to strongest (15 => 1)
 	case 20480:
 		return 15;
 	case 16448:
@@ -89,61 +85,53 @@ int ttx2chasehq2(int ffRaw) {
 	}
 }
 
-static int RunningThread(void* ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
-	{
-		int ff = 0;
-		{
-			long ffAddress = myHelpers->ReadInt32(0x130B558, true);
-			int ffRaw = myHelpers->ReadInt32(ffAddress + 0x45, false);
-			int lampArray[8] = { (16384) + 1, 16 ,1024 ,512, 128, 8, 256 };
-			for (int i = 0; i < 7; i++) {
-				if ((ffRaw & lampArray[i]) == lampArray[i]) {
-					ffRaw -= lampArray[i];
-				}
-			};
-
-			ff = ttx2chasehq2(ffRaw);
-		}
-
-		myHelpers->log("got value: ");
-		std::string ffs = std::to_string(ff);
-		myHelpers->log((char*)ffs.c_str());
-
-		if (ff > 15)
-		{
-			myHelpers->log("moving wheel right");
-			double percentForce = (31 - ff) / 15.0;
-			double percentLength = 100;
-			myTriggers->Rumble(percentForce, 0, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if (ff > 0)
-		{
-			myHelpers->log("moving wheel left");
-			double percentForce = (16 - ff) / 15.0;
-			double percentLength = 100;
-			myTriggers->Rumble(0, percentForce, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-	}
-}
-
 void ChaseHQ2::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	while (SDL_WaitEvent(&e) != 0)
+	int ff = 0;
 	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
+		long ffAddress = helpers->ReadInt32(0x130B558, /* isRelativeOffset*/ true);
+		int ffRaw = helpers->ReadInt32(ffAddress + 0x45, /* isRelativeOffset */ false);
+		int lampArray[8] = { (16384) + 1, 16 ,1024 ,512, 128, 8, 256 };//The 1 isn't needed but I wasn't sure how to get the 16384 to see the first digit any other way lol
+		for (int i = 0; i < 7; i++) {
+			if ((ffRaw & lampArray[i]) == lampArray[i]) {
+				ffRaw -= lampArray[i];
+			}
+		};
+
+		ff = ttx2chasehq2(ffRaw);
+	}
+
+	helpers->log("got value: ");
+	std::string ffs = std::to_string(ff);
+	helpers->log((char *)ffs.c_str());
+
+	if (ff > 15)
+	{
+		helpers->log("moving wheel right");
+		// assume that 30 is the weakest and 16 is the strongest
+		double percentForce = (31 - ff) / 15.0;
+		double percentLength = 100;
+		// direction from left => makes wheel turn right
+		triggers->Rumble(percentForce, 0, percentLength);
+		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce); // old logic: 31 - ff
+		lastWasStop = 0;
+	}
+	else if (ff > 0)
+	{
+		helpers->log("moving wheel left");
+		// assume that 1 is the strongest and 15 is the weakest
+		double percentForce = (16 - ff) / 15.0;
+		double percentLength = 100;
+		// direction from right => makes wheel turn left
+		triggers->Rumble(0, percentForce, percentLength);
+		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce); // old logic: 15 - ff
+		lastWasStop = 0;
+	}
+	else
+	{
+		if (lastWasStop == 0) {
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0); // just pass the hash of 0 strength so we update lastEffectHash & lastEffectTime
+			lastWasStop = 1;
+		}
 	}
 }

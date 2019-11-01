@@ -274,10 +274,6 @@ static int RunningThread(void *ptr)
 
 void HOTD4::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
 	SDL_Thread *thread;
 	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
 
@@ -330,4 +326,8 @@ void HOTD4::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		myConstants = constants;
 		myHelpers = helpers;
 	}
+
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
 }

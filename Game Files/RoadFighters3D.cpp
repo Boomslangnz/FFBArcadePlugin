@@ -292,10 +292,6 @@ static int RunningThread(void *ptr)
 
 void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
 	if (InputDeviceWheelEnable == 1)
 	{
 		SDL_Thread *thread;

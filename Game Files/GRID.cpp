@@ -75,10 +75,13 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	}
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 	myTriggers = triggers;
 	myConstants = constants;
 	myHelpers = helpers;
 
+=======
+>>>>>>> parent of ea7f309... Make every game plugin have Running Thread etc
 	SDL_Thread* thread;
 	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
 =======
@@ -113,9 +116,16 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 	}
+<<<<<<< HEAD
 	oldgear = newgear;
 	myTriggers = triggers;
 	myConstants = constants;
 	myHelpers = helpers;
 >>>>>>> parent of ede0f04... Fix GRID for Rumble to use duration of New Rumble
+=======
+
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
+>>>>>>> parent of ea7f309... Make every game plugin have Running Thread etc
 }

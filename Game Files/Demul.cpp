@@ -18,12 +18,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
-#include "SDL.h"
-
-static SDL_Event e;
-static EffectTriggers* myTriggers;
-static EffectConstants* myConstants;
-static Helpers* myHelpers;
 
 int nascar(int ffnas) {
 	switch (ffnas) {
@@ -116,84 +110,65 @@ BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 	return true; // Need to continue enumerating windows
 }
 
-static int RunningThread(void* ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
+void Demul::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
+
+	const TCHAR substring[] = TEXT("NASCAR");
+	EnumWindows(FindWindowBySubstr, (LPARAM)substring);
+	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
+	int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
+
 	{
-		const TCHAR substring[] = TEXT("NASCAR");
-		EnumWindows(FindWindowBySubstr, (LPARAM)substring);
-		wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
-		int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
-
+		int ffnascar = 0;
 		{
-			int ffnascar = 0;
+			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring))
 			{
-				if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring))
-				{
-					UINT8 ffnas = myHelpers->ReadByte(0x30060C, /* isRelativeOffset */ true); //Nascar Arcade
-					std::string ffs = std::to_string(ffnas);
-					myHelpers->log((char*)ffs.c_str());
-					myHelpers->log("got value: ");
-					ffnascar = nascar(ffnas);
+				UINT8 ffnas = helpers->ReadByte(0x30060C, /* isRelativeOffset */ true); //Nascar Arcade
+				std::string ffs = std::to_string(ffnas);
+				helpers->log((char *)ffs.c_str());
+				helpers->log("got value: ");
+				ffnascar = nascar(ffnas);
 
-					if (FFBMode == 0)
+				if (FFBMode == 0)
+				{
+					if ((ffnascar > 16) & (ffnascar < 33))
 					{
-						if ((ffnascar > 16)& (ffnascar < 33))
-						{
-							myHelpers->log("moving wheel left");
-							double percentForce = (ffnascar - 16) / 16.0;
-							double percentLength = 100;
-							myTriggers->Rumble(percentForce, 0, percentLength);
-							myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-						}
-						else if ((ffnascar > 0)& (ffnascar < 17))
-						{
-							myHelpers->log("moving wheel right");
-							double percentForce = (17 - ffnascar) / 16.0;
-							double percentLength = 100;
-							myTriggers->Rumble(0, percentForce, percentLength);
-							myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-						}
+						helpers->log("moving wheel left");
+						double percentForce = (ffnascar - 16) / 16.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 					}
-					else
+					else if ((ffnascar > 0) & (ffnascar < 17))
 					{
-						if ((ffnascar > 16)& (ffnascar < 33))
-						{
-							myHelpers->log("moving wheel left");
-							double percentForce = (ffnascar - 16) / 16.0;
-							double percentLength = 100;
-							myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-							myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-						}
-						else if ((ffnascar > 0)& (ffnascar < 17))
-						{
-							myHelpers->log("moving wheel right");
-							double percentForce = (17 - ffnascar) / 16.0;
-							double percentLength = 100;
-							myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-							myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-						}
+						helpers->log("moving wheel right");
+						double percentForce = (17 - ffnascar) / 16.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+				}
+				else
+				{
+					if ((ffnascar > 16) & (ffnascar < 33))
+					{
+						helpers->log("moving wheel left");
+						double percentForce = (ffnascar - 16) / 16.0;
+						double percentLength = 100;
+						triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
+					}
+					else if ((ffnascar > 0) & (ffnascar < 17))
+					{
+						helpers->log("moving wheel right");
+						double percentForce = (17 - ffnascar) / 16.0;
+						double percentLength = 100;
+						triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
 					}
 				}
 			}
 		}
 	}
+
 }
 
-void Demul::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
-
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	while (SDL_WaitEvent(&e) != 0)
-	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
-	}
-}

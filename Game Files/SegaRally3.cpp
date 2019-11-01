@@ -13,73 +13,40 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "SegaRally3.h"
-#include "SDL.h"
-static EffectTriggers* myTriggers;
-static EffectConstants* myConstants;
-static Helpers* myHelpers;
-static SDL_Event e;
-static HANDLE hSection;
-static LPVOID secData;
-static int ffbOffset = 0;
-
-static int TeknoParrotGame()
-{
-	hSection = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, 64, L"TeknoParrot_JvsState");
-	secData = MapViewOfFile(hSection, FILE_MAP_ALL_ACCESS, 0, 0, 64);
-	ffbOffset = *((int*)secData + 2);
-	return 0;
-}
-
-static int GetTeknoParrotFFB()
-{
-	ffbOffset = *((int*)secData + 2);
-	return ffbOffset;
-}
-
-static int RunningThread(void* ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
-	{
-		myHelpers->log("in SR3 Ffbloop");
-		const int ff = GetTeknoParrotFFB();
-		std::string ffs = std::to_string(ff);
-		myHelpers->log((char*)ffs.c_str());
-
-		if (ff > 15)
-		{
-			myHelpers->log("moving wheel right");
-			double percentForce = (31 - ff) / 15.0;
-			double percentLength = 100;
-			myTriggers->Rumble(percentForce, 0, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if (ff > 0)
-		{
-			myHelpers->log("moving wheel left");
-			double percentForce = (16 - ff) / 15.0;
-			double percentLength = 100;
-			myTriggers->Rumble(0, percentForce, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-	}
-}
 
 void SegaRally3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+	helpers->log("in SR3 Ffbloop");
+	const int ff = GetTeknoParrotFFB();
+	std::string ffs = std::to_string(ff);
+	helpers->log((char *)ffs.c_str());
 
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-
-	TeknoParrotGame();
-
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	while (SDL_WaitEvent(&e) != 0)
+	if (ff > 15)
 	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
-	}	
+		helpers->log("moving wheel right");
+		// assume that 30 is the weakest and 16 is the strongest
+		double percentForce = (31 - ff) / 15.0;
+		double percentLength = 100;
+		// direction from left => makes wheel turn right
+		triggers->Rumble(percentForce, 0, percentLength);
+		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		lastWasStop = 0;
+	}
+	else if (ff > 0)
+	{
+		helpers->log("moving wheel left");
+		// assume that 1 is the strongest and 15 is the weakest
+		double percentForce = (16 - ff) / 15.0;
+		double percentLength = 100;
+		// direction from right => makes wheel turn left
+		triggers->Rumble(0, percentForce, percentLength);
+		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		lastWasStop = 0;
+	}
+	else
+	{
+		if (lastWasStop == 0) {
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0); // just pass the hash of 0 strength so we update lastEffectHash & lastEffectTime
+			lastWasStop = 1;
+		}
+	}
 }
