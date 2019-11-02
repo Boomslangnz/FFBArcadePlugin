@@ -111,12 +111,9 @@
     <ClCompile Include="Game Files\ButtonRumble.cpp">
       <Filter>Game Files</Filter>
     </ClCompile>
-    <ClCompile Include="Game Files\Mame0199.cpp">
-      <Filter>Game Files</Filter>
-    </ClCompile>
-    <ClCompile Include="Game Files\Mame0206.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
+    <ClCompile Include="Game Files\Mame.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -225,16 +222,13 @@
     <ClInclude Include="Game Files\ButtonRumble.h">
       <Filter>Game Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game Files\Mame0199.h">
-      <Filter>Game Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\Mame0206.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game Files\HOTD4.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\GRID.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\Mame.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>
