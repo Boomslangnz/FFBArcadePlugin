@@ -153,6 +153,9 @@ static int RunningThread(void *ptr)
 }
 
 void OutRun2Real::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
 	SDL_Thread *thread;
 	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
 		
