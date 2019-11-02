@@ -1693,7 +1693,7 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	std::string Mame0206UI64bit("MAME0206UI64bit");
 	std::string mameversion(MameVersionChar);
 
-	if ((hWnd > NULL) || (hWnd1 > NULL) || (hWnd2 > NULL) || (hWnd7 > NULL))
+	if ((hWnd > NULL) || (hWnd1 > NULL) || (hWnd2 > NULL) || (hWnd7 > NULL)) //Sfrush
 	{
 		int ffsanfranrush = 0;
 		{
@@ -1737,8 +1737,8 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 			{
 				INT_PTR ff = helpers->ReadIntPtr(0x0E2B20A4, true);
 				INT_PTR ff1 = helpers->ReadIntPtr(ff + 0x134, false);
-				INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x5E8, false);
-				INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x42C, false);
+				INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x5D8, false);
+				INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x564, false);
 				FFB = helpers->ReadByte(ff3 + 0x550, false);
 			}
 			if (mameversion.compare(Mame020664bit) == 0)
@@ -1780,61 +1780,61 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 			}
 		}
 	}
-	if ((hWnd4 > NULL) || (hWnd5 > NULL) || (hWnd6 > NULL))
+	if ((hWnd4 > NULL) || (hWnd5 > NULL) || (hWnd6 > NULL)) //Rave Racer
 	{
 		int ffrave = 0;
 		{
 			if (mameversion.compare(Mame019932bit) == 0)
 			{
-				INT_PTR ffrave0 = helpers->ReadIntPtr(0x078D624C, /* isRelativeOffset*/ true);
-				INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x10, /* isRelativeOffset*/ false);
-				INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x90, /* isRelativeOffset*/ false);
-				INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x18, /* isRelativeOffset*/ false);
-				INT_PTR ffrave4 = helpers->ReadIntPtr(ffrave3 + 0x3D8, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffrave4 + 0x42, /* isRelativeOffset */ false); //Rave Racer 32bit
+				INT_PTR ffrave0 = helpers->ReadIntPtr(0x078D624C, true);
+				INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x10, false);
+				INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x90, false);
+				INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x18, false);
+				INT_PTR ffrave4 = helpers->ReadIntPtr(ffrave3 + 0x3D8, false);
+				FFB = helpers->ReadByte(ffrave4 + 0x42, false);
 			}
 			if (mameversion.compare(Mame019964bit) == 0)
 			{
-				INT_PTR ffrave640 = helpers->ReadIntPtr(0x0C5E4FE8, /* isRelativeOffset*/ true);
-				INT_PTR ffrave641 = helpers->ReadIntPtr(ffrave640 + 0x90, /* isRelativeOffset*/ false);
-				INT_PTR ffrave642 = helpers->ReadIntPtr(ffrave641 + 0x8, /* isRelativeOffset*/ false);
-				INT_PTR ffrave643 = helpers->ReadIntPtr(ffrave642 + 0x130, /* isRelativeOffset*/ false);
-				INT_PTR ffrave644 = helpers->ReadIntPtr(ffrave643 + 0x720, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffrave644 + 0x42, /* isRelativeOffset */ false); //Rave Racer 64bit
+				INT_PTR ffrave640 = helpers->ReadIntPtr(0x0C5E4FE8, true);
+				INT_PTR ffrave641 = helpers->ReadIntPtr(ffrave640 + 0x90, false);
+				INT_PTR ffrave642 = helpers->ReadIntPtr(ffrave641 + 0x8, false);
+				INT_PTR ffrave643 = helpers->ReadIntPtr(ffrave642 + 0x130, false);
+				INT_PTR ffrave644 = helpers->ReadIntPtr(ffrave643 + 0x720, false);
+				FFB = helpers->ReadByte(ffrave644 + 0x42, false);
 			}
 			if (mameversion.compare(Mame0199UI64bit) == 0)
 			{
-				INT_PTR ffraveui640 = helpers->ReadIntPtr(0x0C075FB8, /* isRelativeOffset*/ true);
-				INT_PTR ffraveui641 = helpers->ReadIntPtr(ffraveui640 + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffraveui642 = helpers->ReadIntPtr(ffraveui641 + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffraveui643 = helpers->ReadIntPtr(ffraveui642 + 0x740, /* isRelativeOffset*/ false);
-				INT_PTR ffraveui644 = helpers->ReadIntPtr(ffraveui643 + 0x1F8, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffraveui644 + 0x42, /* isRelativeOffset */ false); //Rave Racer mameui 64bit
+				INT_PTR ffraveui640 = helpers->ReadIntPtr(0x0C075FB8, true);
+				INT_PTR ffraveui641 = helpers->ReadIntPtr(ffraveui640 + 0x48, false);
+				INT_PTR ffraveui642 = helpers->ReadIntPtr(ffraveui641 + 0x48, false);
+				INT_PTR ffraveui643 = helpers->ReadIntPtr(ffraveui642 + 0x740, false);
+				INT_PTR ffraveui644 = helpers->ReadIntPtr(ffraveui643 + 0x1F8, false);
+				FFB = helpers->ReadByte(ffraveui644 + 0x42, false);
 			}
 			if (mameversion.compare(Mame020632bit) == 0)
 			{
-				INT_PTR ffrave0 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x388, /* isRelativeOffset*/ false);
-				INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x1A0, /* isRelativeOffset*/ false);
-				INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x358, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffrave3 + 0x40, /* isRelativeOffset */ false); //Rave Racer 32bit
+				INT_PTR ffrave0 = helpers->ReadIntPtr(0x02426C78, true);
+				INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x388, false);
+				INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x1A0, false);
+				INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x358, false);
+				FFB = helpers->ReadByte(ffrave3 + 0x40, false);
 			}
 			if (mameversion.compare(Mame020664bit) == 0)
 			{
-				INT_PTR ffrave640 = helpers->ReadIntPtr(0x0E198068, /* isRelativeOffset*/ true);
-				INT_PTR ffrave641 = helpers->ReadIntPtr(ffrave640 + 0x2E8, /* isRelativeOffset*/ false);
-				INT_PTR ffrave642 = helpers->ReadIntPtr(ffrave641 + 0x28, /* isRelativeOffset*/ false);
-				INT_PTR ffrave643 = helpers->ReadIntPtr(ffrave642 + 0x0, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffrave643 + 0x40, /* isRelativeOffset */ false); //Rave Racer 64bit
+				INT_PTR ffrave640 = helpers->ReadIntPtr(0x0E198068, true);
+				INT_PTR ffrave641 = helpers->ReadIntPtr(ffrave640 + 0x2E8, false);
+				INT_PTR ffrave642 = helpers->ReadIntPtr(ffrave641 + 0x28, false);
+				INT_PTR ffrave643 = helpers->ReadIntPtr(ffrave642 + 0x0, false);
+				FFB = helpers->ReadByte(ffrave643 + 0x40, false);
 			}
 			if (mameversion.compare(Mame0206UI64bit) == 0)
 			{
-				INT_PTR ffraveui640 = helpers->ReadIntPtr(0x0DBCF058, /* isRelativeOffset*/ true);
-				INT_PTR ffraveui641 = helpers->ReadIntPtr(ffraveui640 + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffraveui642 = helpers->ReadIntPtr(ffraveui641 + 0x40, /* isRelativeOffset*/ false);
-				INT_PTR ffraveui643 = helpers->ReadIntPtr(ffraveui642 + 0x2D8, /* isRelativeOffset*/ false);
-				INT_PTR ffraveui644 = helpers->ReadIntPtr(ffraveui643 + 0x630, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffraveui644 + 0x40, /* isRelativeOffset */ false); //Rave Racer mameui 64bit
+				INT_PTR ffraveui640 = helpers->ReadIntPtr(0x0DBCF058, true);
+				INT_PTR ffraveui641 = helpers->ReadIntPtr(ffraveui640 + 0x48, false);
+				INT_PTR ffraveui642 = helpers->ReadIntPtr(ffraveui641 + 0x40, false);
+				INT_PTR ffraveui643 = helpers->ReadIntPtr(ffraveui642 + 0x2D8, false);
+				INT_PTR ffraveui644 = helpers->ReadIntPtr(ffraveui643 + 0x630, false);
+				FFB = helpers->ReadByte(ffraveui644 + 0x40, false);
 			}
 
 			ffrave = raveracer(FFB);
@@ -1860,54 +1860,54 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	{
 		if (mameversion.compare(Mame019932bit) == 0)
 		{
-			INT_PTR ff2049 = helpers->ReadIntPtr(0x078D624C, /* isRelativeOffset*/ true);
-			INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x10, /* isRelativeOffset*/ false);
-			INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x34, /* isRelativeOffset*/ false);
-			INT_PTR ff20493 = helpers->ReadIntPtr(ff20492 + 0x18, /* isRelativeOffset*/ false);
-			INT_PTR ff20494 = helpers->ReadIntPtr(ff20493 + 0x54, /* isRelativeOffset*/ false);
-			FFB = helpers->ReadByte(ff20494 + 0x4E8, /* isRelativeOffset */ false); //SanFranRush2049
+			INT_PTR ff2049 = helpers->ReadIntPtr(0x078D624C, true);
+			INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x10, false);
+			INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x34, false);
+			INT_PTR ff20493 = helpers->ReadIntPtr(ff20492 + 0x18, false);
+			INT_PTR ff20494 = helpers->ReadIntPtr(ff20493 + 0x54, false);
+			FFB = helpers->ReadByte(ff20494 + 0x4E8, false);
 		}
 		if (mameversion.compare(Mame019964bit) == 0)
 		{
-			INT_PTR ff204964 = helpers->ReadIntPtr(0x0C5E4FE8, /* isRelativeOffset*/ true);
-			INT_PTR ff2049164 = helpers->ReadIntPtr(ff204964 + 0x48, /* isRelativeOffset*/ false);
-			INT_PTR ff2049264 = helpers->ReadIntPtr(ff2049164 + 0x48, /* isRelativeOffset*/ false);
-			INT_PTR ff2049364 = helpers->ReadIntPtr(ff2049264 + 0x310, /* isRelativeOffset*/ false);
-			INT_PTR ff2049464 = helpers->ReadIntPtr(ff2049364 + 0x130, /* isRelativeOffset*/ false);
-			FFB = helpers->ReadByte(ff2049464 + 0x79C, /* isRelativeOffset */ false); //SanFranRush204964bit
+			INT_PTR ff204964 = helpers->ReadIntPtr(0x0C5E4FE8, true);
+			INT_PTR ff2049164 = helpers->ReadIntPtr(ff204964 + 0x48, false);
+			INT_PTR ff2049264 = helpers->ReadIntPtr(ff2049164 + 0x48, false);
+			INT_PTR ff2049364 = helpers->ReadIntPtr(ff2049264 + 0x310, false);
+			INT_PTR ff2049464 = helpers->ReadIntPtr(ff2049364 + 0x130, false);
+			FFB = helpers->ReadByte(ff2049464 + 0x79C, false);
 		}
 		if (mameversion.compare(Mame0199UI64bit) == 0)
 		{
-			INT_PTR ff204964ui = helpers->ReadIntPtr(0x0CF9F7D0, /* isRelativeOffset*/ true);
-			INT_PTR ff2049164ui = helpers->ReadIntPtr(ff204964ui + 0x48, /* isRelativeOffset*/ false);
-			INT_PTR ff2049264ui = helpers->ReadIntPtr(ff2049164ui + 0x48, /* isRelativeOffset*/ false);
-			INT_PTR ff2049364ui = helpers->ReadIntPtr(ff2049264ui + 0x10, /* isRelativeOffset*/ false);
-			INT_PTR ff2049464ui = helpers->ReadIntPtr(ff2049364ui + 0x2D0, /* isRelativeOffset*/ false);
-			FFB = helpers->ReadByte(ff2049464ui + 0x79C, /* isRelativeOffset */ false); //SanFranRush204964bitmameUI
+			INT_PTR ff204964ui = helpers->ReadIntPtr(0x0CF9F7D0, true);
+			INT_PTR ff2049164ui = helpers->ReadIntPtr(ff204964ui + 0x48, false);
+			INT_PTR ff2049264ui = helpers->ReadIntPtr(ff2049164ui + 0x48, false);
+			INT_PTR ff2049364ui = helpers->ReadIntPtr(ff2049264ui + 0x10, false);
+			INT_PTR ff2049464ui = helpers->ReadIntPtr(ff2049364ui + 0x2D0, false);
+			FFB = helpers->ReadByte(ff2049464ui + 0x79C, false);
 		}
 		if (mameversion.compare(Mame020632bit) == 0)
 		{
-			INT_PTR ff2049 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-			INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x388, /* isRelativeOffset*/ false);
-			INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x6C4, /* isRelativeOffset*/ false);
-			FFB = helpers->ReadByte(ff20492 + 0x7C, /* isRelativeOffset */ false); //SanFranRush2049
+			INT_PTR ff2049 = helpers->ReadIntPtr(0x02426C78, true);
+			INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x388, false);
+			INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x6C4, false);
+			FFB = helpers->ReadByte(ff20492 + 0x7C, false);
 		}
 		if (mameversion.compare(Mame020664bit) == 0)
 		{
-			INT_PTR ff204964 = helpers->ReadIntPtr(0x0E198068, /* isRelativeOffset*/ true);
-			INT_PTR ff2049164 = helpers->ReadIntPtr(ff204964 + 0x48, /* isRelativeOffset*/ false);
-			INT_PTR ff2049264 = helpers->ReadIntPtr(ff2049164 + 0x40, /* isRelativeOffset*/ false);
-			INT_PTR ff2049364 = helpers->ReadIntPtr(ff2049264 + 0x540, /* isRelativeOffset*/ false);
-			FFB = helpers->ReadByte(ff2049364 + 0x7FC, /* isRelativeOffset */ false); //SanFranRush204964bit
+			INT_PTR ff204964 = helpers->ReadIntPtr(0x0E198068, true);
+			INT_PTR ff2049164 = helpers->ReadIntPtr(ff204964 + 0x48, false);
+			INT_PTR ff2049264 = helpers->ReadIntPtr(ff2049164 + 0x40, false);
+			INT_PTR ff2049364 = helpers->ReadIntPtr(ff2049264 + 0x540, false);
+			FFB = helpers->ReadByte(ff2049364 + 0x7FC, false);
 		}
 		if (mameversion.compare(Mame0206UI64bit) == 0)
 		{
-			INT_PTR ff204964ui = helpers->ReadIntPtr(0x0DBCF058, /* isRelativeOffset*/ true);
-			INT_PTR ff2049164ui = helpers->ReadIntPtr(ff204964ui + 0x48, /* isRelativeOffset*/ false);
-			INT_PTR ff2049264ui = helpers->ReadIntPtr(ff2049164ui + 0x40, /* isRelativeOffset*/ false);
-			INT_PTR ff2049364ui = helpers->ReadIntPtr(ff2049264ui + 0x7F0, /* isRelativeOffset*/ false);
-			INT_PTR ff2049464ui = helpers->ReadIntPtr(ff2049364ui + 0x48, /* isRelativeOffset*/ false);
-			FFB = helpers->ReadByte(ff2049464ui + 0x62C, /* isRelativeOffset */ false); //SanFranRush204964bitmameUI
+			INT_PTR ff204964ui = helpers->ReadIntPtr(0x0DBCF058, true);
+			INT_PTR ff2049164ui = helpers->ReadIntPtr(ff204964ui + 0x48, false);
+			INT_PTR ff2049264ui = helpers->ReadIntPtr(ff2049164ui + 0x40, false);
+			INT_PTR ff2049364ui = helpers->ReadIntPtr(ff2049264ui + 0x7F0, false);
+			INT_PTR ff2049464ui = helpers->ReadIntPtr(ff2049364ui + 0x48, false);
+			FFB = helpers->ReadByte(ff2049464ui + 0x62C, false);
 		}
 
 		if ((FFB > 0x80)& (FFB < 0x100))
@@ -2003,58 +2003,59 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		{
 			if (mameversion.compare(Mame019932bit) == 0)
 			{
-				INT_PTR ffcru1 = helpers->ReadIntPtr(0x0C61E0A4, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x134, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x2E8, /* isRelativeOffset*/ false);
-				INT_PTR ffcru4 = helpers->ReadIntPtr(ffcru3 + 0x0, /* isRelativeOffset*/ false);
-				INT_PTR ffcru5 = helpers->ReadIntPtr(ffcru4 + 0x20, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffcru5 + 0x5A0, /* isRelativeOffset */ false); //CrusnWld32bit
+				INT_PTR ffcru1 = helpers->ReadIntPtr(0x0C61E0A4, true);
+				INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x134, false);
+				INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x2E8, false);
+				INT_PTR ffcru4 = helpers->ReadIntPtr(ffcru3 + 0x0, false);
+				INT_PTR ffcru5 = helpers->ReadIntPtr(ffcru4 + 0x20, false);
+				FFB = helpers->ReadByte(ffcru5 + 0x5A0, false);
 			}
 			if (mameversion.compare(Mame019964bit) == 0)
 			{
-				INT_PTR ffcru164 = helpers->ReadIntPtr(0x0C5E4FE8, /* isRelativeOffset*/ true);
-				INT_PTR ffcru264 = helpers->ReadIntPtr(ffcru164 + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffcru364 = helpers->ReadIntPtr(ffcru264 + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffcru464 = helpers->ReadIntPtr(ffcru364 + 0xF0, /* isRelativeOffset*/ false);
-				INT_PTR ffcru564 = helpers->ReadIntPtr(ffcru464 + 0x1F0, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffcru564 + 0x774, /* isRelativeOffset */ false); //CrusnWld64bit
+				INT_PTR ffcru164 = helpers->ReadIntPtr(0x0C5E4FE8, true);
+				INT_PTR ffcru264 = helpers->ReadIntPtr(ffcru164 + 0x48, false);
+				INT_PTR ffcru364 = helpers->ReadIntPtr(ffcru264 + 0x48, false);
+				INT_PTR ffcru464 = helpers->ReadIntPtr(ffcru364 + 0xF0, false);
+				INT_PTR ffcru564 = helpers->ReadIntPtr(ffcru464 + 0x1F0, false);
+				FFB = helpers->ReadByte(ffcru564 + 0x774, false);
 			}
 			if (mameversion.compare(Mame0199UI64bit) == 0)
 			{
-				INT_PTR ffcru1ui = helpers->ReadIntPtr(0x0C075FB8, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2ui = helpers->ReadIntPtr(ffcru1ui + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3ui = helpers->ReadIntPtr(ffcru2ui + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffcru4ui = helpers->ReadIntPtr(ffcru3ui + 0xF0, /* isRelativeOffset*/ false);
-				INT_PTR ffcru5ui = helpers->ReadIntPtr(ffcru4ui + 0x1F0, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffcru5ui + 0x774, /* isRelativeOffset */ false); //CrusnWldUI64
+				INT_PTR ffcru1ui = helpers->ReadIntPtr(0x0C075FB8, true);
+				INT_PTR ffcru2ui = helpers->ReadIntPtr(ffcru1ui + 0x48, false);
+				INT_PTR ffcru3ui = helpers->ReadIntPtr(ffcru2ui + 0x48, false);
+				INT_PTR ffcru4ui = helpers->ReadIntPtr(ffcru3ui + 0xF0, false);
+				INT_PTR ffcru5ui = helpers->ReadIntPtr(ffcru4ui + 0x1F0, false);
+				FFB = helpers->ReadByte(ffcru5ui + 0x774, false);
 			}
 			if (mameversion.compare(Mame020632bit) == 0)
 			{
-				INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, /* isRelativeOffset*/ false);
-				UINT8 ffcru6 = helpers->ReadByte(ffcru3 + 0x248, /* isRelativeOffset */ false); //CrusnWld32bit
-				FFB = crusnwld(ffcru6);
+				INT_PTR ffcru1 = helpers->ReadIntPtr(0x02426C78, true);
+				INT_PTR ffcru2 = helpers->ReadIntPtr(ffcru1 + 0x290, false);
+				INT_PTR ffcru3 = helpers->ReadIntPtr(ffcru2 + 0x650, false);
+				FFB = helpers->ReadByte(ffcru3 + 0x248, false);
 			}
 			if (mameversion.compare(Mame020664bit) == 0)
 			{
-				INT_PTR ffcru164 = helpers->ReadIntPtr(0x0E198068, /* isRelativeOffset*/ true);
-				INT_PTR ffcru264 = helpers->ReadIntPtr(ffcru164 + 0xB8, /* isRelativeOffset*/ false);
-				INT_PTR ffcru364 = helpers->ReadIntPtr(ffcru264 + 0x8, /* isRelativeOffset*/ false);
-				INT_PTR ffcru464 = helpers->ReadIntPtr(ffcru364 + 0x0, /* isRelativeOffset*/ false);
-				INT_PTR ffcru564 = helpers->ReadIntPtr(ffcru464 + 0x0, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffcru564 + 0x54, /* isRelativeOffset */ false); //CrusnWld64bit
+				INT_PTR ffcru164 = helpers->ReadIntPtr(0x0E198068, true);
+				INT_PTR ffcru264 = helpers->ReadIntPtr(ffcru164 + 0xB8, false);
+				INT_PTR ffcru364 = helpers->ReadIntPtr(ffcru264 + 0x8, false);
+				INT_PTR ffcru464 = helpers->ReadIntPtr(ffcru364 + 0x0, false);
+				INT_PTR ffcru564 = helpers->ReadIntPtr(ffcru464 + 0x0, false);
+				FFB = helpers->ReadByte(ffcru564 + 0x54, false);
 			}
 			if (mameversion.compare(Mame0206UI64bit) == 0)
 			{
-				INT_PTR ffcru1ui = helpers->ReadIntPtr(0x0DBCF058, /* isRelativeOffset*/ true);
-				INT_PTR ffcru2ui = helpers->ReadIntPtr(ffcru1ui + 0x48, /* isRelativeOffset*/ false);
-				INT_PTR ffcru3ui = helpers->ReadIntPtr(ffcru2ui + 0x40, /* isRelativeOffset*/ false);
-				INT_PTR ffcru4ui = helpers->ReadIntPtr(ffcru3ui + 0x10, /* isRelativeOffset*/ false);
-				INT_PTR ffcru5ui = helpers->ReadIntPtr(ffcru4ui + 0x2B8, /* isRelativeOffset*/ false);
-				FFB = helpers->ReadByte(ffcru5ui + 0x7A4, /* isRelativeOffset */ false); //CrusnWldUI64
+				INT_PTR ffcru1ui = helpers->ReadIntPtr(0x0DBCF058, true);
+				INT_PTR ffcru2ui = helpers->ReadIntPtr(ffcru1ui + 0x48, false);
+				INT_PTR ffcru3ui = helpers->ReadIntPtr(ffcru2ui + 0x40, false);
+				INT_PTR ffcru4ui = helpers->ReadIntPtr(ffcru3ui + 0x10, false);
+				INT_PTR ffcru5ui = helpers->ReadIntPtr(ffcru4ui + 0x2B8, false);
+				FFB = helpers->ReadByte(ffcru5ui + 0x7A4, false);
 			}
 			
+			ffcrusnwld = crusnwld(FFB);
+
 			if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
 			{
 				helpers->log("moving wheel left");
@@ -2131,37 +2132,21 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 			}
 					
 			ffcrusnusa = crusnusa(FFB);
-
-			if ((FFB > 104)& (FFB < 215))
+			
+			if ((ffcrusnusa > 104) & (ffcrusnusa < 215))
 			{
 				helpers->log("moving wheel left");
-				double percentForce = (214 - FFB) / 109.0;
+				double percentForce = (215 - FFB) / 110.0;
 				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
+				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
-			else if ((FFB > 0)& (FFB < 105))
+			else if ((ffcrusnusa > 0) & (ffcrusnusa < 105))
 			{
 				helpers->log("moving wheel right");
 				double percentForce = (FFB) / 104.0;
 				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((FFB > 104)& (FFB < 215))
-			{
-				helpers->log("moving wheel left");
-				double percentForce = (214 - FFB) / 109.0;
-				double percentLength = 100;
-				triggers->LeftRight(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-			else if ((FFB > 0)& (FFB < 105))
-			{
-				helpers->log("moving wheel right");
-				double percentForce = (FFB) / 104.0;
-				double percentLength = 100;
-				triggers->LeftRight(percentForce, 0, percentLength);
+				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
@@ -2219,7 +2204,7 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 			INT_PTR ffoff464UI = helpers->ReadIntPtr(ffoff364UI + 0x588, false);
 			FFB = helpers->ReadByte(ffoff464UI + 0x4CC, false);
 		}
-		
+
 		if ((FFB > 0x83)& (FFB < 0x100))
 		{
 			helpers->log("moving wheel left");
