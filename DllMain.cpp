@@ -1820,12 +1820,18 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		TriggerFrictionEffectWithDefaultOption(configDefaultFriction / 100.0, true);
 	}
 
+	if (game != 0)
+	{
+		game->BaseInit(&hlp, &t);
+	}
+
 	hlp.log("Entering Game's FFBLoop loop");
 	bool* kr = (bool*)lpParam;
 	while (*kr)
 	{
 		if (game != 0)
 		{
+			game->Loop();
 			game->FFBLoop(&effectConst, &hlp, &t);
 			Sleep(16);
 		}

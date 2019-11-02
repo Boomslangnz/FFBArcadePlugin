@@ -13,9 +13,27 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "../Common Files/Game.h"
+
 class WMMT5 : public Game {
-	int lastWasStop = 0;
-	
-	public:
-	void FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers);
+	UINT8 oldgear = 0;
+	bool gameFfbStarted = false;
+	int SpringStrength = hlp->GetIniValueInt("SpringStrength", 100);
+	int FrictionStrength = hlp->GetIniValueInt("FrictionStrength", 0);
+	int JointsAndStripesStrength = hlp->GetIniValueInt("JointsAndStripesStrength", 100);
+	int CollisionsStrength = hlp->GetIniValueInt("CollisionsStrength", 100);
+	int TiresSlipStrength = hlp->GetIniValueInt("TiresSlipStrength", 100);
+	int HighSpeedVibrationsStrength = hlp->GetIniValueInt("HighSpeedVibrationsStrength", 100);
+	int LimitBetweenHighSpeedVibrationsAndTiresSlip = hlp->GetIniValueInt("LimitBetweenHighSpeedVibrationsAndTiresSlip", 75);
+	int WheelSpinStrength = hlp->GetIniValueInt("WheelSpinStrength", 100);
+	int ForceFullTune = hlp->GetIniValueInt("ForceFullTune", 0);
+	int DisableRaceTimer = hlp->GetIniValueInt("DisableRaceTimer", 0);
+	int EnableForceFinish = hlp->GetIniValueInt("EnableForceFinish", 0);
+	int EnableForceTimeUp = hlp->GetIniValueInt("EnableForceTimeUp", 0);
+	int ForceFinishButton = hlp->GetIniValueInt("ForceFinishButton", 99);
+	int ForceTimeUpButton = hlp->GetIniValueInt("ForceTimeUpButton", 99);
+	void InputThread();
+	void SpamThread();
+
+public:
+	void Loop();
 };

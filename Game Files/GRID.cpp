@@ -23,7 +23,7 @@ static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringS
 static int GearChangeStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearChangeStrength"), 20, settingsFilename);
 static int GearChangeLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearChangeLength"), 200, settingsFilename);
 
-static int GearChangeThread(void* ptr)
+static int GearChangeThread2(void* ptr)
 {
 	myHelpers->log("gear change");
 	double percentForce = GearChangeStrength / 100.0;
@@ -63,7 +63,7 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 
 	if ((oldgear != newgear) && (speedo > 0))
 	{
-		SDL_Thread* gearChangeThread = SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
+		SDL_Thread* gearChangeThread = SDL_CreateThread(GearChangeThread2, "GearChangeThread", (void*)NULL);
 	}
 
 	if (Wheels > 0)

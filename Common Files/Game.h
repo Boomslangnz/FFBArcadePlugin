@@ -93,6 +93,10 @@ public:
 	void log(char *msg);
 	void logInt(int value);
 	void logInit(char *msg);
+	// settings file
+	char* GetIniValue(char* param);
+	int GetIniValueInt(char* param, int default = 0);
+	void SetIniValue(char* param, char* value);
 	// reading memory
 	LPVOID GetTranslatedOffset(INT_PTR offset);
 	int ReadInt32(INT_PTR offset, bool isRelativeOffset);
@@ -106,6 +110,21 @@ public:
 };
 
 class Game {
+protected:
+	int lastWasStop = 0;
+	EffectConstants effectConst;
+	Helpers* hlp;
+	EffectTriggers* triggers;
+	int GearChangeStrength = hlp->GetIniValueInt("GearChangeStrength", 20);
+	int GearChangeDelay = hlp->GetIniValueInt("GearChangeDelay", 250);
+	int GearChangeLength = hlp->GetIniValueInt("GearChangeLength", 200);
+	virtual void InputThread();
+	virtual void SpamThread();
+	void GearChangeThread();
+
 public:
+	void BaseInit(Helpers* helpers, EffectTriggers* triggers);
+	virtual void Init();
+	virtual void Loop();
 	virtual void FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers *triggers);
 };

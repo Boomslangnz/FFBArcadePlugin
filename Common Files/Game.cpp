@@ -2,6 +2,7 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <thread>
 #include "Game.h"
 
 typedef unsigned char U8;
@@ -29,6 +30,24 @@ void Helpers::logInit(char *msg) {
 	std::ofstream ofs("FFBlog.txt", std::ofstream::out);
 	ofs << msg << std::endl;
 	ofs.close();
+}
+
+// settings file
+char* Helpers::GetIniValue(char* param)
+{
+	char buff[300];
+	GetPrivateProfileStringA("Settings", param, "", buff, _countof(buff), ".\\FFBPlugin.ini");
+	return buff;
+};
+
+int Helpers::GetIniValueInt(char* param, int default)
+{
+	return GetPrivateProfileIntA("Settings", param, default, ".\\FFBPlugin.ini");
+}
+
+void Helpers::SetIniValue(char* param, char* value)
+{
+	WritePrivateProfileStringA("Settings", param, value, ".\\FFBPlugin.ini");
 }
 
 // reading memory
@@ -119,7 +138,47 @@ float Helpers::ReadFloat32(INT_PTR offset, bool isRelativeOffset)
 		
 };
 
-void Game::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers)
+void Game::InputThread()
 {
-	return;
+}
+
+void Game::SpamThread()
+{
+}
+
+void Game::GearChangeThread()
+{
+	if (GearChangeDelay > 0)
+	{
+		Sleep(GearChangeDelay);
+	}
+	hlp->log("gear change");
+	double percentForce = GearChangeStrength / 100.0;
+	triggers->Sine(GearChangeLength, GearChangeLength, percentForce);
+	triggers->Rumble(0, percentForce, 150);
+}
+
+void Game::BaseInit(Helpers* helpers, EffectTriggers* triggers)
+{
+	this->hlp = helpers;
+	this->triggers = triggers;
+
+	std::thread InputThread(&Game::InputThread, this);
+	InputThread.detach();
+	std::thread SpamThread(&Game::SpamThread, this);
+	SpamThread.detach();
+
+	this->Init();
+}
+
+void Game::Init()
+{
+}
+
+void Game::Loop()
+{
+}
+
+void Game::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
+{
 }
