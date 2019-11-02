@@ -16,22 +16,102 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "WMMT5.h"
 #include "SDL.h"
 
+void WMMT5::InputThread()
+{
+	if (1 != EnableForceFinish && 1 != EnableForceTimeUp)
+	{
+		return;
+	}
+
+	helpers->log("starting input thread");
+	SDL_Event e;
+	while (SDL_WaitEvent(&e) != 0)
+	{
+		if (e.type == SDL_JOYBUTTONDOWN)
+		{
+			helpers->log("button pressed");
+			if (1 == EnableForceFinish && e.jbutton.button == ForceFinishButton)
+			{
+				INT_PTR ptr1 = helpers->ReadIntPtr(0x199A468, true);
+				helpers->WriteByte(ptr1 + 0x28, 8, false);
+			}
+			else if (1 == EnableForceTimeUp && e.jbutton.button == ForceTimeUpButton)
+			{
+				int tempDisableRaceTimer = DisableRaceTimer;
+				DisableRaceTimer = 0;
+				helpers->WriteFloat32(0x199AE18, 0, true);
+				if (1 == tempDisableRaceTimer)
+				{
+					Sleep(10000);
+					DisableRaceTimer = tempDisableRaceTimer;
+				}
+			}
+		}
+	}
+	helpers->log("input thread stopped");
+}
+
+void WMMT5::SpamThread()
+{
+	if (1 != ForceFullTune && 1 != DisableRaceTimer)
+	{
+		return;
+	}
+
+	Sleep(5000); // To avoid crashes
+	helpers->log("starting spam thread");
+	while (1)
+	{
+		if (1 == ForceFullTune)
+		{
+			INT_PTR ptr1 = helpers->ReadIntPtr(0x1948F10, true);
+			INT_PTR ptr2 = helpers->ReadIntPtr(ptr1 + 0x180 + 0xa8 + 0x18, false);
+			UINT8 car = helpers->ReadByte(ptr2 + 0x2C, false);
+			std::string msg = "car: " + std::to_string(car);
+			helpers->log((char*)msg.c_str());
+
+			if (0x00 < car)
+			{
+				UINT8 power = helpers->ReadByte(ptr2 + 0x98, false);
+				UINT8 handling = helpers->ReadByte(ptr2 + 0x9C, false);
+				msg = "power: " + std::to_string(power) + " | handling: " + std::to_string(handling);
+				helpers->log((char*)msg.c_str());
+
+				if (0x20 != (power + handling))
+				{
+					helpers->log("forcing full tune");
+					helpers->WriteByte(ptr2 + 0x98, 0x10, false);
+					helpers->WriteByte(ptr2 + 0x9C, 0x10, false);
+				}
+			}
+		}
+
+		if (1 == DisableRaceTimer)
+		{
+			helpers->WriteFloat32(0x199AE18, 999.99, true);
+		}
+
+		Sleep(500); // We don't need to spam too much
+	}
+	helpers->log("spam thread stopped");
+}
+
 void WMMT5::Loop()
 {
-	float spring = hlp->ReadFloat32(0x196F18C, true);
-	float friction = hlp->ReadFloat32(0x196F190, true);
-	float collisions = hlp->ReadFloat32(0x196F194, true);
-	float tiresSlip = hlp->ReadFloat32(0x196F188, true);
-	int speed = hlp->ReadInt32(0x196FEBC, true);
+	float spring = helpers->ReadFloat32(0x196F18C, true);
+	float friction = helpers->ReadFloat32(0x196F190, true);
+	float collisions = helpers->ReadFloat32(0x196F194, true);
+	float tiresSlip = helpers->ReadFloat32(0x196F188, true);
+	int speed = helpers->ReadInt32(0x196FEBC, true);
 	std::string msg = "spring: " + std::to_string(spring) + " | friction: " + std::to_string(friction)
 		+ " | collisions: " + std::to_string(collisions) + " | tires slip: " + std::to_string(tiresSlip)
 		+ " | speed: " + std::to_string(speed);
-	hlp->log((char*)msg.c_str());
+	helpers->log((char*)msg.c_str());
 
 	double percentForce;
 	if (0.001 > spring && !gameFfbStarted)
 	{
-		hlp->log("fake spring+friction until game's FFB starts");
+		helpers->log("fake spring+friction until game's FFB starts");
 		percentForce = 0.3 * SpringStrength / 100.0;
 		triggers->Spring(percentForce);
 		percentForce = 0.5 * FrictionStrength / 100.0;
@@ -41,7 +121,7 @@ void WMMT5::Loop()
 	{
 		if (!gameFfbStarted)
 		{
-			hlp->log("game's FFB started");
+			helpers->log("game's FFB started");
 			gameFfbStarted = true;
 		}
 		percentForce = (1.0 * spring) * SpringStrength / 100.0;
@@ -54,16 +134,16 @@ void WMMT5::Loop()
 	{
 		if (0.209 <= collisions && 0.311 >= collisions)
 		{
-			hlp->log("joint/stripe on the right");
+			helpers->log("joint/stripe on the right");
 			percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
 			triggers->Sine(80, 80, percentForce);
 			triggers->Rumble(0, percentForce, 150);
 		}
 		else
 		{
-			hlp->log("collision on the right");
+			helpers->log("collision on the right");
 			percentForce = (1.0 * collisions) * CollisionsStrength / 100.0;
-			triggers->Constant(effectConst.DIRECTION_FROM_RIGHT, percentForce);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			triggers->Rumble(0, percentForce, 150);
 		}
 	}
@@ -71,28 +151,28 @@ void WMMT5::Loop()
 	{
 		if (-0.209 >= collisions && -0.311 <= collisions)
 		{
-			hlp->log("joint/stripe on the left");
+			helpers->log("joint/stripe on the left");
 			percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
 			triggers->Sine(80, 80, percentForce);
 			triggers->Rumble(0, -1.0 * percentForce, 150);
 		}
 		else
 		{
-			hlp->log("collision on the left");
+			helpers->log("collision on the left");
 			percentForce = (-1.0 * collisions) * CollisionsStrength / 100.0;
-			triggers->Constant(effectConst.DIRECTION_FROM_LEFT, percentForce);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			triggers->Rumble(0, percentForce, 150);
 		}
 	}
 	else
 	{
-		hlp->log("resetting collision");
-		triggers->Constant(effectConst.DIRECTION_FROM_LEFT, 0);
+		helpers->log("resetting collision");
+		triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
 	}
 
 	if (0 < tiresSlip)
 	{
-		hlp->log("tires slip left");
+		helpers->log("tires slip left");
 		bool highSpeedVibrations = (294 <= speed) && (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
 		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
 		triggers->Sine(100, 100, percentForce);
@@ -104,7 +184,7 @@ void WMMT5::Loop()
 	}
 	else if (0 > tiresSlip)
 	{
-		hlp->log("tires slip right");
+		helpers->log("tires slip right");
 		bool highSpeedVibrations = (294 <= speed) && (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
 		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
 		triggers->Sine(100, 100, percentForce);
@@ -115,15 +195,15 @@ void WMMT5::Loop()
 		}
 	}
 
-	INT_PTR ptr1 = hlp->ReadIntPtr(0x199A450, true);
-	UINT8 gear = hlp->ReadByte(ptr1 + 0x398, false);
+	INT_PTR ptr1 = helpers->ReadIntPtr(0x199A450, true);
+	UINT8 gear = helpers->ReadByte(ptr1 + 0x398, false);
 
 	if (0 < WheelSpinStrength)
 	{
-		INT_PTR ptr1 = hlp->ReadIntPtr(0x1948F10, true);
-		INT_PTR ptr2 = hlp->ReadIntPtr(ptr1 + 0x180 + 0xa8 + 0x18, false);
-		UINT8 power = hlp->ReadByte(ptr2 + 0x98, false);
-		int rpm = hlp->ReadInt32(0x1970038, true);
+		INT_PTR ptr1 = helpers->ReadIntPtr(0x1948F10, true);
+		INT_PTR ptr2 = helpers->ReadIntPtr(ptr1 + 0x180 + 0xa8 + 0x18, false);
+		UINT8 power = helpers->ReadByte(ptr2 + 0x98, false);
+		int rpm = helpers->ReadInt32(0x1970038, true);
 		int diff = 0x0A <= power ? 0 : 20;
 
 		if (
@@ -141,7 +221,7 @@ void WMMT5::Loop()
 
 			msg = "tires spin: gear: " + std::to_string(gear) + " | speed: " + std::to_string(speed)
 				+ " | rpm: " + std::to_string(rpm) + " | force: " + std::to_string(percentForce);
-			hlp->log((char*)msg.c_str());
+			helpers->log((char*)msg.c_str());
 		}
 		else if (
 			2 == gear && 10 < speed && (
@@ -158,20 +238,20 @@ void WMMT5::Loop()
 
 			msg = "tires spin: gear: " + std::to_string(gear) + " | speed: " + std::to_string(speed)
 				+ " | rpm: " + std::to_string(rpm) + " | force: " + std::to_string(percentForce);
-			hlp->log((char*)msg.c_str());
+			helpers->log((char*)msg.c_str());
 		}
 	}
 
 	if (0 < GearChangeStrength)
 	{
-		ptr1 = hlp->ReadIntPtr(0x199A468, true);
-		float time = hlp->ReadFloat32(ptr1 + 0x18, false);
+		ptr1 = helpers->ReadIntPtr(0x199A468, true);
+		float time = helpers->ReadFloat32(ptr1 + 0x18, false);
 
 		if (oldgear != gear && 0 < gear && 0 < time)
 		{
 			msg = "oldgear: " + std::to_string(oldgear) + " | gear: " + std::to_string(gear)
 				+ " | time: " + std::to_string(time) + " | speed: " + std::to_string(speed);
-			hlp->log((char*)msg.c_str());
+			helpers->log((char*)msg.c_str());
 		}
 
 		if (oldgear != gear && 0 < gear && 0.5 < time && 0.1 <= speed)
@@ -181,84 +261,4 @@ void WMMT5::Loop()
 		}
 		oldgear = gear;
 	}
-}
-
-void WMMT5::InputThread()
-{
-	if (1 != EnableForceFinish && 1 != EnableForceTimeUp)
-	{
-		return;
-	}
-
-	hlp->log("starting input thread");
-	SDL_Event e;
-	while (SDL_WaitEvent(&e) != 0)
-	{
-		if (e.type == SDL_JOYBUTTONDOWN)
-		{
-			hlp->log("button pressed");
-			if (1 == EnableForceFinish && e.jbutton.button == ForceFinishButton)
-			{
-				INT_PTR ptr1 = hlp->ReadIntPtr(0x199A468, true);
-				hlp->WriteByte(ptr1 + 0x28, 8, false);
-			}
-			else if (1 == EnableForceTimeUp && e.jbutton.button == ForceTimeUpButton)
-			{
-				int tempDisableRaceTimer = DisableRaceTimer;
-				DisableRaceTimer = 0;
-				hlp->WriteFloat32(0x199AE18, 0, true);
-				if (1 == tempDisableRaceTimer)
-				{
-					Sleep(10000);
-					DisableRaceTimer = tempDisableRaceTimer;
-				}
-			}
-		}
-	}
-	hlp->log("input thread stopped");
-}
-
-void WMMT5::SpamThread()
-{
-	if (1 != ForceFullTune && 1 != DisableRaceTimer)
-	{
-		return;
-	}
-
-	Sleep(5000); // To avoid crashes
-	hlp->log("starting spam thread");
-	while (1)
-	{
-		if (1 == ForceFullTune)
-		{
-			INT_PTR ptr1 = hlp->ReadIntPtr(0x1948F10, true);
-			INT_PTR ptr2 = hlp->ReadIntPtr(ptr1 + 0x180 + 0xa8 + 0x18, false);
-			UINT8 car = hlp->ReadByte(ptr2 + 0x2C, false);
-			std::string msg = "car: " + std::to_string(car);
-			hlp->log((char*)msg.c_str());
-
-			if (0x00 < car)
-			{
-				UINT8 power = hlp->ReadByte(ptr2 + 0x98, false);
-				UINT8 handling = hlp->ReadByte(ptr2 + 0x9C, false);
-				msg = "power: " + std::to_string(power) + " | handling: " + std::to_string(handling);
-				hlp->log((char*)msg.c_str());
-
-				if (0x20 != (power + handling))
-				{
-					hlp->log("forcing full tune");
-					hlp->WriteByte(ptr2 + 0x98, 0x10, false);
-					hlp->WriteByte(ptr2 + 0x9C, 0x10, false);
-				}
-			}
-		}
-
-		if (1 == DisableRaceTimer)
-		{
-			hlp->WriteFloat32(0x199AE18, 999.99, true);
-		}
-
-		Sleep(500); // We don't need to spam too much
-	}
-	hlp->log("spam thread stopped");
 }

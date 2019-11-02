@@ -112,18 +112,18 @@ public:
 class Game {
 protected:
 	int lastWasStop = 0;
-	EffectConstants effectConst;
-	Helpers* hlp;
+	EffectConstants* constants;
+	Helpers* helpers;
 	EffectTriggers* triggers;
-	int GearChangeStrength = hlp->GetIniValueInt("GearChangeStrength", 20);
-	int GearChangeDelay = hlp->GetIniValueInt("GearChangeDelay", 250);
-	int GearChangeLength = hlp->GetIniValueInt("GearChangeLength", 200);
+	int GearChangeStrength = helpers->GetIniValueInt("GearChangeStrength", 20);
+	int GearChangeDelay = helpers->GetIniValueInt("GearChangeDelay", 250);
+	int GearChangeLength = helpers->GetIniValueInt("GearChangeLength", 200);
 	virtual void InputThread();
 	virtual void SpamThread();
 	void GearChangeThread();
 
 public:
-	void BaseInit(Helpers* helpers, EffectTriggers* triggers);
+	void BaseInit(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers);
 	virtual void Init();
 	virtual void Loop();
 	virtual void FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers *triggers);

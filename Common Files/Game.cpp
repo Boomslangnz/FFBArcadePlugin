@@ -152,15 +152,16 @@ void Game::GearChangeThread()
 	{
 		Sleep(GearChangeDelay);
 	}
-	hlp->log("gear change");
+	helpers->log("gear change");
 	double percentForce = GearChangeStrength / 100.0;
 	triggers->Sine(GearChangeLength, GearChangeLength, percentForce);
 	triggers->Rumble(0, percentForce, 150);
 }
 
-void Game::BaseInit(Helpers* helpers, EffectTriggers* triggers)
+void Game::BaseInit(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
-	this->hlp = helpers;
+	this->constants = constants;
+	this->helpers = helpers;
 	this->triggers = triggers;
 
 	std::thread InputThread(&Game::InputThread, this);

@@ -17,20 +17,20 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 class WMMT5 : public Game {
 	UINT8 oldgear = 0;
 	bool gameFfbStarted = false;
-	int SpringStrength = hlp->GetIniValueInt("SpringStrength", 100);
-	int FrictionStrength = hlp->GetIniValueInt("FrictionStrength", 0);
-	int JointsAndStripesStrength = hlp->GetIniValueInt("JointsAndStripesStrength", 100);
-	int CollisionsStrength = hlp->GetIniValueInt("CollisionsStrength", 100);
-	int TiresSlipStrength = hlp->GetIniValueInt("TiresSlipStrength", 100);
-	int HighSpeedVibrationsStrength = hlp->GetIniValueInt("HighSpeedVibrationsStrength", 100);
-	int LimitBetweenHighSpeedVibrationsAndTiresSlip = hlp->GetIniValueInt("LimitBetweenHighSpeedVibrationsAndTiresSlip", 75);
-	int WheelSpinStrength = hlp->GetIniValueInt("WheelSpinStrength", 100);
-	int ForceFullTune = hlp->GetIniValueInt("ForceFullTune", 0);
-	int DisableRaceTimer = hlp->GetIniValueInt("DisableRaceTimer", 0);
-	int EnableForceFinish = hlp->GetIniValueInt("EnableForceFinish", 0);
-	int EnableForceTimeUp = hlp->GetIniValueInt("EnableForceTimeUp", 0);
-	int ForceFinishButton = hlp->GetIniValueInt("ForceFinishButton", 99);
-	int ForceTimeUpButton = hlp->GetIniValueInt("ForceTimeUpButton", 99);
+	int SpringStrength = helpers->GetIniValueInt("SpringStrength", 100);
+	int FrictionStrength = helpers->GetIniValueInt("FrictionStrength", 0);
+	int JointsAndStripesStrength = helpers->GetIniValueInt("JointsAndStripesStrength", 100);
+	int CollisionsStrength = helpers->GetIniValueInt("CollisionsStrength", 100);
+	int TiresSlipStrength = helpers->GetIniValueInt("TiresSlipStrength", 100);
+	int HighSpeedVibrationsStrength = helpers->GetIniValueInt("HighSpeedVibrationsStrength", 100);
+	int LimitBetweenHighSpeedVibrationsAndTiresSlip = helpers->GetIniValueInt("LimitBetweenHighSpeedVibrationsAndTiresSlip", 75);
+	int WheelSpinStrength = helpers->GetIniValueInt("WheelSpinStrength", 100);
+	int ForceFullTune = helpers->GetIniValueInt("ForceFullTune", 0);
+	int DisableRaceTimer = helpers->GetIniValueInt("DisableRaceTimer", 0);
+	int EnableForceFinish = helpers->GetIniValueInt("EnableForceFinish", 0);
+	int EnableForceTimeUp = helpers->GetIniValueInt("EnableForceTimeUp", 0);
+	int ForceFinishButton = helpers->GetIniValueInt("ForceFinishButton", 99);
+	int ForceTimeUpButton = helpers->GetIniValueInt("ForceTimeUpButton", 99);
 	void InputThread();
 	void SpamThread();
 

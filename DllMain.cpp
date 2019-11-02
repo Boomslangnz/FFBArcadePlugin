@@ -1822,7 +1822,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 
 	if (game != 0)
 	{
-		game->BaseInit(&hlp, &t);
+		game->BaseInit(&effectConst, &hlp, &t);
 	}
 
 	hlp.log("Entering Game's FFBLoop loop");
