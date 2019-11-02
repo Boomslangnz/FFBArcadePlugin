@@ -15,16 +15,14 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "InitialD5.h"
 #include "math.h"
 
-void InitialD5::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
+void InitialD5::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
-	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-	int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
 	UINT8 ff = helpers->ReadByte(0x08CB6122, /* isRelativeOffset */ false);
 	UINT8 ff1 = helpers->ReadByte(0x08CB6121, /* isRelativeOffset */ false);
 	UINT8 ff2 = helpers->ReadByte(0x08CB6120, /* isRelativeOffset */ false);
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
-	helpers->log((char *)ffs.c_str());
+	helpers->log((char*)ffs.c_str());
 
 	if (ff2 == 0x86)
 	{
@@ -40,52 +38,25 @@ void InitialD5::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 			triggers->Friction(percentForce);
 			triggers->Damper(percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
-		}		
+		}
 	}
-	if (FFBMode == 1)
-	{	
-		if (ff2 == 0x84)
-		{
-			if ((ff > 0x37) && (ff < 0x80) && (ff1 == 0))
-			{
-				helpers->log("moving wheel right");
-				double percentForce = (128 - ff) / 72.0;
-				double percentLength = 100;
-				double powforce = (ff - 55) / 72.0;
-				triggers->Rumble(pow(percentForce, powforce), 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, powforce)));
-			}
-			else if ((ff > 0x00) && (ff < 0x49) && (ff1 == 1))
-			{
-				helpers->log("moving wheel left");
-				double percentForce = (ff) / 72.0;
-				double percentLength = 100;
-				double powforce = (73 - ff) / 72.0;
-				triggers->Rumble(0, pow(percentForce, powforce), percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, powforce)));
-			}
-		}		
-	}
-	else
+	if (ff2 == 0x84)
 	{
-		if (ff2 == 0x84)
+		if ((ff > 0x37) && (ff < 0x80) && (ff1 == 0))
 		{
-			if ((ff > 0x37) && (ff < 0x80) && (ff1 == 0))
-			{
-				helpers->log("moving wheel right");
-				double percentForce = (128 - ff) / 72.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((ff > 0x00) && (ff < 0x49) && (ff1 == 1))
-			{
-				helpers->log("moving wheel left");
-				double percentForce = (ff) / 72.0;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-		}		
-	}	
-}
+			helpers->log("moving wheel right");
+			double percentForce = (128 - ff) / 72.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if ((ff > 0x00) && (ff < 0x49) && (ff1 == 1))
+		{
+			helpers->log("moving wheel left");
+			double percentForce = (ff) / 72.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+	}
+}	

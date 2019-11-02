@@ -57,7 +57,6 @@ static int InputDeviceCombinedPedals = GetPrivateProfileInt(TEXT("Settings"), TE
 static int SteeringDeadzone = GetPrivateProfileInt(TEXT("Settings"), TEXT("SteeringDeadzone"), 0, settingsFilename);
 static int PedalDeadzone = GetPrivateProfileInt(TEXT("Settings"), TEXT("PedalDeadzone"), 0, settingsFilename);
 static int SequentialGears = GetPrivateProfileInt(TEXT("Settings"), TEXT("SequentialGears"), 0, settingsFilename);
-static int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
 static int ShowAxisForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowAxisForSetup"), 0, settingsFilename);
 static int ExitButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ExitButton"), 0, settingsFilename);
@@ -159,7 +158,7 @@ static int RunningThread(void *ptr)
 						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x01, false);
 					}
 					if (timeroutofmenu != 0)
-					{															
+					{
 						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x00, false);
 						myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B39, 0x7F, false);
 						avoiderror = false;
@@ -232,62 +231,33 @@ static int RunningThread(void *ptr)
 			}
 			if ((ff3 != 0x00) && (ff4 != 0x00))
 			{
-				if (FFBMode == 0)
+				if ((ff2 > 0x00)& (ff2 < 0x40))
 				{
-					if ((ff2 > 0x00) & (ff2 < 0x40))
-					{
-						double percentForce = (ff2) / 63.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, percentForce, percentLength);
-						myTriggers->Sine(120, 120, percentForce);
-					}
-					if ((ff1 > 0x00) & (ff1 < 0x08))
-					{
-						//helpers->log("moving wheel left");
-						double percentForce = (ff1) / 7.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, percentForce, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-					}
-					else if ((ff1 > 0x07) & (ff1 < 0x10))
-					{
-						//helpers->log("moving wheel right");
-						double percentForce = (16 - ff1) / 8.0;
-						double percentLength = 100;
-						myTriggers->Rumble(percentForce, 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-					}
+					double percentForce = (ff2) / 63.0;
+					double percentLength = 100;
+					myTriggers->Rumble(percentForce, percentForce, percentLength);
+					myTriggers->Sine(120, 120, percentForce);
 				}
-				else if (FFBMode == 1)
+				if ((ff1 > 0x00)& (ff1 < 0x08))
 				{
-					if ((ff2 > 0x00) & (ff2 < 0x40))
-					{
-						double percentForce = (ff2) / 63.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), pow(percentForce, 0.5), percentLength);
-						myTriggers->Sine(120, 120, pow(percentForce, 0.5));
-					}
-					if ((ff1 > 0x00) & (ff1 < 0x08))
-					{
-						//helpers->log("moving wheel left");
-						double percentForce = (ff1) / 7.0;
-						double percentLength = 100;
-						myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-					else if ((ff1 > 0x07) & (ff1 < 0x10))
-					{
-						//helpers->log("moving wheel right");
-						double percentForce = (16 - ff1) / 8.0;
-						double percentLength = 100;
-						myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
+					//helpers->log("moving wheel left");
+					double percentForce = (ff1) / 7.0;
+					double percentLength = 100;
+					myTriggers->Rumble(0, percentForce, percentLength);
+					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 				}
-			}						
+				else if ((ff1 > 0x07)& (ff1 < 0x10))
+				{
+					//helpers->log("moving wheel right");
+					double percentForce = (16 - ff1) / 8.0;
+					double percentLength = 100;
+					myTriggers->Rumble(percentForce, 0, percentLength);
+					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
 		}
-	}
-	return 0;
+	}					
+return 0;
 }
 
 void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {

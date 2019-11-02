@@ -110,65 +110,36 @@ BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 	return true; // Need to continue enumerating windows
 }
 
-void Demul::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
+void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	const TCHAR substring[] = TEXT("NASCAR");
 	EnumWindows(FindWindowBySubstr, (LPARAM)substring);
-	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-	int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
-
+	int ffnascar = 0;
 	{
-		int ffnascar = 0;
+		if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring))
 		{
-			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring))
-			{
-				UINT8 ffnas = helpers->ReadByte(0x30060C, /* isRelativeOffset */ true); //Nascar Arcade
-				std::string ffs = std::to_string(ffnas);
-				helpers->log((char *)ffs.c_str());
-				helpers->log("got value: ");
-				ffnascar = nascar(ffnas);
+			UINT8 ffnas = helpers->ReadByte(0x30060C, /* isRelativeOffset */ true); //Nascar Arcade
+			std::string ffs = std::to_string(ffnas);
+			helpers->log((char*)ffs.c_str());
+			helpers->log("got value: ");
+			ffnascar = nascar(ffnas);
 
-				if (FFBMode == 0)
-				{
-					if ((ffnascar > 16) & (ffnascar < 33))
-					{
-						helpers->log("moving wheel left");
-						double percentForce = (ffnascar - 16) / 16.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
-					else if ((ffnascar > 0) & (ffnascar < 17))
-					{
-						helpers->log("moving wheel right");
-						double percentForce = (17 - ffnascar) / 16.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-				}
-				else
-				{
-					if ((ffnascar > 16) & (ffnascar < 33))
-					{
-						helpers->log("moving wheel left");
-						double percentForce = (ffnascar - 16) / 16.0;
-						double percentLength = 100;
-						triggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-					}
-					else if ((ffnascar > 0) & (ffnascar < 17))
-					{
-						helpers->log("moving wheel right");
-						double percentForce = (17 - ffnascar) / 16.0;
-						double percentLength = 100;
-						triggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-					}
-				}
+			if ((ffnascar > 16)& (ffnascar < 33))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ffnascar - 16) / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((ffnascar > 0)& (ffnascar < 17))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (17 - ffnascar) / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}
 	}
-
-}
-
+}	

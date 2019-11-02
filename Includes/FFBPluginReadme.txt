@@ -427,7 +427,7 @@ If a game has any of its own such forces,these values will be overwritten immedi
 
 BeepWhenHook= **Beep should occur if dll is hooked by executable when turned on (1)**
 
-FFBMode= **This will raise strength of lower forces, potentially could cause oscillation to occur on certain games. Set 1 to turn on**
+PowerMode= **This will raise strength of lower forces, potentially could cause oscillation to occur on certain games. Set 1 to turn on**
 
 AlternativeFFB= **This is for certain wheels where roll effect does not work correctly normally (such as PWM2M2 or Thrustmaster 300rs etc). Set 1 to turn on **
 

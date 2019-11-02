@@ -122,17 +122,15 @@ static int rubbingwalls(int ffwalls) {
 	}
 }
 
-void InitialD7::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers)
+void InitialD7::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
 	int ffrubbingwalls = 0;
 	int ffcarcollision = 0;
 	{
-		wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-		int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
 		helpers->log("in ID7 Ffbloop");
 		const int ff = GetTeknoParrotFFB();
 		std::string ffs = std::to_string(ff);
-		helpers->log((char *)ffs.c_str());
+		helpers->log((char*)ffs.c_str());
 		ffcarcollision = carscollide(ff);
 		ffrubbingwalls = rubbingwalls(ff);
 
@@ -158,41 +156,19 @@ void InitialD7::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTr
 			triggers->Damper(percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
-		if (FFBMode == 1)
+		if ((ff > 0x40037)& (ff < 0x40080))
 		{
-			if ((ff > 0x40037) & (ff < 0x40080))
-			{
-				double percentForce = (262272 - ff) / 72.0;
-				double percentLength = 100;
-				double powforce = (ff - 262199) / 72.0;
-				triggers->Rumble(pow(percentForce, powforce), 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, (pow(percentForce, powforce)));
-			}
-			else if ((ff > 0x40100) & (ff < 0x40149))
-			{
-				double percentForce = (ff - 262400) / 72.0;
-				double percentLength = 100;
-				double powforce = (262473 - ff) / 72.0;
-				triggers->Rumble(0, pow(percentForce, powforce), percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, (pow(percentForce, powforce)));
-			}
+			double percentForce = (262272 - ff) / 72.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
-		else
+		else if ((ff > 0x40100)& (ff < 0x40149))
 		{
-			if ((ff > 0x40037) & (ff < 0x40080))
-			{
-				double percentForce = (262272 - ff) / 72.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((ff > 0x40100) & (ff < 0x40149))
-			{
-				double percentForce = (ff - 262400) / 72.0;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
+			double percentForce = (ff - 262400) / 72.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 	}
 }

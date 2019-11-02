@@ -20,7 +20,6 @@ static EffectConstants *myConstants;
 static Helpers *myHelpers;
 static SDL_Event e;
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-static int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
 static int ChangeGearsViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("ChangeGearsViaPlugin"), 0, settingsFilename);
 static int Gear1 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear1"), 0, settingsFilename);
@@ -99,65 +98,6 @@ static int RunningThread(void *ptr)
 			SpeedStrength = 0;
 		}
 
-		if (FFBMode == 1)
-		{
-			if (ff8 == 1)
-			{
-				if ((ff6 >= 0x00) & (ff6 < 0x7F))
-				{
-					double percentForce = ((127 - ff6) / 127.0);
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-				if ((ff6 > 0x7F) & (ff6 < 0x100))
-				{
-					double percentForce = ((ff6 - 127) / 128.0);
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-			}
-			if (ff9 == 1)
-			{
-				if ((ff6 >= 0x00) & (ff6 < 0x7F))
-				{
-					double percentForce = ((127 - ff6) / 127.0);
-					double percentLength = 100;
-					myTriggers->Rumble(pow(percentForce, 0.5), 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, (pow(percentForce, 0.5)));
-				}
-				if ((ff6 > 0x7F) & (ff6 < 0x100))
-				{
-					double percentForce = ((ff6 - 127) / 128.0);
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-			}
-			if (ff5 == 2)
-			{
-				if (oldFloat != newFloat)
-				{
-					double percentForce = SpeedStrength / 100.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-			}
-			else if (ff5 == 1)
-			{
-				if (oldFloat != newFloat)
-				{
-					double percentForce = SpeedStrength / 100.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, pow(percentForce, 0.5), percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, (pow(percentForce, 0.5)));
-				}
-			}
-		}		
-		else
-		{
 			if (ff8 == 1)
 			{
 				if ((ff6 >= 0x00) & (ff6 < 0x7F))
@@ -212,7 +152,7 @@ static int RunningThread(void *ptr)
 					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
-		}			
+					
 		if (oldFloat1 != newFloat1)
 		{
 			double percentForce = SpeedStrength / 100.0;
