@@ -850,6 +850,7 @@ wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 int configMinForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForce"), 0, settingsFilename);
 int configMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForce"), 100, settingsFilename);
 int enableLogging = GetPrivateProfileInt(TEXT("Settings"), TEXT("Logging"), 0, settingsFilename);
+int FFBMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBMode"), 0, settingsFilename);
 int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 0, settingsFilename);
 int ReverseRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumble"), 0, settingsFilename);
 wchar_t* deviceGUIDString = new wchar_t[256];
@@ -1104,6 +1105,11 @@ void TriggerConstantEffect(int direction, double strength)
 			confMinForce = configAlternativeMinForceRight;
 			confMaxForce = configAlternativeMaxForceRight;
 		}
+	}
+
+	if (FFBMode == 1)
+	{
+		strength = pow(strength, 0.5);
 	}
 
 	SHORT MinForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0);
