@@ -18,6 +18,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 static bool keybdleft = false;
 static bool keybdright = false;
 static bool keybdup = false;
+static bool init = false;
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
@@ -36,165 +37,166 @@ static int GearDown = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearDown"), 0
 static int HideCursor = GetPrivateProfileInt(TEXT("Settings"), TEXT("HideCursor"), 0, settingsFilename);
 
 static int RunningThread(void *ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
-	{
-		UINT8 steering = myHelpers->ReadByte(0x019B4678, false);
-		UINT8 gamestate = myHelpers->ReadByte(0x19B5744, false);
-		UINT8 ff = myHelpers->ReadByte(0x15AFC46, false);
-		HWND hWnd = FindWindowA(0, ("Daytona Championship USA"));
-
-		if (HideCursor == 1)
+{		
+		while (SDL_WaitEvent(&e) != 0)
 		{
-			SetCursorPos(2000, 2000);
-		}
+			UINT8 gear = myHelpers->ReadByte(0x019B468C, /* isRelativeOffset */ false);
 
-		if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
-		{
-			if (hWnd > NULL)
+			if (ShowButtonNumbersForSetup == 1)
 			{
-				//SendMessage(hWnd, WM_CLOSE, NULL, NULL);
-				system("taskkill /f /im InpWrapper.exe");
-				TerminateProcess(GetCurrentProcess(), 0);
+				if (e.type == SDL_JOYBUTTONDOWN)
+				{
+					if (e.jbutton.button >= 0)
+					{
+						char buff[100];
+						sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
+						MessageBoxA(NULL, buff, "", NULL);
+					}
+				}
+			}
+
+			if (e.type == SDL_JOYBUTTONDOWN)
+			{
+				if (ChangeGearsViaPlugin == 1)
+				{
+					if (e.jbutton.button == Gear1)
+					{
+						myHelpers->WriteByte(0x019B468C, 0x00, false);
+					}
+					else if (e.jbutton.button == Gear2)
+					{
+						myHelpers->WriteByte(0x019B468C, 0x02, false);
+					}
+					else if (e.jbutton.button == Gear3)
+					{
+						myHelpers->WriteByte(0x019B468C, 0x01, false);
+					}
+					else if (e.jbutton.button == Gear4)
+					{
+						myHelpers->WriteByte(0x019B468C, 0x03, false);
+					}
+					else if ((e.jbutton.button == GearDown) && (gear > 0x00))
+					{
+						myHelpers->WriteByte(0x019B468C, --gear, false);
+					}
+					else if ((e.jbutton.button == GearUp) && (gear < 0x03))
+					{
+						myHelpers->WriteByte(0x019B468C, ++gear, false);
+					}
+				}
 			}
 		}
+ return 0;
+}
 
-		if (MenuMovementViaPlugin == 1)
+void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
+
+	if (!init)
+	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
+		SDL_Thread* thread;
+		thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
+		init = true;
+	}
+
+	UINT8 steering = helpers->ReadByte(0x019B4678, false);
+	UINT8 gamestate = helpers->ReadByte(0x19B5744, false);
+	UINT8 ff = helpers->ReadByte(0x15AFC46, false);
+	HWND hWnd = FindWindowA(0, ("Daytona Championship USA"));
+
+	if (HideCursor == 1)
+	{
+		SetCursorPos(2000, 2000);
+	}
+
+	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
+	{
+		if (hWnd > NULL)
 		{
-			//Menu Movement & Game Initial Screen
-			if (gamestate == 18 || gamestate == 30)
+			//SendMessage(hWnd, WM_CLOSE, NULL, NULL);
+			system("taskkill /f /im InpWrapper.exe");
+			TerminateProcess(GetCurrentProcess(), 0);
+		}
+	}
+
+	if (MenuMovementViaPlugin == 1)
+	{
+		//Menu Movement & Game Initial Screen
+		if (gamestate == 18 || gamestate == 30)
+		{
+			if ((steering <= 0x75) && (steering > 0x50))
 			{
-				if ((steering <= 0x75) && (steering > 0x50))
+				//Menu Left
+				if (!keybdleft)
 				{
-					//Menu Left
-					if (!keybdleft)
-					{
-						keybdleft = true;
-						SendMessage(hWnd, WM_KEYDOWN, VK_LEFT, 0);
-					}
-					else
-					{
-						SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
-					}
-				}
-				else if (steering <= 0x50)
-				{
+					keybdleft = true;
 					SendMessage(hWnd, WM_KEYDOWN, VK_LEFT, 0);
 				}
-				else if ((steering >= 0x89) && (steering < 0xAE))
+				else
 				{
-					//Menu Right
-					if (!keybdright)
-					{
-						keybdright = true;
-						SendMessage(hWnd, WM_KEYDOWN, VK_RIGHT, 0);
-					}
-					else
-					{
-						SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
-					}
+					SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
 				}
-				else if (steering >= 0xAE)
+			}
+			else if (steering <= 0x50)
+			{
+				SendMessage(hWnd, WM_KEYDOWN, VK_LEFT, 0);
+			}
+			else if ((steering >= 0x89) && (steering < 0xAE))
+			{
+				//Menu Right
+				if (!keybdright)
 				{
+					keybdright = true;
 					SendMessage(hWnd, WM_KEYDOWN, VK_RIGHT, 0);
 				}
 				else
 				{
-					keybdleft = false;
-					keybdright = false;
 					SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
-					SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
 				}
-				keybdup = false;
+			}
+			else if (steering >= 0xAE)
+			{
+				SendMessage(hWnd, WM_KEYDOWN, VK_RIGHT, 0);
 			}
 			else
 			{
-				if (!keybdup)
-				{
-					keybdup = true;
-					keybdleft = false;
-					keybdright = false;
-					SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
-					SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
-				}
+				keybdleft = false;
+				keybdright = false;
+				SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
+				SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
 			}
+			keybdup = false;
 		}
-		
-		if (ff > 15)
+		else
 		{
-			double percentForce = (31 - ff) / 15.0;
-			double percentLength = 100;
-			myTriggers->Rumble(percentForce, 0, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if (ff > 0)
-		{
-			double percentForce = (16 - ff) / 15.0;
-			double percentLength = 100;
-			myTriggers->Rumble(0, percentForce, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-	}
-	return 0;
-}
-
-void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-	SDL_Thread *thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
-	UINT8 gear = helpers->ReadByte(0x019B468C, /* isRelativeOffset */ false);
-	int ff = helpers->ReadInt32(0x15AFC46, /* isRelativeOffset */ false);
-	helpers->log("got value: ");
-	std::string ffs = std::to_string(ff);
-	helpers->log((char *)ffs.c_str());
-	while (SDL_WaitEvent(&e) != 0)
-	{		
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
-
-		if (ShowButtonNumbersForSetup == 1)
-		{
-			if (e.type == SDL_JOYBUTTONDOWN)
+			if (!keybdup)
 			{
-				if (e.jbutton.button >= 0)
-				{
-					char buff[100];
-					sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
-					MessageBoxA(NULL, buff, "", NULL);
-				}
-			}
-		}		
-
-		if (e.type == SDL_JOYBUTTONDOWN)
-		{
-			if (ChangeGearsViaPlugin == 1)
-			{
-				if (e.jbutton.button == Gear1)
-				{
-					helpers->WriteByte(0x019B468C, 0x00, false);
-				}
-				else if (e.jbutton.button == Gear2)
-				{
-					helpers->WriteByte(0x019B468C, 0x02, false);
-				}
-				else if (e.jbutton.button == Gear3)
-				{
-					helpers->WriteByte(0x019B468C, 0x01, false);
-				}
-				else if (e.jbutton.button == Gear4)
-				{
-					helpers->WriteByte(0x019B468C, 0x03, false);
-				}
-				else if ((e.jbutton.button == GearDown) && (gear > 0x00))
-				{
-					helpers->WriteByte(0x019B468C, --gear, false);
-				}
-				else if ((e.jbutton.button == GearUp) && (gear < 0x03))
-				{
-					helpers->WriteByte(0x019B468C, ++gear, false);
-				}
+				keybdup = true;
+				keybdleft = false;
+				keybdright = false;
+				SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
+				SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
 			}
 		}
 	}
+
+	if (ff > 15)
+	{
+		double percentForce = (31 - ff) / 15.0;
+		double percentLength = 100;
+		triggers->Rumble(percentForce, 0, percentLength);
+		triggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+	}
+	else if (ff > 0)
+	{
+		double percentForce = (16 - ff) / 15.0;
+		double percentLength = 100;
+		triggers->Rumble(0, percentForce, percentLength);
+		triggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+	}
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
 }
