@@ -2656,6 +2656,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		{
 			FreeLibrary(gl_hlibavs);
 		}
+		if (gl_cgGLDll)
+		{
+			FreeLibrary(gl_cgGLDll);
+		}
 
 		if (GameController)
 		{
