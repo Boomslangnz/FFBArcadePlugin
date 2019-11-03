@@ -112,7 +112,6 @@ void WackyRaces::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTri
 		// direction from left => makes wheel turn right
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce); // old logic: 31 - ff
-		lastWasStop = 0;
 	}
 	else if (ff > 0)
 	{
@@ -123,13 +122,5 @@ void WackyRaces::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTri
 		// direction from right => makes wheel turn left
 		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce); // old logic: 15 - ff
-		lastWasStop = 0;
-	}
-	else
-	{
-		if (lastWasStop == 0) {
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0); // just pass the hash of 0 strength so we update lastEffectHash & lastEffectTime
-			lastWasStop = 1;
-		}
 	}
 }

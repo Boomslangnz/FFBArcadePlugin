@@ -34,7 +34,6 @@ void SonicSegaAllStarsRacing::FFBLoop(EffectConstants *constants, Helpers *helpe
 		double percentLength = 100;
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		lastWasStop = 0;
 
 	}
 	else if ((FFB > 237) & (FFB < 256))
@@ -44,13 +43,5 @@ void SonicSegaAllStarsRacing::FFBLoop(EffectConstants *constants, Helpers *helpe
 		double percentLength = 100;
 		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		lastWasStop = 0;
-	}
-	else
-	{
-		if (lastWasStop == 0) {
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0); // just pass the hash of 0 strength so we update lastEffectHash & lastEffectTime
-			lastWasStop = 1;
-		}
 	}
 }

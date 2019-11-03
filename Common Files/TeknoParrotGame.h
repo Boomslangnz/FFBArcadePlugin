@@ -9,7 +9,6 @@ class TeknoParrotGame : public Game {
 	int ffbOffset = 0;
 
 protected:
-	int lastWasStop = 0;
 	int GetTeknoParrotFFB();
 	TeknoParrotGame();
 

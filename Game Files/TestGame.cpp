@@ -15,7 +15,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "TestGame.h"
 #include "SDL.h"
 
-//settingsFN copied from DllMain.cpp; renamed from settingsFilename
 wchar_t *settingsFN = TEXT(".\\FFBPlugin.ini");
 
 //GameId test values:
