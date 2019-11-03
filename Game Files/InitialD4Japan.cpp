@@ -34,9 +34,7 @@ void InitialD4Japan::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 		{
 			double percentLength = 200;
 			double percentForce = (0.6);
-			triggers->Inertia(percentForce);
 			triggers->Friction(percentForce);
-			triggers->Damper(percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 	}

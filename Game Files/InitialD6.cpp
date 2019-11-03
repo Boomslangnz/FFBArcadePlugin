@@ -142,18 +142,14 @@ void InitialD6::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 		{
 			double percentLength = 200;
 			double percentForce = (ffrubbingwalls / 31.0);
-			triggers->Inertia(percentForce);
 			triggers->Friction(percentForce);
-			triggers->Damper(percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 		if (ffcarcollision > 0) //cars colliding or rubbing with each other
 		{
 			double percentLength = 200;
 			double percentForce = (ffcarcollision / 16.0);
-			triggers->Inertia(percentForce);
 			triggers->Friction(percentForce);
-			triggers->Damper(percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 		if ((ff > 0x40037)& (ff < 0x40080))

@@ -34,9 +34,7 @@ void InitialD4::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 		{
 			double percentLength = 200;
 			double percentForce = (0.6);
-			triggers->Inertia(percentForce);
 			triggers->Friction(percentForce);
-			triggers->Damper(percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 	}
