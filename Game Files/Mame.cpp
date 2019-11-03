@@ -1699,12 +1699,12 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		{
 			if (mameversion.compare(Mame019932bit) == 0)
 			{
-				INT_PTR ff = helpers->ReadIntPtr(0x0096D760, true);
-				INT_PTR ff1 = helpers->ReadIntPtr(ff + 0x34C, false);
-				INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x34, false);
-				INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x18, false);
-				INT_PTR ff4 = helpers->ReadIntPtr(ff3 + 0x1C, false);
-				FFB = helpers->ReadByte(ff4 + 0x70C, false);
+				INT_PTR ff = helpers->ReadIntPtr(0x39B5D00, true);
+				INT_PTR ff1 = helpers->ReadIntPtr(ff + 0x708, false);
+				INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x398, false);
+				INT_PTR ff3 = helpers->ReadIntPtr(ff2 + 0x34, false);
+				INT_PTR ff4 = helpers->ReadIntPtr(ff3 + 0x24, false);
+				FFB = helpers->ReadByte(ff4 + 0x5C0, false);
 			}
 			if (mameversion.compare(Mame019964bit) == 0)
 			{
@@ -1786,11 +1786,11 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		{
 			if (mameversion.compare(Mame019932bit) == 0)
 			{
-				INT_PTR ffrave0 = helpers->ReadIntPtr(0x078D624C, true);
-				INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x10, false);
-				INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x90, false);
-				INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x18, false);
-				INT_PTR ffrave4 = helpers->ReadIntPtr(ffrave3 + 0x3D8, false);
+				INT_PTR ffrave0 = helpers->ReadIntPtr(0x78D624C, true);
+				INT_PTR ffrave1 = helpers->ReadIntPtr(ffrave0 + 0x0, false);
+				INT_PTR ffrave2 = helpers->ReadIntPtr(ffrave1 + 0x34C, false);
+				INT_PTR ffrave3 = helpers->ReadIntPtr(ffrave2 + 0x8, false);
+				INT_PTR ffrave4 = helpers->ReadIntPtr(ffrave3 + 0x490, false);
 				FFB = helpers->ReadByte(ffrave4 + 0x42, false);
 			}
 			if (mameversion.compare(Mame019964bit) == 0)
@@ -1860,12 +1860,12 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	{
 		if (mameversion.compare(Mame019932bit) == 0)
 		{
-			INT_PTR ff2049 = helpers->ReadIntPtr(0x078D624C, true);
-			INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x10, false);
-			INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x34, false);
-			INT_PTR ff20493 = helpers->ReadIntPtr(ff20492 + 0x18, false);
-			INT_PTR ff20494 = helpers->ReadIntPtr(ff20493 + 0x54, false);
-			FFB = helpers->ReadByte(ff20494 + 0x4E8, false);
+			INT_PTR ff2049 = helpers->ReadIntPtr(0x2956BA8, true);
+			INT_PTR ff20491 = helpers->ReadIntPtr(ff2049 + 0x160, false);
+			INT_PTR ff20492 = helpers->ReadIntPtr(ff20491 + 0x30C, false);
+			INT_PTR ff20493 = helpers->ReadIntPtr(ff20492 + 0x38C, false);
+			INT_PTR ff20494 = helpers->ReadIntPtr(ff20493 + 0xB0, false);
+			FFB = helpers->ReadByte(ff20494 + 0x4C8, false);
 		}
 		if (mameversion.compare(Mame019964bit) == 0)
 		{
@@ -1931,12 +1931,12 @@ void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	{
 		if (mameversion.compare(Mame019932bit) == 0)
 		{
-			INT_PTR ffcal1 = helpers->ReadIntPtr(0x078D624C, true);
-			INT_PTR ffcal2 = helpers->ReadIntPtr(ffcal1 + 0x10, false);
-			INT_PTR ffcal3 = helpers->ReadIntPtr(ffcal2 + 0xE4, false);
-			INT_PTR ffcal4 = helpers->ReadIntPtr(ffcal3 + 0x4, false);
-			INT_PTR ffcal5 = helpers->ReadIntPtr(ffcal4 + 0xC, false);
-			FFB = helpers->ReadByte(ffcal5 + 0x1F8, false);
+			INT_PTR ffcal1 = helpers->ReadIntPtr(0xC61E0A4, true);
+			INT_PTR ffcal2 = helpers->ReadIntPtr(ffcal1 + 0x118, false);
+			INT_PTR ffcal3 = helpers->ReadIntPtr(ffcal2 + 0x1C, false);
+			INT_PTR ffcal4 = helpers->ReadIntPtr(ffcal3 + 0x7D4, false);
+			INT_PTR ffcal5 = helpers->ReadIntPtr(ffcal4 + 0x0, false);
+			FFB = helpers->ReadByte(ffcal5 + 0x598, false);
 		}
 		if (mameversion.compare(Mame019964bit) == 0)
 		{
