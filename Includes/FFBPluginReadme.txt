@@ -335,6 +335,10 @@ extremely generous.
 
 -Ford Racing [dinput8.dll into game exe folder]
 
+-HOTD4 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
+
+-GRID [dinput8.dll into game exe folder]
+
 -Indy 500 [dinput8.dll into m2 emulator 1.1a folder]
 
 -Initial D4 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
