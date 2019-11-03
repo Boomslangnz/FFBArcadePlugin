@@ -29,8 +29,6 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Removed ResetFeedback as not necessary (pinkimo)
 
-- Changed Enable Rumble to select Force Feedback or Rumble and never both to avoid issues with conflicting effects (read below for details if using ini directly)
-
 - Replaced code for ShowButtonNumbersForSetup & ShowAxisForSetup if not using GUI to use every button/axis available
 
 - Updated SDL2 from 2.0.5 to 2.0.9 to match Teknoparrot (Delete SDL22.dll if leftover from old release in any teknoparrot folders)
@@ -42,7 +40,19 @@ BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 
 - Fixed issue with LGI & LGI3D where rumble wouldn't always work
 
-- Added Rumble Support for HOTD4 
+- Renamed FFBMode to PowerMode & will now work on any game if required (PowerMode=1 in ini)
+
+- Fixed issue where OR2 plugin would crash if going into test menu
+
+- Replaced Rumble code to use new SDL Rumble feature over old LeftRight haptic
+
+- Modified Daytona Championship USA code which could of caused slowdown during FFB Effects
+
+- Fixed M2 Emulator FFB not working for several games
+
+- Replaced old MAME seperate plugin with new one and fixed several issues, select mame version in GUI now for what version you are using
+
+- Added Rumble Support for HOTD4 (up to 2 players)
 
 - Overhauled Daytona Championship USA Menu Movement Input to allow initials to be selected after races etc aswell
 
@@ -50,11 +60,12 @@ BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 
 - Modified Button Rumble Plugin to work better as previously could have slight lag on rumble
 
-- Added FFB Support for GRID
+- Added Custom FFB Support for GRID 
 
 - Modified and cleaned constant effect up
 
 - General code cleanup
+
 
 ***1.0 Changes***
 
