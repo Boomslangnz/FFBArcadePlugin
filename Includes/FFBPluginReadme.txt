@@ -306,6 +306,8 @@ extremely generous.
 
 - Jackchen for his Daytona Championship USA FFB work at beginning of year.
 
+- seam for always testing and helping
+
 - Howard Castro for help on game FFB code. Always helpful and a big reason this plugin was ever made
 
 - Mame team

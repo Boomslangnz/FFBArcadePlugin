@@ -1650,7 +1650,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if (configGameId == 4 || configGameId == 12 || configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24 || configGameId == 35) //Lindbergh Games which require Sleep until loaded enough
+	if (configGameId == 4 || configGameId == 9 || configGameId == 12 || configGameId == 15 || configGameId == 16 || configGameId == 23 || configGameId == 24 || configGameId == 35) //Games which require Sleep until loaded enough eg Lindbergh or WMMT5 (for gui)
 	{
 		Sleep(2500);
 	}
