@@ -2618,6 +2618,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			originalmmsystemGetVersion = GetProcAddress(gl_hOriginalDll, "mmsystemGetVersion");
 		}
 
+		if (processName.find("FFBPluginGUI.exe") != std::string::npos)
+		{
+			hlp.log("hooked FFBPluginGUI.exe, aborting");
+			break;
+		}
+
 		hlp.log("creating ffb loop thread...");
 		CreateFFBLoopThread();
 		if (BeepWhenHook == 1)
