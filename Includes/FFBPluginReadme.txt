@@ -46,6 +46,8 @@ BE AWARE THIS WILL CHANGE YOUR GUID NUMBER OF DEVICES, RE-SET UP!!!
 
 - Replaced Rumble code to use new SDL Rumble feature over old LeftRight haptic
 
+- Removed so much friction feel when rubbing walls etc in Initial D games
+
 - Modified Daytona Championship USA code which could of caused slowdown during FFB Effects
 
 - Fixed M2 Emulator FFB not working for several games
