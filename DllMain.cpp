@@ -30,6 +30,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/TestGame.h"
 #include "Game Files/ChaseHQ2.h"
 #include "Game Files/Daytona3.h"
+#include "Game Files/FastBeatLoopPC.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/GRID.h"
@@ -897,6 +898,7 @@ const int INITIAL_D_8 = 18;
 const int POKKEN_TOURNAMENT = 19;
 const int MARIO_KART_GPDX_110 = 20;
 const int Sonic_Sega_AllStars_Racing = 21;
+const int Fast_Beat_Loop_PC = 22;
 const int INITIAL_D_5 = 23;
 const int INITIAL_D_4_Japan = 24;
 const int M2_Emulator = 25;
@@ -1706,6 +1708,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case DAYTONA_3:
 		game = new Daytona3;
+		break;
+	case Fast_Beat_Loop_PC:
+		game = new FastBeatPC;
 		break;
 	case FORD_RACING:
 		game = new FordRacing;

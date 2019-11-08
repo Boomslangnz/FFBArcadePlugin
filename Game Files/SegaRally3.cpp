@@ -14,11 +14,11 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "SegaRally3.h"
 
-void SegaRally3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+void SegaRally3::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	helpers->log("in SR3 Ffbloop");
 	const int ff = GetTeknoParrotFFB();
 	std::string ffs = std::to_string(ff);
-	helpers->log((char *)ffs.c_str());
+	helpers->log((char*)ffs.c_str());
 
 	if (ff > 15)
 	{
@@ -36,4 +36,5 @@ void SegaRally3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTri
 		double percentLength = 100;
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+	}
 }
