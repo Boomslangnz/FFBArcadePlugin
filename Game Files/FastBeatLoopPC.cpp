@@ -47,15 +47,15 @@ static int ConfirmButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ConfirmB
 static int CancelButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("CancelButton"), 0, settingsFilename);
 static int SaveDeleteButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("SaveDeleteButton"), 0, settingsFilename);
 static int ViewButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViewButton"), 0, settingsFilename);
-static int ShiftUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverUp"), 0, settingsFilename);
-static int ShiftDown = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverDown"), 0, settingsFilename);
+static int ShiftUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftUp"), 0, settingsFilename);
+static int ShiftDown = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftDown"), 0, settingsFilename);
 static int ExitButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ExitButtonDevice2"), 0, settingsFilename);
 static int ConfirmButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ConfirmButtonDevice2"), 0, settingsFilename);
 static int CancelButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("CancelButtonDevice2"), 0, settingsFilename);
 static int SaveDeleteButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SaveDeleteButtonDevice2"), 0, settingsFilename);
 static int ViewButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViewButtonDevice2"), 0, settingsFilename);
-static int ShiftUpDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverUpDevice2"), 0, settingsFilename);
-static int ShiftDownDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverDownDevice2"), 0, settingsFilename);
+static int ShiftUpDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftUpDevice2"), 0, settingsFilename);
+static int ShiftDownDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftDownDevice2"), 0, settingsFilename);
 
 static int RunningThread(void* ptr)
 {
