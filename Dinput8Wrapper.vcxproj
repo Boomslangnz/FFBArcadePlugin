@@ -19,10 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Game Files\FastBeatLoopPC.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GRID.h" />
     <ClInclude Include="Game Files\HOTD4.h" />
+    <ClInclude Include="Game Files\InitialD0.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
     <ClInclude Include="Game Files\ButtonRumble.h" />
@@ -45,10 +45,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Game Files\FastBeatLoopPC.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
+    <ClCompile Include="Game Files\InitialD0.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\ButtonRumble.cpp" />

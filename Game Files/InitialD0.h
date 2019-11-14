@@ -14,7 +14,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #pragma once
 #include "../Common Files/Game.h"
 
-class FastBeatPC : public Game {
+class InitialD0 : public Game {
 public:
 	void FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers);
 };

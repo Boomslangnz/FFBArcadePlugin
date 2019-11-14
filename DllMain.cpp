@@ -30,10 +30,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/TestGame.h"
 #include "Game Files/ChaseHQ2.h"
 #include "Game Files/Daytona3.h"
-#include "Game Files/FastBeatLoopPC.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/GRID.h"
+#include "Game Files/InitialD0.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"
 #include "Game Files/InitialD5.h"
@@ -898,7 +898,6 @@ const int INITIAL_D_8 = 18;
 const int POKKEN_TOURNAMENT = 19;
 const int MARIO_KART_GPDX_110 = 20;
 const int Sonic_Sega_AllStars_Racing = 21;
-const int Fast_Beat_Loop_PC = 22;
 const int INITIAL_D_5 = 23;
 const int INITIAL_D_4_Japan = 24;
 const int M2_Emulator = 25;
@@ -908,6 +907,7 @@ const int Button_Rumble = 28;
 const int Road_Fighters_3D = 29;
 const int LGI_3D = 30;
 const int LGI_ = 31;
+const int INITIAL_D_0 = 32;
 const int MAME_ = 33;
 const int OUTRUN_2Real = 35;
 const int FORD_RACING_OTHER = 38;
@@ -1712,9 +1712,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case DAYTONA_3:
 		game = new Daytona3;
 		break;
-	case Fast_Beat_Loop_PC:
-		game = new FastBeatPC;
-		break;
 	case FORD_RACING:
 		game = new FordRacing;
 		break;
@@ -1723,6 +1720,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case GRID_:
 		game = new GRID;
+		break;
+	case INITIAL_D_0:
+		game = new InitialD0;
 		break;
 	case INITIAL_D_4:
 		game = new InitialD4;
