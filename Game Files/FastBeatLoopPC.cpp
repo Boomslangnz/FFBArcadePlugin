@@ -18,7 +18,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
-extern HINSTANCE gl_dinput8Dll;
 extern int joystick_index1;
 extern int joystick_index2;
 extern SDL_Joystick* GameController2;
@@ -29,13 +28,17 @@ static bool saveA;
 static bool viewA;
 static bool shiftupA;
 static bool shiftdownA;
+static bool dpadupA;
+static bool dpaddownA;
+static bool dpadleftA;
+static bool dpadrightA;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 static int InputDeviceWheelSteeringAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelSteeringAxis"), 0, settingsFilename);
 static int InputDeviceWheelAcclAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelAcclAxis"), 0, settingsFilename);
 static int InputDeviceWheelBrakeAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelBrakeAxis"), 0, settingsFilename);
-static int InputDeviceWheelReverseAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelReverseAxis"), 0, settingsFilename);
+//static int InputDeviceWheelReverseAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelReverseAxis"), 0, settingsFilename);
 static int InputDeviceCombinedPedals = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceCombinedPedals"), 0, settingsFilename);
 static int SteeringDeadzone = GetPrivateProfileInt(TEXT("Settings"), TEXT("SteeringDeadzone"), 0, settingsFilename);
 static int PedalDeadzone = GetPrivateProfileInt(TEXT("Settings"), TEXT("PedalDeadzone"), 0, settingsFilename);
@@ -62,11 +65,33 @@ static int RunningThread(void* ptr)
 	int cnt;
 	for (cnt = 0; cnt >= 0; ++cnt)
 	{
-		if (GetAsyncKeyState(VK_ESCAPE))
-		{
-			TerminateProcess(GetCurrentProcess(), 0);
-		}
-	}
+		//if (GetAsyncKeyState(VK_ESCAPE))
+		//{
+		//	TerminateProcess(GetCurrentProcess(), 0);
+		//}
+
+		//Config Below In Game
+		myHelpers->WriteByte(0xA4136C, 0xB, false); //Accl
+		myHelpers->WriteByte(0xA41368, 0x1, false); //Axis or Button
+		myHelpers->WriteByte(0xA4137C, 0xA, false); //Brake
+		myHelpers->WriteByte(0xA41378, 0x1, false); //Axis or Button
+		myHelpers->WriteByte(0xA41394, 0x5, false); //Shift Up
+		myHelpers->WriteByte(0xA41390, 0x0, false); //Axis or Button
+		myHelpers->WriteByte(0xA4138C, 0x4, false); //Shift Down
+		myHelpers->WriteByte(0xA41388, 0x0, false); //Axis or Button
+		myHelpers->WriteByte(0xA4135C, 0x9, false); //Steering Left
+		myHelpers->WriteByte(0xA41358, 0x1, false); //Axis or Button
+		myHelpers->WriteByte(0xA41364, 0x8, false); //Steering Right
+		myHelpers->WriteByte(0xA41360, 0x1, false); //Axis or Button
+		myHelpers->WriteByte(0xA41384, 0x2, false); //Save Delete
+		myHelpers->WriteByte(0xA41380, 0x0, false); //Axis or Button
+		myHelpers->WriteByte(0xA4134C, 0x0, false); //Confirm
+		myHelpers->WriteByte(0xA41348, 0x0, false); //Axis or Button
+		myHelpers->WriteByte(0xA41354, 0x1, false); //Cancel
+		myHelpers->WriteByte(0xA41350, 0x0, false); //Axis or Button
+		myHelpers->WriteByte(0xA41374, 0x3, false); //View Change
+		myHelpers->WriteByte(0xA41370, 0x0, false); //Axis or Button
+	}	
 	return 0;
 }
 
@@ -74,6 +99,9 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 
 	if (InputDeviceWheelEnable == 1)
 	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
 		SDL_Thread* thread;
 		thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
 
@@ -101,6 +129,10 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 		std::string view("ViewButton");
 		std::string sftup("ShiftUp");
 		std::string sftdown("ShiftDown");
+		std::string dpdupgame("DpadUpGame");
+		std::string dpddowngame("DpadDownGame");
+		std::string dpdleftgame("DpadLeftGame");
+		std::string dpdrightgame("DpadRightGame");
 		std::string exit2("ExitButtonDevice2");
 		std::string confirm2("ConfirmButtonDevice2");
 		std::string cancel2("CancelButtonDevice2");
@@ -108,6 +140,10 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 		std::string view2("ViewButtonDevice2");
 		std::string sftup2("ShiftUpDevice2");
 		std::string sftdown2("ShiftDownDevice2");
+		std::string dpdupgame2("DpadUpGameDevice2");
+		std::string dpddowngame2("DpadDownGameDevice2");
+		std::string dpdleftgame2("DpadLeftGameDevice2");
+		std::string dpdrightgame2("DpadRightGameDevice2");
 		std::string dpdup(DpadUpChar);
 		std::string dpddown(DpadDownChar);
 		std::string dpdleft(DpadLeftChar);
@@ -147,110 +183,45 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 		}
 
 		const int WHEEL_DEAD_ZONE = (SteeringDeadzone * 100.0);
-		const int ACCL_DEAD_ZONE = (1 + PedalDeadzone * 100.0);
-		const int BRAKE_DEAD_ZONE = (1 + PedalDeadzone * 100.0);
+		const int ACCL_DEAD_ZONE = (PedalDeadzone * 100.0);
+		const int BRAKE_DEAD_ZONE = (PedalDeadzone * 100.0);
 		const int SETUP_DEAD_ZONE = 20000;
 
-		/*helpers->WriteNop(0x2F07A, true);
-		helpers->WriteNop(0x2F07B, true);
-		helpers->WriteNop(0x2F07C, true);
-		helpers->WriteNop(0x2F07D, true);
-		helpers->WriteNop(0x2F07E, true);
-		helpers->WriteNop(0x2F07F, true);
-
-		helpers->WriteNop(0x2F1E0, true);
-		helpers->WriteNop(0x2F1E1, true);
-		helpers->WriteNop(0x2F1E2, true);
-		helpers->WriteNop(0x2F1E3, true);
-		helpers->WriteNop(0x2F1E4, true);
-		helpers->WriteNop(0x2F1E5, true);*/
-
-		helpers->WriteNop(0x2E35C, true);
-		helpers->WriteNop(0x2E35D, true);
-		helpers->WriteNop(0x2E35E, true);
-		helpers->WriteNop(0x2E35F, true);
-		helpers->WriteNop(0x2E360, true);
-		helpers->WriteNop(0x2E361, true);
-
-		helpers->WriteNop(0x2E381, true);
-		helpers->WriteNop(0x2E382, true);
-		helpers->WriteNop(0x2E383, true);
-		helpers->WriteNop(0x2E384, true);
-		helpers->WriteNop(0x2E385, true);
-		helpers->WriteNop(0x2E386, true);
-
-		helpers->WriteNop(0x2E456, true);
-		helpers->WriteNop(0x2E457, true);
-		helpers->WriteNop(0x2E458, true);
-		helpers->WriteNop(0x2E459, true);
-		helpers->WriteNop(0x2E45A, true);
-		helpers->WriteNop(0x2E45B, true);
-
-		helpers->WriteNop(0x2E5E2, true);
-		helpers->WriteNop(0x2E5E3, true);
-		helpers->WriteNop(0x2E5E4, true);
-		helpers->WriteNop(0x2E5E5, true);
-		helpers->WriteNop(0x2E5E6, true);
-		helpers->WriteNop(0x2E5E7, true);
-
-		helpers->WriteNop(0x2E81B, true);
-		helpers->WriteNop(0x2E81C, true);
-		helpers->WriteNop(0x2E81D, true);
-		helpers->WriteNop(0x2E81E, true);
-		helpers->WriteNop(0x2E81F, true);
-		helpers->WriteNop(0x2E820, true);
-
-		helpers->WriteNop(0x2E9A7, true);
-		helpers->WriteNop(0x2E9A8, true);
-		helpers->WriteNop(0x2E9A9, true);
-		helpers->WriteNop(0x2E9AA, true);
-		helpers->WriteNop(0x2E9AB, true);
-		helpers->WriteNop(0x2E9AC, true);
-
-		helpers->WriteNop(0x2EA6D, true);
-		helpers->WriteNop(0x2EA6E, true);
-		helpers->WriteNop(0x2EA6F, true);
-		helpers->WriteNop(0x2EA70, true);
-		helpers->WriteNop(0x2EA71, true);
-		helpers->WriteNop(0x2EA72, true);
-
-		helpers->WriteNop(0x2E6A0, true);
-		helpers->WriteNop(0x2E6A1, true);
-		helpers->WriteNop(0x2E6A2, true);
-		helpers->WriteNop(0x2E6A3, true);
-		helpers->WriteNop(0x2E6A4, true);
-		helpers->WriteNop(0x2E6A5, true);
-
-		helpers->WriteNop(0x2E75C, true);
-		helpers->WriteNop(0x2E75D, true);
-		helpers->WriteNop(0x2E75E, true);
-		helpers->WriteNop(0x2E75F, true);
-		helpers->WriteNop(0x2E760, true);
-		helpers->WriteNop(0x2E761, true);
-
-		/*helpers->WriteNop(0x2F17C, true);
-		helpers->WriteNop(0x2F17D, true);
-		helpers->WriteNop(0x2F17E, true);
-		helpers->WriteNop(0x2F17F, true);
-		helpers->WriteNop(0x2F180, true);
-		helpers->WriteNop(0x2F181, true);
-
-		helpers->WriteNop(0x2F024, true);
-		helpers->WriteNop(0x2F025, true);
-		helpers->WriteNop(0x2F026, true);
-		helpers->WriteNop(0x2F027, true);
-		helpers->WriteNop(0x2F028, true);
-		helpers->WriteNop(0x2F029, true);*/
+		HMODULE hMod = GetModuleHandleA("dinput8.dll");
+		if (hMod)
+		{
+			void* fn = GetProcAddress(hMod, "GetdfDIJoystick");
+			helpers->WriteNop((INT_PTR)fn + 0x5C0C, false);
+			helpers->WriteNop((INT_PTR)fn + 0x5C0D, false);
+			helpers->WriteNop((INT_PTR)fn + 0x5C14, false);
+			helpers->WriteNop((INT_PTR)fn + 0x5C15, false);
+		}
 
 		while (SDL_WaitEvent(&e) != 0)
 		{
-			INT_PTR AcclBase = helpers->ReadIntPtr(0x641074, true);
-			INT_PTR AcclBase1 = helpers->ReadIntPtr(AcclBase + 0x8, false);
-			INT_PTR AcclBase2 = helpers->ReadIntPtr(AcclBase1 + 0x0, false);
-			UINT8 Buttons = helpers->ReadByte(AcclBase2 + 0x5A0, false);
 			myTriggers = triggers;
 			myConstants = constants;
 			myHelpers = helpers;
+			INT_PTR InputBase = helpers->ReadIntPtr(0x641074, true);
+			INT_PTR InputBase1 = helpers->ReadIntPtr(InputBase + 0x8, false);
+			INT_PTR InputBase2 = helpers->ReadIntPtr(InputBase1 + 0x450, false);
+			INT_PTR InputBase3 = helpers->ReadIntPtr(InputBase2 + 0x8, false);
+			INT_PTR InputBase4 = helpers->ReadIntPtr(InputBase3 + 0x8, false);
+			UINT8 DinputConfirm = helpers->ReadByte(InputBase4 + 0x164, false);
+			UINT8 DinputCancel = helpers->ReadByte(InputBase4 + 0x165, false);
+			UINT8 DinputSave = helpers->ReadByte(InputBase4 + 0x166, false);
+			UINT8 DinputView = helpers->ReadByte(InputBase4 + 0x167, false);			
+			UINT8 DinputShiftDown = helpers->ReadByte(InputBase4 + 0x168, false);
+			UINT8 DinputShiftUp = helpers->ReadByte(InputBase4 + 0x169, false);
+			INT_PTR DinputDpad = helpers->ReadIntPtr(InputBase4 + 0xA8, false);
+			UINT8 XinputConfirm = helpers->ReadByte(InputBase4 + 0x27, false);
+			UINT8 XinputCancel = helpers->ReadByte(InputBase4 + 0x28, false);
+			UINT8 XinputSave = helpers->ReadByte(InputBase4 + 0x29, false);
+			UINT8 XinputView = helpers->ReadByte(InputBase4 + 0x2A, false);
+			UINT8 XinputShiftDown = helpers->ReadByte(InputBase4 + 0x2B, false);
+			UINT8 XinputShiftUp = helpers->ReadByte(InputBase4 + 0x2C, false);
+			INT_PTR XinputDpad = helpers->ReadIntPtr(InputBase4 + 0x23, false);
+			
 			if ((e.type == SDL_JOYAXISMOTION) & (ShowAxisForSetup == 0))
 			{
 				if (e.jaxis.which == joystick_index1)
@@ -261,25 +232,25 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						{
 							e.jaxis.value = e.jaxis.value + WHEEL_DEAD_ZONE;
 							{
-								helpers->WriteFloat32(AcclBase1 + 0x654, -1.0 - (-e.jaxis.value / -32568.0) + 1.0, false);
-								helpers->WriteFloat32(AcclBase1 + 0x650, 0.0, false);
-							}
+								helpers->WriteIntPtr(InputBase4 + 0x98, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
+								helpers->WriteIntPtr(InputBase4 + 0x13, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
+							}						
 						}
 						else if (e.jaxis.value > WHEEL_DEAD_ZONE)
 						{
 							e.jaxis.value = e.jaxis.value - WHEEL_DEAD_ZONE;
 							{
-								helpers->WriteFloat32(AcclBase1 + 0x650, (e.jaxis.value / 32567.0), false);
-								helpers->WriteFloat32(AcclBase1 + 0x654, 0.0, false);
+								helpers->WriteIntPtr(InputBase4 + 0x98, (e.jaxis.value / 32567.0) * 1000000000.0, false);
+								helpers->WriteIntPtr(InputBase4 + 0x13, (e.jaxis.value / 32567.0) * 1000000000.0, false);
 							}
 						}
 						else if ((e.jaxis.value < WHEEL_DEAD_ZONE) & (e.jaxis.value > -WHEEL_DEAD_ZONE))
 						{
-							helpers->WriteFloat32(AcclBase1 + 0x650, 0.0, false);
-							helpers->WriteFloat32(AcclBase1 + 0x654, 0.0, false);
+							helpers->WriteIntPtr(InputBase4 + 0x98, 0, false);
+							helpers->WriteIntPtr(InputBase4 + 0x13, 0, false);
 						}
 					}
-					if (InputDeviceWheelReverseAxis == 1)
+					/*if (InputDeviceWheelReverseAxis == 1)
 					{
 						if (InputDeviceCombinedPedals == 1)
 						{
@@ -288,25 +259,23 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 								if (e.jaxis.value < -ACCL_DEAD_ZONE)
 								{
 									e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
-									int acclfloat = ((-e.jaxis.value + ACCL_DEAD_ZONE) / 128.5);
-									if ((acclfloat >= 0) && (acclfloat < 256))
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x664, ((acclfloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
 									}
 								}
 								else if (e.jaxis.value > ACCL_DEAD_ZONE)
 								{
 									e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
-									int brakefloat = ((e.jaxis.value + ACCL_DEAD_ZONE) / 128);
-									if ((brakefloat >= 0) && (brakefloat < 256))
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x660, ((brakefloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (e.jaxis.value / 32567.0) * 1000000000.0, false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, (e.jaxis.value / 32567.0) * 1000000000.0, false);
 									}
 								}
 								else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
 								{
-									helpers->WriteFloat32(AcclBase1 + 0x664, 0.0, false);
-									helpers->WriteFloat32(AcclBase1 + 0x660, 0.0, false);
+									helpers->WriteIntPtr(InputBase4 + 0x9C, 0, false);
+									helpers->WriteIntPtr(InputBase4 + 0xF, 0, false);
 								}
 							}
 						}
@@ -316,20 +285,16 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 							{
 								if (e.jaxis.value < -ACCL_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int acclfloat = 127 - e.jaxis.value;
-									if ((acclfloat > 127) && (acclfloat < 256))
+									e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x664, ((acclfloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
 									}
 								}
 								else if (e.jaxis.value > ACCL_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int acclfloat = 128 - e.jaxis.value;
-									if ((acclfloat >= 0) && (acclfloat < 128))
+									e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x664, ((acclfloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (e.jaxis.value / 32567.0) * 1000000000.0, false);
 									}
 								}
 							}
@@ -337,49 +302,48 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 							{
 								if (e.jaxis.value < -BRAKE_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int brakefloat = 127 - e.jaxis.value;
-									if ((brakefloat > 127) && (brakefloat < 256))
+									e.jaxis.value = e.jaxis.value + BRAKE_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x660, ((brakefloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
 									}
 								}
 								else if (e.jaxis.value > BRAKE_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int brakefloat = 128 - e.jaxis.value;
-									if ((brakefloat >= 0) && (brakefloat < 128))
+									e.jaxis.value = e.jaxis.value - BRAKE_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x660, ((brakefloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (e.jaxis.value / 32567.0) * 1000000000.0, false);
 									}
 								}
 							}
 						}
-					}
-					else
-					{
+					}*/
+					//else
+					//{
 						if (InputDeviceCombinedPedals == 1)
 						{
-							if (e.jaxis.value < -ACCL_DEAD_ZONE)
+							if (e.jaxis.axis == InputDeviceWheelAcclAxis)
 							{
-								e.jaxis.value = e.jaxis.value;
-								int acclfloat = ((e.jaxis.value) / 128.5);
+								if (e.jaxis.value < -ACCL_DEAD_ZONE)
 								{
-									helpers->WriteFloat32(AcclBase1 + 0x664, ((255 + acclfloat) / 255.0), false);
+									e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
+									{
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, (-e.jaxis.value / -32568.0) * 1000000000.0, false);
+									}
 								}
-							}
-							else if (e.jaxis.value > ACCL_DEAD_ZONE)
-							{
-								e.jaxis.value = e.jaxis.value;
-								int brakefloat = ((-e.jaxis.value) / 128.5);
+								else if (e.jaxis.value > ACCL_DEAD_ZONE)
 								{
-									helpers->WriteFloat32(AcclBase1 + 0x660, ((254 + brakefloat) / 255.0), false);
+									e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
+									{
+										helpers->WriteIntPtr(InputBase4 + 0x9C, (e.jaxis.value / 32567.0) * 1000000000.0, false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, (e.jaxis.value / 32567.0) * 1000000000.0, false);
+									}
 								}
-							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
-							{
-								helpers->WriteFloat32(AcclBase1 + 0x664, 1.0, false);
-								helpers->WriteFloat32(AcclBase1 + 0x660, 1.0, false);
+								else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+								{
+									helpers->WriteIntPtr(InputBase4 + 0x9C, 0, false);
+									helpers->WriteIntPtr(InputBase4 + 0xF, 0, false);
+								}
 							}
 						}
 						else
@@ -388,20 +352,18 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 							{
 								if (e.jaxis.value < -ACCL_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int acclfloat = 128 + e.jaxis.value;
-									if ((acclfloat >= 0) && (acclfloat < 128))
+									e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x664, ((acclfloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, -((-e.jaxis.value / -32568.0) * 500000000.0) - 500000000.0, false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, -((-e.jaxis.value / -32568.0) * 500000000.0) - 500000000.0, false);
 									}
 								}
 								else if (e.jaxis.value > ACCL_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int acclfloat = 127 + e.jaxis.value;
-									if ((acclfloat > 127) && (acclfloat < 256))
+									e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x664, ((acclfloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, -((e.jaxis.value / 32567.0) * 500000000.0) - 500000000.0, false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, -((e.jaxis.value / 32567.0) * 500000000.0) - 500000000.0, false);
 									}
 								}
 							}
@@ -409,27 +371,25 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 							{
 								if (e.jaxis.value < -BRAKE_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int brakefloat = 128 + e.jaxis.value;
-									if ((brakefloat >= 0) && (brakefloat < 128))
+									e.jaxis.value = e.jaxis.value + BRAKE_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x660, ((brakefloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, 500000000.0 + ((-e.jaxis.value / -32568.0) * 500000000.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, 500000000.0 + ((-e.jaxis.value / -32568.0) * 500000000.0), false);
 									}
 								}
 								else if (e.jaxis.value > BRAKE_DEAD_ZONE)
 								{
-									e.jaxis.value = (e.jaxis.value / 255);
-									int brakefloat = 127 + e.jaxis.value;
-									if ((brakefloat > 127) && (brakefloat < 256))
+									e.jaxis.value = e.jaxis.value - BRAKE_DEAD_ZONE;
 									{
-										helpers->WriteFloat32(AcclBase1 + 0x660, ((brakefloat) / 255.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0x9C, 500000000.0 + ((e.jaxis.value / 32567.0) * 500000000.0), false);
+										helpers->WriteIntPtr(InputBase4 + 0xF, 500000000.0 + ((e.jaxis.value / 32567.0) * 500000000.0), false);
 									}
 								}
 							}
 						}
 					}
 				}
-			}
+			//}
 
 			if (ShowAxisForSetup == 1)
 			{
@@ -481,66 +441,126 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 					{
 						if (confirmA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm -= 0x80, false);
 							confirmA = false;
 						}
 						if (cancelA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel -= 0x80, false);
 							cancelA = false;
 						}
 						if (saveA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave -= 0x80, false);
 							saveA = false;
 						}
 						if (viewA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView -= 0x80, false);
 							viewA = false;
 						}
 						if (shiftupA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp -= 0x80, false);
 							shiftupA = false;
 						}
 						if (shiftdownA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown -= 0x80, false);
 							shiftdownA = false;
+						}
+						if (dpadupA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad += 0xFFFFFFFF, false);
+							dpadupA = false;
+						}
+						if (dpaddownA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad += 0xFFFFB9AF, false);
+							dpaddownA = false;
+						}
+						if (dpadleftA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad += 0xFFFF9687, false);
+							dpadleftA = false;
+						}
+						if (dpadrightA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad += 0xFFFFDCD7, false);
+							dpadrightA = false;
 						}
 					}
 					else if (e.jhat.which == joystick_index2)
 					{
 						if (confirmA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm -= 0x80, false);
 							confirmA = false;
 						}
 						if (cancelA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel -= 0x80, false);
 							cancelA = false;
 						}
 						if (saveA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave -= 0x80, false);
 							saveA = false;
 						}
 						if (viewA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView -= 0x80, false);
 							viewA = false;
 						}
 						if (shiftupA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp -= 0x80, false);
 							shiftupA = false;
 						}
 						if (shiftdownA)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown -= 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown -= 0x80, false);
 							shiftdownA = false;
+						}
+						if (dpadupA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad += 0xFFFFFFFF, false);
+							dpadupA = false;
+						}
+						if (dpaddownA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad += 0xFFFFB9AF, false);
+							dpaddownA = false;
+						}
+						if (dpadleftA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad += 0xFFFF9687, false);
+							dpadleftA = false;
+						}
+						if (dpadrightA)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad += 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad += 0xFFFFDCD7, false);
+							dpadrightA = false;
 						}
 					}
 				}
@@ -554,33 +574,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpdup.compare(confirm) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpdup.compare(cancel) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpdup.compare(view) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpdup.compare(save) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpdup.compare(sftup) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpdup.compare(sftdown) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpdup.compare(dpdupgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpdup.compare(dpddowngame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpdup.compare(dpdleftgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpdup.compare(dpdrightgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 					else if (e.jhat.which == joystick_index2)
@@ -591,33 +641,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpdup2.compare(confirm2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpdup2.compare(cancel2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpdup2.compare(view2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpdup2.compare(save2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpdup2.compare(sftup2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpdup2.compare(sftdown2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpdup2.compare(dpdupgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpdup2.compare(dpddowngame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpdup2.compare(dpdleftgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpdup2.compare(dpdrightgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 				}
@@ -631,33 +711,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpddown.compare(confirm) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpddown.compare(cancel) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpddown.compare(view) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpddown.compare(save) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpddown.compare(sftup) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpddown.compare(sftdown) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpddown.compare(dpdupgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpddown.compare(dpddowngame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpddown.compare(dpdleftgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpddown.compare(dpdrightgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 					else if (e.jhat.which == joystick_index2)
@@ -668,33 +778,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpddown2.compare(confirm2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpddown2.compare(cancel2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpddown2.compare(view2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpddown2.compare(save2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpddown2.compare(sftup2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpddown2.compare(sftdown2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpddown2.compare(dpdupgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpddown2.compare(dpddowngame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpddown2.compare(dpdleftgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpddown2.compare(dpdrightgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 				}
@@ -708,33 +848,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpdleft.compare(confirm) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpdleft.compare(cancel) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpdleft.compare(view) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpdleft.compare(save) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpdleft.compare(sftup) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpdleft.compare(sftdown) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpdleft.compare(dpdupgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpdleft.compare(dpddowngame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpdleft.compare(dpdleftgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpdleft.compare(dpdrightgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 					else if (e.jhat.which == joystick_index2)
@@ -745,33 +915,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpdleft2.compare(confirm2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpdleft2.compare(cancel2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpdleft2.compare(view2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpdleft2.compare(save2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpdleft2.compare(sftup2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpdleft2.compare(sftdown2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpdleft2.compare(dpdupgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpdleft2.compare(dpddowngame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpdleft2.compare(dpdleftgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpdleft2.compare(dpdrightgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 				}
@@ -785,33 +985,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpdright.compare(confirm) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpdright.compare(cancel) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpdright.compare(view) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpdright.compare(save) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpdright.compare(sftup) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpdright.compare(sftdown) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpdright.compare(dpdupgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpdright.compare(dpddowngame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpdright.compare(dpdleftgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpdright.compare(dpdrightgame) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 					else if (e.jhat.which == joystick_index2)
@@ -822,33 +1052,63 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 						}
 						if (dpdright2.compare(confirm2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+							helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 							confirmA = true;
 						}
 						if (dpdright2.compare(cancel2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
+							helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 							cancelA = true;
 						}
 						if (dpdright2.compare(view2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+							helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 							viewA = true;
 						}
 						if (dpdright2.compare(save2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+							helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 							saveA = true;
 						}
 						if (dpdright2.compare(sftup2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+							helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 							shiftupA = true;
 						}
 						if (dpdright2.compare(sftdown2) == 0)
 						{
-							helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+							helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+							helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 							shiftdownA = true;
+						}
+						if (dpdright2.compare(dpdupgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFFFFF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, XinputDpad -= 0xFFFFFFFF, false);
+							dpadupA = true;
+						}
+						if (dpdright2.compare(dpddowngame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFB9AF, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFB9AF, false);
+							dpaddownA = true;
+						}
+						if (dpdright2.compare(dpdleftgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFF9687, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFF9687, false);
+							dpadleftA = true;
+						}
+						if (dpdright2.compare(dpdrightgame2) == 0)
+						{
+							helpers->WriteIntPtr(InputBase4 + 0xA8, DinputDpad -= 0xFFFFDCD7, false);
+							helpers->WriteIntPtr(InputBase4 + 0x23, DinputDpad -= 0xFFFFDCD7, false);
+							dpadrightA = true;
 						}
 					}
 				}
@@ -860,7 +1120,8 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 				{
 					if (e.jbutton.button == ConfirmButton)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+						helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 					}
 					if (e.jbutton.button == ExitButton)
 					{
@@ -868,30 +1129,36 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 					}
 					if (e.jbutton.button == CancelButton)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
-					}
-					if (e.jbutton.button == ViewButton)
-					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+						helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 					}
 					if (e.jbutton.button == SaveDeleteButton)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+						helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
+					}
+					if (e.jbutton.button == ViewButton)
+					{
+						helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
+					}					
+					if (e.jbutton.button == ShiftDown)
+					{
+						helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
 					}
 					if (e.jbutton.button == ShiftUp)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
-					}
-					if (e.jbutton.button == ShiftDown)
-					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+						helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 					}
 				}
 				else if (e.jbutton.which == joystick_index2)
 				{
 					if (e.jbutton.button == ConfirmButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x20, false);
+						helpers->WriteByte(InputBase4 + 0x164, DinputConfirm += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x27, XinputConfirm += 0x80, false);
 					}
 					if (e.jbutton.button == ExitButtonDevice2)
 					{
@@ -899,23 +1166,28 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 					}
 					if (e.jbutton.button == CancelButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x10, false);
-					}
-					if (e.jbutton.button == ViewButtonDevice2)
-					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x4, false);
+						helpers->WriteByte(InputBase4 + 0x165, DinputCancel += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x28, XinputCancel += 0x80, false);
 					}
 					if (e.jbutton.button == SaveDeleteButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x8, false);
+						helpers->WriteByte(InputBase4 + 0x166, DinputSave += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x29, XinputSave += 0x80, false);
 					}
-					if (e.jbutton.button == ShiftUpDevice2)
+					if (e.jbutton.button == ViewButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x2, false);
+						helpers->WriteByte(InputBase4 + 0x167, DinputView += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2A, XinputView += 0x80, false);
 					}
 					if (e.jbutton.button == ShiftDownDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons += 0x1, false);
+						helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown += 0x80, false);
+					}
+					if (e.jbutton.button == ShiftUpDevice2)
+					{
+						helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp += 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp += 0x80, false);
 					}
 				}
 			}
@@ -925,54 +1197,66 @@ void FastBeatPC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 				{
 					if (e.jbutton.button == ConfirmButton)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x20, false);
+						helpers->WriteByte(InputBase4 + 0x164, DinputConfirm -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x27, XinputConfirm -= 0x80, false);
 					}
 					if (e.jbutton.button == CancelButton)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x10, false);
-					}
-					if (e.jbutton.button == ViewButton)
-					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x4, false);
+						helpers->WriteByte(InputBase4 + 0x165, DinputCancel -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x28, XinputCancel -= 0x80, false);
 					}
 					if (e.jbutton.button == SaveDeleteButton)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x8, false);
+						helpers->WriteByte(InputBase4 + 0x166, DinputSave -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x29, XinputSave -= 0x80, false);
 					}
-					if (e.jbutton.button == ShiftUp)
+					if (e.jbutton.button == ViewButton)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x2, false);
+						helpers->WriteByte(InputBase4 + 0x167, DinputView -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2A, XinputView -= 0x80, false);
 					}
 					if (e.jbutton.button == ShiftDown)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x1, false);
+						helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown -= 0x80, false);
+					}
+					if (e.jbutton.button == ShiftUp)
+					{
+						helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp -= 0x80, false);
 					}
 				}
 				else if (e.jbutton.which == joystick_index2)
 				{
 					if (e.jbutton.button == ConfirmButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x20, false);
+						helpers->WriteByte(InputBase4 + 0x164, DinputConfirm -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x27, XinputConfirm -= 0x80, false);
 					}
 					if (e.jbutton.button == CancelButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x10, false);
-					}
-					if (e.jbutton.button == ViewButtonDevice2)
-					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x4, false);
+						helpers->WriteByte(InputBase4 + 0x165, DinputCancel -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x28, XinputCancel -= 0x80, false);
 					}
 					if (e.jbutton.button == SaveDeleteButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x8, false);
+						helpers->WriteByte(InputBase4 + 0x166, DinputSave -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x29, XinputSave -= 0x80, false);
 					}
-					if (e.jbutton.button == ShiftUpDevice2)
+					if (e.jbutton.button == ViewButtonDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x2, false);
+						helpers->WriteByte(InputBase4 + 0x167, DinputView -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2A, XinputView -= 0x80, false);
 					}
 					if (e.jbutton.button == ShiftDownDevice2)
 					{
-						helpers->WriteByte(AcclBase2 + 0x5A0, Buttons -= 0x1, false);
+						helpers->WriteByte(InputBase4 + 0x168, DinputShiftDown -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2B, XinputShiftDown -= 0x80, false);
+					}
+					if (e.jbutton.button == ShiftUpDevice2)
+					{
+						helpers->WriteByte(InputBase4 + 0x169, DinputShiftUp -= 0x80, false);
+						helpers->WriteByte(InputBase4 + 0x2C, XinputShiftUp -= 0x80, false);
 					}
 				}
 			}

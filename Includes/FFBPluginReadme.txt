@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.1
+Version 1.1a
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -9,6 +9,15 @@ to add FFB to Daytona Championship USA and it grew from there to support several
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
+
+***1.1a Changes***
+
+- Fixed issue with inputs not working correctly
+
+- Stopped plugin files being able to hook FFBPluginGUI.exe
+
+- Added sleep before loading most games which should stop potential crashes
+
 
 ***1.1 Changes***
 
