@@ -359,6 +359,8 @@ extremely generous.
 
 -Indy 500 [dinput8.dll into m2 emulator 1.1a folder]
 
+-Initial D0 [dinput8.dll into game exe folder]
+
 -Initial D4 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Initial D4 Japan [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
