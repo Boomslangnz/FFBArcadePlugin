@@ -24,7 +24,7 @@ void InitialD0::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
-	
+
 	if (oldff != newff)
 	{
 		if ((ff > 0x37) && (ff < 0x80))

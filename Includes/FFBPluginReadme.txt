@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.2
+Version 1.1a
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -9,15 +9,6 @@ to add FFB to Daytona Championship USA and it grew from there to support several
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
-
-***1.2 Changes***
-
-- Added Initial D Arcade Stage Zero FFB Support
-
-- Added ChaseHQ2 shader filter removal checkbox under Input/Misc setting in GUI
-
-- Sorry had wrong SDL2.dll for all 64bit games on last release
-
 
 ***1.1a Changes***
 
@@ -358,8 +349,6 @@ extremely generous.
 -GRID [dinput8.dll into game exe folder]
 
 -Indy 500 [dinput8.dll into m2 emulator 1.1a folder]
-
--Initial D0 [dinput8.dll into game exe folder]
 
 -Initial D4 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
