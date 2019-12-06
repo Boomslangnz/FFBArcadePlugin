@@ -28,6 +28,8 @@ static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int MinimumSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinimumSpringStrength"), 0, settingsFilename);
 
 static bool init = false;
+static bool MAEffect = false;
+static bool MBEffect = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -1711,6 +1713,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			SDL_HapticRumbleInit;
 			SDL_HapticRumbleInit(ControllerHaptic2);
 		}
+		SDL_HapticSetGain(haptic2, 100);
 	}
 
 	char* name = new char[256];
@@ -2074,8 +2077,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 	if (hWnd45 > NULL) //OutRunners
 	{
-		static bool MAEffect = false;
-		static bool MBEffect = false;
 
 		if (name == MA_Steering_Wheel_motor)
 		{
@@ -2109,21 +2110,25 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		if (MAEffect)
 		{
 			triggers->Sine(100, 0, 1.0);
+			triggers->Rumble(1.0, 1.0, 100);
 		}
 
 		if (!MAEffect)
 		{
 			triggers->Sine(0, 0, 0);
+			triggers->Rumble(0, 0, 0);
 		}
 
 		if (MBEffect)
 		{
-			// Need to add device 2
+			triggers->SineDevice2(100, 0, 1.0);
+			triggers->RumbleDevice2(1.0, 1.0, 100);
 		}
 
 		if (!MBEffect)
 		{
-			// Need to add device 2
+			triggers->SineDevice2(0, 0, 0);
+			triggers->RumbleDevice2(0, 0, 0);
 		}
 	}
 }

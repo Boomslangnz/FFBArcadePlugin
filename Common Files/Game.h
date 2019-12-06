@@ -6,6 +6,7 @@ struct EffectTriggers {
 	void(*Spring)(double strength);
 	void(*Friction)(double strength);
 	void(*Sine)(UINT16 period, UINT16 fadePeriod, double strength);
+	void(*SineDevice2)(UINT16 period, UINT16 fadePeriod, double strength);
 	void(*Rumble)(double lowfrequency, double highfrequency, double length);
 	void(*RumbleDevice2)(double lowfrequency, double highfrequency, double length);
 	void(*LeftRight)(double smallstrength, double largestrength, double length);
@@ -28,6 +29,7 @@ public:
 	int effect_friction_id;
 	int effect_leftright_id;
 	int effect_sine_id;
+	int effect_sine_id_device2;
 	int effect_spring_id;
 	int effect_vibration_id;
 	int effect_inertia_id;
