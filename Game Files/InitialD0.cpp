@@ -15,6 +15,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "InitialD0.h"
 #include "math.h"
 
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
+static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
+
 void InitialD0::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	UINT8 ff = helpers->ReadByte(0x168317F, true);
@@ -24,6 +28,11 @@ void InitialD0::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
+
+	if (EnableForceSpringEffect == 1)
+	{
+		triggers->Springi(ForceSpringStrength / 100.0);
+	}
 
 	if (oldff != newff)
 	{
