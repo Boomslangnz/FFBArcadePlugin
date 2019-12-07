@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.1a
+Version 1.3
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -9,6 +9,58 @@ to add FFB to Daytona Championship USA and it grew from there to support several
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
+
+***1.3 Changes***
+
+- Added optional Spring Effect to Initial D Arcade Stage Zero
+
+- Added EnableRumbleDevice2 and ReverseRumbleDevice2 checkboxes to certain games that support 2P Rumble
+
+- Renamed MAME plugins to OldMame as they are outdated and nearly useless now. Only game worth keeping them for is Rave Racer since MAME doesn't support FFB Output yet
+
+- Added Output Reading support!! (HUGE Thanks to headkaze for making MAMEInterOp SDK)
+
+No more specific versions of MAME necessary and all past and present MAME versions can be supported, along with the likes of Supermodel Emulator and any others which support MAME Outputs.
+
+This has taken me all week to get the c++ code working correctly, then port across to FFB Plugin, and finally begin adding support to some games.
+
+Initial Supported Output Games
+
+***Supermodel Emulator*** 
+-Daytona USA 2 - Power Edition
+-Daytona USA 2 - Battle on the Edge
+-Scud Race
+-Scud Race Plus
+-Le Mans 24
+-Sega Rally 2
+-Dirt Devils
+-Emergency Call Ambulance
+
+***MAME***
+-Virtua Formula
+-Virtua Racing
+-San Francisco Rush
+-San Francisco Rush: The Rock
+-San Francisco Rush 2049
+-Cruis'n World
+-Off Road Challenge
+-Cruis'n USA
+-California Speed
+-Out Run
+-Turbo Out Run
+-Power Drift
+-OutRunners (Currently ONLY game which allows 2 Player FFB if you have 2 x wheels or controllers)
+
+Please Read Below Output Section For More Info or read FFBPluginReadme.txt before you message for help.
+
+***1.2 Changes***
+
+- Added Initial D Arcade Stage Zero FFB Support
+
+- Added ChaseHQ2 shader filter removal checkbox under Input/Misc setting in GUI
+
+- Sorry had wrong SDL2.dll for all 64bit games on last release
+
 
 ***1.1a Changes***
 
@@ -306,7 +358,7 @@ Track selection menu & Name Entry has added control too now
 
 - Requires Visual Runtime Files https://www.techpowerup.com/download/visual-c-redistributable-runtime-package-all-in-one/
 
-- GUI Requires Visual Runtime 2015 (pretty sure its this lol) and has to be in same folder with metroframework.dll & SDL2.dll
+- GUI Requires Visual Runtime 2019 and has to be in same folder with metroframework.dll & SDL2.dll
 
 ***CREDITS***
 
@@ -327,6 +379,8 @@ extremely generous.
 
 - POOTERMAN for making logo on GUI
 
+- headkaze for making MAMEInterOp SDK
+
 - Everyone who helps and gives back to this awesome scene. Thanks for everything!
 
 
@@ -340,7 +394,15 @@ extremely generous.
 
 -Daytona USA [dinput8.dll into m2 emulator 1.1a folder]
 
+-Daytona USA 2 - Power Edition [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
+
+-Daytona USA 2 - Battle on the Edge [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
+
 -Daytona Championship USA [dinput8.dll into game exe folder]
+
+-Dirt Devils [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
+
+-Emergency Call Ambulance [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
 
 -Ford Racing [dinput8.dll into game exe folder]
 
@@ -350,17 +412,19 @@ extremely generous.
 
 -Indy 500 [dinput8.dll into m2 emulator 1.1a folder]
 
--Initial D4 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D Zero [dinput8.dll into game exe folder]
 
--Initial D4 Japan [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D 4 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
--Initial D5 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
+-Initial D 4 Japan [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
--Initial D6 [dinput8.dll into game exe folder]
+-Initial D 5 [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
--Initial D7 [dinput8.dll into game exe folder]
+-Initial D 6 [dinput8.dll into game exe folder]
 
--Initial D8 [dinput8.dll into game exe folder]
+-Initial D 7 [dinput8.dll into game exe folder]
+
+-Initial D 8 [dinput8.dll into game exe folder]
 
 -Machstorm (Rumble only) [xinput1_3.dll into game exe folder]
 
@@ -368,11 +432,17 @@ extremely generous.
 
 -Pokken Tournament (Rumble only) [dinput8.dll into game exe folder]
 
+-Scud Race [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
+
+-Scud Race Plus [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
+
 -Sega Touring Car Championship [dinput8.dll into m2 emulator 1.1a folder]
 
 -Sega Racing Classic [dinput8.dll into game exe folder]
 
 -Sega Rally Championship [dinput8.dll into m2 emulator 1.1a folder]
+
+-Sega Rally 2 [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
 
 -Sega Rally 3 [dinput8.dll into game exe folder]
 
@@ -388,24 +458,37 @@ extremely generous.
 
 -Wangan Midnight Maximum Tune 5 (Update 5) [d3d11.dll into game exe folder]
 
--San Francisco Rush, San Francisco Rush The Rock, San Francisco Rush 2049 & San Francisco Rush 2049 SE 
-(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+-Le Mans 24 [32bit or 64bit opengl32.dll into game exe folder depending on 32 or 64bit Supermodel Emulator]
 
--Rave Racer [dinput8.dll into any mame 0.199 folder]
+-Rave Racer
 TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK!
 (will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206  [dinput8.dll into any mame 0.199 or mame 0.206 folder]
 
--California Speed
-(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+-San Francisco Rush [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
 
--Cruis'n World
-(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+-San Francisco Rush The Rock [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
 
--Cruis'n USA
-(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+-San Francisco Rush 2049 [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
 
--Off Road Challenge
-(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 [dinput8.dll into any mame 0.199 or mame 0.206 folder]
+-San Francisco Rush 2049 SE [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-California Speed [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-Cruis'n World [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-Cruis'n USA [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-Off Road Challenge [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-Virtua Racing & Virtua Formula [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-OutRun [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-Turbo OutRun [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-OutRunners [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
+-Power Drift [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
 
 -GTI Club Supermini Festa [dinput8.dll into game exe folder]
 
@@ -441,7 +524,9 @@ MaxForce= **Maximum FFB force with 100 being highest value available**
 
 DeviceGUID= **Set Device GUID to connect to specific wheel or controller**
 
-EnableRumble= **Turn Off (0) if your wheel supports rumble effect. For controllers, turn on (1)**
+EnableRumble= **Turn Off (0) if your wheel supports rumble effect. For controllers, turn on (1), This is for DeviceGUID**
+
+ReverseRumble= **Turn Off (0) if your rumble effect is correct for motors. Turn on (1) if you want to reverse motor rumble, This is for DeviceGUID**
 
 Logging= **Turn On (1) to allow log.txt to be made to log plugin. Device GUID is given in here**
 
@@ -461,10 +546,20 @@ AlternativeFFB= **This is for certain wheels where roll effect does not work cor
 
 Device2GUID= **Set Device 2 GUID to connect to secondary specific wheel or controller (buttons only)**
 
+MinForceDevice2= **Device 2 Minimum FFB force with 0 being lowest value available**
+
+MaxForceDevice2= **Device 2 Maximum FFB force with 100 being highest value available**
+
+EnableRumbleDevice2= **Turn Off (0) if your wheel supports rumble effect. For controllers, turn on (1), This is for Device2GUID**
+
+ReverseRumbleDevice2= **Turn Off (0) if your rumble effect is correct for motors. Turn on (1) if you want to reverse motor rumble, This is for Device2GUID**
+
+AlternativeFFBDevice2= **This is for Device 2 where certain wheels where roll effect does not work correctly normally (such as PWM2M2 or Thrustmaster 300rs etc). Set 1 to turn on **
+
 
 *** GUI SUPPORT ***
 
-- REQUIRES visual runtime 2015,SDL2.dll & Metroframework.dll. SDL2.dll & Metroframework.dll are supplied in each plugin folder
+- REQUIRES visual runtime 2019,SDL2.dll & Metroframework.dll. SDL2.dll & Metroframework.dll are supplied in each plugin folder
 
 - Is designed to be used in conjunction with FFBPlugin.ini files included with each plugin folder. Place all plugin files into game exe folder(unless Lindbergh)
 
@@ -500,6 +595,26 @@ to change in FFBPlugin.ini.
 - Set DpadUp,DpadDown,DpadLeft & DpadRight = as any button name in ini eg DpadUp=StartButton and DpadUp will now do start button ingame. You can use Dpad and normal button at same time if you wish
 
 After setting up Axis and Buttons then Disable ShowButtonNumbersForSetup & ShowAxisSetup if enabled and play!
+
+
+*** OUTPUT SUPPORT ***
+
+(For MAME)
+
+- Create a ini file on root of MAME folder called Mame.ini and place inside it and save
+#
+# OSD OUTPUT OPTIONS
+#
+output                    windows
+
+- Ensure either MAME32.dll or MAME64.dll is with FFB Plugin files in MAME folder depending on 32bit or 64bit MAME
+
+
+(For SUPERMODEL EMULATOR)
+
+- If you wish to use FFB Plugin over Supermodel's FFB then disable Supermodel's FFB.
+
+- When you launch game, ensure you have command -outputs=win for FFB Plugin to recieve Output Values etc
 
 
 *** TROUBLESHOOTING ***
