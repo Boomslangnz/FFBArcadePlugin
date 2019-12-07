@@ -919,7 +919,7 @@ const int Road_Fighters_3D = 29;
 const int LGI_3D = 30;
 const int LGI_ = 31;
 const int INITIAL_D_0 = 32;
-const int MAME_ = 33;
+const int OLDMAME_ = 33;
 const int OUTRUN_2Real = 35;
 const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
@@ -1902,8 +1902,8 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case LGI_:
 		game = new LGI;
 		break;
-	case MAME_:
-		game = new Mame;
+	case OLDMAME_:
+		game = new OldMame;
 		break;
 	case KO_Drive:
 		game = new KODrive;
