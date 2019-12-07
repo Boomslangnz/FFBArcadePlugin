@@ -25,11 +25,19 @@ extern SDL_Haptic* ControllerHaptic2;
 extern SDL_Haptic* haptic2;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
-static int MinimumSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinimumSpringStrength"), 0, settingsFilename);
+static int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
+static int SinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriod"), 0, settingsFilename);
+static int SineFadePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriod"), 0, settingsFilename);
+static int SineStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrength"), 0, settingsFilename);
+static int RumbleStrengthLeftMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotor"), 0, settingsFilename);
+static int RumbleStrengthRightMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotor"), 0, settingsFilename);
+static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
+static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
 
 static bool init = false;
 static bool MAEffect = false;
 static bool MBEffect = false;
+static bool DirtDevilSine = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -1725,8 +1733,12 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	HWND hWnd3 = FindWindowA(0, ("Supermodel - Scud Race"));
 	HWND hWnd4 = FindWindowA(0, ("Supermodel - Scud Race Plus"));
 	HWND hWnd5 = FindWindowA(0, ("Supermodel - Le Mans 24"));
+	HWND hWnd6 = FindWindowA(0, ("Supermodel - Sega Rally 2"));
+	HWND hWnd7 = FindWindowA(0, ("Supermodel - Dirt Devils")); 
+	HWND hWnd8 = FindWindowA(0, ("Supermodel - Emergency Call Ambulance"));
 
 	//MAME Games
+	HWND hWnd9 = FindWindowA(0, ("MAME: Virtua Formula [vformula]"));
 	HWND hWnd10 = FindWindowA(0, ("MAME: Virtua Racing [vr]"));
 	HWND hWnd11 = FindWindowA(0, ("MAME: San Francisco Rush (boot rom L 1.0) [sfrush]"));
 	HWND hWnd12 = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (boot rom L 1.0, GUTS Oct 6 1997 / MAIN Oct 16 1997) [sfrushrk]"));
@@ -1763,30 +1775,38 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	HWND hWnd43 = FindWindowA(0, ("MAME: Power Drift (Japan) [pdriftj]"));
 	HWND hWnd44 = FindWindowA(0, ("MAME: Power Drift - Link Version (Japan, Rev A) [pdriftl]"));
 	HWND hWnd45 = FindWindowA(0, ("MAME: OutRunners (World) [orunners]"));
+	HWND hWnd46 = FindWindowA(0, ("MAME: OutRunners (US) [orunnersu]"));
+	HWND hWnd47 = FindWindowA(0, ("MAME: OutRunners (Japan) [orunnersj]"));
+	HWND hWnd48 = FindWindowA(0, ("MAME: San Francisco Rush 2049 [sf2049]"));
+	HWND hWnd49 = FindWindowA(0, ("MAME: San Francisco Rush 2049: Special Edition [sf2049se]"));
+	HWND hWnd50 = FindWindowA(0, ("MAME: San Francisco Rush 2049 : Tournament Edition[sf2049te]"));
 
-	if ((hWnd1 > NULL) || (hWnd2 > NULL) || (hWnd3 > NULL) || (hWnd4 > NULL) || (hWnd5 > NULL)) //Daytona 2,Scud Race & Le Mans 24
+	if (EnableForceSpringEffect == 1)
+	{
+		if (stateFFB > 0)
+		{
+			triggers->Springi(ForceSpringStrength / 100.0);
+		}		
+	}
+
+	if ((hWnd1 > NULL) || (hWnd2 > NULL) || (hWnd3 > NULL) || (hWnd4 > NULL) || (hWnd5 > NULL)) //Daytona 2,Scud Race,Le Mans 24
 	{
 		if (name == RawDrive)
 		{
 			stateFFB = newstateFFB;
 		}
 
-		if ((stateFFB > 0x09) && (stateFFB < 0x18))
+		if ((stateFFB > 0x09) && (stateFFB < 0x10))
 		{
 			//Spring
-			double percentForce = (stateFFB - 9) / 14.0;
-			if (percentForce < (MinimumSpringStrength / 100.0))
-			{
-				percentForce = MinimumSpringStrength / 100.0;
-			}
-
+			double percentForce = (stateFFB - 9) / 16.0;
 			triggers->Spring(percentForce);
 		}
 
-		if ((stateFFB > 0x1F) && (stateFFB < 0x28))
+		if ((stateFFB > 0x1F) && (stateFFB < 0x30))
 		{
 			//Clutch
-			double percentForce = (stateFFB - 31) / 8.0;
+			double percentForce = (stateFFB - 31) / 16.0;
 			triggers->Friction(percentForce);
 		}
 
@@ -1794,28 +1814,28 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		{
 			//Centering
 			double percentForce = (stateFFB - 47) / 16.0;
-			triggers->Sine(70, 30, percentForce);
+			triggers->Sine(40, 0, percentForce);
 		}
 
 		if ((stateFFB > 0x3F) && (stateFFB < 0x50))
 		{
 			//Uncentering
 			double percentForce = (stateFFB - 63) / 16.0;
-			triggers->Sine(70, 30, percentForce);
+			triggers->Sine(40, 0, percentForce);
 		}
 
-		if ((stateFFB > 0x4F) && (stateFFB < 0x58))
+		if ((stateFFB > 0x4F) && (stateFFB < 0x60))
 		{
 			//Roll Right
-			double percentForce = (stateFFB - 79) / 8.0;
+			double percentForce = (stateFFB - 79) / 16.0;
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
-		else if ((stateFFB > 0x5F) && (stateFFB < 0x68))
+		else if ((stateFFB > 0x5F) && (stateFFB < 0x70))
 		{
 			//Roll Left
-			double percentForce = (stateFFB - 95) / 8.0;
+			double percentForce = (stateFFB - 95) / 16.0;
 			double percentLength = 100;
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
@@ -1840,7 +1860,61 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		}
 	}
 
-	if (hWnd10 > NULL) //Virtua Racing
+	if (hWnd7 > NULL) //Dirt Devils
+	{
+		if (name == RawDrive)
+		{
+			stateFFB = newstateFFB;
+		}
+
+		if (stateFFB == 0x10)
+		{
+			double percentForce = 0.7;
+			triggers->Spring(percentForce);
+		}
+
+		if ((stateFFB == 0x27) || (stateFFB == 0x30))
+		{
+			DirtDevilSine = false;
+		}
+
+		if (stateFFB == 0x2F)
+		{
+			DirtDevilSine = true;
+		}
+
+		if (DirtDevilSine)
+		{
+			double percentForce = (stateFFB - 31) / 16.0;
+			triggers->Sine(60, 0, percentForce);
+			triggers->Rumble(percentForce, percentForce, 100);
+		}
+	}
+
+	if ((hWnd6 > NULL) || (hWnd8 > NULL)) //Sega Rally 2, Emergency Call Ambulance
+	{
+		if (name == RawDrive)
+		{
+			stateFFB = newstateFFB;
+		}
+
+		if ((stateFFB > 0x00) && (stateFFB < 0x26))
+		{
+			double percentForce = (stateFFB) / 37.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+		else if ((stateFFB > 0x3F) && (stateFFB < 0x66))
+		{
+			double percentForce = (stateFFB - 64) / 37.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+	}
+
+	if ((hWnd9 > NULL) || (hWnd10 > NULL)) //Virtua Formula, Virtua Racing
 	{
 		static bool DontSineUntilRaceStart = false;
 
@@ -2048,12 +2122,14 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 		if (stateFFB == 0x01)
 		{
-			triggers->Sine(100, 0, 1.0);
+			triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+			triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
 		}
 
 		if (stateFFB == 0x00)
 		{
 			triggers->Sine(0, 0, 0);
+			triggers->Rumble(0, 0, 0);
 		}
 	}
 
@@ -2066,16 +2142,18 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 		if (stateFFB == 0x01)
 		{
-			triggers->Sine(100, 0, 1.0);
+			triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+			triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
 		}
 
 		if (stateFFB == 0x00)
 		{
 			triggers->Sine(0, 0, 0);
+			triggers->Rumble(0, 0, 0);
 		}
 	}
 
-	if (hWnd45 > NULL) //OutRunners
+	if ((hWnd45 > NULL) || (hWnd46 > NULL) || (hWnd47 > NULL)) //OutRunners
 	{
 
 		if (name == MA_Steering_Wheel_motor)
@@ -2109,8 +2187,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 		if (MAEffect)
 		{
-			triggers->Sine(100, 0, 1.0);
-			triggers->Rumble(1.0, 1.0, 100);
+			triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+			triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
 		}
 
 		if (!MAEffect)
@@ -2121,14 +2199,37 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 		if (MBEffect)
 		{
-			triggers->SineDevice2(100, 0, 1.0);
-			triggers->RumbleDevice2(1.0, 1.0, 100);
+			triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+			triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
 		}
 
 		if (!MBEffect)
 		{
 			triggers->SineDevice2(0, 0, 0);
 			triggers->RumbleDevice2(0, 0, 0);
+		}
+	}
+
+	if ((hWnd48 > NULL) || (hWnd49 > NULL) || (hWnd50 > NULL)) //San Fran 2049
+	{
+		if (name == wheel)
+		{
+			stateFFB = newstateFFB;
+		}
+
+		if ((stateFFB > 0x80) && (stateFFB < 0x100))
+		{
+			double percentForce = (255 - stateFFB) / 126.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);			
+		}
+		else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+		{
+			double percentForce = (stateFFB) / 126.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 	}
 }

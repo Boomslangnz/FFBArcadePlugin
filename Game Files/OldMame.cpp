@@ -13,7 +13,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include <tchar.h>
-#include "Mame.h"
+#include "OldMame.h"
 #include "math.h"
 
 static int sanfran(int ffsan) {
@@ -1651,7 +1651,7 @@ static int raveracer(int ffRaw) {
 
 UINT8 FFB;
 
-void Mame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+void OldMame::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	
 	HWND hWnds = FindWindow(NULL, _T("MAME: San Francisco Rush 2049 [sf2049]"));
 	HWND hWnd = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (boot rom L 1.0, GUTS Oct 6 1997 / MAIN Oct 16 1997) [sfrushrk]"));

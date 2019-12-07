@@ -46,7 +46,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/OutRun2Real.h"
 #include "Game Files/SegaRacingClassic.h"
 #include "Game Files/SegaRally3.h"
-#include "Game Files/Mame.h"
+#include "Game Files/OldMame.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
 #include "Game Files/BG4JP.h"
@@ -1134,7 +1134,7 @@ void TriggerConstantEffect(int direction, double strength)
 
 	if (PowerMode == 1)
 	{
-		strength = pow(strength, 0.6);
+		strength = pow(strength, 0.5);
 	}
 
 	SHORT MinForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0);
@@ -1751,7 +1751,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if (configGameId != 29) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	if ((configGameId != 22) && (configGameId != 29)) //For games which need code to run quicker etc. Some games will crash if no sleep added
 	{
 		Sleep(2500);
 	}
