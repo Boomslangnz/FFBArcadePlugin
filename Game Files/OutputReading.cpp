@@ -38,6 +38,7 @@ static bool init = false;
 static bool MAEffect = false;
 static bool MBEffect = false;
 static bool DirtDevilSine = false;
+static bool ForceSpringEffect = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -1785,8 +1786,13 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	{
 		if (stateFFB > 0)
 		{
+			ForceSpringEffect = true;			
+		}
+
+		if (ForceSpringEffect)
+		{
 			triggers->Springi(ForceSpringStrength / 100.0);
-		}		
+		}
 	}
 
 	if ((hWnd1 > NULL) || (hWnd2 > NULL) || (hWnd3 > NULL) || (hWnd4 > NULL) || (hWnd5 > NULL)) //Daytona 2,Scud Race,Le Mans 24

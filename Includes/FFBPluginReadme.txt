@@ -46,12 +46,21 @@ Initial Supported Output Games
 -Off Road Challenge
 -Cruis'n USA
 -California Speed
--Out Run
--Turbo Out Run
+-OutRun
+-Turbo OutRun
 -Power Drift
 -OutRunners (Currently ONLY game which allows 2 Player FFB if you have 2 x wheels or controllers)
 
+Added Force Spring effect & Strength if you would like a spring effect over the standard default spring some games give (this will work on both MAME & Supermodel Output Games)
+
+For Games which have a simple shaker motor, ive added SinePeriod,SineFadePeriod & SineStrength (or L & R Rumble Motor Strength if using controller) adjustments for you to get the effect how you would like (OutRun,Turbo OutRun,Power Drift & Outrunners)
+
+Set motor power to 100% in Supermodel test menu's to recieve all values etc
+
+Remember if effects feel too weak you can either Enable PowerMode or Raise the MinForce settings. If too strong, lower MaxForce settings.
+
 Please Read Below Output Section For More Info or read FFBPluginReadme.txt before you message for help.
+
 
 ***1.2 Changes***
 
