@@ -144,8 +144,10 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	if (hEdit == NULL)
 		MessageBox(hWnd, L"Could not create edit box.", L"Error", MB_OK | MB_ICONERROR);
 
+
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
+
 
 	mame_start_ptr = mame_start;
 	mame_stop_ptr = mame_stop;
@@ -1786,7 +1788,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	{
 		if (stateFFB > 0)
 		{
-			ForceSpringEffect = true;			
+			ForceSpringEffect = true;
+			
 		}
 
 		if (ForceSpringEffect)
@@ -1820,6 +1823,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		{
 			//Centering
 			double percentForce = (stateFFB - 47) / 16.0;
+			triggers->Rumble(percentForce, percentForce, 100);
 			triggers->Sine(40, 0, percentForce);
 		}
 
@@ -1827,6 +1831,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		{
 			//Uncentering
 			double percentForce = (stateFFB - 63) / 16.0;
+			triggers->Rumble(percentForce, percentForce, 100);
 			triggers->Sine(40, 0, percentForce);
 		}
 
@@ -1964,6 +1969,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			{
 				//Uncentering
 				double percentForce = 0.4;
+				triggers->Rumble(percentForce, percentForce, 100);
 				triggers->Sine(70, 30, percentForce);
 			}
 			else
@@ -1972,6 +1978,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				{
 					//Uncentering
 					double percentForce = 0.4;
+					triggers->Rumble(percentForce, percentForce, 100);
 					triggers->Sine(70, 30, percentForce);
 				}
 			}

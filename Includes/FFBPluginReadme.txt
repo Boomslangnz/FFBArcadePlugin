@@ -61,6 +61,8 @@ Remember if effects feel too weak you can either Enable PowerMode or Raise the M
 
 Please Read Below Output Section For More Info or read FFBPluginReadme.txt before you message for help.
 
+Ive run out of known games with Outputs so unless theres anymore, this is it for now (help! :D)
+
 
 ***1.2 Changes***
 
@@ -610,7 +612,7 @@ After setting up Axis and Buttons then Disable ShowButtonNumbersForSetup & ShowA
 
 (For MAME)
 
-- Create a ini file on root of MAME folder called Mame.ini and place inside it and save
+- Create a ini file on root of MAME folder called Mame.ini and place inside it and save (could be different depending on MAME version)
 #
 # OSD OUTPUT OPTIONS
 #
@@ -624,6 +626,8 @@ output                    windows
 - If you wish to use FFB Plugin over Supermodel's FFB then disable Supermodel's FFB.
 
 - When you launch game, ensure you have command -outputs=win for FFB Plugin to recieve Output Values etc
+
+- Ensure either MAME32.dll or MAME64.dll is with FFB Plugin files in Supermodel folder depending on 32bit or 64bit Supermodel
 
 
 *** TROUBLESHOOTING ***
