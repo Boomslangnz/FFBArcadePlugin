@@ -294,6 +294,13 @@ DWORD WINAPI ThreadForLoop(LPVOID lpParam)
 	return 0;
 }
 
+DWORD WINAPI ForcedSpringLoop(LPVOID lpParam)
+{
+	Sleep(2500);
+	ForceSpringEffect = true;
+	return 0;
+}
+
 static int sanfran(int ffsan) {
 	switch (ffsan) {
 
@@ -1678,6 +1685,10 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	if (!init)
 	{
 		CreateThread(NULL, 0, ThreadForLoop, NULL, 0, NULL);
+		if (EnableForceSpringEffect == 1)
+		{
+			CreateThread(NULL, 0, ForcedSpringLoop, NULL, 0, NULL);
+		}		
 		init = true;
 	}
 
@@ -1784,12 +1795,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 	if (EnableForceSpringEffect == 1)
 	{
-		if (stateFFB > 0)
-		{
-			ForceSpringEffect = true;
-			
-		}
-
 		if (ForceSpringEffect)
 		{
 			triggers->Springi(ForceSpringStrength / 100.0);
