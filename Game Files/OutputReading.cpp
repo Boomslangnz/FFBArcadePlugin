@@ -23,6 +23,7 @@ extern int joystick_index2;
 extern SDL_Joystick* GameController2;
 extern SDL_Haptic* ControllerHaptic2;
 extern SDL_Haptic* haptic2;
+HINSTANCE ProcDLL = NULL;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
@@ -72,7 +73,6 @@ int __stdcall mame_output(const char* name, int value);
 
 void CallTheOutputs()
 {
-	HINSTANCE ProcDLL;
 #ifdef _WIN64  
 	ProcDLL = LoadLibrary(TEXT("MAME64.dll"));
 #else  

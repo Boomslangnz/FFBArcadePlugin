@@ -842,6 +842,7 @@ HINSTANCE gl_hOriginalDll = NULL;
 HINSTANCE gl_hjgtDll = NULL;
 HINSTANCE gl_cgGLDll = NULL;
 HINSTANCE gl_hlibavs = NULL;
+extern HINSTANCE ProcDLL;
 int joystick_index1;
 int joystick1Index = -1;
 int joystick_index2 = -1;
@@ -2755,21 +2756,30 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		hlp.log("detaching from process:");
 		hlp.log((char*)processName.c_str());
 		keepRunning = false;
+
 		if (gl_hOriginalDll)
 		{
 			FreeLibrary(gl_hOriginalDll);
 		}
+
 		if (gl_hjgtDll)
 		{
 			FreeLibrary(gl_hjgtDll);
 		}
+
 		if (gl_hlibavs)
 		{
 			FreeLibrary(gl_hlibavs);
 		}
+
 		if (gl_cgGLDll)
 		{
 			FreeLibrary(gl_cgGLDll);
+		}
+
+		if (ProcDLL)
+		{
+			FreeLibrary(ProcDLL);
 		}
 
 		if (GameController)
@@ -2782,7 +2792,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 
 		if (GameController2)
 		{
-			if (EnableRumble == 1)
+			if (EnableRumbleDevice2 == 1)
 			{
 				SDL_JoystickRumble(GameController2, 0, 0, 0);
 			}
@@ -2801,6 +2811,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			SDL_HapticStopAll(haptic);
 			SDL_HapticClose(haptic); // release the haptic device / clean-up.
 		}
+
+		if (haptic2)
+		{
+			SDL_HapticStopEffect(haptic2, effects.effect_sine_id_device2);
+		}
+
 		break;
 	}
 
