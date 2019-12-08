@@ -288,13 +288,13 @@ int __stdcall mame_output(const char* name, int value)
 	return 1;
 }
 
-DWORD WINAPI ThreadForLoop(LPVOID lpParam)
+DWORD WINAPI ThreadForOutputs(LPVOID lpParam)
 {
 	WinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
 	return 0;
 }
 
-DWORD WINAPI ForcedSpringLoop(LPVOID lpParam)
+DWORD WINAPI ThreadForForcedSpring(LPVOID lpParam)
 {
 	Sleep(2500);
 	ForceSpringEffect = true;
@@ -1684,11 +1684,13 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 	if (!init)
 	{
-		CreateThread(NULL, 0, ThreadForLoop, NULL, 0, NULL);
+		CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
+
 		if (EnableForceSpringEffect == 1)
 		{
-			CreateThread(NULL, 0, ForcedSpringLoop, NULL, 0, NULL);
-		}		
+			CreateThread(NULL, 0, ThreadForForcedSpring, NULL, 0, NULL);
+		}
+
 		init = true;
 	}
 
