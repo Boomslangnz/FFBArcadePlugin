@@ -144,10 +144,8 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	if (hEdit == NULL)
 		MessageBox(hWnd, L"Could not create edit box.", L"Error", MB_OK | MB_ICONERROR);
 
-
-	ShowWindow(hWnd, SW_SHOW);
+	//ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
-
 
 	mame_start_ptr = mame_start;
 	mame_stop_ptr = mame_stop;
@@ -2077,7 +2075,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		}
 	}
 
-	if ((hWnd27 > NULL) || (hWnd28 > NULL) || (hWnd29 > NULL))
+	if ((hWnd27 > NULL) || (hWnd28 > NULL) || (hWnd29 > NULL)) //Crusn USA
 	{
 		if (name == wheel)
 		{
