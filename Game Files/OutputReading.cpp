@@ -61,93 +61,6 @@ int newstateFFB;
 int stateFFB;
 int stateFFBDevice2;
 
-//Supermodel Emulator Games
-std::string dayto2pe("dayto2pe");
-std::string daytona2("daytona2");
-std::string dirtdvlsa("dirtdvlsa");
-std::string ecau("ecau");
-std::string lemans24("lemans24");
-std::string scud("scud");
-std::string scuda("scuda");
-std::string scudj("scudj");
-std::string scudplus("scudplus");
-std::string scudplusa("scudplusa");
-std::string srally2("srally2");
-std::string srally2x("srally2x");
-
-//MAME Games
-std::string vformula("vformula");
-std::string vr("vr");
-std::string sfrush("sfrush");
-std::string sfrushrk("sfrushrk");
-std::string sfrushrkwo("sfrushrkwo");
-std::string sfrusha("sfrusha");
-std::string crusnwld("crusnwld");
-std::string crusnwld24("crusnwld24");
-std::string crusnwld23("crusnwld23");
-std::string crusnwld20("crusnwld20");
-std::string crusnwld19("crusnwld19");
-std::string crusnwld17("crusnwld17");
-std::string crusnwld13("crusnwld13");
-std::string offroadc("offroadc");
-std::string offroadc4("offroadc4");
-std::string offroadc3("offroadc3");
-std::string offroadc1("offroadc1");
-std::string crusnusa("crusnusa");
-std::string crusnusa40("crusnusa40");
-std::string crusnusa21("crusnusa21");
-std::string calspeed("calspeed");
-std::string calspeeda("calspeeda");
-std::string calspeedb("calspeedb");
-std::string outrunra("outrunra");
-std::string outrun("outrun");
-std::string outruneh("outruneh");
-std::string toutrun("toutrun");
-std::string toutrund("toutrund");
-std::string toutrunj("toutrunj");
-std::string toutrunjd("toutrunjd");
-std::string pdrift("pdrift");
-std::string pdrifta("pdrifta");
-std::string pdrifte("pdrifte");
-std::string pdriftj("pdriftj");
-std::string pdriftl("pdriftl");
-std::string orunners("orunners");
-std::string orunnersu("orunnersu");
-std::string orunnersj("orunnersj");
-std::string sf2049("sf2049");
-std::string sf2049se("sf2049se");
-std::string sf2049te("sf2049te");
-std::string harddriv1("harddriv1");
-
-//Our string to load game from
-std::string Daytona2Active("Daytona2Active");
-std::string DirtDevilsActive("DirtDevilsActive");
-std::string Srally2Active("Srally2Active");
-std::string VirtuaRacingActive("VirtuaRacingActive");
-std::string SanFranActive("SanFranActive");
-std::string CrusnWldActive("CrusnWldActive");
-std::string OffroadChallengeActive("OffroadChallengeActive");
-std::string CrusnUSAActive("CrusnUSAActive");
-std::string CalSpeedActive("CalSpeedActive");
-std::string OutrunActive("OutrunActive");
-std::string PowerDriftActive("PowerDriftActive");
-std::string OutrunnersActive("OutrunnersActive");
-std::string SanFran2049Active("SanFran2049Active");
-std::string HardDrivinActive("HardDrivinActive");
-
-//Names of FFB Outputs
-std::string RawDrive("RawDrive");
-std::string digit0("digit0");
-std::string wheel("wheel");
-std::string Vibration_motor("Vibration_motor");
-std::string upright_wheel_motor("upright_wheel_motor");
-std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
-std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
-
-//Emulator Name
-std::string MAME("MAME");
-std::string Supermodel("Supermodel");
-
 typedef int(__stdcall* MAME_START)(int hWnd);
 typedef int(__stdcall* MAME_STOP)(void);
 typedef int(__stdcall* MAME_COPYDATA)(int id, const char* name);
@@ -1795,6 +1708,101 @@ static int crusnusaA(int ffusa) {
 	}
 }
 
+//Supermodel Emulator Games
+std::string dayto2pe("dayto2pe");
+std::string daytona2("daytona2");
+std::string dirtdvlsa("dirtdvlsa");
+std::string dirtdvls("dirtdvls");
+std::string dirtdvlsj("dirtdvlsj");
+std::string dirtdvlsg("dirtdvlsg");
+std::string ecau("ecau");
+std::string eca("eca");
+std::string ecap("ecap");
+std::string ecaj("ecaj");
+std::string lemans24("lemans24");
+std::string scud("scud");
+std::string scuda("scuda");
+std::string scudj("scudj");
+std::string scudplus("scudplus");
+std::string scudplusa("scudplusa");
+std::string srally2("srally2");
+std::string srally2x("srally2x");
+std::string srally2p("srally2p");
+std::string srally2pa("srally2pa");
+
+//MAME Games
+std::string vformula("vformula");
+std::string vr("vr");
+std::string sfrush("sfrush");
+std::string sfrushrk("sfrushrk");
+std::string sfrushrkwo("sfrushrkwo");
+std::string sfrusha("sfrusha");
+std::string crusnwld("crusnwld");
+std::string crusnwld24("crusnwld24");
+std::string crusnwld23("crusnwld23");
+std::string crusnwld20("crusnwld20");
+std::string crusnwld19("crusnwld19");
+std::string crusnwld17("crusnwld17");
+std::string crusnwld13("crusnwld13");
+std::string offroadc("offroadc");
+std::string offroadc4("offroadc4");
+std::string offroadc3("offroadc3");
+std::string offroadc1("offroadc1");
+std::string crusnusa("crusnusa");
+std::string crusnusa40("crusnusa40");
+std::string crusnusa21("crusnusa21");
+std::string calspeed("calspeed");
+std::string calspeeda("calspeeda");
+std::string calspeedb("calspeedb");
+std::string outrunra("outrunra");
+std::string outrun("outrun");
+std::string outruneh("outruneh");
+std::string toutrun("toutrun");
+std::string toutrund("toutrund");
+std::string toutrunj("toutrunj");
+std::string toutrunjd("toutrunjd");
+std::string pdrift("pdrift");
+std::string pdrifta("pdrifta");
+std::string pdrifte("pdrifte");
+std::string pdriftj("pdriftj");
+std::string pdriftl("pdriftl");
+std::string orunners("orunners");
+std::string orunnersu("orunnersu");
+std::string orunnersj("orunnersj");
+std::string sf2049("sf2049");
+std::string sf2049se("sf2049se");
+std::string sf2049te("sf2049te");
+std::string harddriv1("harddriv1");
+
+//Our string to load game from
+std::string Daytona2Active("Daytona2Active");
+std::string DirtDevilsActive("DirtDevilsActive");
+std::string Srally2Active("Srally2Active");
+std::string VirtuaRacingActive("VirtuaRacingActive");
+std::string SanFranActive("SanFranActive");
+std::string CrusnWldActive("CrusnWldActive");
+std::string OffroadChallengeActive("OffroadChallengeActive");
+std::string CrusnUSAActive("CrusnUSAActive");
+std::string CalSpeedActive("CalSpeedActive");
+std::string OutrunActive("OutrunActive");
+std::string PowerDriftActive("PowerDriftActive");
+std::string OutrunnersActive("OutrunnersActive");
+std::string SanFran2049Active("SanFran2049Active");
+std::string HardDrivinActive("HardDrivinActive");
+
+//Names of FFB Outputs
+std::string RawDrive("RawDrive");
+std::string digit0("digit0");
+std::string wheel("wheel");
+std::string Vibration_motor("Vibration_motor");
+std::string upright_wheel_motor("upright_wheel_motor");
+std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
+std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
+
+//Emulator Name
+std::string MAME("MAME");
+std::string Supermodel("Supermodel");
+
 void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	if (!init)
@@ -1872,17 +1880,17 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		if (romname != NULL)
 		{
 			//Select code to run via rom name
-			if (romname == dayto2pe || romname == daytona2 || romname == scud || romname == scuda || romname == scudj || romname == scudplus || romname == scudplusa)
+			if (romname == dayto2pe || romname == daytona2 || romname == scud || romname == scuda || romname == scudj || romname == scudplus || romname == scudplusa || romname == lemans24)
 			{
 				RunningFFB = "Daytona2Active";
 			}
 
-			if (romname == dirtdvlsa)
+			if (romname == dirtdvlsa || romname == dirtdvls || romname == dirtdvlsj || romname == dirtdvlsg)
 			{
 				RunningFFB = "DirtDevilsActive";
 			}
 
-			if (romname == srally2 || romname == srally2x || romname == ecau)
+			if (romname == srally2 || romname == srally2x || romname == srally2p || romname == srally2pa || romname == ecau || romname == eca || romname == ecap || romname == ecaj)
 			{
 				RunningFFB = "Srally2Active";
 			}
