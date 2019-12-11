@@ -24,6 +24,8 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Added error messagebox if hidden window isnt created correctly on Outputs
 
+- Modified GUI Page so Supermodel Outputs only shows relevant information for Supermodel Games
+
 - Forgot to mention last release that on Virtua Racing, set cabinet to Upright to recieve FFB values
 
 

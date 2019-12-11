@@ -921,6 +921,7 @@ const int LGI_3D = 30;
 const int LGI_ = 31;
 const int INITIAL_D_0 = 32;
 const int OLDMAME_ = 33;
+const int SUPERMODEL_READING = 34;
 const int OUTRUN_2Real = 35;
 const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
@@ -1752,7 +1753,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if ((configGameId != 22) && (configGameId != 29)) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	if ((configGameId != 22) && (configGameId != 29) && (configGameId != 34)) //For games which need code to run quicker etc. Some games will crash if no sleep added
 	{
 		Sleep(2500);
 	}
@@ -1812,6 +1813,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case DAYTONA_3:
 		game = new Daytona3;
+		break;
+	case SUPERMODEL_READING:
+		game = new OutputReading;
 		break;
 	case OUTPUT_READING:
 		game = new OutputReading;
