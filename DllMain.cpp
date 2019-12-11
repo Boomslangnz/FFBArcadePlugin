@@ -2815,6 +2815,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		if (haptic2)
 		{
 			SDL_HapticStopEffect(haptic2, effects.effect_sine_id_device2);
+			SDL_HapticStopAll(haptic2);
+			SDL_HapticClose(haptic2);
 		}
 
 		break;

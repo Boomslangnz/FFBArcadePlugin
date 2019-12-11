@@ -17,6 +17,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 #include <string>
+#include <tchar.h>
 #include "SDL.h"
 extern int joystick_index1;
 extern int joystick_index2;
@@ -36,10 +37,13 @@ static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT
 static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
 
 static bool init = false;
+static bool EmuName = false;
+static bool RomGameName = false;
 static bool MAEffect = false;
 static bool MBEffect = false;
 static bool DirtDevilSine = false;
 static bool ForceSpringEffect = false;
+static bool DontSineUntilRaceStart = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -47,9 +51,102 @@ LPSTR lpCmdLine;
 int nCmdShow;
 
 const char* nameFFB;
+const char* romFFB;
+const char* EmulatorName;
+char* name;
+char* romname;
+char* RunningFFB;
+char* Emulator;
 int newstateFFB;
 int stateFFB;
 int stateFFBDevice2;
+
+//Supermodel Emulator Games
+std::string dayto2pe("dayto2pe");
+std::string daytona2("daytona2");
+std::string dirtdvlsa("dirtdvlsa");
+std::string ecau("ecau");
+std::string lemans24("lemans24");
+std::string scud("scud");
+std::string scuda("scuda");
+std::string scudj("scudj");
+std::string scudplus("scudplus");
+std::string scudplusa("scudplusa");
+std::string srally2("srally2");
+std::string srally2x("srally2x");
+
+//MAME Games
+std::string vformula("vformula");
+std::string vr("vr");
+std::string sfrush("sfrush");
+std::string sfrushrk("sfrushrk");
+std::string sfrushrkwo("sfrushrkwo");
+std::string sfrusha("sfrusha");
+std::string crusnwld("crusnwld");
+std::string crusnwld24("crusnwld24");
+std::string crusnwld23("crusnwld23");
+std::string crusnwld20("crusnwld20");
+std::string crusnwld19("crusnwld19");
+std::string crusnwld17("crusnwld17");
+std::string crusnwld13("crusnwld13");
+std::string offroadc("offroadc");
+std::string offroadc4("offroadc4");
+std::string offroadc3("offroadc3");
+std::string offroadc1("offroadc1");
+std::string crusnusa("crusnusa");
+std::string crusnusa40("crusnusa40");
+std::string crusnusa21("crusnusa21");
+std::string calspeed("calspeed");
+std::string calspeeda("calspeeda");
+std::string calspeedb("calspeedb");
+std::string outrunra("outrunra");
+std::string outrun("outrun");
+std::string outruneh("outruneh");
+std::string toutrun("toutrun");
+std::string toutrund("toutrund");
+std::string toutrunj("toutrunj");
+std::string toutrunjd("toutrunjd");
+std::string pdrift("pdrift");
+std::string pdrifta("pdrifta");
+std::string pdrifte("pdrifte");
+std::string pdriftj("pdriftj");
+std::string pdriftl("pdriftl");
+std::string orunners("orunners");
+std::string orunnersu("orunnersu");
+std::string orunnersj("orunnersj");
+std::string sf2049("sf2049");
+std::string sf2049se("sf2049se");
+std::string sf2049te("sf2049te");
+std::string harddriv1("harddriv1");
+
+//Our string to load game from
+std::string Daytona2Active("Daytona2Active");
+std::string DirtDevilsActive("DirtDevilsActive");
+std::string Srally2Active("Srally2Active");
+std::string VirtuaRacingActive("VirtuaRacingActive");
+std::string SanFranActive("SanFranActive");
+std::string CrusnWldActive("CrusnWldActive");
+std::string OffroadChallengeActive("OffroadChallengeActive");
+std::string CrusnUSAActive("CrusnUSAActive");
+std::string CalSpeedActive("CalSpeedActive");
+std::string OutrunActive("OutrunActive");
+std::string PowerDriftActive("PowerDriftActive");
+std::string OutrunnersActive("OutrunnersActive");
+std::string SanFran2049Active("SanFran2049Active");
+std::string HardDrivinActive("HardDrivinActive");
+
+//Names of FFB Outputs
+std::string RawDrive("RawDrive");
+std::string digit0("digit0");
+std::string wheel("wheel");
+std::string Vibration_motor("Vibration_motor");
+std::string upright_wheel_motor("upright_wheel_motor");
+std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
+std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
+
+//Emulator Name
+std::string MAME("MAME");
+std::string Supermodel("Supermodel");
 
 typedef int(__stdcall* MAME_START)(int hWnd);
 typedef int(__stdcall* MAME_STOP)(void);
@@ -137,6 +234,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	hWnd = CreateWindow(L"MAMEInterop", L"MAMEInterop", WS_OVERLAPPEDWINDOW,
 		0, 0, 512, 512, NULL, NULL, hInstance, NULL);
 
+	if (hWnd == NULL)
+		MessageBox(hWnd, L"Could not create window", L"Error", MB_OK | MB_ICONERROR);
+
 	hEdit = CreateWindowEx(WS_EX_CLIENTEDGE, L"EDIT", L"",
 		WS_CHILD | WS_VISIBLE | WS_VSCROLL | ES_MULTILINE | ES_AUTOVSCROLL,
 		8, 8, 488, 464, hWnd, NULL, GetModuleHandle(NULL), NULL);
@@ -144,9 +244,12 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	if (hEdit == NULL)
 		MessageBox(hWnd, L"Could not create edit box.", L"Error", MB_OK | MB_ICONERROR);
 
-	//ShowWindow(hWnd, SW_SHOW);
-	UpdateWindow(hWnd);
-
+	if (hWnd != NULL)
+	{
+		//ShowWindow(hWnd, SW_SHOW);
+		UpdateWindow(hWnd);
+	}
+	
 	mame_start_ptr = mame_start;
 	mame_stop_ptr = mame_stop;
 	mame_copydata_ptr = mame_copydata;
@@ -255,6 +358,11 @@ int __stdcall mame_copydata(int id, const char* name)
 
 	wsprintf(buf, L"id %d = '%S'\r\n", id, name);
 
+	if (id == 0)
+	{
+		romFFB = name;
+	}
+
 	AppendTextToEditCtrl(hEdit, buf);
 
 	return 1;
@@ -286,6 +394,21 @@ int __stdcall mame_output(const char* name, int value)
 	AppendTextToEditCtrl(hEdit, buf);
 
 	return 1;
+}
+
+static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
+{
+	const DWORD TITLE_SIZE = 1024;
+	TCHAR windowTitle[TITLE_SIZE];
+
+	if (GetWindowText(hwnd, windowTitle, TITLE_SIZE))
+	{
+		if (_tcsstr(windowTitle, LPCTSTR(substring)) != NULL)
+		{
+			return false;
+		}
+	}
+	return true;
 }
 
 DWORD WINAPI ThreadForOutputs(LPVOID lpParam)
@@ -774,7 +897,7 @@ static int sanfran(int ffsan) {
 	}
 }
 
-static int crusnwld(int ffcru) {
+static int crusnwldA(int ffcru) {
 	switch (ffcru) {
 
 	case 0xFF:
@@ -1234,7 +1357,7 @@ static int crusnwld(int ffcru) {
 	}
 }
 
-static int crusnusa(int ffusa) {
+static int crusnusaA(int ffusa) {
 	switch (ffusa) {
 
 	case 0xFF:
@@ -1672,14 +1795,6 @@ static int crusnusa(int ffusa) {
 	}
 }
 
-std::string RawDrive("RawDrive");
-std::string digit0("digit0");
-std::string wheel("wheel");
-std::string Vibration_motor("Vibration_motor");
-std::string upright_wheel_motor("upright_wheel_motor");
-std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
-std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
-
 void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	if (!init)
@@ -1738,63 +1853,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		SDL_HapticSetGain(haptic2, 100);
 	}
 
-	char* name = new char[256];
-	sprintf(name, "%s", nameFFB);
-
-	//Supermodel Emulator Games
-	HWND hWnd1 = FindWindowA(0, ("Supermodel - Daytona USA 2 - Power Edition"));
-	HWND hWnd2 = FindWindowA(0, ("Supermodel - Daytona USA 2 - Battle on the Edge"));
-	HWND hWnd3 = FindWindowA(0, ("Supermodel - Scud Race"));
-	HWND hWnd4 = FindWindowA(0, ("Supermodel - Scud Race Plus"));
-	HWND hWnd5 = FindWindowA(0, ("Supermodel - Le Mans 24"));
-	HWND hWnd6 = FindWindowA(0, ("Supermodel - Sega Rally 2"));
-	HWND hWnd7 = FindWindowA(0, ("Supermodel - Dirt Devils")); 
-	HWND hWnd8 = FindWindowA(0, ("Supermodel - Emergency Call Ambulance"));
-
-	//MAME Games
-	HWND hWnd9 = FindWindowA(0, ("MAME: Virtua Formula [vformula]"));
-	HWND hWnd10 = FindWindowA(0, ("MAME: Virtua Racing [vr]"));
-	HWND hWnd11 = FindWindowA(0, ("MAME: San Francisco Rush (boot rom L 1.0) [sfrush]"));
-	HWND hWnd12 = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (boot rom L 1.0, GUTS Oct 6 1997 / MAIN Oct 16 1997) [sfrushrk]"));
-	HWND hWnd13 = FindWindowA(0, ("MAME: San Francisco Rush: The Rock (Wavenet, boot rom L 1.38, GUTS Aug 6 1997 / MAIN Aug 5 1997) [sfrushrkwo]"));
-	HWND hWnd14 = FindWindowA(0, ("MAME: San Francisco Rush (boot rom L 1.06A) [sfrusha]"));
-	HWND hWnd15 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.5) [crusnwld]"));
-	HWND hWnd16 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.4) [crusnwld24]"));
-	HWND hWnd17 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.3) [crusnwld23]"));
-	HWND hWnd18 = FindWindowA(0, ("MAME: Cruis'n World (rev L2.0) [crusnwld20]"));
-	HWND hWnd19 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.9) [crusnwld19]"));
-	HWND hWnd20 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.7) [crusnwld17]"));
-	HWND hWnd21 = FindWindowA(0, ("MAME: Cruis'n World (rev L1.3) [crusnwld13]"));
-	HWND hWnd22 = FindWindowA(0, ("MAME: Off Road Challenge (v1.63) [offroadc]"));
-	HWND hWnd23 = FindWindowA(0, ("MAME: Off Road Challenge (v1.63) [offroadc]"));
-	HWND hWnd24 = FindWindowA(0, ("MAME: Off Road Challenge (v1.40) [offroadc4]"));
-	HWND hWnd25 = FindWindowA(0, ("MAME: Off Road Challenge (v1.30) [offroadc3]"));
-	HWND hWnd26 = FindWindowA(0, ("MAME: Off Road Challenge (v1.10) [offroadc1]"));
-	HWND hWnd27 = FindWindowA(0, ("MAME: Cruis'n USA (rev L4.1) [crusnusa]"));
-	HWND hWnd28 = FindWindowA(0, ("MAME: Cruis'n USA (rev L4.0) [crusnusa40]"));
-	HWND hWnd29 = FindWindowA(0, ("MAME: Cruis'n USA (rev L2.1) [crusnusa21]"));
-	HWND hWnd30 = FindWindowA(0, ("MAME: California Speed (Version 2.1a Apr 17 1998, GUTS 1.25 Apr 17 1998 / MAIN Apr 17 1998) [calspeed]"));
-	HWND hWnd31 = FindWindowA(0, ("MAME: California Speed (Version 1.0r8 Mar 10 1998, GUTS Mar 10 1998 / MAIN Mar 10 1998) [calspeeda]"));
-	HWND hWnd32 = FindWindowA(0, ("MAME: California Speed (Version 1.0r7a Mar 4 1998, GUTS Mar 3 1998 / MAIN Jan 19 1998) [calspeedb]"));
-	HWND hWnd33 = FindWindowA(0, ("MAME: Out Run (sitdown/upright, Rev A) [outrunra]"));
-	HWND hWnd34 = FindWindowA(0, ("MAME: Out Run (sitdown/upright, Rev B) [outrun]"));
-	HWND hWnd35 = FindWindowA(0, ("MAME: Out Run (sitdown/upright, Rev B) (Enhanced Edition v1.1.0) [outruneh]"));
-	HWND hWnd36 = FindWindowA(0, ("MAME: Turbo Out Run (Out Run upgrade) (FD1094 317-0118) [toutrun]"));
-	HWND hWnd37 = FindWindowA(0, ("MAME: Turbo Out Run (Out Run upgrade) (bootleg of FD1094 317-0118 set) [toutrund]"));
-	HWND hWnd38 = FindWindowA(0, ("MAME: Turbo Out Run (Japan, Out Run upgrade) (FD1094 317-0117) [toutrunj]"));
-	HWND hWnd39 = FindWindowA(0, ("MAME: Turbo Out Run (Japan, Out Run upgrade) (bootleg of FD1094 317-0117 set) [toutrunjd]"));
-	HWND hWnd40 = FindWindowA(0, ("MAME: Power Drift (World, Rev A) [pdrift]"));
-	HWND hWnd41 = FindWindowA(0, ("MAME: Power Drift (World) [pdrifta]"));
-	HWND hWnd42 = FindWindowA(0, ("MAME: Power Drift (World, Earlier) [pdrifte]"));
-	HWND hWnd43 = FindWindowA(0, ("MAME: Power Drift (Japan) [pdriftj]"));
-	HWND hWnd44 = FindWindowA(0, ("MAME: Power Drift - Link Version (Japan, Rev A) [pdriftl]"));
-	HWND hWnd45 = FindWindowA(0, ("MAME: OutRunners (World) [orunners]"));
-	HWND hWnd46 = FindWindowA(0, ("MAME: OutRunners (US) [orunnersu]"));
-	HWND hWnd47 = FindWindowA(0, ("MAME: OutRunners (Japan) [orunnersj]"));
-	HWND hWnd48 = FindWindowA(0, ("MAME: San Francisco Rush 2049 [sf2049]"));
-	HWND hWnd49 = FindWindowA(0, ("MAME: San Francisco Rush 2049: Special Edition [sf2049se]"));
-	HWND hWnd50 = FindWindowA(0, ("MAME: San Francisco Rush 2049 : Tournament Edition[sf2049te]"));
-
 	if (EnableForceSpringEffect == 1)
 	{
 		if (ForceSpringEffect)
@@ -1803,451 +1861,677 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		}
 	}
 
-	if ((hWnd1 > NULL) || (hWnd2 > NULL) || (hWnd3 > NULL) || (hWnd4 > NULL) || (hWnd5 > NULL)) //Daytona 2,Scud Race,Le Mans 24
+	romname = new char[256]; //name of rom being played
+	sprintf(romname, "%s", romFFB);
+
+	name = new char[256]; //name of FFB currently
+	sprintf(name, "%s", nameFFB);
+
+	if (!RomGameName)
 	{
-		if (name == RawDrive)
+		if (romname != NULL)
 		{
-			stateFFB = newstateFFB;
-		}
+			//Select code to run via rom name
+			if (romname == dayto2pe || romname == daytona2 || romname == scud || romname == scuda || romname == scudj || romname == scudplus || romname == scudplusa)
+			{
+				RunningFFB = "Daytona2Active";
+			}
 
-		if ((stateFFB > 0x09) && (stateFFB < 0x10))
-		{
-			//Spring
-			double percentForce = (stateFFB - 9) / 16.0;
-			triggers->Spring(percentForce);
-		}
+			if (romname == dirtdvlsa)
+			{
+				RunningFFB = "DirtDevilsActive";
+			}
 
-		if ((stateFFB > 0x1F) && (stateFFB < 0x30))
-		{
-			//Clutch
-			double percentForce = (stateFFB - 31) / 16.0;
-			triggers->Friction(percentForce);
-		}
+			if (romname == srally2 || romname == srally2x || romname == ecau)
+			{
+				RunningFFB = "Srally2Active";
+			}
 
-		if ((stateFFB > 0x2F) && (stateFFB < 0x40))
-		{
-			//Centering
-			double percentForce = (stateFFB - 47) / 16.0;
-			triggers->Rumble(percentForce, percentForce, 100);
-			triggers->Sine(40, 0, percentForce);
-		}
+			if (romname == vr || romname == vformula)
+			{
+				RunningFFB = "VirtuaRacingActive";
+			}
 
-		if ((stateFFB > 0x3F) && (stateFFB < 0x50))
-		{
-			//Uncentering
-			double percentForce = (stateFFB - 63) / 16.0;
-			triggers->Rumble(percentForce, percentForce, 100);
-			triggers->Sine(40, 0, percentForce);
-		}
+			if (romname == sfrush || romname == sfrusha || romname == sfrushrk || romname == sfrushrkwo)
+			{
+				RunningFFB = "SanFranActive";
+			}
 
-		if ((stateFFB > 0x4F) && (stateFFB < 0x60))
-		{
-			//Roll Right
-			double percentForce = (stateFFB - 79) / 16.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if ((stateFFB > 0x5F) && (stateFFB < 0x70))
-		{
-			//Roll Left
-			double percentForce = (stateFFB - 95) / 16.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
+			if (romname == crusnwld || romname == crusnwld24 || romname == crusnwld23 || romname == crusnwld20 || romname == crusnwld19 || romname == crusnwld17 || romname == crusnwld13)
+			{
+				RunningFFB = "CrusnWldActive";
+			}
 
-		//Test Menu
-		if (stateFFB == 0x80)
-		{
-			triggers->Rumble(0, 0, 0);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-		}
-		else if (stateFFB == 0x81)
-		{
-			triggers->Rumble(0.5, 0, 100);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0.5);
-		}
-		else if (stateFFB == 0x82)
-		{
-			triggers->Rumble(0, 0.5, 100);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0.5);
+			if (romname == offroadc || romname == offroadc4 || romname == offroadc3 || romname == offroadc1)
+			{
+				RunningFFB = "OffroadChallengeActive";
+			}
+
+			if (romname == crusnusa || romname == crusnusa40 || romname == crusnusa21)
+			{
+				RunningFFB = "CrusnUSAActive";
+			}
+
+			if (romname == calspeed || romname == calspeeda || romname == calspeedb)
+			{
+				RunningFFB = "CalSpeedActive";
+			}
+
+			if (romname == outrunra || romname == outrun || romname == outruneh || romname == toutrun || romname == toutrund || romname == toutrunj || romname == toutrunjd)
+			{
+				RunningFFB = "OutrunActive";
+			}
+
+			if (romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj || romname == pdriftl)
+			{
+				RunningFFB = "PowerDriftActive";
+			}
+
+			if (romname == orunners || romname == orunnersu || romname == orunnersj)
+			{
+				RunningFFB = "OutrunnersActive";
+			}
+
+			if (romname == sf2049 || romname == sf2049se || romname == sf2049te)
+			{
+				RunningFFB = "SanFran2049Active";
+			}
+
+			if (romname == harddriv1)
+			{
+				RunningFFB = "HardDrivinActive";
+			}
+
+			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
+			{
+				RomGameName = true;
+			}
 		}
 	}
 
-	if (hWnd7 > NULL) //Dirt Devils
+	if (!EmuName)
 	{
-		if (name == RawDrive)
+		//Select code to run via emulator name using partial window title to avoid issues with FPS showing etc
+		const TCHAR MAMEstring[] = TEXT("MAME");
+		EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring);
+
+		const TCHAR Supermodelstring[] = TEXT("Supermodel");
+		EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring);
+
+		if (!EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring))
 		{
-			stateFFB = newstateFFB;
+			EmulatorName = "MAME";
 		}
 
-		if (stateFFB == 0x10)
+		if (!EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring))
 		{
-			double percentForce = 0.7;
-			triggers->Spring(percentForce);
+			EmulatorName = "Supermodel";
 		}
 
-		if ((stateFFB == 0x27) || (stateFFB == 0x30))
-		{
-			DirtDevilSine = false;
-		}
+		Emulator = new char[256]; // Emulator name
+		sprintf(Emulator, "%s", EmulatorName);
 
-		if (stateFFB == 0x2F)
+		if ((EmulatorName != NULL) && (EmulatorName[0] != '\0'))
 		{
-			DirtDevilSine = true;
-		}
-
-		if (DirtDevilSine)
-		{
-			double percentForce = (stateFFB - 31) / 16.0;
-			triggers->Sine(60, 0, percentForce);
-			triggers->Rumble(percentForce, percentForce, 100);
+			EmuName = true;
 		}
 	}
-
-	if ((hWnd6 > NULL) || (hWnd8 > NULL)) //Sega Rally 2, Emergency Call Ambulance
+	
+	if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
 	{
-		if (name == RawDrive)
+		if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race,Le Mans 24
 		{
-			stateFFB = newstateFFB;
-		}
-
-		if ((stateFFB > 0x00) && (stateFFB < 0x26))
-		{
-			double percentForce = (stateFFB) / 37.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-		else if ((stateFFB > 0x3F) && (stateFFB < 0x66))
-		{
-			double percentForce = (stateFFB - 64) / 37.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-	}
-
-	if ((hWnd9 > NULL) || (hWnd10 > NULL)) //Virtua Formula, Virtua Racing
-	{
-		static bool DontSineUntilRaceStart = false;
-
-		if (name == digit0)
-		{
-			stateFFB = newstateFFB;
-		}
-
-		if ((stateFFB == 0x03) || (stateFFB == 0x07) || (stateFFB == 0x09) || (stateFFB == 0x10))
-		{
-			if (stateFFB == 0x07)
+			if (Emulator == Supermodel)
 			{
-				DontSineUntilRaceStart = true;
-			}
-			if (stateFFB == 0x09)
-			{
-				DontSineUntilRaceStart = false;
-			}
-			//Spring
-			double percentForce = 0.8;
-			triggers->Spring(percentForce);
-		}
+				if (name == RawDrive)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
 
-		else if ((stateFFB == 0x20) || (stateFFB == 0x28))
-		{
-			//Clutch
-			double percentForce = 0.4;
-			triggers->Friction(percentForce);
-		}
+					stateFFB = newstateFFB;
+				}
 
-		else if ((stateFFB > 0x2F) && (stateFFB < 0x40))
-		{
-			//Centering
-			double percentForce = (stateFFB - 47) / 11.0;
-			triggers->Spring(percentForce);
-		}
+				if ((stateFFB > 0x09) && (stateFFB < 0x10))
+				{
+					//Spring
+					double percentForce = (stateFFB - 9) / 16.0;
+					triggers->Spring(percentForce);
+				}
 
-		else if ((stateFFB == 0x40) || (stateFFB == 0x46) || (stateFFB == 0x4A))
-		{
-			if (stateFFB == 0x40)
-			{
-				//Uncentering
-				double percentForce = 0.4;
-				triggers->Rumble(percentForce, percentForce, 100);
-				triggers->Sine(70, 30, percentForce);
-			}
-			else
-			{
-				if (DontSineUntilRaceStart)
+				if ((stateFFB > 0x1F) && (stateFFB < 0x30))
+				{
+					//Clutch
+					double percentForce = (stateFFB - 31) / 16.0;
+					triggers->Friction(percentForce);
+				}
+
+				if ((stateFFB > 0x2F) && (stateFFB < 0x40))
+				{
+					//Centering
+					double percentForce = (stateFFB - 47) / 16.0;
+					triggers->Rumble(percentForce, percentForce, 100);
+					triggers->Sine(40, 0, percentForce);
+				}
+
+				if ((stateFFB > 0x3F) && (stateFFB < 0x50))
 				{
 					//Uncentering
-					double percentForce = 0.4;
+					double percentForce = (stateFFB - 63) / 16.0;
 					triggers->Rumble(percentForce, percentForce, 100);
-					triggers->Sine(70, 30, percentForce);
+					triggers->Sine(40, 0, percentForce);
+				}
+
+				if ((stateFFB > 0x4F) && (stateFFB < 0x60))
+				{
+					//Roll Right
+					double percentForce = (stateFFB - 79) / 16.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((stateFFB > 0x5F) && (stateFFB < 0x70))
+				{
+					//Roll Left
+					double percentForce = (stateFFB - 95) / 16.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				//Test Menu
+				if (stateFFB == 0x80)
+				{
+					triggers->Rumble(0, 0, 0);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+				}
+				else if (stateFFB == 0x81)
+				{
+					triggers->Rumble(0.5, 0, 100);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0.5);
+				}
+				else if (stateFFB == 0x82)
+				{
+					triggers->Rumble(0, 0.5, 100);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0.5);
 				}
 			}
 		}
 
-		else if ((stateFFB == 0x50) || (stateFFB == 0x5F))
+		if (RunningFFB == DirtDevilsActive) //Dirt Devils
 		{
-			//Roll Left
-			double percentForce = 0.5;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-		else if ((stateFFB == 0x60) || (stateFFB == 0x6F))
-		{
-			//Roll Right
-			double percentForce = 0.5;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-	}
+			if (Emulator == Supermodel)
+			{
+				if (name == RawDrive)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
 
-	if ((hWnd11 > NULL) || (hWnd12 > NULL) || (hWnd13 > NULL) || (hWnd14 > NULL)) //San Francisco Rush
-	{
-		if (name == wheel)
-		{
-			stateFFB = newstateFFB;
-		}
+					stateFFB = newstateFFB;
+				}
 
-		int ffsanfranrush = 0;
-		ffsanfranrush = sanfran(stateFFB);
+				if (stateFFB == 0x10)
+				{
+					double percentForce = 0.7;
+					triggers->Spring(percentForce);
+				}
 
-		if ((ffsanfranrush > 0x70) && (ffsanfranrush < 0xE9))
-		{
-			double percentForce = (233 - ffsanfranrush) / 119.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-		else if ((ffsanfranrush > 0x00) && (ffsanfranrush < 0x71))
-		{
-			double percentForce = (ffsanfranrush) / 112.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-	}
+				if ((stateFFB == 0x27) || (stateFFB == 0x30))
+				{
+					DirtDevilSine = false;
+				}
 
-	if ((hWnd15 > NULL) || (hWnd16 > NULL) || (hWnd17 > NULL) || (hWnd18 > NULL) || (hWnd19 > NULL) || (hWnd20 > NULL) || (hWnd21 > NULL)) //Cruis'n USA
-	{
-		if (name == wheel)
-		{
-			stateFFB = newstateFFB;
+				if (stateFFB == 0x2F)
+				{
+					DirtDevilSine = true;
+				}
+
+				if (DirtDevilSine)
+				{
+					double percentForce = (stateFFB - 31) / 16.0;
+					triggers->Sine(60, 0, percentForce);
+					triggers->Rumble(percentForce, percentForce, 100);
+				}
+			}
 		}
 
-		int ffcrusnwld = 0;
-		ffcrusnwld = crusnwld(stateFFB);
+		if (RunningFFB == Srally2Active) //Sega Rally 2, Emergency Call Ambulance
+		{
+			if (Emulator == Supermodel)
+			{
+				if (name == RawDrive)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
 
-		if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
-		{
-			double percentForce = (225 - ffcrusnwld) / 114.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-		else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
-		{
-			double percentForce = (ffcrusnwld) / 110.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-	}
+					stateFFB = newstateFFB;
+				}
 
-	if ((hWnd22 > NULL) || (hWnd23 > NULL) || (hWnd24 > NULL) || (hWnd25 > NULL) || (hWnd26 > NULL)) //Off Road Challenge
-	{
-		if (name == wheel)
-		{
-			stateFFB = newstateFFB;
-		}
-
-		if ((stateFFB > 0x83) && (stateFFB < 0x100))
-		{
-			double percentForce = (255 - stateFFB) / 124.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-		else if ((stateFFB > 0x00) && (stateFFB < 0x7D))
-		{
-			double percentForce = (stateFFB) / 124.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-	}
-
-	if ((hWnd27 > NULL) || (hWnd28 > NULL) || (hWnd29 > NULL)) //Crusn USA
-	{
-		if (name == wheel)
-		{
-			stateFFB = newstateFFB;
+				if ((stateFFB > 0x00) && (stateFFB < 0x26))
+				{
+					double percentForce = (stateFFB) / 37.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((stateFFB > 0x3F) && (stateFFB < 0x66))
+				{
+					double percentForce = (stateFFB - 64) / 37.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
 		}
 
-		int ffcrusnusa = 0;
-		ffcrusnusa = crusnusa(stateFFB);
+		if (RunningFFB == VirtuaRacingActive) //Virtua Formula, Virtua Racing
+		{
+			if (Emulator == MAME)
+			{
+				if (name == digit0)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
 
-		if ((ffcrusnusa > 0x68) && (ffcrusnusa < 0xD7))
-		{
-			double percentForce = (215 - ffcrusnusa) / 110.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-		else if ((ffcrusnusa > 0x00) && (ffcrusnusa < 0x69))
-		{
-			double percentForce = (ffcrusnusa) / 104.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-	}
+					stateFFB = newstateFFB;
+				}
 
-	if ((hWnd30 > NULL) || (hWnd31 > NULL) || (hWnd32 > NULL)) //California Speed
-	{
-		if (name == wheel)
-		{
-			stateFFB = newstateFFB;
-		}
+				if ((stateFFB == 0x03) || (stateFFB == 0x07) || (stateFFB == 0x09) || (stateFFB == 0x10))
+				{
+					if (stateFFB == 0x07)
+					{
+						DontSineUntilRaceStart = true;
+					}
+					if (stateFFB == 0x09)
+					{
+						DontSineUntilRaceStart = false;
+					}
+					//Spring
+					double percentForce = 0.8;
+					triggers->Spring(percentForce);
+				}
 
-		if ((stateFFB > 0x80) && (stateFFB < 0x100))
-		{
-			double percentForce = (255 - stateFFB) / 126.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-		{
-			double percentForce = (stateFFB) / 126.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-	}
+				else if ((stateFFB == 0x20) || (stateFFB == 0x28))
+				{
+					//Clutch
+					double percentForce = 0.4;
+					triggers->Friction(percentForce);
+				}
 
-	if ((hWnd33 > NULL) || (hWnd34 > NULL) || (hWnd35 > NULL) || (hWnd36 > NULL) || (hWnd37 > NULL) || (hWnd38 > NULL) || (hWnd39 > NULL)) //Outrun,Turbo Outrun
-	{
-		if (name == Vibration_motor)
-		{
-			stateFFB = newstateFFB;
-		}
+				else if ((stateFFB > 0x2F) && (stateFFB < 0x40))
+				{
+					//Centering
+					double percentForce = (stateFFB - 47) / 11.0;
+					triggers->Spring(percentForce);
+				}
 
-		if (stateFFB == 0x01)
-		{
-			triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-			triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-		}
+				else if ((stateFFB == 0x40) || (stateFFB == 0x46) || (stateFFB == 0x4A))
+				{
+					if (stateFFB == 0x40)
+					{
+						//Uncentering
+						double percentForce = 0.4;
+						triggers->Rumble(percentForce, percentForce, 100);
+						triggers->Sine(70, 30, percentForce);
+					}
+					else
+					{
+						if (DontSineUntilRaceStart)
+						{
+							//Uncentering
+							double percentForce = 0.4;
+							triggers->Rumble(percentForce, percentForce, 100);
+							triggers->Sine(70, 30, percentForce);
+						}
+					}
+				}
 
-		if (stateFFB == 0x00)
-		{
-			triggers->Sine(0, 0, 0);
-			triggers->Rumble(0, 0, 0);
-		}
-	}
-
-	if ((hWnd40 > NULL) || (hWnd41 > NULL) || (hWnd42 > NULL) || (hWnd43 > NULL) || (hWnd44 > NULL)) //Power Drift
-	{
-		if (name == upright_wheel_motor)
-		{
-			stateFFB = newstateFFB;
-		}
-
-		if (stateFFB == 0x01)
-		{
-			triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-			triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-		}
-
-		if (stateFFB == 0x00)
-		{
-			triggers->Sine(0, 0, 0);
-			triggers->Rumble(0, 0, 0);
-		}
-	}
-
-	if ((hWnd45 > NULL) || (hWnd46 > NULL) || (hWnd47 > NULL)) //OutRunners
-	{
-
-		if (name == MA_Steering_Wheel_motor)
-		{
-			stateFFB = newstateFFB;
-		}
-		else if (name == MB_Steering_Wheel_motor)
-		{
-			stateFFBDevice2 = newstateFFB;
+				else if ((stateFFB == 0x50) || (stateFFB == 0x5F))
+				{
+					//Roll Left
+					double percentForce = 0.5;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((stateFFB == 0x60) || (stateFFB == 0x6F))
+				{
+					//Roll Right
+					double percentForce = 0.5;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}			
 		}
 
-		if (stateFFB == 0x01)
+		if (RunningFFB == SanFranActive) //San Francisco Rush
 		{
-			MAEffect = true;
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				int ffsanfranrush = sanfran(stateFFB);
+
+				if ((ffsanfranrush > 0x70) && (ffsanfranrush < 0xE9))
+				{
+					double percentForce = (233 - ffsanfranrush) / 119.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffsanfranrush > 0x00) && (ffsanfranrush < 0x71))
+				{
+					double percentForce = (ffsanfranrush) / 112.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
 		}
 
-		if (stateFFB == 0x00)
+		if (RunningFFB == CrusnWldActive) //Cruis'n World
 		{
-			MAEffect = false;
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				int ffcrusnwld = crusnwldA(stateFFB);
+
+				if ((ffcrusnwld > 110)& (ffcrusnwld < 226))
+				{
+					double percentForce = (225 - ffcrusnwld) / 114.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnwld > 0)& (ffcrusnwld < 111))
+				{
+					double percentForce = (ffcrusnwld) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
 		}
 
-		if (stateFFBDevice2 == 0x01)
+		if (RunningFFB == OffroadChallengeActive) //Off Road Challenge
 		{
-			MBEffect = true;
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if ((stateFFB > 0x83) && (stateFFB < 0x100))
+				{
+					double percentForce = (255 - stateFFB) / 124.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((stateFFB > 0x00) && (stateFFB < 0x7D))
+				{
+					double percentForce = (stateFFB) / 124.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
 		}
 
-		if (stateFFBDevice2 == 0x00)
+		if (RunningFFB == CrusnUSAActive) //Crusn USA
 		{
-			MBEffect = false;
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				int ffcrusnusa = crusnusaA(stateFFB);
+
+				if ((ffcrusnusa > 0x68) && (ffcrusnusa < 0xD7))
+				{
+					double percentForce = (215 - ffcrusnusa) / 110.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ffcrusnusa > 0x00) && (ffcrusnusa < 0x69))
+				{
+					double percentForce = (ffcrusnusa) / 104.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
 		}
 
-		if (MAEffect)
+		if (RunningFFB == CalSpeedActive) //California Speed
 		{
-			triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-			triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if ((stateFFB > 0x80) && (stateFFB < 0x100))
+				{
+					double percentForce = (255 - stateFFB) / 126.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+				{
+					double percentForce = (stateFFB) / 126.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
 		}
 
-		if (!MAEffect)
+		if (RunningFFB == OutrunActive) //Outrun,Turbo Outrun
 		{
-			triggers->Sine(0, 0, 0);
-			triggers->Rumble(0, 0, 0);
+			if (Emulator == MAME)
+			{
+				if (name == Vibration_motor)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if (stateFFB == 0x01)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (stateFFB == 0x00)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
+				}
+			}
 		}
 
-		if (MBEffect)
+		if (RunningFFB == PowerDriftActive) //Power Drift
 		{
-			triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-			triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			if (Emulator == MAME)
+			{
+				if (name == upright_wheel_motor)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if (stateFFB == 0x01)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (stateFFB == 0x00)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
+				}
+			}
 		}
 
-		if (!MBEffect)
+		if (RunningFFB == OutrunnersActive) //OutRunners
 		{
-			triggers->SineDevice2(0, 0, 0);
-			triggers->RumbleDevice2(0, 0, 0);
-		}
-	}
+			if (Emulator == MAME)
+			{
+				if (name == MA_Steering_Wheel_motor)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
 
-	if ((hWnd48 > NULL) || (hWnd49 > NULL) || (hWnd50 > NULL)) //San Fran 2049
-	{
-		if (name == wheel)
-		{
-			stateFFB = newstateFFB;
+					stateFFB = newstateFFB;
+				}
+				else if (name == MB_Steering_Wheel_motor)
+				{
+					stateFFBDevice2 = newstateFFB;
+				}
+
+				if (stateFFB == 0x01)
+				{
+					MAEffect = true;
+				}
+
+				if (stateFFB == 0x00)
+				{
+					MAEffect = false;
+				}
+
+				if (stateFFBDevice2 == 0x01)
+				{
+					MBEffect = true;
+				}
+
+				if (stateFFBDevice2 == 0x00)
+				{
+					MBEffect = false;
+				}
+
+				if (MAEffect)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!MAEffect)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
+				}
+
+				if (MBEffect)
+				{
+					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!MBEffect)
+				{
+					triggers->SineDevice2(0, 0, 0);
+					triggers->RumbleDevice2(0, 0, 0);
+				}
+			}
 		}
 
-		if ((stateFFB > 0x80) && (stateFFB < 0x100))
+		if (RunningFFB == SanFran2049Active) //San Fran 2049
 		{
-			double percentForce = (255 - stateFFB) / 126.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);			
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if ((stateFFB > 0x80) && (stateFFB < 0x100))
+				{
+					double percentForce = (255 - stateFFB) / 126.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+				{
+					double percentForce = (stateFFB) / 126.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
 		}
-		else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+
+		if (RunningFFB == HardDrivinActive) //Hard Drivin
 		{
-			double percentForce = (stateFFB) / 126.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					stateFFB = newstateFFB;
+				}
+
+				if (stateFFB > 0)
+				{
+					if (stateFFB != 0xE0)
+					{
+						static char test[256];
+						memset(test, 0, 256);
+						sprintf(test, "hex print: %08X", stateFFB);
+						OutputDebugStringA(test);
+					}
+				}
+			}
 		}
 	}
 }

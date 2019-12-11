@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.3
+Version 1.3a
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -9,6 +9,23 @@ to add FFB to Daytona Championship USA and it grew from there to support several
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
+
+***1.3a Changes***
+
+- Changed to Output Reading to use rom name rather then using game's window title (FFB wouldn't work if showing FPS via Supermodel etc)
+
+- Added Partial window title reading for Emulator in action (If in the future we end up with a game on MAME + Supermodel using same rom name etc)
+
+- Added logging values to all Output games (MAME & Supermodel)
+
+- FreeLibrary on MAME32 & MAME64 which was missing previously
+
+- Changed Forced Spring to occur after 2.5 seconds rather then after first FFB Value sent on Outputs
+
+- Added error messagebox if hidden window isnt created correctly on Outputs
+
+- Forgot to mention last release that on Virtua Racing, set cabinet to Upright to recieve FFB values
+
 
 ***1.3 Changes***
 

@@ -92,7 +92,7 @@ int nascar(int ffnas) {
 	}
 }
 
-BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
+static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 {
 	const DWORD TITLE_SIZE = 1024;
 	TCHAR windowTitle[TITLE_SIZE];
