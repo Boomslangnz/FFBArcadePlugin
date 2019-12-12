@@ -17,6 +17,12 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "math.h"
 #include "SDL.h"
 
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int DaytonaAIMultiplayerHack = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaAIMultiplayerHack"), 0, settingsFilename);
+static int DaytonaForcePanoramicAttract = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaForcePanoramicAttract"), 0, settingsFilename);
+static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
+static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
+
 static bool init = false;
 
 static bool __stdcall ExitHook(UINT uExitCode)
@@ -49,9 +55,7 @@ static bool Hook(void * toHook, void * ourFunct, int len) {
 static DWORD jmpBackAddy;
 
 void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
-	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-	int DaytonaAIMultiplayerHack = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaAIMultiplayerHack"), 0, settingsFilename);
-	int DaytonaForcePanoramicAttract = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaForcePanoramicAttract"), 0, settingsFilename);
+
 
 	HWND hWnd1 = FindWindowA(0, ("Sega Rally Championship"));
 	HWND hWnd2 = FindWindowA(0, ("Daytona USA"));
@@ -74,6 +78,10 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 	HWND hWnd19 = FindWindowA(0, ("Sega Touring Car Championship (Rev B)"));
 	HWND hWnd20 = FindWindowA(0, ("Over Rev (Model 2B)"));
 
+	if (EnableForceSpringEffect == 1)
+	{
+		triggers->Springi(ForceSpringStrength / 100.0);
+	}
 
 	HMODULE hMod = GetModuleHandleA("KERNEL32.dll");
 	if (hMod)
