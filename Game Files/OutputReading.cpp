@@ -306,6 +306,7 @@ int __stdcall mame_updatestate(const char* id, int state)
 	{
 		if (name == wheelA)
 		{
+			//if (!(((state == 0xE0) || (state == 0)) && ((frame == 0) || (frame == 4))))
 			if ((state != 0xE0) && (state != 0x00))
 			{
 				vals[frame & 0x7] = state;
