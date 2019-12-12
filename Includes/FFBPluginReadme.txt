@@ -30,6 +30,8 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Progress made on Hard Drivin' & Race Drivin' (Big thanks to Ducon 2016 for creating math formula and helping with this) but not possible yet to work
 
+- Sorry I said Virtua Formula was supported last release but appears there is no FFB Output Added
+
 - Forgot to mention last release that on Virtua Racing, set cabinet to Upright to recieve FFB values
 
 
@@ -60,7 +62,6 @@ Initial Supported Output Games
 -Emergency Call Ambulance
 
 ***MAME***
--Virtua Formula
 -Virtua Racing
 -San Francisco Rush
 -San Francisco Rush: The Rock
@@ -514,7 +515,7 @@ TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBAC
 
 -Off Road Challenge [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
 
--Virtua Racing & Virtua Formula [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+-Virtua Racing (SET CABINET TO UPRIGHT) [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
 
 -OutRun [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
 
