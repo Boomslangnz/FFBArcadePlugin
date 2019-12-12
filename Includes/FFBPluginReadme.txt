@@ -18,7 +18,7 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Added logging values to all Output games (MAME & Supermodel)
 
-- FreeLibrary on MAME32 & MAME64 dll which was missing previously
+- FreeLibrary on MAME32 & MAME64 dll which was missing previously while exiting
 
 - Changed Forced Spring to occur after 2.5 seconds rather then after first FFB Value sent on Outputs
 
@@ -27,6 +27,10 @@ so are not using real force feedback values. Most games use correct ffb values h
 - Modified GUI Page so Supermodel Outputs only shows relevant information for Supermodel Games
 
 - Added Sleep before loading MAME Output as this caused issues on some pcs where Outputs values were not recieved
+
+- Added optional Force Spring to M2 Emulator if you want Spring effect the entire time
+
+- Fixed issue where Outrunners would continue rumbling occassionally when on road
 
 - Progress made on Hard Drivin' & Race Drivin' (Big thanks to Ducon 2016 for creating math formula and helping with this) but not possible yet to work
 
