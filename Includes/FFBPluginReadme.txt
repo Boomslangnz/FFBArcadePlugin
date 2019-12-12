@@ -18,13 +18,17 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Added logging values to all Output games (MAME & Supermodel)
 
-- FreeLibrary on MAME32 & MAME64 which was missing previously
+- FreeLibrary on MAME32 & MAME64 dll which was missing previously
 
 - Changed Forced Spring to occur after 2.5 seconds rather then after first FFB Value sent on Outputs
 
 - Added error messagebox if hidden window isnt created correctly on Outputs
 
 - Modified GUI Page so Supermodel Outputs only shows relevant information for Supermodel Games
+
+- Added Sleep before loading MAME Output as this caused issues on some pcs where Outputs values were not recieved
+
+- Progress made on Hard Drivin' & Race Drivin' (Big thanks to Ducon 2016 for creating math formula and helping with this) but not possible yet to work
 
 - Forgot to mention last release that on Virtua Racing, set cabinet to Upright to recieve FFB values
 

@@ -28,6 +28,7 @@ HINSTANCE ProcDLL = NULL;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
+static int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 0, settingsFilename);
 static int SinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriod"), 0, settingsFilename);
 static int SineFadePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriod"), 0, settingsFilename);
 static int SineStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrength"), 0, settingsFilename);
@@ -351,8 +352,16 @@ DWORD WINAPI ThreadForOutputs(LPVOID lpParam)
 
 DWORD WINAPI ThreadForForcedSpring(LPVOID lpParam)
 {
-	Sleep(2500);
-	ForceSpringEffect = true;
+	if (configGameId == 34)
+	{
+		Sleep(2500);
+		ForceSpringEffect = true;
+	}
+	else
+	{
+		ForceSpringEffect = true;
+	}	
+
 	return 0;
 }
 
@@ -2494,10 +2503,20 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					std::string ffs = std::to_string(newstateFFB);
 					helpers->log((char*)ffs.c_str());
 
+					if (newstateFFB == 0x00)
+					{
+						MAEffect = false;
+					}
+
 					stateFFB = newstateFFB;
 				}
 				else if (name == MB_Steering_Wheel_motor)
 				{
+					if (newstateFFB == 0x00)
+					{
+						MAEffect = false;
+					}
+
 					stateFFBDevice2 = newstateFFB;
 				}
 
@@ -2581,11 +2600,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		{
 			if (Emulator == MAME)
 			{
-				if (name == wheel)
-				{
-					stateFFB = newstateFFB;
-				}
-
 				if (!HardDrivinFrame)
 				{
 					HardDrivinFrame = true;
@@ -2614,7 +2628,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					sprintf(test, "hex print: %d", HardDrivinFFB);
 					OutputDebugStringA(test);
 
-					if (HardDrivinFFB > 0)
+/*					if (HardDrivinFFB > 0)
 					{
 						double percentForce = HardDrivinFFB / 100.0;
 						double percentLength = 100;
@@ -2629,7 +2643,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 						double percentLength = 100;
 						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}					
+					}	*/				
 				}
 			}
 		}
