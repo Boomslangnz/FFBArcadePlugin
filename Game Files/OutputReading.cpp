@@ -44,6 +44,7 @@ static bool MBEffect = false;
 static bool DirtDevilSine = false;
 static bool ForceSpringEffect = false;
 static bool DontSineUntilRaceStart = false;
+static bool HardDrivinFrame = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -57,9 +58,14 @@ char* name;
 char* romname;
 char* RunningFFB;
 char* Emulator;
+int vals[8] = { 0 };
+int frame = 0;
+int HardDrivinFFB;
 int newstateFFB;
 int stateFFB;
 int stateFFBDevice2;
+
+std::string wheelA("wheel");
 
 typedef int(__stdcall* MAME_START)(int hWnd);
 typedef int(__stdcall* MAME_STOP)(void);
@@ -296,6 +302,18 @@ int __stdcall mame_updatestate(const char* id, int state)
 	nameFFB = name;
 	newstateFFB = state;
 
+	if (HardDrivinFrame)
+	{
+		if (name == wheelA)
+		{
+			if ((state != 0xE0) && (state != 0x00))
+			{
+				vals[frame & 0x7] = state;
+				frame++;
+			}
+		}
+	}
+	
 	return 1;
 }
 
@@ -1772,7 +1790,41 @@ std::string orunnersj("orunnersj");
 std::string sf2049("sf2049");
 std::string sf2049se("sf2049se");
 std::string sf2049te("sf2049te");
+std::string harddriv("harddriv");
 std::string harddriv1("harddriv1");
+std::string harddrivb6("harddrivb6");
+std::string harddrivb("harddrivb");
+std::string harddrivg4("harddrivg4");
+std::string harddrivg("harddrivg");
+std::string harddrivj6("harddrivj6");
+std::string harddrivj("harddrivj");
+std::string harddriv2("harddriv2");
+std::string harddriv3("harddriv3");
+std::string harddrivcb("harddrivcb");
+std::string harddrivcg("harddrivcg");
+std::string harddrivc1("harddrivc1");
+std::string harddrivc("harddrivc");
+std::string hdrivairp("hdrivairp");
+std::string hdrivair("hdrivair");
+std::string racedrivb1("racedrivb1");
+std::string racedrivb4("racedrivb4");
+std::string racedrivb("racedrivb");
+std::string racedrivg1("racedrivg1");
+std::string racedrivg4("racedrivg4");
+std::string racedrivg("racedrivg");
+std::string racedriv1("racedriv1");
+std::string racedriv2("racedriv2");
+std::string racedriv3("racedriv3");
+std::string racedriv4("racedriv4");
+std::string racedriv("racedriv");
+std::string racedrivcb4("racedrivcb4");
+std::string racedrivcb("racedrivcb");
+std::string racedrivcg4("racedrivcg4");
+std::string racedrivcg("racedrivcg");
+std::string racedrivc2("racedrivc2");
+std::string racedrivc4("racedrivc4");
+std::string racedrivc("racedrivc");
+std::string racedrivpan("racedrivpan");
 
 //Our string to load game from
 std::string Daytona2Active("Daytona2Active");
@@ -1945,7 +1997,11 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				RunningFFB = "SanFran2049Active";
 			}
 
-			if (romname == harddriv1)
+			if (romname == harddriv1 || romname == harddrivb6 || romname == harddrivb || romname == harddrivg4 || romname == harddrivg || romname == harddrivj6 || romname == harddrivj ||
+				romname == harddriv2 || romname == harddriv3 || romname == harddriv || romname == harddrivcb || romname == harddrivcg || romname == harddrivc1 || romname == harddrivc ||
+				romname == hdrivairp || romname == hdrivair || romname == racedrivb1 || romname == racedrivb4 || romname == racedrivb || romname == racedrivg1 || romname == racedrivg4 ||
+				romname == racedrivg || romname == racedriv1 || romname == racedriv2 || romname == racedriv3 || romname == racedriv4 || romname == racedriv || romname == racedrivcb4 || 
+				romname == racedrivcb || romname == racedrivcg4 || romname == racedrivcg || romname == racedrivc2 || romname == racedrivc4 || romname == racedrivc || romname == racedrivpan)
 			{
 				RunningFFB = "HardDrivinActive";
 			}
@@ -2529,15 +2585,50 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					stateFFB = newstateFFB;
 				}
 
-				if (stateFFB > 0)
+				if (!HardDrivinFrame)
 				{
-					if (stateFFB != 0xE0)
+					HardDrivinFrame = true;
+				}
+			
+				if ((frame & 7) == 4)
+				{
+					HardDrivinFFB = (vals[0] & 15) + ((vals[3] & 7) << 5);
+
+					if ((vals[1] & 0xF0) == 0xF0)
 					{
-						static char test[256];
-						memset(test, 0, 256);
-						sprintf(test, "hex print: %08X", stateFFB);
-						OutputDebugStringA(test);
+						HardDrivinFFB |= 0x10;
 					}
+					 
+					if ((vals[2] & 0xF0) == 0xF0)
+					{
+						HardDrivinFFB = -HardDrivinFFB;
+					}
+
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(HardDrivinFFB);
+					helpers->log((char*)ffs.c_str());			
+
+					static char test[256];
+					memset(test, 0, 256);
+					sprintf(test, "hex print: %d", HardDrivinFFB);
+					OutputDebugStringA(test);
+
+					if (HardDrivinFFB > 0)
+					{
+						double percentForce = HardDrivinFFB / 100.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+
+					if (HardDrivinFFB < 0)
+					{
+						HardDrivinFFB = -HardDrivinFFB;
+						double percentForce = HardDrivinFFB / 100.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}					
 				}
 			}
 		}

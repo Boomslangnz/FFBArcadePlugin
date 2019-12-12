@@ -1154,7 +1154,7 @@ void TriggerConstantEffect(int direction, double strength)
 	}
 
 	tempEffect.constant.level = level;
-	hlp.log((char*)(std::to_string(level)).c_str());
+	//hlp.log((char*)(std::to_string(level)).c_str());
 	SDL_HapticUpdateEffect(haptic, effects.effect_constant_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_constant_id, 1);
 }
