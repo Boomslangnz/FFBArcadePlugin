@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.3a
+Version 1.4
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -9,6 +9,31 @@ to add FFB to Daytona Championship USA and it grew from there to support several
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
+
+***1.4 Changes***
+
+- Added bunch of games to MAME Output reading plugin
+
+- Changed MAME Output GUI to display Device 3 (for games which allow 3 player support)
+
+- Changed Shaker Motor Only to Shaker Motor Only / Light Gun Games Only (use this to modify lightgun settings too)
+
+***New Supported MAME Games***
+
+- Afterburner II
+- Alien3
+- Beast Busters (Up to 3 Player)
+- Ghoul Panic
+- GunBuster
+- Mechanized Attack
+- Operation Thunderbolt
+- Operation Wolf
+- Point Blank 2
+- Revolution X (Up to 3 Player)
+- Space Gun
+- Terminator 2
+- Turkey Shoot
+- Zombie Raid
 
 ***1.3a Changes***
 
