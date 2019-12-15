@@ -40,8 +40,8 @@ static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Fo
 static bool init = false;
 static bool EmuName = false;
 static bool RomGameName = false;
-static bool MAEffect = false;
-static bool MBEffect = false;
+static bool Effect1 = false;
+static bool Effect2 = false;
 static bool DirtDevilSine = false;
 static bool ForceSpringEffect = false;
 static bool DontSineUntilRaceStart = false;
@@ -1759,6 +1759,7 @@ std::string srally2p("srally2p");
 std::string srally2pa("srally2pa");
 
 //MAME Games
+std::string aburner2("aburner2");
 std::string vformula("vformula");
 std::string vr("vr");
 std::string sfrush("sfrush");
@@ -1850,12 +1851,14 @@ std::string OutrunActive("OutrunActive");
 std::string PowerDriftActive("PowerDriftActive");
 std::string OutrunnersActive("OutrunnersActive");
 std::string SanFran2049Active("SanFran2049Active");
-std::string HardDrivinActive("HardDrivinActive");
+std::string HardDrivinActive("HardDrivinActive"); 
+std::string AfterburnerActive("AfterburnerActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
 std::string digit0("digit0");
 std::string wheel("wheel");
+std::string lamp1("lamp1");
 std::string Vibration_motor("Vibration_motor");
 std::string upright_wheel_motor("upright_wheel_motor");
 std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
@@ -2014,6 +2017,11 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				romname == racedrivcb || romname == racedrivcg4 || romname == racedrivcg || romname == racedrivc2 || romname == racedrivc4 || romname == racedrivc || romname == racedrivpan)
 			{
 				RunningFFB = "HardDrivinActive";
+			}
+
+			if (romname == aburner2)
+			{
+				RunningFFB = "AfterburnerActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2505,7 +2513,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 					if (newstateFFB == 0x00)
 					{
-						MAEffect = false;
+						Effect1 = false;
 					}
 
 					stateFFB = newstateFFB;
@@ -2514,7 +2522,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				{
 					if (newstateFFB == 0x00)
 					{
-						MAEffect = false;
+						Effect2 = false;
 					}
 
 					stateFFBDevice2 = newstateFFB;
@@ -2522,43 +2530,41 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 				if (stateFFB == 0x01)
 				{
-					MAEffect = true;
+					Effect1 = true;
 				}
-
-				if (stateFFB == 0x00)
+				else
 				{
-					MAEffect = false;
+					Effect1 = false;
 				}
 
 				if (stateFFBDevice2 == 0x01)
 				{
-					MBEffect = true;
+					Effect2 = true;
 				}
-
-				if (stateFFBDevice2 == 0x00)
+				else
 				{
-					MBEffect = false;
+					Effect2 = false;
 				}
 
-				if (MAEffect)
+				if (Effect1)
 				{
 					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
 					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
 				}
 
-				if (!MAEffect)
+				if (!Effect1)
 				{
 					triggers->Sine(0, 0, 0);
 					triggers->Rumble(0, 0, 0);
 				}
 
-				if (MBEffect)
+				if (Effect2)
 				{
 					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
 					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
 				}
 
-				if (!MBEffect)
+				if (!Effect2)
 				{
 					triggers->SineDevice2(0, 0, 0);
 					triggers->RumbleDevice2(0, 0, 0);
@@ -2644,6 +2650,42 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 					}	*/				
+				}
+			}
+		}
+
+		if (RunningFFB == AfterburnerActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (name == lamp1)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if (stateFFB == 1)
+				{
+					Effect1 = true;
+				}
+				else
+				{
+					Effect1 = false;
+				}
+
+				if (Effect1)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect1)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
 				}
 			}
 		}
