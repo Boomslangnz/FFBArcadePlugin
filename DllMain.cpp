@@ -827,6 +827,7 @@ LPCDIDATAFORMAT WINAPI DirectInputGetdfDIJoystick()
 // global variables 
 SDL_Haptic* haptic;
 SDL_Haptic* haptic2 = NULL;
+SDL_Haptic* haptic3 = NULL;
 EffectCollection effects;
 EffectConstants effectConst;
 Helpers hlp;
@@ -838,6 +839,8 @@ SDL_Joystick* GameController = NULL;
 SDL_Haptic* ControllerHaptic = NULL;
 SDL_Joystick* GameController2 = NULL;
 SDL_Haptic* ControllerHaptic2 = NULL;
+SDL_Joystick* GameController3 = NULL;
+SDL_Haptic* ControllerHaptic3 = NULL;
 HINSTANCE gl_hOriginalDll = NULL;
 HINSTANCE gl_hjgtDll = NULL;
 HINSTANCE gl_cgGLDll = NULL;
@@ -846,6 +849,7 @@ extern HINSTANCE ProcDLL;
 int joystick_index1;
 int joystick1Index = -1;
 int joystick_index2 = -1;
+int joystick_index3 = -1;
 
 // settings
 wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -872,11 +876,20 @@ int configMinForceDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForc
 int configMaxForceDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDevice2"), 100, settingsFilename);
 int EnableRumbleDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumbleDevice2"), 0, settingsFilename);
 int ReverseRumbleDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumbleDevice2"), 0, settingsFilename);
-int AlternativeFFBDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeFFB"), 0, settingsFilename);
+int AlternativeFFBDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeFFBDevice2"), 0, settingsFilename);
 int configAlternativeMinForceLeftDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDevice2"), 0, settingsFilename);
 int configAlternativeMaxForceLeftDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDevice2"), 100, settingsFilename);
 int configAlternativeMinForceRightDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDevice2"), 0, settingsFilename);
 int configAlternativeMaxForceRightDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDevice2"), 100, settingsFilename);
+int configMinForceDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDevice3"), 0, settingsFilename);
+int configMaxForceDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDevice3"), 100, settingsFilename);
+int EnableRumbleDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumbleDevice3"), 0, settingsFilename);
+int ReverseRumbleDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumbleDevice3"), 0, settingsFilename);
+int AlternativeFFBDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeFFBDevice3"), 0, settingsFilename);
+int configAlternativeMinForceLeftDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDevice3"), 0, settingsFilename);
+int configAlternativeMaxForceLeftDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDevice3"), 100, settingsFilename);
+int configAlternativeMinForceRightDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDevice3"), 0, settingsFilename);
+int configAlternativeMaxForceRightDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDevice3"), 100, settingsFilename);
 
 char chainedDLL[256];
 
@@ -1091,6 +1104,16 @@ void Initialize(int device_index)
 		tempEffect2.constant.direction.type = SDL_HAPTIC_CARTESIAN;
 		effects.effect_sine_id_device2 = SDL_HapticNewEffect(haptic2, &tempEffect2);
 	}
+
+	if (haptic3 != NULL)
+	{
+		SDL_HapticEffect tempEffect3;
+		SDL_memset(&tempEffect3, 0, sizeof(SDL_HapticEffect));
+		tempEffect3 = SDL_HapticEffect();
+		tempEffect3.type = SDL_HAPTIC_SINE;
+		tempEffect3.constant.direction.type = SDL_HAPTIC_CARTESIAN;
+		effects.effect_sine_id_device3 = SDL_HapticNewEffect(haptic3, &tempEffect3);
+	}
 	
 
 	// TODO: why don't we just define this as hackFix = true in the other file?
@@ -1103,10 +1126,14 @@ void Initialize(int device_index)
 using namespace std::chrono;
 std::chrono::milliseconds timeOfLastSineEffect = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 std::chrono::milliseconds timeOfLastSineEffectDevice2 = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+std::chrono::milliseconds timeOfLastSineEffectDevice3 = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
 double lastSineEffectStrength = 0;
 double lastSineEffectStrengthDevice2 = 0;
+double lastSineEffectStrengthDevice3 = 0;
 double lastSineEffectPeriod = 0;
 double lastSineEffectPeriodDevice2 = 0;
+double lastSineEffectPeriodDevice3 = 0;
+
 void TriggerConstantEffect(int direction, double strength)
 {
 	SDL_HapticEffect tempEffect;
@@ -1532,6 +1559,80 @@ void TriggerSineEffectDevice2(UINT16 period, UINT16 fadePeriod, double strength)
 	lastSineEffectPeriodDevice2 = period;
 }
 
+void TriggerSineEffectDevice3(UINT16 period, UINT16 fadePeriod, double strength)
+{
+	std::chrono::milliseconds now = duration_cast<milliseconds>(system_clock::now().time_since_epoch());
+	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffectDevice3)).count();
+
+	int direction = 1;
+	if (strength < -0.001) {
+		strength *= -1;
+		direction = -1;
+	}
+
+	// if no strength, we do nothing
+	if (strength <= 0.001) {
+		return;
+	}
+
+	// we ignore the new effect until the last one is completed, unless the new one is significantly stronger
+	if (elapsedTime < lastSineEffectPeriodDevice3 && strength < (lastSineEffectStrengthDevice3 * 1.5)) {
+		return;
+	}
+
+	SDL_HapticEffect tempEffect;
+	SDL_memset(&tempEffect, 0, sizeof(SDL_HapticEffect));
+	hlp.log("Doing Device3 sine...");
+	tempEffect.type = SDL_HAPTIC_SINE;
+	tempEffect.periodic.direction.type = SDL_HAPTIC_CARTESIAN;
+	tempEffect.periodic.direction.dir[0] = direction;
+	tempEffect.constant.direction.dir[1] = 0; //Y Position
+	tempEffect.periodic.period = period;
+
+	int confMinForce = configMinForceDevice3;
+	int confMaxForce = configMaxForceDevice3;
+	if (AlternativeFFBDevice3 == 1)
+	{
+		if (direction == -1)
+		{
+			confMinForce = configAlternativeMinForceLeftDevice3;
+			confMaxForce = configAlternativeMaxForceLeftDevice3;
+		}
+		else
+		{
+			confMinForce = configAlternativeMinForceRightDevice3;
+			confMaxForce = configAlternativeMaxForceRightDevice3;
+		}
+	}
+	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
+	SHORT range = maxForce - minForce;
+	SHORT magnitude = (SHORT)(strength * range + minForce);
+	if (range > 0 && magnitude < 0)
+	{
+		magnitude = 32767;
+	}
+	else if (range < 0 && magnitude > 0)
+	{
+		magnitude = -32767;
+	}
+
+	tempEffect.periodic.magnitude = (SHORT)(magnitude);
+	tempEffect.periodic.length = period;
+	tempEffect.periodic.attack_length = fadePeriod;
+	tempEffect.periodic.fade_length = fadePeriod;
+
+	SDL_HapticUpdateEffect(haptic3, effects.effect_sine_id_device3, &tempEffect);
+	SDL_HapticRunEffect(haptic3, effects.effect_sine_id_device3, 1);
+
+	/*int supported = SDL_HapticEffectSupported(haptic, &tempEffect);
+	hlp.log((char *)std::to_string(supported).c_str());*/
+
+	timeOfLastSineEffectDevice3 = now;
+	lastSineEffectStrengthDevice3 = strength;
+	lastSineEffectPeriodDevice3 = period;
+}
+
 void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault)
 {
 	SDL_HapticEffect tempEffect;
@@ -1735,6 +1836,37 @@ void TriggerRumbleEffectDevice2(double highfrequency, double lowfrequency, doubl
 	}
 }
 
+void TriggerRumbleEffectDevice3(double highfrequency, double lowfrequency, double length)
+{
+	if (EnableRumbleDevice3 == 1)
+	{
+		DWORD minForceLow = (DWORD)(lowfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD minForceHigh = (DWORD)(highfrequency > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD maxForce = (DWORD)(configMaxForce / 100.0 * 65535.0);
+		DWORD rangeLow = maxForce - minForceLow;
+		DWORD rangeHigh = maxForce - minForceHigh;
+		DWORD LowMotor = (DWORD)(lowfrequency * rangeLow + minForceLow);
+		DWORD HighMotor = (DWORD)(highfrequency * rangeHigh + minForceHigh);
+
+		if (ReverseRumbleDevice3 == 1)
+		{
+			int ReverseRumble3 = SDL_JoystickRumble(GameController3, HighMotor, LowMotor, length);
+			if (ReverseRumble3 == -1)
+			{
+				EnableRumbleDevice3 = 0;
+			}
+		}
+		else
+		{
+			int Rumble3 = SDL_JoystickRumble(GameController3, LowMotor, HighMotor, length);
+			if (Rumble3 == -1)
+			{
+				EnableRumbleDevice3 = 0;
+			}
+		}
+	}
+}
+
 void TriggerSpringEffect(double strength)
 {
 	TriggerSpringEffectWithDefaultOption(strength, false);
@@ -1791,8 +1923,10 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	t.Friction = &TriggerFrictionEffect;
 	t.Sine = &TriggerSineEffect;
 	t.SineDevice2 = &TriggerSineEffectDevice2;
+	t.SineDevice3 = &TriggerSineEffectDevice3;
 	t.Rumble = &TriggerRumbleEffect;
 	t.RumbleDevice2 = &TriggerRumbleEffectDevice2;
+	t.RumbleDevice3 = &TriggerRumbleEffectDevice3;
 	t.LeftRight = &TriggerLeftRightEffect;
 	t.LeftRightDevice2 = &TriggerLeftRightDevice2Effect;
 	t.Springi = &TriggerSpringEffectInfinite;

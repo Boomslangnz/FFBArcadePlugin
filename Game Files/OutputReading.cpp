@@ -21,9 +21,13 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "SDL.h"
 extern int joystick_index1;
 extern int joystick_index2;
+extern int joystick_index3;
 extern SDL_Joystick* GameController2;
 extern SDL_Haptic* ControllerHaptic2;
 extern SDL_Haptic* haptic2;
+extern SDL_Joystick* GameController3;
+extern SDL_Haptic* ControllerHaptic3;
+extern SDL_Haptic* haptic3;
 HINSTANCE ProcDLL = NULL;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -42,6 +46,7 @@ static bool EmuName = false;
 static bool RomGameName = false;
 static bool Effect1 = false;
 static bool Effect2 = false;
+static bool Effect3 = false;
 static bool DirtDevilSine = false;
 static bool ForceSpringEffect = false;
 static bool DontSineUntilRaceStart = false;
@@ -65,6 +70,7 @@ int HardDrivinFFB;
 int newstateFFB;
 int stateFFB;
 int stateFFBDevice2;
+int stateFFBDevice3;
 
 std::string wheelA("wheel");
 
@@ -1760,6 +1766,7 @@ std::string srally2pa("srally2pa");
 
 //MAME Games
 std::string aburner2("aburner2");
+std::string aburner2g("aburner2g");
 std::string vformula("vformula");
 std::string vr("vr");
 std::string sfrush("sfrush");
@@ -1836,6 +1843,18 @@ std::string racedrivc2("racedrivc2");
 std::string racedrivc4("racedrivc4");
 std::string racedrivc("racedrivc");
 std::string racedrivpan("racedrivpan");
+std::string othunder("othunder");
+std::string othundero("othundero");
+std::string othunderuo("othunderuo");
+std::string othunderu("othunderu");
+std::string othunderj("othunderj");
+std::string opwolf("opwolf");
+std::string opwolfp("opwolfp");
+std::string opwolfj("opwolfj");
+std::string opwolfu("opwolfu");
+std::string opwolfa("opwolfa");
+std::string revx("revx");
+std::string revxp5("revxp5");
 
 //Our string to load game from
 std::string Daytona2Active("Daytona2Active");
@@ -1853,6 +1872,8 @@ std::string OutrunnersActive("OutrunnersActive");
 std::string SanFran2049Active("SanFran2049Active");
 std::string HardDrivinActive("HardDrivinActive"); 
 std::string AfterburnerActive("AfterburnerActive");
+std::string RecoilPistolActive("RecoilPistolActive");
+std::string RecoilGunActive("RecoilGunActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -1863,6 +1884,11 @@ std::string Vibration_motor("Vibration_motor");
 std::string upright_wheel_motor("upright_wheel_motor");
 std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
 std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
+std::string Player1_Recoil_Piston("Player1_Recoil_Piston");
+std::string Player2_Recoil_Piston("Player2_Recoil_Piston");
+std::string Player1_Gun_Recoil("Player1_Gun_Recoil");
+std::string Player2_Gun_Recoil("Player2_Gun_Recoil");
+std::string Player3_Gun_Recoil("Player3_Gun_Recoil");
 
 //Emulator Name
 std::string MAME("MAME");
@@ -1924,6 +1950,50 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			SDL_HapticRumbleInit(ControllerHaptic2);
 		}
 		SDL_HapticSetGain(haptic2, 100);
+	}
+
+	for (int i = 0; i < SDL_NumJoysticks(); i++)
+	{
+		wchar_t* deviceGUIDString3 = new wchar_t[256];
+		int Device3GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device3GUID"), NULL, deviceGUIDString3, 256, settingsFilename);
+		char joystick_guid[256];
+		sprintf(joystick_guid, "%S", deviceGUIDString3);
+		SDL_JoystickGUID guid, dev_guid;
+		int numJoysticks = SDL_NumJoysticks();
+		std::string njs = std::to_string(numJoysticks);
+		((char)njs.c_str());
+		for (int i = 0; i < SDL_NumJoysticks(); i++)
+		{
+			extern int joystick1Index;
+			if (i == joystick1Index)
+			{
+				continue;
+			}
+			SDL_Joystick* js3 = SDL_JoystickOpen(i);
+			joystick_index3 = SDL_JoystickInstanceID(js3);
+			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js3);
+			char guid_str[1024];
+			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
+			const char* name = SDL_JoystickName(js3);
+			char text[256];
+			sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+			guid = SDL_JoystickGetGUIDFromString(joystick_guid);
+			dev_guid = SDL_JoystickGetGUID(js3);
+			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+			{
+				GameController3 = SDL_JoystickOpen(i);
+				ControllerHaptic3 = SDL_HapticOpenFromJoystick(GameController3);
+				break;
+			}
+			SDL_JoystickClose(js3);
+		}
+		haptic3 = ControllerHaptic3;
+		if ((SDL_HapticRumbleSupported(haptic3) == SDL_TRUE))
+		{
+			SDL_HapticRumbleInit;
+			SDL_HapticRumbleInit(ControllerHaptic3);
+		}
+		SDL_HapticSetGain(haptic3, 100);
 	}
 
 	if (EnableForceSpringEffect == 1)
@@ -2019,9 +2089,20 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				RunningFFB = "HardDrivinActive";
 			}
 
-			if (romname == aburner2)
+			if (romname == aburner2 || romname == aburner2g)
 			{
 				RunningFFB = "AfterburnerActive";
+			}
+
+			if (romname == othunder || romname == othundero || romname == othunderuo || romname == othunderu || romname == othunderj || romname == opwolf || romname == opwolfp || romname == opwolfj ||
+				romname == opwolfu || romname == opwolfa)
+			{
+				RunningFFB = "RecoilPistolActive";
+			}
+
+			if (romname == revx || romname == revxp5)
+			{
+				RunningFFB = "RecoilGunActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2688,6 +2769,156 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					triggers->Rumble(0, 0, 0);
 				}
 			}
+		}
+
+		if (RunningFFB == RecoilPistolActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (name == Player1_Recoil_Piston)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if (name == Player2_Recoil_Piston)
+				{
+					stateFFBDevice2 = newstateFFB;
+				}
+
+				if (stateFFB == 1)
+				{
+					Effect1 = true;
+				}
+				else
+				{
+					Effect1 = false;
+				}
+
+				if (stateFFBDevice2 == 1)
+				{
+					Effect2 = true;
+				}
+				else
+				{
+					Effect2 = false;
+				}
+
+				if (Effect1)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect1)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
+				}
+
+				if (Effect2)
+				{
+					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect2)
+				{
+					triggers->SineDevice2(0, 0, 0);
+					triggers->RumbleDevice2(0, 0, 0);
+				}
+			}
+		}
+
+		if (RunningFFB == RecoilGunActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (name == Player1_Gun_Recoil)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if (name == Player2_Gun_Recoil)
+				{
+					stateFFBDevice2 = newstateFFB;
+				}
+
+				if (name == Player3_Gun_Recoil)
+				{
+					stateFFBDevice3 = newstateFFB;
+				}
+
+				if (stateFFB == 1)
+				{
+					Effect1 = true;
+				}
+				else
+				{
+					Effect1 = false;
+				}
+
+				if (stateFFBDevice2 == 1)
+				{
+					Effect2 = true;
+				}
+				else
+				{
+					Effect2 = false;
+				}
+
+				if (stateFFBDevice3 == 1)
+				{
+					Effect3 = true;
+				}
+				else
+				{
+					Effect3 = false;
+				}
+
+				if (Effect1)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect1)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
+				}
+
+				if (Effect2)
+				{
+					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect2)
+				{
+					triggers->SineDevice2(0, 0, 0);
+					triggers->RumbleDevice2(0, 0, 0);
+				}
+
+				if (Effect3)
+				{
+					triggers->SineDevice3(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->RumbleDevice3(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect3)
+				{
+					triggers->SineDevice3(0, 0, 0);
+					triggers->RumbleDevice3(0, 0, 0);
+				}
+			}			
 		}
 	}
 }
