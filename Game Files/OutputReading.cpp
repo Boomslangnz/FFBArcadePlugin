@@ -1855,6 +1855,35 @@ std::string opwolfu("opwolfu");
 std::string opwolfa("opwolfa");
 std::string revx("revx");
 std::string revxp5("revxp5");
+std::string term2("term2");
+std::string term2la1("term2la1");
+std::string term2pa2("term2pa2");
+std::string term2la2("term2la2");
+std::string term2la3("term2la3");
+std::string term2lg1("term2lg1");
+std::string zombraid("zombraid");
+std::string zombraidpj("zombraidpj");
+std::string zombraidp("zombraidp");
+std::string bbusters("bbusters");
+std::string bbustersu("bbustersu");
+std::string bbustersua("bbustersua");
+std::string bbustersj("bbustersj");
+std::string mechatt("mechatt");
+std::string mechattu("mechattu");
+std::string mechattu1("mechattu1");
+std::string mechattj("mechattj");
+std::string tshoot("tshoot");
+std::string gunbustru("gunbustru");
+std::string gunbustr("gunbustr");
+std::string gunbustrj("gunbustrj");
+std::string alien3("alien3");
+std::string alien3u("alien3u");
+std::string ptblank2("ptblank2");
+std::string ptblank2ua("ptblank2ua");
+std::string ghlpanic("ghlpanic");
+std::string spacegun("spacegun");
+std::string spacegunu("spacegunu");
+std::string spacegunj("spacegunj");
 
 //Our string to load game from
 std::string Daytona2Active("Daytona2Active");
@@ -1874,6 +1903,7 @@ std::string HardDrivinActive("HardDrivinActive");
 std::string AfterburnerActive("AfterburnerActive");
 std::string RecoilPistolActive("RecoilPistolActive");
 std::string RecoilGunActive("RecoilGunActive");
+std::string LeftRightGunActive("LeftRightGunActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -1884,6 +1914,8 @@ std::string Vibration_motor("Vibration_motor");
 std::string upright_wheel_motor("upright_wheel_motor");
 std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
 std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
+std::string Left_Gun_Recoil("Left_Gun_Recoil");
+std::string Right_Gun_Recoil("Right_Gun_Recoil");
 std::string Player1_Recoil_Piston("Player1_Recoil_Piston");
 std::string Player2_Recoil_Piston("Player2_Recoil_Piston");
 std::string Player1_Gun_Recoil("Player1_Gun_Recoil");
@@ -2100,9 +2132,17 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				RunningFFB = "RecoilPistolActive";
 			}
 
-			if (romname == revx || romname == revxp5)
+			if (romname == revx || romname == revxp5 || romname == zombraid || romname == zombraidpj || romname == zombraidp || romname == bbusters || romname == bbustersu || romname == bbustersua ||
+				romname == bbustersj || romname == mechatt || romname == mechattu || romname == mechattu1 || romname == mechattj || romname == tshoot || romname == gunbustru || romname == gunbustr ||
+				romname == gunbustrj || romname == alien3 || romname == alien3u || romname == ptblank2 || romname == ptblank2ua || romname == ghlpanic || romname == spacegun || romname == spacegunu ||
+				romname == spacegunj)
 			{
 				RunningFFB = "RecoilGunActive";
+			}
+
+			if (romname == term2 || romname == term2la1 || romname == term2la2 || romname == term2la3 || romname == term2lg1)
+			{
+				RunningFFB = "LeftRightGunActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2919,6 +2959,68 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					triggers->RumbleDevice3(0, 0, 0);
 				}
 			}			
+		}
+
+		if (RunningFFB == LeftRightGunActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (name == Left_Gun_Recoil)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if (name == Right_Gun_Recoil)
+				{
+					stateFFBDevice2 = newstateFFB;
+				}
+
+				if (stateFFB == 1)
+				{
+					Effect1 = true;
+				}
+				else
+				{
+					Effect1 = false;
+				}
+
+				if (stateFFBDevice2 == 1)
+				{
+					Effect2 = true;
+				}
+				else
+				{
+					Effect2 = false;
+				}
+
+				if (Effect1)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect1)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
+				}
+
+				if (Effect2)
+				{
+					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect2)
+				{
+					triggers->SineDevice2(0, 0, 0);
+					triggers->RumbleDevice2(0, 0, 0);
+				}
+			}
 		}
 	}
 }
