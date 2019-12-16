@@ -28,6 +28,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 // include all game header files here.
 #include "Game Files/TestGame.h"
+#include "Game Files/AliensExtermination.h"
 #include "Game Files/ChaseHQ2.h"
 #include "Game Files/Daytona3.h"
 #include "Game Files/FordRacing.h"
@@ -936,6 +937,7 @@ const int INITIAL_D_0 = 32;
 const int OLDMAME_ = 33;
 const int SUPERMODEL_READING = 34;
 const int OUTRUN_2Real = 35;
+const int ALIENS_EXTERMINATION = 36;
 const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
 
@@ -2025,6 +2027,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case Demul_Emulator:
 		game = new Demul;
+		break;
+	case ALIENS_EXTERMINATION:
+		game = new AliensExtermination;
 		break;
 	case GTI_Club_3:
 		game = new GTIClub3;

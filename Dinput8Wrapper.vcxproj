@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Game Files\AliensExtermination.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GRID.h" />
     <ClInclude Include="Game Files\HOTD4.h" />
@@ -46,6 +47,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Game Files\AliensExtermination.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
