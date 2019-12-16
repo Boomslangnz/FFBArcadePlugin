@@ -1884,6 +1884,15 @@ std::string ghlpanic("ghlpanic");
 std::string spacegun("spacegun");
 std::string spacegunu("spacegunu");
 std::string spacegunj("spacegunj");
+std::string rchase("rchase");
+std::string rchasej("rchasej");
+std::string lghost("lghost");
+std::string lghostd("lghostd");
+std::string lghostu("lghostu");
+std::string lghostud("lghostud");
+std::string lghostj("lghostj");
+std::string timecris("timecris");
+std::string timecrisa("timecrisa");
 
 //Our string to load game from
 std::string Daytona2Active("Daytona2Active");
@@ -1895,15 +1904,9 @@ std::string CrusnWldActive("CrusnWldActive");
 std::string OffroadChallengeActive("OffroadChallengeActive");
 std::string CrusnUSAActive("CrusnUSAActive");
 std::string CalSpeedActive("CalSpeedActive");
-std::string OutrunActive("OutrunActive");
-std::string PowerDriftActive("PowerDriftActive");
-std::string OutrunnersActive("OutrunnersActive");
 std::string SanFran2049Active("SanFran2049Active");
 std::string HardDrivinActive("HardDrivinActive"); 
-std::string AfterburnerActive("AfterburnerActive");
-std::string RecoilPistolActive("RecoilPistolActive");
-std::string RecoilGunActive("RecoilGunActive");
-std::string LeftRightGunActive("LeftRightGunActive");
+std::string EffectActive("EffectActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -1921,6 +1924,10 @@ std::string Player2_Recoil_Piston("Player2_Recoil_Piston");
 std::string Player1_Gun_Recoil("Player1_Gun_Recoil");
 std::string Player2_Gun_Recoil("Player2_Gun_Recoil");
 std::string Player3_Gun_Recoil("Player3_Gun_Recoil");
+std::string P1_Gun_Recoil("P1_Gun_Recoil");
+std::string P2_Gun_Recoil("P2_Gun_Recoil");
+std::string P3_Gun_Recoil("P3_Gun_Recoil");
+std::string mcuout1("mcuout1");
 
 //Emulator Name
 std::string MAME("MAME");
@@ -2092,21 +2099,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				RunningFFB = "CalSpeedActive";
 			}
 
-			if (romname == outrunra || romname == outrun || romname == outruneh || romname == toutrun || romname == toutrund || romname == toutrunj || romname == toutrunjd)
-			{
-				RunningFFB = "OutrunActive";
-			}
-
-			if (romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj || romname == pdriftl)
-			{
-				RunningFFB = "PowerDriftActive";
-			}
-
-			if (romname == orunners || romname == orunnersu || romname == orunnersj)
-			{
-				RunningFFB = "OutrunnersActive";
-			}
-
 			if (romname == sf2049 || romname == sf2049se || romname == sf2049te)
 			{
 				RunningFFB = "SanFran2049Active";
@@ -2121,28 +2113,17 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				RunningFFB = "HardDrivinActive";
 			}
 
-			if (romname == aburner2 || romname == aburner2g)
-			{
-				RunningFFB = "AfterburnerActive";
-			}
-
-			if (romname == othunder || romname == othundero || romname == othunderuo || romname == othunderu || romname == othunderj || romname == opwolf || romname == opwolfp || romname == opwolfj ||
-				romname == opwolfu || romname == opwolfa)
-			{
-				RunningFFB = "RecoilPistolActive";
-			}
-
 			if (romname == revx || romname == revxp5 || romname == zombraid || romname == zombraidpj || romname == zombraidp || romname == bbusters || romname == bbustersu || romname == bbustersua ||
 				romname == bbustersj || romname == mechatt || romname == mechattu || romname == mechattu1 || romname == mechattj || romname == tshoot || romname == gunbustru || romname == gunbustr ||
 				romname == gunbustrj || romname == alien3 || romname == alien3u || romname == ptblank2 || romname == ptblank2ua || romname == ghlpanic || romname == spacegun || romname == spacegunu ||
-				romname == spacegunj)
+				romname == spacegunj || romname == term2 || romname == term2la1 || romname == term2la2 || romname == term2la3 || romname == term2lg1 || romname == rchase || romname == rchasej || 
+				romname == lghost || romname == lghostd || romname == lghostu || romname == lghostud || romname == lghostj || romname == timecris || romname == timecrisa || romname == othunder || 
+				romname == othundero || romname == othunderuo || romname == othunderu || romname == othunderj || romname == opwolf || romname == opwolfp || romname == opwolfj || romname == opwolfu ||
+				 romname == opwolfa || romname == aburner2 || romname == aburner2g || romname == orunners || romname == orunnersu || romname == orunnersj || romname == pdrift || romname == pdrifta || 
+				romname == pdrifte || romname == pdriftj || romname == pdriftl || romname == outrunra || romname == outrun || romname == outruneh || romname == toutrun || romname == toutrund || 
+				romname == toutrunj || romname == toutrunjd)
 			{
-				RunningFFB = "RecoilGunActive";
-			}
-
-			if (romname == term2 || romname == term2la1 || romname == term2la2 || romname == term2la3 || romname == term2lg1)
-			{
-				RunningFFB = "LeftRightGunActive";
+				RunningFFB = "EffectActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2568,85 +2549,51 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			}
 		}
 
-		if (RunningFFB == OutrunActive) //Outrun,Turbo Outrun
+		if (RunningFFB == EffectActive) //Shaker Motor/LightGun Games
 		{
 			if (Emulator == MAME)
 			{
-				if (name == Vibration_motor)
+				if (name == MA_Steering_Wheel_motor || name == lamp1 || name == Player1_Recoil_Piston || name == Player1_Gun_Recoil || name == Left_Gun_Recoil || name == P1_Gun_Recoil || name == mcuout1 ||
+					name == upright_wheel_motor || name == Vibration_motor)
 				{
-					helpers->log("got value: ");
+					helpers->log("P1 value: ");
 					std::string ffs = std::to_string(newstateFFB);
 					helpers->log((char*)ffs.c_str());
 
-					stateFFB = newstateFFB;
-				}
-
-				if (stateFFB == 0x01)
-				{
-					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (stateFFB == 0x00)
-				{
-					triggers->Sine(0, 0, 0);
-					triggers->Rumble(0, 0, 0);
-				}
-			}
-		}
-
-		if (RunningFFB == PowerDriftActive) //Power Drift
-		{
-			if (Emulator == MAME)
-			{
-				if (name == upright_wheel_motor)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if (stateFFB == 0x01)
-				{
-					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (stateFFB == 0x00)
-				{
-					triggers->Sine(0, 0, 0);
-					triggers->Rumble(0, 0, 0);
-				}
-			}
-		}
-
-		if (RunningFFB == OutrunnersActive) //OutRunners
-		{
-			if (Emulator == MAME)
-			{
-				if (name == MA_Steering_Wheel_motor)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0x00)
+					if (newstateFFB == 0)
 					{
 						Effect1 = false;
 					}
 
 					stateFFB = newstateFFB;
 				}
-				else if (name == MB_Steering_Wheel_motor)
+
+				if (name == MB_Steering_Wheel_motor || name == Player2_Recoil_Piston || name == Player2_Gun_Recoil || name == Right_Gun_Recoil || name == P2_Gun_Recoil)
 				{
-					if (newstateFFB == 0x00)
+					helpers->log("P2 value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					if (newstateFFB == 0)
 					{
 						Effect2 = false;
 					}
 
 					stateFFBDevice2 = newstateFFB;
+				}
+
+				if (name == Player3_Gun_Recoil || name == P3_Gun_Recoil)
+				{
+					helpers->log("P3 value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					if (newstateFFB == 0)
+					{
+						Effect3 = false;
+					}
+
+					stateFFBDevice3 = newstateFFB;
 				}
 
 				if (stateFFB == 0x01)
@@ -2665,6 +2612,15 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				else
 				{
 					Effect2 = false;
+				}
+
+				if (stateFFBDevice3 == 0x01)
+				{
+					Effect3 = true;
+				}
+				else
+				{
+					Effect3 = false;
 				}
 
 				if (Effect1)
@@ -2689,6 +2645,18 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				{
 					triggers->SineDevice2(0, 0, 0);
 					triggers->RumbleDevice2(0, 0, 0);
+				}
+
+				if (Effect3)
+				{
+					triggers->SineDevice3(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->RumbleDevice3(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect3)
+				{
+					triggers->SineDevice3(0, 0, 0);
+					triggers->RumbleDevice3(0, 0, 0);
 				}
 			}
 		}
@@ -2771,254 +2739,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 					}	*/				
-				}
-			}
-		}
-
-		if (RunningFFB == AfterburnerActive)
-		{
-			if (Emulator == MAME)
-			{
-				if (name == lamp1)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if (stateFFB == 1)
-				{
-					Effect1 = true;
-				}
-				else
-				{
-					Effect1 = false;
-				}
-
-				if (Effect1)
-				{
-					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect1)
-				{
-					triggers->Sine(0, 0, 0);
-					triggers->Rumble(0, 0, 0);
-				}
-			}
-		}
-
-		if (RunningFFB == RecoilPistolActive)
-		{
-			if (Emulator == MAME)
-			{
-				if (name == Player1_Recoil_Piston)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if (name == Player2_Recoil_Piston)
-				{
-					stateFFBDevice2 = newstateFFB;
-				}
-
-				if (stateFFB == 1)
-				{
-					Effect1 = true;
-				}
-				else
-				{
-					Effect1 = false;
-				}
-
-				if (stateFFBDevice2 == 1)
-				{
-					Effect2 = true;
-				}
-				else
-				{
-					Effect2 = false;
-				}
-
-				if (Effect1)
-				{
-					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect1)
-				{
-					triggers->Sine(0, 0, 0);
-					triggers->Rumble(0, 0, 0);
-				}
-
-				if (Effect2)
-				{
-					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect2)
-				{
-					triggers->SineDevice2(0, 0, 0);
-					triggers->RumbleDevice2(0, 0, 0);
-				}
-			}
-		}
-
-		if (RunningFFB == RecoilGunActive)
-		{
-			if (Emulator == MAME)
-			{
-				if (name == Player1_Gun_Recoil)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if (name == Player2_Gun_Recoil)
-				{
-					stateFFBDevice2 = newstateFFB;
-				}
-
-				if (name == Player3_Gun_Recoil)
-				{
-					stateFFBDevice3 = newstateFFB;
-				}
-
-				if (stateFFB == 1)
-				{
-					Effect1 = true;
-				}
-				else
-				{
-					Effect1 = false;
-				}
-
-				if (stateFFBDevice2 == 1)
-				{
-					Effect2 = true;
-				}
-				else
-				{
-					Effect2 = false;
-				}
-
-				if (stateFFBDevice3 == 1)
-				{
-					Effect3 = true;
-				}
-				else
-				{
-					Effect3 = false;
-				}
-
-				if (Effect1)
-				{
-					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect1)
-				{
-					triggers->Sine(0, 0, 0);
-					triggers->Rumble(0, 0, 0);
-				}
-
-				if (Effect2)
-				{
-					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect2)
-				{
-					triggers->SineDevice2(0, 0, 0);
-					triggers->RumbleDevice2(0, 0, 0);
-				}
-
-				if (Effect3)
-				{
-					triggers->SineDevice3(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->RumbleDevice3(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect3)
-				{
-					triggers->SineDevice3(0, 0, 0);
-					triggers->RumbleDevice3(0, 0, 0);
-				}
-			}			
-		}
-
-		if (RunningFFB == LeftRightGunActive)
-		{
-			if (Emulator == MAME)
-			{
-				if (name == Left_Gun_Recoil)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if (name == Right_Gun_Recoil)
-				{
-					stateFFBDevice2 = newstateFFB;
-				}
-
-				if (stateFFB == 1)
-				{
-					Effect1 = true;
-				}
-				else
-				{
-					Effect1 = false;
-				}
-
-				if (stateFFBDevice2 == 1)
-				{
-					Effect2 = true;
-				}
-				else
-				{
-					Effect2 = false;
-				}
-
-				if (Effect1)
-				{
-					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect1)
-				{
-					triggers->Sine(0, 0, 0);
-					triggers->Rumble(0, 0, 0);
-				}
-
-				if (Effect2)
-				{
-					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
-
-				if (!Effect2)
-				{
-					triggers->SineDevice2(0, 0, 0);
-					triggers->RumbleDevice2(0, 0, 0);
 				}
 			}
 		}

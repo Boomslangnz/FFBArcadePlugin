@@ -16,7 +16,7 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Changed MAME Output GUI to display Device 3 (for games which allow 3 player support)
 
-- Changed Shaker Motor Only to Shaker Motor Only / Light Gun Games Only (use this to modify lightgun settings too)
+- Changed Shaker Motor Only to Shaker Motor Only / Light Gun Games Only on GUI (use this to modify lightgun settings too)
 
 ***New Supported MAME Games***
 
@@ -26,12 +26,15 @@ so are not using real force feedback values. Most games use correct ffb values h
 - Ghoul Panic
 - GunBuster
 - Mechanized Attack
+- Laser Ghost (Up to 3 Player)
 - Operation Thunderbolt
 - Operation Wolf
 - Point Blank 2
+- Rail Chase
 - Revolution X (Up to 3 Player)
 - Space Gun
 - Terminator 2
+- Time Crisis
 - Turkey Shoot
 - Zombie Raid
 
