@@ -171,27 +171,27 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 
 	if (oldShoot != newShoot)
 	{
-		if (!Ammo1pBool)
-		{
+		if (((Ammo1pA == 0) && (Ammo1pB == 0)) || ((Ammo1pA == 10) && (Ammo1pB == 10)))
+		{ 
 			if (Shoot1p == 1)
 			{
 				if (HowtoRumbleGunEffect == 0)
 				{
 					double percentForce = ((Gun1pStrength) / 100.0);
 					double percentLength = configFeedbackLength;
-					triggers->Rumble(percentForce, percentForce, percentLength);
+					triggers->Rumble(1.0, 1.0, percentLength);
 				}
 				else if (HowtoRumbleGunEffect == 1)
 				{
 					double percentForce = ((Gun1pStrength) / 100.0);
 					double percentLength = configFeedbackLength;
-					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Rumble(0, 1.0, percentLength);
 				}
 				else if (HowtoRumbleGunEffect == 2)
 				{
 					double percentForce = ((Gun1pStrength) / 100.0);
 					double percentLength = configFeedbackLength;
-					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Rumble(1.0, 0, percentLength);
 				}
 			}
 		}
@@ -236,8 +236,8 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 
 	if (oldShoot2 != newShoot2)
 	{
-		if (!Ammo2pBool)
-		{
+		if (((Ammo2pA == 0) && (Ammo2pB == 0)) || ((Ammo2pA == 10) && (Ammo2pB == 10)))
+		{ 
 			if (Shoot2p == 1)
 			{
 				if (HowtoRumbleGunEffect == 0)
