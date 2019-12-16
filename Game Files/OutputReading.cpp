@@ -2331,7 +2331,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			}
 		}
 
-		if (RunningFFB == VirtuaRacingActive) //Virtua Formula, Virtua Racing
+		if (RunningFFB == VirtuaRacingActive) //Virtua Racing
 		{
 			if (Emulator == MAME)
 			{
