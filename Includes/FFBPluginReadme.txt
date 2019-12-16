@@ -12,6 +12,8 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 ***1.4 Changes***
 
+- Added Rumble support for Aliens Extermination
+
 - Added bunch of games to MAME Output reading plugin
 
 - Changed MAME Output GUI to display Device 3 (for games which allow 3 player support)
