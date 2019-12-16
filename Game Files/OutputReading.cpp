@@ -1893,6 +1893,16 @@ std::string lghostud("lghostud");
 std::string lghostj("lghostj");
 std::string timecris("timecris");
 std::string timecrisa("timecrisa");
+std::string cischeat("cischeat");
+std::string f1gpstar("f1gpstar");
+std::string f1gpstaro("f1gpstaro");
+std::string f1gpstr2("f1gpstr2");
+std::string undrfire("undrfire");
+std::string undrfireu("undrfireu");
+std::string undrfirej("undrfirej");
+std::string cbombers("cbombers");
+std::string cbombersj("cbombersj");
+std::string cbombersp("cbombersp");
 
 //Our string to load game from
 std::string Daytona2Active("Daytona2Active");
@@ -1907,13 +1917,16 @@ std::string CalSpeedActive("CalSpeedActive");
 std::string SanFran2049Active("SanFran2049Active");
 std::string HardDrivinActive("HardDrivinActive"); 
 std::string EffectActive("EffectActive");
+std::string EffectActive2("EffectActive2");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
 std::string digit0("digit0");
 std::string wheel("wheel");
 std::string lamp1("lamp1");
+std::string led2("led2");
 std::string Vibration_motor("Vibration_motor");
+std::string Wheel_vibration("Wheel_vibration");
 std::string upright_wheel_motor("upright_wheel_motor");
 std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
 std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
@@ -1927,6 +1940,8 @@ std::string Player3_Gun_Recoil("Player3_Gun_Recoil");
 std::string P1_Gun_Recoil("P1_Gun_Recoil");
 std::string P2_Gun_Recoil("P2_Gun_Recoil");
 std::string P3_Gun_Recoil("P3_Gun_Recoil");
+std::string P1_gun_recoil("P1_gun_recoil");
+std::string P2_gun_recoil("P2_gun_recoil");
 std::string mcuout1("mcuout1");
 
 //Emulator Name
@@ -2119,11 +2134,16 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				romname == spacegunj || romname == term2 || romname == term2la1 || romname == term2la2 || romname == term2la3 || romname == term2lg1 || romname == rchase || romname == rchasej || 
 				romname == lghost || romname == lghostd || romname == lghostu || romname == lghostud || romname == lghostj || romname == timecris || romname == timecrisa || romname == othunder || 
 				romname == othundero || romname == othunderuo || romname == othunderu || romname == othunderj || romname == opwolf || romname == opwolfp || romname == opwolfj || romname == opwolfu ||
-				 romname == opwolfa || romname == aburner2 || romname == aburner2g || romname == orunners || romname == orunnersu || romname == orunnersj || romname == pdrift || romname == pdrifta || 
-				romname == pdrifte || romname == pdriftj || romname == pdriftl || romname == outrunra || romname == outrun || romname == outruneh || romname == toutrun || romname == toutrund || 
-				romname == toutrunj || romname == toutrunjd)
+				 romname == opwolfa || romname == orunners || romname == orunnersu || romname == orunnersj || romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj ||
+				romname == pdriftl || romname == outrunra || romname == outrun || romname == outruneh || romname == toutrun || romname == toutrund || romname == toutrunj || romname == toutrunjd ||
+				romname == undrfire || romname == undrfireu || romname == undrfirej || romname == cbombers || romname == cbombersj || romname == cbombersp)				
 			{
 				RunningFFB = "EffectActive";
+			}
+
+			if (romname == aburner2 || romname == aburner2g || romname == cischeat || romname == f1gpstar || romname == f1gpstaro || romname == f1gpstr2 )
+			{
+				RunningFFB = "EffectActive2";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2553,8 +2573,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		{
 			if (Emulator == MAME)
 			{
-				if (name == MA_Steering_Wheel_motor || name == lamp1 || name == Player1_Recoil_Piston || name == Player1_Gun_Recoil || name == Left_Gun_Recoil || name == P1_Gun_Recoil || name == mcuout1 ||
-					name == upright_wheel_motor || name == Vibration_motor)
+				if (name == MA_Steering_Wheel_motor || name == Player1_Recoil_Piston || name == Player1_Gun_Recoil || name == Left_Gun_Recoil || name == P1_Gun_Recoil || name == mcuout1 ||
+					name == upright_wheel_motor || name == Vibration_motor || name == P1_gun_recoil || name == Wheel_vibration)
 				{
 					helpers->log("P1 value: ");
 					std::string ffs = std::to_string(newstateFFB);
@@ -2568,7 +2588,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					stateFFB = newstateFFB;
 				}
 
-				if (name == MB_Steering_Wheel_motor || name == Player2_Recoil_Piston || name == Player2_Gun_Recoil || name == Right_Gun_Recoil || name == P2_Gun_Recoil)
+				if (name == MB_Steering_Wheel_motor || name == Player2_Recoil_Piston || name == Player2_Gun_Recoil || name == Right_Gun_Recoil || name == P2_Gun_Recoil || name == P2_gun_recoil)
 				{
 					helpers->log("P2 value: ");
 					std::string ffs = std::to_string(newstateFFB);
@@ -2657,6 +2677,47 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				{
 					triggers->SineDevice3(0, 0, 0);
 					triggers->RumbleDevice3(0, 0, 0);
+				}
+			}
+		}
+
+		if (RunningFFB == EffectActive2) //Afterburner,Cisco Heat,F1 GpStar            //Keep seperate as names are Lamp1/led2 and could possibly interfere with other outputs
+		{
+			if (Emulator == MAME)
+			{
+				if ( name == lamp1 || name == led2)
+				{
+					helpers->log("P1 value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					if (newstateFFB == 0)
+					{
+						Effect1 = false;
+					}
+
+					stateFFB = newstateFFB;
+				}
+
+				if (stateFFB == 0x01)
+				{
+					Effect1 = true;
+				}
+				else
+				{
+					Effect1 = false;
+				}
+
+				if (Effect1)
+				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+				}
+
+				if (!Effect1)
+				{
+					triggers->Sine(0, 0, 0);
+					triggers->Rumble(0, 0, 0);
 				}
 			}
 		}

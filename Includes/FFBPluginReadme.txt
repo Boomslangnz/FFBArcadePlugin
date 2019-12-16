@@ -23,7 +23,11 @@ so are not using real force feedback values. Most games use correct ffb values h
 - Afterburner II
 - Alien3
 - Beast Busters (Up to 3 Player)
+- Chase Bombers
+- Cisco Heat
 - Ghoul Panic
+- Grand Prix Star
+- F-1 Grand Prix Star II
 - GunBuster
 - Mechanized Attack
 - Laser Ghost (Up to 3 Player)
@@ -36,6 +40,7 @@ so are not using real force feedback values. Most games use correct ffb values h
 - Terminator 2
 - Time Crisis
 - Turkey Shoot
+- Under Fire
 - Zombie Raid
 
 ***1.3a Changes***
