@@ -18,6 +18,8 @@ so are not using real force feedback values. Most games use correct ffb values h
 
 - Changed Shaker Motor Only to Shaker Motor Only / Light Gun Games Only on GUI (use this to modify lightgun settings too)
 
+- Fixed issue where MAME Outputs would continue to rumble on certain games
+
 ***New Supported MAME Games***
 
 - Afterburner II
