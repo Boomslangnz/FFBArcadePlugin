@@ -19,6 +19,7 @@ static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
 static SDL_Event e;
+static bool init = false;
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
 static int ChangeGearsViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("ChangeGearsViaPlugin"), 0, settingsFilename);
@@ -30,174 +31,189 @@ static int Gear5 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear5"), 0, sett
 static int Gear6 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear6"), 0, settingsFilename);
 static int SpeedStrength;
 
-static int RunningThread(void *ptr)
+static int ThreadLoop()
 {
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
-	{
-		int ff = myHelpers->ReadInt32(0x0827A1A0, /* isRelativeOffset */ false);
-		int ffwall = myHelpers->ReadInt32(0x08273FAC, /* isRelativeOffset */ false);
-		int ff3 = myHelpers->ReadInt32(0x0827A1DA, /* isRelativeOffset */ false);
-		int ff4 = myHelpers->ReadInt32(0x0827A35D, /* isRelativeOffset */ false);
-		int ff5 = myHelpers->ReadInt32(0x0827A1D4, /* isRelativeOffset */ false);
-		UINT8 ff6 = myHelpers->ReadByte(0x08670DC8, /* isRelativeOffset */ false); // steering
-		float ff7 = myHelpers->ReadFloat32(0x08273AD4, /* isRelativeOffset */ false);
-		UINT8 ff8 = myHelpers->ReadByte(0x08304ADC, /* isRelativeOffset */ false); // 1 when race
-		UINT8 ff9 = myHelpers->ReadByte(0x086749CA, /* isRelativeOffset */ false); // 1 when menu
-		UINT8 gear = myHelpers->ReadByte(0x0827A160, /* isRelativeOffset */ false); // gear address
-		float ffspeed = myHelpers->ReadFloat32(0x08273DF0, /* isRelativeOffset */ false); //speedo
-		UINT8 static oldgear = 0;
-		int static oldFloat = 0.0;
-		int newFloat = ff3;
-		int static oldFloat1 = 0.0;
-		int newFloat1 = ff4;
-		float newgear = gear;
-		
-		if ((ffspeed >= 0.1) && (ffspeed <= 80))
-		{
-			SpeedStrength = 10;
-		}
-		else if ((ffspeed >= 80.1) && (ffspeed <= 130))
-		{
-			SpeedStrength = 20;
-		}
-		else if ((ffspeed >= 130.1) && (ffspeed <= 180))
-		{
-			SpeedStrength = 30;
-		}
-		else if ((ffspeed >= 180.1) && (ffspeed <= 220))
-		{
-			SpeedStrength = 40;
-		}
-		else if ((ffspeed >= 220.1) && (ffspeed <= 270))
-		{
-			SpeedStrength = 50;
-		}
-		else if ((ffspeed >= 270.1) && (ffspeed <= 320))
-		{
-			SpeedStrength = 60;
-		}
-		else if ((ffspeed >= 320.1) && (ffspeed <= 380))
-		{
-			SpeedStrength = 70;
-		}
-		else if ((ffspeed >= 380.1) && (ffspeed <= 430))
-		{
-			SpeedStrength = 80;
-		}
-		else if ((ffspeed >= 430.1) && (ffspeed <= 500))
-		{
-			SpeedStrength = 90;
-		}
-		else if ((ffspeed >= 500.1) && (ffspeed <= 1000))
-		{
-			SpeedStrength = 100;
-		}
-		else
-		{
-			SpeedStrength = 0;
-		}
+	int ff = myHelpers->ReadInt32(0x0827A1A0, /* isRelativeOffset */ false);
+	int ffwall = myHelpers->ReadInt32(0x08273FAC, /* isRelativeOffset */ false);
+	int ff3 = myHelpers->ReadInt32(0x0827A1DA, /* isRelativeOffset */ false);
+	int ff4 = myHelpers->ReadInt32(0x0827A35D, /* isRelativeOffset */ false);
+	int ff5 = myHelpers->ReadInt32(0x0827A1D4, /* isRelativeOffset */ false);
+	UINT8 ff6 = myHelpers->ReadByte(0x08670DC8, /* isRelativeOffset */ false); // steering
+	float ff7 = myHelpers->ReadFloat32(0x08273AD4, /* isRelativeOffset */ false);
+	UINT8 ff8 = myHelpers->ReadByte(0x08304ADC, /* isRelativeOffset */ false); // 1 when race
+	UINT8 ff9 = myHelpers->ReadByte(0x086749CA, /* isRelativeOffset */ false); // 1 when menu
+	UINT8 gear = myHelpers->ReadByte(0x0827A160, /* isRelativeOffset */ false); // gear address
+	float ffspeed = myHelpers->ReadFloat32(0x08273DF0, /* isRelativeOffset */ false); //speedo
+	UINT8 static oldgear = 0;
+	int static oldFloat = 0.0;
+	int newFloat = ff3;
+	int static oldFloat1 = 0.0;
+	int newFloat1 = ff4;
+	float newgear = gear;
 
-			if (ff8 == 1)
-			{
-				if ((ff6 >= 0x00) & (ff6 < 0x7F))
-				{
-					double percentForce = ((127 - ff6) / 127.0);
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				if ((ff6 > 0x7F) & (ff6 < 0x100))
-				{
-					double percentForce = ((ff6 - 127) / 128.0);
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-			if (ff9 == 1)
-			{
-				if ((ff6 >= 0x00) & (ff6 < 0x7F))
-				{
-					double percentForce = ((127 - ff6) / 127.0);
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				if ((ff6 > 0x7F) & (ff6 < 0x100))
-				{
-					double percentForce = ((ff6 - 127) / 128.0);
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-			if (ff5 == 2)
-			{
-				if (oldFloat != newFloat)
-				{
-					double percentForce = SpeedStrength / 100.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-			else if (ff5 == 1)
-			{
-				if (oldFloat != newFloat)
-				{
-					double percentForce = SpeedStrength / 100.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-					
-		if (oldFloat1 != newFloat1)
+	if ((ffspeed >= 0.1) && (ffspeed <= 80))
+	{
+		SpeedStrength = 10;
+	}
+	else if ((ffspeed >= 80.1) && (ffspeed <= 130))
+	{
+		SpeedStrength = 20;
+	}
+	else if ((ffspeed >= 130.1) && (ffspeed <= 180))
+	{
+		SpeedStrength = 30;
+	}
+	else if ((ffspeed >= 180.1) && (ffspeed <= 220))
+	{
+		SpeedStrength = 40;
+	}
+	else if ((ffspeed >= 220.1) && (ffspeed <= 270))
+	{
+		SpeedStrength = 50;
+	}
+	else if ((ffspeed >= 270.1) && (ffspeed <= 320))
+	{
+		SpeedStrength = 60;
+	}
+	else if ((ffspeed >= 320.1) && (ffspeed <= 380))
+	{
+		SpeedStrength = 70;
+	}
+	else if ((ffspeed >= 380.1) && (ffspeed <= 430))
+	{
+		SpeedStrength = 80;
+	}
+	else if ((ffspeed >= 430.1) && (ffspeed <= 500))
+	{
+		SpeedStrength = 90;
+	}
+	else if ((ffspeed >= 500.1) && (ffspeed <= 1000))
+	{
+		SpeedStrength = 100;
+	}
+	else
+	{
+		SpeedStrength = 0;
+	}
+
+	if (ff8 == 1)
+	{
+		if ((ff6 >= 0x00) & (ff6 < 0x7F))
+		{
+			double percentForce = ((127 - ff6) / 127.0);
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, 0, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		if ((ff6 > 0x7F)& (ff6 < 0x100))
+		{
+			double percentForce = ((ff6 - 127) / 128.0);
+			double percentLength = 100;
+			myTriggers->Rumble(0, percentForce, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+	}
+	if (ff9 == 1)
+	{
+		if ((ff6 >= 0x00) & (ff6 < 0x7F))
+		{
+			double percentForce = ((127 - ff6) / 127.0);
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, 0, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		if ((ff6 > 0x7F)& (ff6 < 0x100))
+		{
+			double percentForce = ((ff6 - 127) / 128.0);
+			double percentLength = 100;
+			myTriggers->Rumble(0, percentForce, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+	}
+	if (ff5 == 2)
+	{
+		if (oldFloat != newFloat)
 		{
 			double percentForce = SpeedStrength / 100.0;
 			double percentLength = 100;
-			myTriggers->Rumble(percentForce, percentForce, percentLength);
-			myTriggers->Sine(200, 200, percentForce);
-		}		
-		else if (ff == 8)
-		{
-			if (SpeedStrength > 0)
-			{
-				double percentForce = 0.1;
-				double percentLength = 100;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-				myTriggers->Sine(70, 70, percentForce);
-			}			
+			myTriggers->Rumble(0, percentForce, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 		}
-		else if (ff == 4)
-		{
-			if (SpeedStrength > 0)
-			{
-				double percentForce = 0.2;
-				double percentLength = 50;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-				myTriggers->Sine(50, 50, percentForce);
-			}			
-		}
-		else if (ff == 16)
-		{
-			if (SpeedStrength > 0)
-			{
-				double percentForce = 0.2;
-				double percentLength = 50;
-				myTriggers->Rumble(percentForce, percentForce, percentLength);
-				myTriggers->Sine(100, 50, percentForce);
-			}			
-		}
-		oldFloat = newFloat;
-		oldFloat1 = newFloat1;
 	}
+	else if (ff5 == 1)
+	{
+		if (oldFloat != newFloat)
+		{
+			double percentForce = SpeedStrength / 100.0;
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, 0, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+		}
+	}
+
+	if (oldFloat1 != newFloat1)
+	{
+		double percentForce = SpeedStrength / 100.0;
+		double percentLength = 100;
+		myTriggers->Rumble(percentForce, percentForce, percentLength);
+		myTriggers->Sine(200, 200, percentForce);
+	}
+	else if (ff == 8)
+	{
+		if (SpeedStrength > 0)
+		{
+			double percentForce = 0.1;
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, percentForce, percentLength);
+			myTriggers->Sine(70, 70, percentForce);
+		}
+	}
+	else if (ff == 4)
+	{
+		if (SpeedStrength > 0)
+		{
+			double percentForce = 0.2;
+			double percentLength = 50;
+			myTriggers->Rumble(percentForce, percentForce, percentLength);
+			myTriggers->Sine(50, 50, percentForce);
+		}
+	}
+	else if (ff == 16)
+	{
+		if (SpeedStrength > 0)
+		{
+			double percentForce = 0.2;
+			double percentLength = 50;
+			myTriggers->Rumble(percentForce, percentForce, percentLength);
+			myTriggers->Sine(100, 50, percentForce);
+		}
+	}
+
+	oldFloat = newFloat;
+	oldFloat1 = newFloat1;
 	return 0;
 }
+
+static DWORD WINAPI RunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		ThreadLoop();
+		Sleep(16);
+	}
+}
+
 void OutRun2Fake::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-	SDL_Thread *thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
+
+	if (!init)
+	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
+		CreateThread(NULL, 0, RunningLoop, NULL, 0, NULL);
+		init = true;
+	}
+	
 	int ff = myHelpers->ReadInt32(0x0827A1A0, /* isRelativeOffset */ false);	
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);

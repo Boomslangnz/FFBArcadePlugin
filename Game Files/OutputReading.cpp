@@ -51,6 +51,8 @@ static bool DirtDevilSine = false;
 static bool ForceSpringEffect = false;
 static bool DontSineUntilRaceStart = false;
 static bool HardDrivinFrame = false;
+static bool Motion = false;
+static bool MotionFalse = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -67,8 +69,11 @@ char* Emulator;
 int vals[8] = { 0 };
 int frame = 0;
 int HardDrivinFFB;
+int StopConstant;
 int newstateFFB;
 int stateFFB;
+int stateFFB2;
+int stateFFB3;
 int stateFFBDevice2;
 int stateFFBDevice3;
 
@@ -274,6 +279,8 @@ int __stdcall mame_stop(void)
 	reset_id_to_outname_cache();
 
 	AppendTextToEditCtrl(hEdit, TEXT("mame_stop\r\n"));
+
+	StopConstant = 255;
 
 	return 1;
 }
@@ -1918,6 +1925,8 @@ std::string SanFran2049Active("SanFran2049Active");
 std::string HardDrivinActive("HardDrivinActive"); 
 std::string EffectActive("EffectActive");
 std::string EffectActive2("EffectActive2");
+std::string OutrunActive("OutrunActive");
+std::string PDriftActive("PDriftActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -1926,6 +1935,7 @@ std::string wheel("wheel");
 std::string lamp1("lamp1");
 std::string led2("led2");
 std::string Vibration_motor("Vibration_motor");
+std::string vibration_motor("vibration_motor");
 std::string Wheel_vibration("Wheel_vibration");
 std::string upright_wheel_motor("upright_wheel_motor");
 std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
@@ -1943,6 +1953,9 @@ std::string P3_Gun_Recoil("P3_Gun_Recoil");
 std::string P1_gun_recoil("P1_gun_recoil");
 std::string P2_gun_recoil("P2_gun_recoil");
 std::string mcuout1("mcuout1");
+std::string Bank_Motor_Speed("Bank_Motor_Speed");
+std::string Bank_Motor_Direction("Bank_Motor_Direction");
+std::string bank_motor_position("bank_motor_position");
 
 //Emulator Name
 std::string MAME("MAME");
@@ -1959,10 +1972,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			CreateThread(NULL, 0, ThreadForForcedSpring, NULL, 0, NULL);
 		}
 
-		init = true;
-	}
-
-	for (int i = 0; i < SDL_NumJoysticks(); i++)
+		for (int i = 0; i < SDL_NumJoysticks(); i++)
 	{
 		wchar_t* deviceGUIDString2 = new wchar_t[256];
 		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
@@ -2050,6 +2060,10 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		SDL_HapticSetGain(haptic3, 100);
 	}
 
+		init = true;
+	}
+
+
 	if (EnableForceSpringEffect == 1)
 	{
 		if (ForceSpringEffect)
@@ -2134,14 +2148,34 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				romname == spacegunj || romname == term2 || romname == term2la1 || romname == term2la2 || romname == term2la3 || romname == term2lg1 || romname == rchase || romname == rchasej || 
 				romname == lghost || romname == lghostd || romname == lghostu || romname == lghostud || romname == lghostj || romname == timecris || romname == timecrisa || romname == othunder || 
 				romname == othundero || romname == othunderuo || romname == othunderu || romname == othunderj || romname == opwolf || romname == opwolfp || romname == opwolfj || romname == opwolfu ||
-				 romname == opwolfa || romname == orunners || romname == orunnersu || romname == orunnersj || romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj ||
-				romname == pdriftl || romname == outrunra || romname == outrun || romname == outruneh || romname == toutrun || romname == toutrund || romname == toutrunj || romname == toutrunjd ||
+				 romname == opwolfa || romname == orunners || romname == orunnersu || romname == orunnersj || romname == toutrun || romname == toutrund || romname == toutrunj || romname == toutrunjd ||
 				romname == undrfire || romname == undrfireu || romname == undrfirej || romname == cbombers || romname == cbombersj || romname == cbombersp)				
 			{
 				RunningFFB = "EffectActive";
 			}
 
-			if (romname == aburner2 || romname == aburner2g || romname == cischeat || romname == f1gpstar || romname == f1gpstaro || romname == f1gpstr2 )
+			//if (MotionFFB == 1)
+			//{
+				if (romname == outrunra || romname == outrun || romname == outruneh)
+				{
+					RunningFFB = "OutrunActive";
+				}
+
+				if (romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj || romname == pdriftl)
+				{
+					RunningFFB = "PDriftActive";
+				}
+			//}
+			//else
+			//{
+			//	if (romname == outrunra || romname == outrun || romname == outruneh || romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj ||
+			//		romname == pdriftl)
+			//	{
+			//		RunningFFB = "EffectActive";
+			//	}
+			//}
+
+			if (romname == aburner2 || romname == aburner2g || romname == cischeat || romname == f1gpstar || romname == f1gpstaro || romname == f1gpstr2)
 			{
 				RunningFFB = "EffectActive2";
 			}
@@ -2181,7 +2215,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		}
 	}
 	
-	if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
+	if (RomGameName && EmuName)
 	{
 		if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race,Le Mans 24
 		{
@@ -2718,6 +2752,210 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				{
 					triggers->Sine(0, 0, 0);
 					triggers->Rumble(0, 0, 0);
+				}
+			}
+		}
+
+		if (RunningFFB == OutrunActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (name == Bank_Motor_Direction)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					if (newstateFFB != 0)
+					{
+						stateFFB = newstateFFB;
+					}				
+				}
+
+				if (name == Vibration_motor)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					if (newstateFFB == 0)
+					{
+						Effect1 = false;
+					}
+
+					stateFFB2 = newstateFFB;
+				}
+
+				if (name == Bank_Motor_Speed)
+				{
+					stateFFB3 = newstateFFB;					
+				}
+
+				if (Motion)
+				{
+					if (stateFFB == 0x01)
+					{
+						double percentForce = (1 + stateFFB3) / 8.0;
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+					if (stateFFB == 0x02)
+					{
+						double percentForce = (1 + stateFFB3) / 8.0;
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+				}
+				
+				if (stateFFB == 1)
+				{
+					Motion = true;
+					MotionFalse = false;
+				}
+
+				if (stateFFB2 == 1)
+				{
+					Motion = false;
+				}
+
+				if (StopConstant == 255)
+				{
+					MotionFalse = true;
+				}
+
+				if (MotionFalse)
+				{
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+					Motion = false;
+					StopConstant = 0;
+					MotionFalse = false;				
+				}
+
+				if (!Motion)
+				{
+					
+					if (stateFFB2 == 0x01)
+					{
+						Effect1 = true;
+					}
+					else
+					{
+						Effect1 = false;
+					}
+
+					if (Effect1)
+					{
+						triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+						triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+					}
+
+					if (!Effect1)
+					{
+						triggers->Sine(0, 0, 0);
+						triggers->Rumble(0, 0, 0);
+					}
+				}			
+			}
+		}
+
+		if (RunningFFB == PDriftActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (name == bank_motor_position)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if (name == vibration_motor)
+				{
+					stateFFB2 = newstateFFB;
+				}
+
+				if (name == upright_wheel_motor)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					if (newstateFFB == 0)
+					{
+						Effect1 = false;
+					}
+
+					stateFFB3 = newstateFFB;
+				}
+
+				if (Motion)
+				{
+					if ((stateFFB > 0x00) && (stateFFB < 0x04))
+					{
+						double percentForce = (4 - stateFFB) / 3.0;
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+					else if ((stateFFB > 0x04) && (stateFFB < 0x08))
+					{
+						double percentForce = (stateFFB - 4) / 3.0;
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+
+					if (stateFFB2 >= 0)
+					{
+						double percentForce = stateFFB2 / 7.0;
+						triggers->Sine(60, 0, percentForce / 3.0);
+					}
+				}
+
+				if (stateFFB == 4)
+				{
+					Motion = true;
+					MotionFalse = false;
+				}
+
+				if (stateFFB3 == 1)
+				{
+					Motion = false;
+				}
+
+				if (StopConstant == 255)
+				{
+					MotionFalse = true;
+				}
+
+				if (MotionFalse)
+				{
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+					Motion = false;
+					StopConstant = 0;
+					MotionFalse = false;
+				}
+
+				if (!Motion)
+				{
+					if (stateFFB3 == 0x01)
+					{
+						Effect1 = true;
+					}
+					else
+					{
+						Effect1 = false;
+					}
+
+					if (Effect1)
+					{
+						triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+						triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+					}
+
+					if (!Effect1)
+					{
+						triggers->Sine(0, 0, 0);
+						triggers->Rumble(0, 0, 0);
+					}
 				}
 			}
 		}

@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.4
+Version 1.4a
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -9,6 +9,20 @@ to add FFB to Daytona Championship USA and it grew from there to support several
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use correct ffb values however :)
+
+***1.4a Changes***
+
+- Fixed issue where FFB/Rumble would not work sometimes if Device2GUID or Device3GUID were blank on certain games
+
+- Added support for Motion Outputs on Outrun & Power Drift rather then just the shaker motor, change Cabinet type to try (Beware this may act strange as it's designed for Motion Simulator, not FFB!)
+
+- Added rumble support for Rambo (up to 2 players)
+
+- Added rumble support for Transformers: Human Alliance (up to 2 players)
+
+- Modified how seperate threads work for certain games which removes possibility of high CPU load for them
+
+- Code cleanup
 
 ***1.4 Changes***
 
@@ -502,6 +516,8 @@ extremely generous.
 
 -Initial D 8 [dinput8.dll into game exe folder]
 
+-MAME Outputs [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
+
 -Machstorm (Rumble only) [xinput1_3.dll into game exe folder]
 
 -Mario Kart GP DX (Version 1.00 & version 1.10) [dinput8.dll into game exe folder]
@@ -540,35 +556,13 @@ extremely generous.
 TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK!
 (will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206  [dinput8.dll into any mame 0.199 or mame 0.206 folder]
 
--San Francisco Rush [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--San Francisco Rush The Rock [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--San Francisco Rush 2049 [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--San Francisco Rush 2049 SE [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--California Speed [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--Cruis'n World [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--Cruis'n USA [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--Off Road Challenge [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--Virtua Racing (SET CABINET TO UPRIGHT) [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--OutRun [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--Turbo OutRun [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--OutRunners [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
--Power Drift [32bit or 64bit dinput8.dll into MAME folder depending on 32 or 64bit MAME]
-
 -GTI Club Supermini Festa [dinput8.dll into game exe folder]
 
 -Road Fighters 3D [dinput8.dll into game exe folder]
+
+-Transformers: Human Alliance [dinput8.dll into game exe folder]
+
+-Rambo [opengl32.dll into Teknoparrot folder inside Main Teknoparrot folder]
 
 -Nascar Racing [dinput8.dll into demul 180428 version folder]
 

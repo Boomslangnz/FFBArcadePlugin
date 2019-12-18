@@ -36,6 +36,7 @@
     <ClInclude Include="Game Files\InitialD5.h" />
     <ClInclude Include="Game Files\InitialD4Japan.h" />
     <ClInclude Include="Game Files\M2Emulator.h" />
+    <ClInclude Include="Game Files\Rambo.h" />
     <ClInclude Include="Game Files\RoadFighters3D.h" />
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
@@ -72,12 +73,14 @@
     <ClCompile Include="Game Files\OldMame.cpp" />
     <ClCompile Include="Game Files\OutRun2Fake.cpp" />
     <ClCompile Include="Game Files\PokkenTournament.cpp" />
+    <ClCompile Include="Game Files\Rambo.cpp" />
     <ClCompile Include="Game Files\SegaRally3.cpp" />
     <ClCompile Include="Game Files\SegaRacingClassic.cpp" />
     <ClCompile Include="Game Files\FordRacing.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />
+    <ClCompile Include="Game Files\Transformers.cpp" />
     <ClCompile Include="Game Files\WackyRaces.cpp" />
     <ClCompile Include="Game Files\WMMT5.cpp" />
     <ClCompile Include="Game Files\InitialD4Japan.cpp" />
@@ -110,6 +113,7 @@
     <ClInclude Include="Game Files\MarioKartGPDX.h" />
     <ClInclude Include="Game Files\SonicSegaAllStarsRacing.h" />
     <ClInclude Include="Game Files\TestGame.h" />
+    <ClInclude Include="Game Files\Transformers.h" />
     <ClInclude Include="Game Files\WackyRaces.h" />
     <ClInclude Include="Game Files\WMMT5.h" />
     <ClInclude Include="Game Files\GTIClub3.h" />

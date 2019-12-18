@@ -16,7 +16,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 void PokkenTournament::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-
 	INT_PTR ffAddress = helpers->ReadIntPtr(0x00E97F10, /* isRelativeOffset*/ true); 
 	INT_PTR ff1 = helpers->ReadIntPtr(ffAddress + 0x60, /* isRelativeOffset */ false);
 	INT_PTR ff2 = helpers->ReadIntPtr(ff1 + 0x8, /* isRelativeOffset */ false);

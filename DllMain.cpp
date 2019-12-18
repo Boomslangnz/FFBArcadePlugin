@@ -65,6 +65,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/LGI.h"
 #include "Game Files/KODrive.h"
 #include "Game Files/HOTD4.h"
+#include "Game Files/Rambo.h"
+#include "Game Files/Transformers.h"
 
 // typedefs 
 typedef unsigned char U8;
@@ -938,8 +940,10 @@ const int OLDMAME_ = 33;
 const int SUPERMODEL_READING = 34;
 const int OUTRUN_2Real = 35;
 const int ALIENS_EXTERMINATION = 36;
+const int RAMBO_ = 37;
 const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
+const int Transformers_ = 40;
 
 HINSTANCE Get_hInstance()
 {
@@ -1965,6 +1969,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case GRID_:
 		game = new GRID;
 		break;
+	case Transformers_:
+		game = new Transformers;
+		break;
 	case INITIAL_D_0:
 		game = new InitialD0;
 		break;
@@ -2015,6 +2022,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case POKKEN_TOURNAMENT:
 		game = new PokkenTournament;
+		break;
+	case RAMBO_:
+		game = new Rambo;
 		break;
 	case MARIO_KART_GPDX_110:
 		game = new MarioKartGPDX110;
@@ -2173,7 +2183,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 				gl_hjgtDll = LoadLibraryA("jgt.dll");
 				gl_hlibavs = LoadLibraryA("libavs-win32-ea3.dll");
 			}
-			if (configGameId == 4)
+			if ((configGameId == 4) || (configGameId == 37))
 			{
 				gl_cgGLDll = LoadLibraryA("cgGL.dll");
 			}

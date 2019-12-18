@@ -15,14 +15,12 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "ButtonRumble.h"
 #include "SDL.h"
 #include <Windows.h>
+static bool init = false;
 extern int joystick_index1;
 extern int joystick_index2;
 extern SDL_Joystick* GameController2;
 extern SDL_Haptic* ControllerHaptic2;
 extern SDL_Haptic* haptic2;
-static EffectTriggers* myTriggers;
-static EffectConstants* myConstants;
-static Helpers* myHelpers;
 static SDL_Event e;
 
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -53,70 +51,57 @@ static int Button8Device2Rumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("B
 static int Button9Device2Rumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("Button9Device2Rumble"), 0, settingsFilename);
 static int Button10Device2Rumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("Button10Device2Rumble"), 0, settingsFilename);
 
-static int RunningThread(void* ptr)
-{
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
-	{
-		
-	}
-	return 0;
-}
-
 void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
-	SDL_Thread* thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
-
-	for (int i = 0; i < SDL_NumJoysticks(); i++)
+	if (!init)
 	{
-		wchar_t* deviceGUIDString2 = new wchar_t[256];
-		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
-		char joystick_guid[256];
-		sprintf(joystick_guid, "%S", deviceGUIDString2);
-		SDL_JoystickGUID guid, dev_guid;
-		int numJoysticks = SDL_NumJoysticks();
-		std::string njs = std::to_string(numJoysticks);
-		((char)njs.c_str());
 		for (int i = 0; i < SDL_NumJoysticks(); i++)
 		{
-			extern int joystick1Index;
-			if (i == joystick1Index)
+			wchar_t* deviceGUIDString2 = new wchar_t[256];
+			int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
+			char joystick_guid[256];
+			sprintf(joystick_guid, "%S", deviceGUIDString2);
+			SDL_JoystickGUID guid, dev_guid;
+			int numJoysticks = SDL_NumJoysticks();
+			std::string njs = std::to_string(numJoysticks);
+			((char)njs.c_str());
+			for (int i = 0; i < SDL_NumJoysticks(); i++)
 			{
-				continue;
+				extern int joystick1Index;
+				if (i == joystick1Index)
+				{
+					continue;
+				}
+				SDL_Joystick* js2 = SDL_JoystickOpen(i);
+				joystick_index2 = SDL_JoystickInstanceID(js2);
+				SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
+				char guid_str[1024];
+				SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
+				const char* name = SDL_JoystickName(js2);
+				char text[256];
+				sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+				guid = SDL_JoystickGetGUIDFromString(joystick_guid);
+				dev_guid = SDL_JoystickGetGUID(js2);
+				if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+				{
+					GameController2 = SDL_JoystickOpen(i);
+					ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
+					break;
+				}
+				SDL_JoystickClose(js2);
 			}
-			SDL_Joystick* js2 = SDL_JoystickOpen(i);
-			joystick_index2 = SDL_JoystickInstanceID(js2);
-			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
-			char guid_str[1024];
-			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
-			const char* name = SDL_JoystickName(js2);
-			char text[256];
-			sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
-			guid = SDL_JoystickGetGUIDFromString(joystick_guid);
-			dev_guid = SDL_JoystickGetGUID(js2);
-			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+			haptic2 = ControllerHaptic2;
+			if ((SDL_HapticRumbleSupported(haptic2) == SDL_TRUE))
 			{
-				GameController2 = SDL_JoystickOpen(i);
-				ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
-				break;
+				SDL_HapticRumbleInit;
+				SDL_HapticRumbleInit(ControllerHaptic2);
 			}
-			SDL_JoystickClose(js2);
 		}
-		haptic2 = ControllerHaptic2;
-		if ((SDL_HapticRumbleSupported(haptic2) == SDL_TRUE))
-		{
-			SDL_HapticRumbleInit;
-			SDL_HapticRumbleInit(ControllerHaptic2);
-		}
+		init = true;
 	}
-
+	
 	while (SDL_WaitEvent(&e) != 0)
 	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
-
 		if (ShowButtonNumbersForSetup == 1)
 		{
 			if (e.type == SDL_JOYBUTTONDOWN)
@@ -144,7 +129,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->Rumble(percentForce, percentForce, percentLength);
+							triggers->Rumble(percentForce, percentForce, percentLength);
 						}
 					}
 				}
@@ -155,7 +140,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->Rumble(0, percentForce, percentLength);
+							triggers->Rumble(0, percentForce, percentLength);
 						}
 					}
 				}
@@ -166,7 +151,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->Rumble(percentForce, 0, percentLength);
+							triggers->Rumble(percentForce, 0, percentLength);
 						}
 					}
 				}
@@ -180,7 +165,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->RumbleDevice2(percentForce, percentForce, percentLength);
+							triggers->RumbleDevice2(percentForce, percentForce, percentLength);
 						}
 					}
 				}
@@ -191,7 +176,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->RumbleDevice2(0, percentForce, percentLength);
+							triggers->RumbleDevice2(0, percentForce, percentLength);
 						}
 					}
 				}
@@ -202,7 +187,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						{
 							double percentForce = ((RumbleStrength) / 100.0);
 							double percentLength = (RumbleLength);
-							myTriggers->RumbleDevice2(percentForce, 0, percentLength);
+							triggers->RumbleDevice2(percentForce, 0, percentLength);
 						}
 					}
 				}
@@ -217,7 +202,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 					{
 						double percentForce = ((RumbleStrength) / 100.0);
 						double percentLength = (RumbleLength);
-						myTriggers->Rumble(0, 0, percentLength);
+						triggers->Rumble(0, 0, percentLength);
 					}
 				}
 			}
@@ -228,13 +213,10 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 					{
 						double percentForce = ((RumbleStrength) / 100.0);
 						double percentLength = (RumbleLength);
-						myTriggers->RumbleDevice2(0, 0, percentLength);
+						triggers->RumbleDevice2(0, 0, percentLength);
 					}
 				}
 			}
 		}
 	}
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
 }	

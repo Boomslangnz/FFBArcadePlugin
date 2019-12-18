@@ -36,57 +36,66 @@ static int GearUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearUp"), 0, se
 static int GearDown = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearDown"), 0, settingsFilename);
 static int HideCursor = GetPrivateProfileInt(TEXT("Settings"), TEXT("HideCursor"), 0, settingsFilename);
 
-static int RunningThread(void *ptr)
-{		
-		while (SDL_WaitEvent(&e) != 0)
+static int ThreadLoop()
+{
+	while (SDL_WaitEvent(&e) != 0)
+	{
+		UINT8 gear = myHelpers->ReadByte(0x019B468C, /* isRelativeOffset */ false);
+
+		if (ShowButtonNumbersForSetup == 1)
 		{
-			UINT8 gear = myHelpers->ReadByte(0x019B468C, /* isRelativeOffset */ false);
-
-			if (ShowButtonNumbersForSetup == 1)
-			{
-				if (e.type == SDL_JOYBUTTONDOWN)
-				{
-					if (e.jbutton.button >= 0)
-					{
-						char buff[100];
-						sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
-						MessageBoxA(NULL, buff, "", NULL);
-					}
-				}
-			}
-
 			if (e.type == SDL_JOYBUTTONDOWN)
 			{
-				if (ChangeGearsViaPlugin == 1)
+				if (e.jbutton.button >= 0)
 				{
-					if (e.jbutton.button == Gear1)
-					{
-						myHelpers->WriteByte(0x019B468C, 0x00, false);
-					}
-					else if (e.jbutton.button == Gear2)
-					{
-						myHelpers->WriteByte(0x019B468C, 0x02, false);
-					}
-					else if (e.jbutton.button == Gear3)
-					{
-						myHelpers->WriteByte(0x019B468C, 0x01, false);
-					}
-					else if (e.jbutton.button == Gear4)
-					{
-						myHelpers->WriteByte(0x019B468C, 0x03, false);
-					}
-					else if ((e.jbutton.button == GearDown) && (gear > 0x00))
-					{
-						myHelpers->WriteByte(0x019B468C, --gear, false);
-					}
-					else if ((e.jbutton.button == GearUp) && (gear < 0x03))
-					{
-						myHelpers->WriteByte(0x019B468C, ++gear, false);
-					}
+					char buff[100];
+					sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
+					MessageBoxA(NULL, buff, "", NULL);
 				}
 			}
 		}
- return 0;
+
+		if (e.type == SDL_JOYBUTTONDOWN)
+		{
+			if (ChangeGearsViaPlugin == 1)
+			{
+				if (e.jbutton.button == Gear1)
+				{
+					myHelpers->WriteByte(0x019B468C, 0x00, false);
+				}
+				else if (e.jbutton.button == Gear2)
+				{
+					myHelpers->WriteByte(0x019B468C, 0x02, false);
+				}
+				else if (e.jbutton.button == Gear3)
+				{
+					myHelpers->WriteByte(0x019B468C, 0x01, false);
+				}
+				else if (e.jbutton.button == Gear4)
+				{
+					myHelpers->WriteByte(0x019B468C, 0x03, false);
+				}
+				else if ((e.jbutton.button == GearDown) && (gear > 0x00))
+				{
+					myHelpers->WriteByte(0x019B468C, --gear, false);
+				}
+				else if ((e.jbutton.button == GearUp) && (gear < 0x03))
+				{
+					myHelpers->WriteByte(0x019B468C, ++gear, false);
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+static DWORD WINAPI RunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		ThreadLoop();
+		Sleep(16);
+	}
 }
 
 void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
@@ -96,8 +105,7 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		myTriggers = triggers;
 		myConstants = constants;
 		myHelpers = helpers;
-		SDL_Thread* thread;
-		thread = SDL_CreateThread(RunningThread, "RunningThread", (void*)NULL);
+		CreateThread(NULL, 0, RunningLoop, NULL, 0, NULL);
 		init = true;
 	}
 

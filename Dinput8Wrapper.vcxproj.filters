@@ -117,6 +117,8 @@
     <ClCompile Include="Game Files\OldMame.cpp" />
     <ClCompile Include="Game Files\OutputReading.cpp" />
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
+    <ClCompile Include="Game Files\Rambo.cpp" />
+    <ClCompile Include="Game Files\Transformers.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -241,6 +243,12 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\AliensExtermination.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\Rambo.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\Transformers.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

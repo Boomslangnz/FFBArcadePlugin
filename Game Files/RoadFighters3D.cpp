@@ -33,6 +33,7 @@ static bool leverdownA;
 static bool leverleftA;
 static bool leverrightA;
 static bool stophack;
+static bool init = false;
 static SDL_Event e;
 
 static void MEMwrite(void *adr, void *ptr, int size)
@@ -80,192 +81,233 @@ static int leverDownDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("lever
 static int leverLeftDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverLeftDevice2"), 0, settingsFilename);
 static int leverRightDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverRightDevice2"), 0, settingsFilename);
 
-static int RunningThread(void *ptr)
-{	
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
+static int ThreadLoop()
+{
+	int menuvalue = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x0094BFFC, false);
+	int menuvalue1 = myHelpers->ReadIntPtr((INT_PTR)menuvalue + 0x46C, false);
+	int serviceread3 = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, false);
+	int timer = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x954394, false);
+	int cabid = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x951034, false);
+	int cabid2 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x952B9C, false);
+	float timeroutofmenu = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x94BEE8, false);
+	uintptr_t jgtBase;
+	jgtBase = (uintptr_t)GetModuleHandleA("jgt.dll");
+
+	if (CabinetID == 2)
 	{
-		int menuvalue = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x0094BFFC, false);
-		int menuvalue1 = myHelpers->ReadIntPtr((INT_PTR)menuvalue + 0x46C, false);
-		int serviceread3 = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, false);
-		int timer = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x954394, false);
-		int cabid = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x951034, false);
-		int cabid2 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x952B9C, false);
-		float timeroutofmenu = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x94BEE8, false);
-		uintptr_t jgtBase;
-		jgtBase = (uintptr_t)GetModuleHandleA("jgt.dll");
+		MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x01", 1);
+		MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
+	}
+	else if (CabinetID == 3)
+	{
+		MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x02", 1);
+		MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
+	}
+	else if (CabinetID == 4)
+	{
+		MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x03", 1);
+		MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
+	}
+	else
+	{
+		MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x00", 1);
+		MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x74", 1);
+	}
 
-		if (CabinetID == 2)
+	if (HackToCloseLibmovieErrorAuto == 1)
+	{
+		//Remove fucken window error popup
+		HWND hWnd = FindWindowA(0, ("Libmovie Error Report"));
+		if (hWnd > NULL)
 		{
-			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x01", 1);
-			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
+			SendMessage(hWnd, WM_CLOSE, NULL, NULL);
 		}
-		else if (CabinetID == 3)
+	}
+	if (HackToSkipMenuError == 1)
+	{
+		// Hack to quickly bypass error at start
+		if (avoiderror)
 		{
-			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x02", 1);
-			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
-		}
-		else if (CabinetID == 4)
-		{
-			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x03", 1);
-			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x75", 1);
-		}
-		else
-		{
-			MEMwrite((void*)(jgtBase + 0x951034), (void*)"\x00", 1);
-			MEMwrite((void*)(jgtBase + 0x42EBB9), (void*)"\x74", 1);
-		}
-
-		if (HackToCloseLibmovieErrorAuto == 1)
-		{
-			//Remove fucken window error popup
-			HWND hWnd = FindWindowA(0, ("Libmovie Error Report"));
-			if (hWnd > NULL)
+			if (cabid > 0)
 			{
-				SendMessage(hWnd, WM_CLOSE, NULL, NULL);
-			}
-		}
-		if (HackToSkipMenuError == 1)
-		{
-			// Hack to quickly bypass error at start
-			if (avoiderror)
-			{
-				if (cabid > 0)
+				if (menuvalue1 > 700000)
 				{
-					if (menuvalue1 > 700000)
-					{
-						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x02, false);
-					}
-					if (menuvalue1 == 0)
-					{
-						SDL_Delay(50);
-						myHelpers->WriteIntPtr((INT_PTR)menuvalue + 0x46C, 0x0F, false);
-					}
-					if (menuvalue1 == 15)
-					{
-						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x01, false);
-					}
-					if (timeroutofmenu != 0)
-					{
-						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x00, false);
-						avoiderror = false;
-					}
+					myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x02, false);
 				}
-				else
+				if (menuvalue1 == 0)
 				{
-					if (menuvalue1 > 700000)
-					{
-						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x01, false);
-					}
-					if (timeroutofmenu != 0)
-					{
-						myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x00, false);
-						myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B39, 0x7F, false);
-						avoiderror = false;
-					}
+					SDL_Delay(50);
+					myHelpers->WriteIntPtr((INT_PTR)menuvalue + 0x46C, 0x0F, false);
+				}
+				if (menuvalue1 == 15)
+				{
+					myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x01, false);
+				}
+				if (timeroutofmenu != 0)
+				{
+					myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x00, false);
+					avoiderror = false;
+				}
+			}
+			else
+			{
+				if (menuvalue1 > 700000)
+				{
+					myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x01, false);
+				}
+				if (timeroutofmenu != 0)
+				{
+					myHelpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, 0x00, false);
+					myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B39, 0x7F, false);
+					avoiderror = false;
 				}
 			}
 		}
+	}
 
-		if (Only2D == 1)
+	if (Only2D == 1)
+	{
+		//2D Only
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24C9F, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CA0, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CA1, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAA, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAB, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAC, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBA, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBB, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBC, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x478F, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x4790, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x4791, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DB, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DC, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DD, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391D8, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391D9, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391DA, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391EF, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391F0, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391F1, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x5962F, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x59630, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x59631, false);
+		int TwoDee1 = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x00946DA0, false);
+		int TwoDee2 = myHelpers->ReadIntPtr((INT_PTR)TwoDee1 + 0x38, false);
+		int TwoDee3 = myHelpers->ReadIntPtr((INT_PTR)TwoDee2 + 0x94, false);
+		myHelpers->WriteIntPtr((INT_PTR)TwoDee3 + 0x74, 0x00, false);
+	}
+	if (InputDeviceWheelEnable == 1)
+	{
+		//Write New Calibration Values	
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B00, 0x00, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B01, 0x7F, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B0C, 0x00, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B0D, 0xFF, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B14, 0x00, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B15, 0xFF, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B10, 0x00, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B11, 0xFF, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B21, 0x00, false);
+
+		// Remove error flashing
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x951154, 0x01, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x951155, 0x01, false);
+		myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x951156, 0x01, false);
+	}
+
+	UINT8 ff1 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BB9, false);
+	UINT8 ff2 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BBA, false);
+	UINT8 ff3 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BBB, false);
+	UINT8 ff4 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BBC, false);
+	//Change timer back to 0 when test menu & FFB Only while timer above 0
+	if ((timer != 0) || (menuvalue1 == 0x00))
+	{
+		if (menuvalue1 == 0x00)
 		{
-			//2D Only
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24C9F, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CA0, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CA1, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAA, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAB, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAC, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBA, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBB, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBC, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x478F, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x4790, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x4791, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DB, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DC, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DD, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391D8, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391D9, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391DA, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391EF, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391F0, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391F1, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x5962F, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x59630, false);
-			myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x59631, false);
-			int TwoDee1 = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x00946DA0, false);
-			int TwoDee2 = myHelpers->ReadIntPtr((INT_PTR)TwoDee1 + 0x38, false);
-			int TwoDee3 = myHelpers->ReadIntPtr((INT_PTR)TwoDee2 + 0x94, false);
-			myHelpers->WriteIntPtr((INT_PTR)TwoDee3 + 0x74, 0x00, false);
+			myHelpers->WriteFloat32((INT_PTR)gl_hjgtDll + 0x954394, 0, false);
 		}
-		if (InputDeviceWheelEnable == 1)
+		if ((ff3 != 0x00) && (ff4 != 0x00))
 		{
-			//Write New Calibration Values	
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B00, 0x00, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B01, 0x7F, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B0C, 0x00, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B0D, 0xFF, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B14, 0x00, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B15, 0xFF, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B10, 0x00, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B11, 0xFF, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B21, 0x00, false);
-
-			// Remove error flashing
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x951154, 0x01, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x951155, 0x01, false);
-			myHelpers->WriteByte((INT_PTR)gl_hjgtDll + 0x951156, 0x01, false);
-		}
-
-		UINT8 ff1 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BB9, false);
-		UINT8 ff2 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BBA, false);
-		UINT8 ff3 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BBB, false);
-		UINT8 ff4 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x7D2BBC, false);
-		//Change timer back to 0 when test menu & FFB Only while timer above 0
-		if ((timer != 0) || (menuvalue1 == 0x00))
-		{
-			if (menuvalue1 == 0x00)
+			if ((ff2 > 0x00)& (ff2 < 0x40))
 			{
-				myHelpers->WriteFloat32((INT_PTR)gl_hjgtDll + 0x954394, 0, false);
+				double percentForce = (ff2) / 63.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, percentForce, percentLength);
+				myTriggers->Sine(120, 120, percentForce);
 			}
-			if ((ff3 != 0x00) && (ff4 != 0x00))
+			if ((ff1 > 0x00)& (ff1 < 0x08))
 			{
-				if ((ff2 > 0x00)& (ff2 < 0x40))
-				{
-					double percentForce = (ff2) / 63.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, percentForce, percentLength);
-					myTriggers->Sine(120, 120, percentForce);
-				}
-				if ((ff1 > 0x00)& (ff1 < 0x08))
-				{
-					//helpers->log("moving wheel left");
-					double percentForce = (ff1) / 7.0;
-					double percentLength = 100;
-					myTriggers->Rumble(0, percentForce, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ff1 > 0x07)& (ff1 < 0x10))
-				{
-					//helpers->log("moving wheel right");
-					double percentForce = (16 - ff1) / 8.0;
-					double percentLength = 100;
-					myTriggers->Rumble(percentForce, 0, percentLength);
-					myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-				}
+				//helpers->log("moving wheel left");
+				double percentForce = (ff1) / 7.0;
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((ff1 > 0x07)& (ff1 < 0x10))
+			{
+				//helpers->log("moving wheel right");
+				double percentForce = (16 - ff1) / 8.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}
-	}					
-return 0;
+	}
+	return 0;
+}
+
+static DWORD WINAPI RunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		ThreadLoop();
+		Sleep(16);
+	}
 }
 
 void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
 	if (InputDeviceWheelEnable == 1)
 	{
-		SDL_Thread *thread;
-		thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
+		if (!init)
+		{
+			myTriggers = triggers;
+			myConstants = constants;
+			myHelpers = helpers;
+
+			CreateThread(NULL, 0, RunningLoop, NULL, 0, NULL);
+
+			//Added 2nd device stuff from here
+			wchar_t* deviceGUIDString2 = new wchar_t[256];
+			int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
+			char joystick_guid[256];
+			sprintf(joystick_guid, "%S", deviceGUIDString2);
+			SDL_JoystickGUID guid, dev_guid;
+			int numJoysticks = SDL_NumJoysticks();
+			std::string njs = std::to_string(numJoysticks);
+			((char)njs.c_str());
+			for (int i = 0; i < SDL_NumJoysticks(); i++)
+			{
+				SDL_Joystick* js2 = SDL_JoystickOpen(i);
+				joystick_index2 = SDL_JoystickInstanceID(js2);
+				SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
+				char guid_str[1024];
+				SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
+				const char* name = SDL_JoystickName(js2);
+				char text[256];
+				sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+				guid = SDL_JoystickGetGUIDFromString(joystick_guid);
+				dev_guid = SDL_JoystickGetGUID(js2);
+				SDL_JoystickClose(js2);
+				if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+				{
+					GameController2 = SDL_JoystickOpen(i);
+					break;
+				}
+			}
+			init = true;
+		}
 
 			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D84B, false);
 			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D84C, false);
@@ -346,35 +388,6 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 		int gearnumber1 = helpers->ReadIntPtr((INT_PTR)gearnumber + 0x5C, false);
 		int gearnumber2 = helpers->ReadIntPtr((INT_PTR)gearnumber1 + 0x390, false);
 		int gearnumber3 = helpers->ReadIntPtr((INT_PTR)gearnumber2 + 0x18, false);
-
-		//Added 2nd device stuff from here
-		wchar_t * deviceGUIDString2 = new wchar_t[256];
-		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
-		char joystick_guid[256];
-		sprintf(joystick_guid, "%S", deviceGUIDString2);
-		SDL_JoystickGUID guid, dev_guid;
-		int numJoysticks = SDL_NumJoysticks();
-		std::string njs = std::to_string(numJoysticks);
-		((char)njs.c_str());
-		for (int i = 0; i < SDL_NumJoysticks(); i++)
-		{
-			SDL_Joystick* js2 = SDL_JoystickOpen(i);
-			joystick_index2 = SDL_JoystickInstanceID(js2);
-			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
-			char guid_str[1024];
-			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
-			const char* name = SDL_JoystickName(js2);
-			char text[256];
-			sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
-			guid = SDL_JoystickGetGUIDFromString(joystick_guid);
-			dev_guid = SDL_JoystickGetGUID(js2);
-			SDL_JoystickClose(js2);
-			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
-			{
-				GameController2 = SDL_JoystickOpen(i);
-				break;
-			}
-		}
 
 		if (SequentialGears == 1)
 		{
@@ -1318,13 +1331,20 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 	}
 	else
 	{
-	SDL_Thread *thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
-	while (SDL_WaitEvent(&e) != 0)
-	{		
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
+		if (!init)
+		{
+			myTriggers = triggers;
+			myConstants = constants;
+			myHelpers = helpers;
+			CreateThread(NULL, 0, RunningLoop, NULL, 0, NULL);
+			init = true;
+		}
+
+		while (SDL_WaitEvent(&e) != 0)
+		{
+			myTriggers = triggers;
+			myConstants = constants;
+			myHelpers = helpers;
+		}
 	}
-}
 }

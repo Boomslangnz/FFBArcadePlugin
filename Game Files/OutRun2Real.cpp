@@ -19,6 +19,7 @@ static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
 static SDL_Event e;
+static bool init = false;
 static int SpeedStrength;
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
@@ -84,80 +85,90 @@ signed int cdecl or2FfbFunction(unsigned __int8 unk1, unsigned __int8 unk2, unsi
 	return 0;
 }
 
-static int RunningThread(void *ptr)
+static int ThreadLoop()
 {
-	int cnt;
-	for (cnt = 0; cnt >= 0; ++cnt)
+	UINT8 gear = myHelpers->ReadByte(0x0827A160, /* isRelativeOffset */ false); // gear address
+	UINT8 ff8 = myHelpers->ReadByte(0x08304ADC, /* isRelativeOffset */ false); // 1 when race
+	float ffspeed = myHelpers->ReadFloat32(0x08273DF0, /* isRelativeOffset */ false); //speedo
+	UINT8 static oldgear = 0;
+	float newgear = gear;
+
+	if ((ffspeed >= 0.1) && (ffspeed <= 80))
 	{
-		UINT8 gear = myHelpers->ReadByte(0x0827A160, /* isRelativeOffset */ false); // gear address
-		UINT8 ff8 = myHelpers->ReadByte(0x08304ADC, /* isRelativeOffset */ false); // 1 when race
-		float ffspeed = myHelpers->ReadFloat32(0x08273DF0, /* isRelativeOffset */ false); //speedo
-		UINT8 static oldgear = 0;
-		float newgear = gear;
-
-		if ((ffspeed >= 0.1) && (ffspeed <= 80))
-		{
-			SpeedStrength = 10;
-		}
-		else if ((ffspeed >= 80.1) && (ffspeed <= 130))
-		{
-			SpeedStrength = 20;
-		}
-		else if ((ffspeed >= 130.1) && (ffspeed <= 180))
-		{
-			SpeedStrength = 30;
-		}
-		else if ((ffspeed >= 180.1) && (ffspeed <= 220))
-		{
-			SpeedStrength = 40;
-		}
-		else if ((ffspeed >= 220.1) && (ffspeed <= 270))
-		{
-			SpeedStrength = 50;
-		}
-		else if ((ffspeed >= 270.1) && (ffspeed <= 320))
-		{
-			SpeedStrength = 60;
-		}
-		else if ((ffspeed >= 320.1) && (ffspeed <= 380))
-		{
-			SpeedStrength = 70;
-		}
-		else if ((ffspeed >= 380.1) && (ffspeed <= 430))
-		{
-			SpeedStrength = 80;
-		}
-		else if ((ffspeed >= 430.1) && (ffspeed <= 500))
-		{
-			SpeedStrength = 90;
-		}
-		else if ((ffspeed >= 500.1) && (ffspeed <= 1000))
-		{
-			SpeedStrength = 100;
-		}
-		else
-		{
-			SpeedStrength = 0;
-		}
-
-		if ((oldgear != newgear) && (ff8 == 1) && (ffspeed >= 0.1))
-		{
-			double percentForce = 0.1;
-			double percentLength = 100;
-			myTriggers->Sine(240, 320, percentForce);
-			myTriggers->Rumble(percentForce, percentForce, percentLength);
-		}
-		oldgear = newgear;
+		SpeedStrength = 10;
 	}
+	else if ((ffspeed >= 80.1) && (ffspeed <= 130))
+	{
+		SpeedStrength = 20;
+	}
+	else if ((ffspeed >= 130.1) && (ffspeed <= 180))
+	{
+		SpeedStrength = 30;
+	}
+	else if ((ffspeed >= 180.1) && (ffspeed <= 220))
+	{
+		SpeedStrength = 40;
+	}
+	else if ((ffspeed >= 220.1) && (ffspeed <= 270))
+	{
+		SpeedStrength = 50;
+	}
+	else if ((ffspeed >= 270.1) && (ffspeed <= 320))
+	{
+		SpeedStrength = 60;
+	}
+	else if ((ffspeed >= 320.1) && (ffspeed <= 380))
+	{
+		SpeedStrength = 70;
+	}
+	else if ((ffspeed >= 380.1) && (ffspeed <= 430))
+	{
+		SpeedStrength = 80;
+	}
+	else if ((ffspeed >= 430.1) && (ffspeed <= 500))
+	{
+		SpeedStrength = 90;
+	}
+	else if ((ffspeed >= 500.1) && (ffspeed <= 1000))
+	{
+		SpeedStrength = 100;
+	}
+	else
+	{
+		SpeedStrength = 0;
+	}
+
+	if ((oldgear != newgear) && (ff8 == 1) && (ffspeed >= 0.1))
+	{
+		double percentForce = 0.1;
+		double percentLength = 100;
+		myTriggers->Sine(240, 320, percentForce);
+		myTriggers->Rumble(percentForce, percentForce, percentLength);
+	}
+
+	oldgear = newgear;
 	return 0;
 }
 
+static DWORD WINAPI RunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		ThreadLoop();
+		Sleep(16);
+	}
+}
+
 void OutRun2Real::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
-	SDL_Thread *thread;
-	thread = SDL_CreateThread(RunningThread, "RunningThread", (void *)NULL);
+
+	if (!init)
+	{
+		myTriggers = triggers;
+		myConstants = constants;
+		myHelpers = helpers;
+		CreateThread(NULL, 0, RunningLoop, NULL, 0, NULL);
+		init = true;
+	}
 		
 	while (SDL_WaitEvent(&e) != 0)
 	{	

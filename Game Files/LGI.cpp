@@ -20,6 +20,7 @@ extern int joystick_index2;
 extern SDL_Joystick* GameController2;
 extern SDL_Haptic* ControllerHaptic2;
 extern SDL_Haptic* haptic2;
+static bool init = false;
 
 void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
 	int ff = helpers->ReadIntPtr(0x0063BF5C, /* isRelativeOffset */ true);
@@ -50,47 +51,51 @@ void LGI::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* 
 	int Motor2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Motor2pStrength"), 0, settingsFilename);
 	int Health2pStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Health2pStrength"), 0, settingsFilename);
 
-	for (int i = 0; i < SDL_NumJoysticks(); i++)
+	if (!init)
 	{
-		wchar_t * deviceGUIDString2 = new wchar_t[256];
-		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
-		char joystick_guid[256];
-		sprintf(joystick_guid, "%S", deviceGUIDString2);
-		SDL_JoystickGUID guid, dev_guid;
-		int numJoysticks = SDL_NumJoysticks();
-		std::string njs = std::to_string(numJoysticks);
-		((char)njs.c_str());
 		for (int i = 0; i < SDL_NumJoysticks(); i++)
 		{
-			extern int joystick1Index;
-			if (i == joystick1Index)
+			wchar_t* deviceGUIDString2 = new wchar_t[256];
+			int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
+			char joystick_guid[256];
+			sprintf(joystick_guid, "%S", deviceGUIDString2);
+			SDL_JoystickGUID guid, dev_guid;
+			int numJoysticks = SDL_NumJoysticks();
+			std::string njs = std::to_string(numJoysticks);
+			((char)njs.c_str());
+			for (int i = 0; i < SDL_NumJoysticks(); i++)
 			{
-				continue;
+				extern int joystick1Index;
+				if (i == joystick1Index)
+				{
+					continue;
+				}
+				SDL_Joystick* js2 = SDL_JoystickOpen(i);
+				joystick_index2 = SDL_JoystickInstanceID(js2);
+				SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
+				char guid_str[1024];
+				SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
+				const char* name = SDL_JoystickName(js2);
+				char text[256];
+				sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+				guid = SDL_JoystickGetGUIDFromString(joystick_guid);
+				dev_guid = SDL_JoystickGetGUID(js2);
+				if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+				{
+					GameController2 = SDL_JoystickOpen(i);
+					ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
+					break;
+				}
+				SDL_JoystickClose(js2);
 			}
-			SDL_Joystick* js2 = SDL_JoystickOpen(i);
-			joystick_index2 = SDL_JoystickInstanceID(js2);
-			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
-			char guid_str[1024];
-			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
-			const char* name = SDL_JoystickName(js2);
-			char text[256];
-			sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
-			guid = SDL_JoystickGetGUIDFromString(joystick_guid);
-			dev_guid = SDL_JoystickGetGUID(js2);
-			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+			haptic2 = ControllerHaptic2;
+			if ((SDL_HapticRumbleSupported(haptic2) == SDL_TRUE))
 			{
-				GameController2 = SDL_JoystickOpen(i);
-				ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
-				break;
+				SDL_HapticRumbleInit;
+				SDL_HapticRumbleInit(ControllerHaptic2);
 			}
-			SDL_JoystickClose(js2);
 		}
-		haptic2 = ControllerHaptic2;
-		if ((SDL_HapticRumbleSupported(haptic2) == SDL_TRUE))
-		{
-			SDL_HapticRumbleInit;
-			SDL_HapticRumbleInit(ControllerHaptic2);
-		}
+		init = true;
 	}
 
 		if ((oldFloat1 != newFloat1) && (health1p != 0x1))
