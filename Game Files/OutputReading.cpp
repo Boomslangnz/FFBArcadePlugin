@@ -1972,8 +1972,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			CreateThread(NULL, 0, ThreadForForcedSpring, NULL, 0, NULL);
 		}
 
-		for (int i = 0; i < SDL_NumJoysticks(); i++)
-	{
 		wchar_t* deviceGUIDString2 = new wchar_t[256];
 		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
 		char joystick_guid[256];
@@ -2014,18 +2012,12 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			SDL_HapticRumbleInit(ControllerHaptic2);
 		}
 		SDL_HapticSetGain(haptic2, 100);
-	}
 
-	for (int i = 0; i < SDL_NumJoysticks(); i++)
-	{
 		wchar_t* deviceGUIDString3 = new wchar_t[256];
 		int Device3GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device3GUID"), NULL, deviceGUIDString3, 256, settingsFilename);
-		char joystick_guid[256];
-		sprintf(joystick_guid, "%S", deviceGUIDString3);
-		SDL_JoystickGUID guid, dev_guid;
-		int numJoysticks = SDL_NumJoysticks();
-		std::string njs = std::to_string(numJoysticks);
-		((char)njs.c_str());
+		char joystick_guid2[256];
+		sprintf(joystick_guid2, "%S", deviceGUIDString3);
+		SDL_JoystickGUID guid2, dev_guid2;
 		for (int i = 0; i < SDL_NumJoysticks(); i++)
 		{
 			extern int joystick1Index;
@@ -2035,15 +2027,15 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			}
 			SDL_Joystick* js3 = SDL_JoystickOpen(i);
 			joystick_index3 = SDL_JoystickInstanceID(js3);
-			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js3);
-			char guid_str[1024];
-			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
-			const char* name = SDL_JoystickName(js3);
-			char text[256];
-			sprintf(text, "Joystick: %d / Name: %s / GUID: %s\n", i, name, guid_str);
-			guid = SDL_JoystickGetGUIDFromString(joystick_guid);
-			dev_guid = SDL_JoystickGetGUID(js3);
-			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
+			SDL_JoystickGUID guid2 = SDL_JoystickGetGUID(js3);
+			char guid_str2[1024];
+			SDL_JoystickGetGUIDString(guid2, guid_str2, sizeof(guid_str2));
+			const char* name2 = SDL_JoystickName(js3);
+			char text2[256];
+			sprintf(text2, "Joystick: %d / Name: %s / GUID: %s\n", i, name2, guid_str2);
+			guid2 = SDL_JoystickGetGUIDFromString(joystick_guid2);
+			dev_guid2 = SDL_JoystickGetGUID(js3);
+			if (!memcmp(&guid2, &dev_guid2, sizeof(SDL_JoystickGUID)))
 			{
 				GameController3 = SDL_JoystickOpen(i);
 				ControllerHaptic3 = SDL_HapticOpenFromJoystick(GameController3);
@@ -2058,8 +2050,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			SDL_HapticRumbleInit(ControllerHaptic3);
 		}
 		SDL_HapticSetGain(haptic3, 100);
-	}
-
 		init = true;
 	}
 
@@ -2154,26 +2144,15 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				RunningFFB = "EffectActive";
 			}
 
-			//if (MotionFFB == 1)
-			//{
-				if (romname == outrunra || romname == outrun || romname == outruneh)
-				{
-					RunningFFB = "OutrunActive";
-				}
+			if (romname == outrunra || romname == outrun || romname == outruneh)
+			{
+				RunningFFB = "OutrunActive";
+			}
 
-				if (romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj || romname == pdriftl)
-				{
-					RunningFFB = "PDriftActive";
-				}
-			//}
-			//else
-			//{
-			//	if (romname == outrunra || romname == outrun || romname == outruneh || romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj ||
-			//		romname == pdriftl)
-			//	{
-			//		RunningFFB = "EffectActive";
-			//	}
-			//}
+			if (romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj || romname == pdriftl)
+			{
+				RunningFFB = "PDriftActive";
+			}
 
 			if (romname == aburner2 || romname == aburner2g || romname == cischeat || romname == f1gpstar || romname == f1gpstaro || romname == f1gpstr2)
 			{
