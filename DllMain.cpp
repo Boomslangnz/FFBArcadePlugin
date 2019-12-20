@@ -34,6 +34,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/GRID.h"
+#include "Game Files/GoldenGun.h"
 #include "Game Files/InitialD0.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"
@@ -944,6 +945,7 @@ const int RAMBO_ = 37;
 const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
 const int Transformers_ = 40;
+const int Golden_Gun = 41;
 
 HINSTANCE Get_hInstance()
 {
@@ -1968,6 +1970,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case GRID_:
 		game = new GRID;
+		break;
+	case Golden_Gun:
+		game = new GoldenGun;
 		break;
 	case Transformers_:
 		game = new Transformers;
