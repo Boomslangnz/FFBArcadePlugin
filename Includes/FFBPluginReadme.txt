@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.4a
+Version 1.4b
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -8,7 +8,20 @@ This is a plugin to provide Force Feedback and Rumble (and in certain cases adde
 to add FFB to Daytona Championship USA and it grew from there to support several more games and rumble was added. 
 While best efforts were made to try to resemble the real arcade force feedback, It will never be 100% accurate & 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
-so are not using real force feedback values. Most games use correct ffb values however :)
+so are not using real force feedback values. Most games use REAL ffb values however :)
+
+***1.4b Changes***
+
+- Added rumble support for Golden Gun (up to 2 players)
+
+- Added ability to have individual game settings for MAME & Supermodel Output Games
+
+- Certain MAME Output will now use all available values as some were skipped previously
+
+- Fixed issue on Aliens Extermination where it only Gun Shoot was always at full power
+
+- MAME Lightgun games now only work on rumble (removed old sine effect on these, seemed unnecessary to include)
+
 
 ***1.4a Changes***
 

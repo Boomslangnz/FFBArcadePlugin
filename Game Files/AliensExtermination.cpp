@@ -182,19 +182,19 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 				{
 					double percentForce = ((Gun1pStrength) / 100.0);
 					double percentLength = configFeedbackLength;
-					triggers->Rumble(1.0, 1.0, percentLength);
+					triggers->Rumble(percentForce, percentForce, percentLength);
 				}
 				else if (HowtoRumbleGunEffect == 1)
 				{
 					double percentForce = ((Gun1pStrength) / 100.0);
 					double percentLength = configFeedbackLength;
-					triggers->Rumble(0, 1.0, percentLength);
+					triggers->Rumble(0, percentForce, percentLength);
 				}
 				else if (HowtoRumbleGunEffect == 2)
 				{
 					double percentForce = ((Gun1pStrength) / 100.0);
 					double percentLength = configFeedbackLength;
-					triggers->Rumble(1.0, 0, percentLength);
+					triggers->Rumble(percentForce, 0, percentLength);
 				}
 			}
 		}
