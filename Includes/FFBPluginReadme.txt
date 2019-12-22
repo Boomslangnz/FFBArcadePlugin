@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.4b
+Version 1.5
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -10,7 +10,9 @@ While best efforts were made to try to resemble the real arcade force feedback, 
 in some cases eg Mario Kart GP DX, Pokken Tournament and Battle Gear 4,effects were created entirely from scratch
 so are not using real force feedback values. Most games use REAL ffb values however :)
 
-***1.4b Changes***
+***1.5 Changes***
+
+- Added FFB support for Dirty Drivin
 
 - Added rumble support for Golden Gun (up to 2 players)
 

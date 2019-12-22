@@ -31,6 +31,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/AliensExtermination.h"
 #include "Game Files/ChaseHQ2.h"
 #include "Game Files/Daytona3.h"
+#include "Game Files/DirtyDrivin.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/GRID.h"
@@ -953,6 +954,7 @@ const int FORD_RACING_OTHER = 38;
 const int KO_Drive = 39;
 const int Transformers_ = 40;
 const int Golden_Gun = 41;
+const int Dirty_Drivin = 42;
 
 HINSTANCE Get_hInstance()
 {
@@ -2076,6 +2078,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case HOTD_4:
 		game = new HOTD4;
+		break;
+	case Dirty_Drivin:
+		game = new DirtyDrivin;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

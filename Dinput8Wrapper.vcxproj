@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\AliensExtermination.h" />
+    <ClInclude Include="Game Files\DirtyDrivin.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GoldenGun.h" />
     <ClInclude Include="Game Files\GRID.h" />
@@ -50,6 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
+    <ClCompile Include="Game Files\DirtyDrivin.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\GoldenGun.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
