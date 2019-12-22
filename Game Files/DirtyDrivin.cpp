@@ -18,6 +18,10 @@ void DirtyDrivin::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 	float ff = helpers->ReadFloat32(0x886EC4, false);
 
+	helpers->log("got value: ");
+	std::string ffs = std::to_string(ff);
+	helpers->log((char*)ffs.c_str());
+
 	if (ff > 0)
 	{
 		double percentForce = ff;
