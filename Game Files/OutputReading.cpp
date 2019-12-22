@@ -12,13 +12,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include "OutputReading.h"
-#include <commctrl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <string>
 #include <tchar.h>
 #include "SDL.h"
+
 HINSTANCE ProcDLL = NULL;
 extern int joystick_index1;
 extern int joystick_index2;
@@ -68,6 +65,408 @@ extern int RumbleStrengthLeftMotor;
 extern int RumbleStrengthRightMotor;
 extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
+
+static int configMinForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDaytona2"), 0, settingsFilename);
+static int configMaxForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDaytona2"), 100, settingsFilename);
+static int configAlternativeMinForceLeftDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDaytona2"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDaytona2"), 100, settingsFilename);
+static int configAlternativeMinForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDaytona2"), 0, settingsFilename);
+static int configAlternativeMaxForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDaytona2"), 100, settingsFilename);
+static int configFeedbackLengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDaytona2"), 120, settingsFilename);
+static int PowerModeDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDaytona2"), 0, settingsFilename);
+static int EnableForceSpringEffectDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytona2"), 0, settingsFilename);
+static int ForceSpringStrengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytona2"), 0, settingsFilename);
+
+static int configMinForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceScud"), 0, settingsFilename);
+static int configMaxForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceScud"), 100, settingsFilename);
+static int configAlternativeMinForceLeftScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftScud"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftScud"), 100, settingsFilename);
+static int configAlternativeMinForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightScud"), 0, settingsFilename);
+static int configAlternativeMaxForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightScud"), 100, settingsFilename);
+static int configFeedbackLengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthScud"), 120, settingsFilename);
+static int PowerModeScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeScud"), 0, settingsFilename);
+static int EnableForceSpringEffectScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectScud"), 0, settingsFilename);
+static int ForceSpringStrengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthScud"), 0, settingsFilename);
+
+static int configMinForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLeMans"), 0, settingsFilename);
+static int configMaxForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLeMans"), 100, settingsFilename);
+static int configAlternativeMinForceLeftLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftLeMans"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftLeMans"), 100, settingsFilename);
+static int configAlternativeMinForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightLeMans"), 0, settingsFilename);
+static int configAlternativeMaxForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightLeMans"), 100, settingsFilename);
+static int configFeedbackLengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthLeMans"), 120, settingsFilename);
+static int PowerModeLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeLeMans"), 0, settingsFilename);
+static int EnableForceSpringEffectLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectLeMans"), 0, settingsFilename);
+
+static int ForceSpringStrengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthLeMans"), 0, settingsFilename);
+static int configMinForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDirtDevils"), 0, settingsFilename);
+static int configMaxForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDirtDevils"), 100, settingsFilename);
+static int configAlternativeMinForceLeftDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDirtDevils"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDirtDevils"), 100, settingsFilename);
+static int configAlternativeMinForceRightDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDirtDevils"), 0, settingsFilename);
+static int configAlternativeMaxForceRightDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDirtDevils"), 100, settingsFilename);
+static int configFeedbackLengthDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDirtDevils"), 120, settingsFilename);
+static int PowerModeDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDirtDevils"), 0, settingsFilename);
+static int EnableForceSpringEffectDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDirtDevils"), 0, settingsFilename);
+static int ForceSpringStrengthDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDirtDevils"), 0, settingsFilename);
+
+static int configMinForceSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSRally2"), 0, settingsFilename);
+static int configMaxForceSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSRally2"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSRally2"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSRally2"), 100, settingsFilename);
+static int configAlternativeMinForceRightSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSRally2"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSRally2"), 100, settingsFilename);
+static int configFeedbackLengthSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSRally2"), 120, settingsFilename);
+static int PowerModeSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSRally2"), 0, settingsFilename);
+static int EnableForceSpringEffectSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSRally2"), 0, settingsFilename);
+static int ForceSpringStrengthSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSRally2"), 0, settingsFilename);
+
+static int configMinForceECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceECA"), 0, settingsFilename);
+static int configMaxForceECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceECA"), 100, settingsFilename);
+static int configAlternativeMinForceLeftECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftECA"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftECA"), 100, settingsFilename);
+static int configAlternativeMinForceRightECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightECA"), 0, settingsFilename);
+static int configAlternativeMaxForceRightECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightECA"), 100, settingsFilename);
+static int configFeedbackLengthECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthECA"), 120, settingsFilename);
+static int PowerModeECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeECA"), 0, settingsFilename);
+static int EnableForceSpringEffectECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectECA"), 0, settingsFilename);
+static int ForceSpringStrengthECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthECA"), 0, settingsFilename);
+
+static int configMinForceVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceVirtuaRacing"), 0, settingsFilename);
+static int configMaxForceVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceVirtuaRacing"), 100, settingsFilename);
+static int configAlternativeMinForceLeftVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftVirtuaRacing"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftVirtuaRacing"), 100, settingsFilename);
+static int configAlternativeMinForceRightVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightVirtuaRacing"), 0, settingsFilename);
+static int configAlternativeMaxForceRightVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightVirtuaRacing"), 100, settingsFilename);
+static int configFeedbackLengthVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthVirtuaRacing"), 120, settingsFilename);
+static int EnableForceSpringEffectVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectVirtuaRacing"), 0, settingsFilename);
+static int ForceSpringStrengthVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthVirtuaRacing"), 0, settingsFilename);
+
+static int configMinForceSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRush"), 0, settingsFilename);
+static int configMaxForceSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRush"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSFRush"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSFRush"), 100, settingsFilename);
+static int configAlternativeMinForceRightSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSFRush"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSFRush"), 100, settingsFilename);
+static int configFeedbackLengthSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSFRush"), 120, settingsFilename);
+static int PowerModeSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRush"), 0, settingsFilename);
+static int EnableForceSpringEffectSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRush"), 0, settingsFilename);
+static int ForceSpringStrengthSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRush"), 0, settingsFilename);
+static int configMinForceSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRushRock"), 0, settingsFilename);
+static int configMaxForceSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRushRock"), 100, settingsFilename);
+
+static int configAlternativeMinForceLeftSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSFRushRock"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSFRushRock"), 100, settingsFilename);
+static int configAlternativeMinForceRightSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSFRushRock"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSFRushRock"), 100, settingsFilename);
+static int configFeedbackLengthSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSFRushRock"), 120, settingsFilename);
+static int PowerModeSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRushRock"), 0, settingsFilename);
+static int EnableForceSpringEffectSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRushRock"), 0, settingsFilename);
+static int ForceSpringStrengthSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRushRock"), 0, settingsFilename);
+
+static int configMinForceCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCrusnWld"), 0, settingsFilename);
+static int configMaxForceCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCrusnWld"), 100, settingsFilename);
+static int configAlternativeMinForceLeftCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCrusnWld"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCrusnWld"), 100, settingsFilename);
+static int configAlternativeMinForceRightCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCrusnWld"), 0, settingsFilename);
+static int configAlternativeMaxForceRightCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCrusnWld"), 100, settingsFilename);
+static int configFeedbackLengthCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCrusnWld"), 120, settingsFilename);
+static int PowerModeCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCrusnWld"), 0, settingsFilename);
+static int EnableForceSpringEffectCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCrusnWld"), 0, settingsFilename);
+static int ForceSpringStrengthCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCrusnWld"), 0, settingsFilename);
+
+static int configMinForceOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOffRoadC"), 0, settingsFilename);
+static int configMaxForceOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOffRoadC"), 100, settingsFilename);
+static int configAlternativeMinForceLeftOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftOffRoadC"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftOffRoadC"), 100, settingsFilename);
+static int configAlternativeMinForceRightOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightOffRoadC"), 0, settingsFilename);
+static int configAlternativeMaxForceRightOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightOffRoadC"), 100, settingsFilename);
+static int configFeedbackLengthOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthOffRoadC"), 120, settingsFilename);
+static int PowerModeOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeOffRoadC"), 0, settingsFilename);
+static int EnableForceSpringEffectOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectOffRoadC"), 0, settingsFilename);
+static int ForceSpringStrengthOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthOffRoadC"), 0, settingsFilename);
+
+static int configMinForceCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCrusnUSA"), 0, settingsFilename);
+static int configMaxForceCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCrusnUSA"), 100, settingsFilename);
+static int configAlternativeMinForceLeftCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCrusnUSA"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCrusnUSA"), 100, settingsFilename);
+static int configAlternativeMinForceRightCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCrusnUSA"), 0, settingsFilename);
+static int configAlternativeMaxForceRightCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCrusnUSA"), 100, settingsFilename);
+static int configFeedbackLengthCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCrusnUSA"), 120, settingsFilename);
+static int PowerModeCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCrusnUSA"), 0, settingsFilename);
+static int EnableForceSpringEffectCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCrusnUSA"), 0, settingsFilename);
+static int ForceSpringStrengthCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCrusnUSA"), 0, settingsFilename);
+
+static int configMinForceCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCalSpeed"), 0, settingsFilename);
+static int configMaxForceCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCalSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceLeftCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCalSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCalSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceRightCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCalSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceRightCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCalSpeed"), 100, settingsFilename);
+static int configFeedbackLengthCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCalSpeed"), 120, settingsFilename);
+static int PowerModeCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCalSpeed"), 0, settingsFilename);
+static int EnableForceSpringEffectCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCalSpeed"), 0, settingsFilename);
+static int ForceSpringStrengthCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCalSpeed"), 0, settingsFilename);
+
+static int configMinForceSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRush2049"), 0, settingsFilename);
+static int configMaxForceSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRush2049"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSFRush2049"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSFRush2049"), 100, settingsFilename);
+static int configAlternativeMinForceRightSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSFRush2049"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSFRush2049"), 100, settingsFilename);
+static int configFeedbackLengthSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSFRush2049"), 120, settingsFilename);
+static int PowerModeSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRush2049"), 0, settingsFilename);
+static int EnableForceSpringEffectSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRush2049"), 0, settingsFilename);
+static int ForceSpringStrengthSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRush2049"), 0, settingsFilename);
+
+static int configMinForceHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceHardD"), 0, settingsFilename);
+static int configMaxForceHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceHardD"), 100, settingsFilename);
+static int configAlternativeMinForceLeftHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftHardD"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftHardD"), 100, settingsFilename);
+static int configAlternativeMinForceRightHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightHardD"), 0, settingsFilename);
+static int configAlternativeMaxForceRightHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightHardD"), 100, settingsFilename);
+static int configFeedbackLengthHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthHardD"), 120, settingsFilename);
+static int PowerModeHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeHardD"), 0, settingsFilename);
+static int EnableForceSpringEffectHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectHardD"), 0, settingsFilename);
+static int ForceSpringStrengthHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthHardD"), 0, settingsFilename);
+
+static int configMinForceRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRevX"), 0, settingsFilename);
+static int configMaxForceRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRevX"), 100, settingsFilename);
+static int configMinForceRevXDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRevXDevice2"), 0, settingsFilename);
+static int configMaxForceRevXDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRevXDevice2"), 100, settingsFilename);
+static int configMinForceRevXDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRevXDevice3"), 0, settingsFilename);
+static int configMaxForceRevXDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRevXDevice3"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorRevX"), 0, settingsFilename);
+static int RumbleStrengthRightMotorRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorRevX"), 0, settingsFilename);
+
+static int configMinForceZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceZombRaid"), 0, settingsFilename);
+static int configMaxForceZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceZombRaid"), 100, settingsFilename);
+static int configMinForceZombRaidDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceZombRaidDevice2"), 0, settingsFilename);
+static int configMaxForceZombRaidDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceZombRaidDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorZombRaid"), 0, settingsFilename);
+static int RumbleStrengthRightMotorZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorZombRaid"), 0, settingsFilename);
+
+static int configMinForceBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceBBusters"), 0, settingsFilename);
+static int configMaxForceBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceBBusters"), 100, settingsFilename);
+static int configMinForceBBustersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceBBustersDevice2"), 0, settingsFilename);
+static int configMaxForceBBustersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceBBustersDevice2"), 100, settingsFilename);
+static int configMinForceBBustersDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceBBustersDevice3"), 0, settingsFilename);
+static int configMaxForceBBustersDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceBBustersDevice3"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorBBusters"), 0, settingsFilename);
+static int RumbleStrengthRightMotorBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorBBusters"), 0, settingsFilename);
+
+static int configMinForceMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceMechatt"), 0, settingsFilename);
+static int configMaxForceMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceMechatt"), 100, settingsFilename);
+static int configMinForceMechattDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceMechattDevice2"), 0, settingsFilename);
+static int configMaxForceMechattDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceMechattDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorMechatt"), 0, settingsFilename);
+static int RumbleStrengthRightMotorMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorMechatt"), 0, settingsFilename);
+
+static int configMinForceTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTShoot"), 0, settingsFilename);
+static int configMaxForceTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTShoot"), 100, settingsFilename);
+static int configMinForceTShootDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTShootDevice2"), 0, settingsFilename);
+static int configMaxForceTShootDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTShootDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTShoot"), 0, settingsFilename);
+static int RumbleStrengthRightMotorTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTShoot"), 0, settingsFilename);
+
+static int configMinForceGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGunBuster"), 0, settingsFilename);
+static int configMaxForceGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGunBuster"), 100, settingsFilename);
+static int configMinForceGunBusterDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGunBusterDevice2"), 0, settingsFilename);
+static int configMaxForceGunBusterDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGunBusterDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorGunBuster"), 0, settingsFilename);
+static int RumbleStrengthRightMotorGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorGunBuster"), 0, settingsFilename);
+
+static int configMinForceAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAlien3"), 0, settingsFilename);
+static int configMaxForceAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAlien3"), 100, settingsFilename);
+static int configMinForceAlien3Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAlien3Device2"), 0, settingsFilename);
+static int configMaxForceAlien3Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAlien3Device2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorAlien3"), 0, settingsFilename);
+static int RumbleStrengthRightMotorAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorAlien3"), 0, settingsFilename);
+
+static int configMinForcePointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePointBlank2"), 0, settingsFilename);
+static int configMaxForcePointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePointBlank2"), 100, settingsFilename);
+static int configMinForcePointBlank2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePointBlank2Device2"), 0, settingsFilename);
+static int configMaxForcePointBlank2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePointBlank2Device2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorPointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorPointBlank2"), 0, settingsFilename);
+static int RumbleStrengthRightMotorPointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorPointBlank2"), 0, settingsFilename);
+
+static int configMinForceGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGhoulPanic"), 0, settingsFilename);
+static int configMaxForceGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGhoulPanic"), 100, settingsFilename);
+static int configMinForceGhoulPanicDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGhoulPanicDevice2"), 0, settingsFilename);
+static int configMaxForceGhoulPanicDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGhoulPanicDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorGhoulPanic"), 0, settingsFilename);
+static int RumbleStrengthRightMotorGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorGhoulPanic"), 0, settingsFilename);
+
+static int configMinForceSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSpacegun"), 0, settingsFilename);
+static int configMaxForceSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSpacegun"), 100, settingsFilename);
+static int configMinForceSpacegunDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSpacegunDevice2"), 0, settingsFilename);
+static int configMaxForceSpacegunDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSpacegunDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorSpacegun"), 0, settingsFilename);
+static int RumbleStrengthRightMotorSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorSpacegun"), 0, settingsFilename);
+
+static int configMinForceTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTerm2"), 0, settingsFilename);
+static int configMaxForceTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTerm2"), 100, settingsFilename);
+static int configMinForceTerm2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTerm2Device2"), 0, settingsFilename);
+static int configMaxForceTerm2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTerm2Device2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTerm2"), 0, settingsFilename);
+static int RumbleStrengthRightMotorTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTerm2"), 0, settingsFilename);
+
+static int configMinForceRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRchase"), 0, settingsFilename);
+static int configMaxForceRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRchase"), 100, settingsFilename);
+static int configMinForceRchaseDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRchaseDevice2"), 0, settingsFilename);
+static int configMaxForceRchaseDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRchaseDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorRchase"), 0, settingsFilename);
+static int RumbleStrengthRightMotorRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorRchase"), 0, settingsFilename);
+
+static int configMinForceLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLGhost"), 0, settingsFilename);
+static int configMaxForceLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLGhost"), 100, settingsFilename);
+static int configMinForceLGhostDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLGhostDevice2"), 0, settingsFilename);
+static int configMaxForceLGhostDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLGhostDevice2"), 100, settingsFilename);
+static int configMinForceLGhostDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLGhostDevice3"), 0, settingsFilename);
+static int configMaxForceLGhostDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLGhostDevice3"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorLGhost"), 0, settingsFilename);
+static int RumbleStrengthRightMotorLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorLGhost"), 0, settingsFilename);
+
+static int configMinForceTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTimeCris"), 0, settingsFilename);
+static int configMaxForceTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTimeCris"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTimeCris"), 0, settingsFilename);
+static int RumbleStrengthRightMotorTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTimeCris"), 0, settingsFilename);
+
+static int configMinForceOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOThunder"), 0, settingsFilename);
+static int configMaxForceOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOThunder"), 100, settingsFilename);
+static int configMinForceOThunderDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOThunderDevice2"), 0, settingsFilename);
+static int configMaxForceOThunderDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOThunderDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorOThunder"), 0, settingsFilename);
+static int RumbleStrengthRightMotorOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorOThunder"), 0, settingsFilename);
+
+static int configMinForceOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOpWolf"), 0, settingsFilename);
+static int configMaxForceOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOpWolf"), 100, settingsFilename);
+static int configMinForceOpWolfDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOpWolfDevice2"), 0, settingsFilename);
+static int configMaxForceOpWolfDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOpWolfDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorOpWolf"), 0, settingsFilename);
+static int RumbleStrengthRightMotorOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorOpWolf"), 0, settingsFilename);
+
+static int configMinForceUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceUFire"), 0, settingsFilename);
+static int configMaxForceUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceUFire"), 100, settingsFilename);
+static int configMinForceUFireDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceUFireDevice2"), 0, settingsFilename);
+static int configMaxForceUFireDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceUFireDevice2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorUFire"), 0, settingsFilename);
+static int RumbleStrengthRightMotorUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorUFire"), 0, settingsFilename);
+
+static int configMinForceORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceORunners"), 0, settingsFilename);
+static int configMaxForceORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceORunners"), 100, settingsFilename);
+static int configAlternativeMinForceLeftORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftORunners"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftORunners"), 100, settingsFilename);
+static int configAlternativeMinForceRightORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightORunners"), 0, settingsFilename);
+static int configAlternativeMaxForceRightORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightORunners"), 100, settingsFilename);
+static int configMinForceORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceORunnersDevice2"), 0, settingsFilename);
+static int configMaxForceORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceORunnersDevice2"), 100, settingsFilename);
+static int configAlternativeMinForceLeftORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftORunnersDevice2"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftORunnersDevice2"), 100, settingsFilename);
+static int configAlternativeMinForceRightORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightORunnersDevice2"), 0, settingsFilename);
+static int configAlternativeMaxForceRightORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightORunnersDevice2"), 100, settingsFilename);
+static int configFeedbackLengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthORunners"), 120, settingsFilename);
+static int EnableForceSpringEffectORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectORunners"), 0, settingsFilename);
+static int ForceSpringStrengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthORunners"), 0, settingsFilename);
+static int SinePeriodORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodORunners"), 0, settingsFilename);
+static int SineFadePeriodORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodORunners"), 0, settingsFilename);
+static int SineStrengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthORunners"), 0, settingsFilename);
+
+static int configMinForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTOutrun"), 0, settingsFilename);
+static int configMaxForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTOutrun"), 100, settingsFilename);
+static int configAlternativeMinForceLeftTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftTOutrun"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftTOutrun"), 100, settingsFilename);
+static int configAlternativeMinForceRightTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightTOutrun"), 0, settingsFilename);
+static int configAlternativeMaxForceRightTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightTOutrun"), 100, settingsFilename);
+static int configFeedbackLengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthTOutrun"), 120, settingsFilename);
+static int EnableForceSpringEffectTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectTOutrun"), 0, settingsFilename);
+static int ForceSpringStrengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthTOutrun"), 0, settingsFilename);
+static int SinePeriodTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodTOutrun"), 0, settingsFilename);
+static int SineFadePeriodTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodTOutrun"), 0, settingsFilename);
+static int SineStrengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthTOutrun"), 0, settingsFilename);
+
+static int configMinForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCBombers"), 0, settingsFilename);
+static int configMaxForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCBombers"), 100, settingsFilename);
+static int configAlternativeMinForceLeftCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCBombers"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCBombers"), 100, settingsFilename);
+static int configAlternativeMinForceRightCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCBombers"), 0, settingsFilename);
+static int configAlternativeMaxForceRightCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCBombers"), 100, settingsFilename);
+static int configFeedbackLengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCBombers"), 120, settingsFilename);
+static int EnableForceSpringEffectCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCBombers"), 0, settingsFilename);
+static int ForceSpringStrengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCBombers"), 0, settingsFilename);
+static int SinePeriodCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodCBombers"), 0, settingsFilename);
+static int SineFadePeriodCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodCBombers"), 0, settingsFilename);
+static int SineStrengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCBombers"), 0, settingsFilename);
+
+static int configMinForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOutrun"), 0, settingsFilename);
+static int configMaxForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOutrun"), 100, settingsFilename);
+static int configAlternativeMinForceLeftOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftOutrun"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftOutrun"), 100, settingsFilename);
+static int configAlternativeMinForceRightOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightOutrun"), 0, settingsFilename);
+static int configAlternativeMaxForceRightOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightOutrun"), 100, settingsFilename);
+static int configFeedbackLengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthOutrun"), 120, settingsFilename);
+static int EnableForceSpringEffectOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectOutrun"), 0, settingsFilename);
+static int ForceSpringStrengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthOutrun"), 0, settingsFilename);
+static int SinePeriodOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodOutrun"), 0, settingsFilename);
+static int SineFadePeriodOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodOutrun"), 0, settingsFilename);
+static int SineStrengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthOutrun"), 0, settingsFilename);
+
+static int configMinForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePDrift"), 0, settingsFilename);
+static int configMaxForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePDrift"), 100, settingsFilename);
+static int configAlternativeMinForceLeftPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftPDrift"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftPDrift"), 100, settingsFilename);
+static int configAlternativeMinForceRightPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightPDrift"), 0, settingsFilename);
+static int configAlternativeMaxForceRightPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightPDrift"), 100, settingsFilename);
+static int configFeedbackLengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthPDrift"), 120, settingsFilename);
+static int EnableForceSpringEffectPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectPDrift"), 0, settingsFilename);
+static int ForceSpringStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthPDrift"), 0, settingsFilename);
+static int SinePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodPDrift"), 0, settingsFilename);
+static int SineFadePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodPDrift"), 0, settingsFilename);
+static int SineStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthPDrift"), 0, settingsFilename);
+
+static int configMinForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAfterBurner2"), 0, settingsFilename);
+static int configMaxForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAfterBurner2"), 100, settingsFilename);
+static int RumbleStrengthLeftMotorAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorAfterBurner2"), 0, settingsFilename);
+static int RumbleStrengthRightMotorAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorAfterBurner2"), 0, settingsFilename);
+
+static int configMinForceCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCisHeat"), 0, settingsFilename);
+static int configMaxForceCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCisHeat"), 100, settingsFilename);
+static int configAlternativeMinForceLeftCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCisHeat"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCisHeat"), 100, settingsFilename);
+static int configAlternativeMinForceRightCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCisHeat"), 0, settingsFilename);
+static int configAlternativeMaxForceRightCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCisHeat"), 100, settingsFilename);
+static int configFeedbackLengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCisHeat"), 120, settingsFilename);
+static int EnableForceSpringEffectCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCisHeat"), 0, settingsFilename);
+static int ForceSpringStrengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCisHeat"), 0, settingsFilename);
+static int SinePeriodCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodCisHeat"), 0, settingsFilename);
+static int SineFadePeriodCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodCisHeat"), 0, settingsFilename);
+static int SineStrengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCisHeat"), 0, settingsFilename);
+
+static int configMinForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar"), 0, settingsFilename);
+static int configMaxForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar"), 100, settingsFilename);
+static int configAlternativeMinForceLeftF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftF1GpStar"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftF1GpStar"), 100, settingsFilename);
+static int configAlternativeMinForceRightF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightF1GpStar"), 0, settingsFilename);
+static int configAlternativeMaxForceRightF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightF1GpStar"), 100, settingsFilename);
+static int configFeedbackLengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthF1GpStar"), 120, settingsFilename);
+static int EnableForceSpringEffectF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectF1GpStar"), 0, settingsFilename);
+static int ForceSpringStrengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthF1GpStar"), 0, settingsFilename);
+static int SinePeriodF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodF1GpStar"), 0, settingsFilename);
+static int SineFadePeriodF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodF1GpStar"), 0, settingsFilename);
+static int SineStrengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar"), 0, settingsFilename);
+
+static int configMinForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar2"), 0, settingsFilename);
+static int configMaxForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar2"), 100, settingsFilename);
+static int configAlternativeMinForceLeftF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftF1GpStar2"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftF1GpStar2"), 100, settingsFilename);
+static int configAlternativeMinForceRightF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightF1GpStar2"), 0, settingsFilename);
+static int configAlternativeMaxForceRightF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightF1GpStar2"), 100, settingsFilename);
+static int configFeedbackLengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthF1GpStar2"), 120, settingsFilename);
+static int EnableForceSpringEffectF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectF1GpStar2"), 0, settingsFilename);
+static int ForceSpringStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthF1GpStar2"), 0, settingsFilename);
+static int SinePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodF1GpStar2"), 0, settingsFilename);
+static int SineFadePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodF1GpStar2"), 0, settingsFilename);
+static int SineStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar2"), 0, settingsFilename);
 
 static bool init = false;
 static bool initSpring = false;
@@ -738,18 +1137,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		{
 			//Select code to run via rom name
 			if (romname == dayto2pe || romname == daytona2)
-			{
-				static int configMinForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDaytona2"), 0, settingsFilename);
-				static int configMaxForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDaytona2"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDaytona2"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDaytona2"), 100, settingsFilename);
-				static int configAlternativeMinForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDaytona2"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDaytona2"), 100, settingsFilename);
-				static int configFeedbackLengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDaytona2"), 120, settingsFilename);
-				static int PowerModeDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDaytona2"), 0, settingsFilename);
-				static int EnableForceSpringEffectDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytona2"), 0, settingsFilename);
-				static int ForceSpringStrengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytona2"), 0, settingsFilename);
-
+			{				
 				configMinForce = configMinForceDaytona2;
 				configMaxForce = configMaxForceDaytona2;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftDaytona2;
@@ -766,17 +1154,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == scud || romname == scuda || romname == scudj || romname == scudplus || romname == scudplusa)
 			{
-				static int configMinForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceScud"), 0, settingsFilename);
-				static int configMaxForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceScud"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftScud"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftScud"), 100, settingsFilename);
-				static int configAlternativeMinForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightScud"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightScud"), 100, settingsFilename);
-				static int configFeedbackLengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthScud"), 120, settingsFilename);
-				static int PowerModeScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeScud"), 0, settingsFilename);
-				static int EnableForceSpringEffectScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectScud"), 0, settingsFilename);
-				static int ForceSpringStrengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthScud"), 0, settingsFilename);
-
 				configMinForce = configMinForceScud;
 				configMaxForce = configMaxForceScud;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftScud;
@@ -793,17 +1170,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == lemans24)
 			{
-				static int configMinForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLeMans"), 0, settingsFilename);
-				static int configMaxForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLeMans"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftLeMans"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftLeMans"), 100, settingsFilename);
-				static int configAlternativeMinForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightLeMans"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightLeMans"), 100, settingsFilename);
-				static int configFeedbackLengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthLeMans"), 120, settingsFilename);
-				static int PowerModeLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeLeMans"), 0, settingsFilename);
-				static int EnableForceSpringEffectLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectLeMans"), 0, settingsFilename);
-				static int ForceSpringStrengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthLeMans"), 0, settingsFilename);
-
 				configMinForce = configMinForceLeMans;
 				configMaxForce = configMaxForceLeMans;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftLeMans;
@@ -820,17 +1186,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == dirtdvlsa || romname == dirtdvls || romname == dirtdvlsj || romname == dirtdvlsg)
 			{
-				static int configMinForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDirtDevils"), 0, settingsFilename);
-				static int configMaxForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDirtDevils"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDirtDevils"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDirtDevils"), 100, settingsFilename);
-				static int configAlternativeMinForceRightDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDirtDevils"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDirtDevils"), 100, settingsFilename);
-				static int configFeedbackLengthDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDirtDevils"), 120, settingsFilename);
-				static int PowerModeDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDirtDevils"), 0, settingsFilename);
-				static int EnableForceSpringEffectDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDirtDevils"), 0, settingsFilename);
-				static int ForceSpringStrengthDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDirtDevils"), 0, settingsFilename);
-
 				configMinForce = configMinForceDirtDevils;
 				configMaxForce = configMaxForceDirtDevils;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftDirtDevils;
@@ -847,17 +1202,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == srally2 || romname == srally2x || romname == srally2p || romname == srally2pa)
 			{
-				static int configMinForceSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSRally2"), 0, settingsFilename);
-				static int configMaxForceSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSRally2"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSRally2"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSRally2"), 100, settingsFilename);
-				static int configAlternativeMinForceRightSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSRally2"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSRally2"), 100, settingsFilename);
-				static int configFeedbackLengthSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSRally2"), 120, settingsFilename);
-				static int PowerModeSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSRally2"), 0, settingsFilename);
-				static int EnableForceSpringEffectSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSRally2"), 0, settingsFilename);
-				static int ForceSpringStrengthSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSRally2"), 0, settingsFilename);
-
 				configMinForce = configMinForceSRally2;
 				configMaxForce = configMaxForceSRally2;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftSRally2;
@@ -874,17 +1218,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == ecau || romname == eca || romname == ecap || romname == ecaj)
 			{
-				static int configMinForceECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceECA"), 0, settingsFilename);
-				static int configMaxForceECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceECA"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftECA"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftECA"), 100, settingsFilename);
-				static int configAlternativeMinForceRightECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightECA"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightECA"), 100, settingsFilename);
-				static int configFeedbackLengthECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthECA"), 120, settingsFilename);
-				static int PowerModeECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeECA"), 0, settingsFilename);
-				static int EnableForceSpringEffectECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectECA"), 0, settingsFilename);
-				static int ForceSpringStrengthECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthECA"), 0, settingsFilename);
-
 				configMinForce = configMinForceECA;
 				configMaxForce = configMaxForceECA;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftECA;
@@ -901,16 +1234,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == vr)
 			{
-				static int configMinForceVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceVirtuaRacing"), 0, settingsFilename);
-				static int configMaxForceVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceVirtuaRacing"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftVirtuaRacing"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftVirtuaRacing"), 100, settingsFilename);
-				static int configAlternativeMinForceRightVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightVirtuaRacing"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightVirtuaRacing"), 100, settingsFilename);
-				static int configFeedbackLengthVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthVirtuaRacing"), 120, settingsFilename);
-				static int EnableForceSpringEffectVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectVirtuaRacing"), 0, settingsFilename);
-				static int ForceSpringStrengthVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthVirtuaRacing"), 0, settingsFilename);
-
 				configMinForce = configMinForceVirtuaRacing;
 				configMaxForce = configMaxForceVirtuaRacing;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftVirtuaRacing;
@@ -926,17 +1249,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == sfrush || romname == sfrusha)
 			{
-				static int configMinForceSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRush"), 0, settingsFilename);
-				static int configMaxForceSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRush"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSFRush"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSFRush"), 100, settingsFilename);
-				static int configAlternativeMinForceRightSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSFRush"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSFRush"), 100, settingsFilename);
-				static int configFeedbackLengthSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSFRush"), 120, settingsFilename);
-				static int PowerModeSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRush"), 0, settingsFilename);
-				static int EnableForceSpringEffectSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRush"), 0, settingsFilename);
-				static int ForceSpringStrengthSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRush"), 0, settingsFilename);
-
 				configMinForce = configMinForceSFRush;
 				configMaxForce = configMaxForceSFRush;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftSFRush;
@@ -953,17 +1265,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == sfrushrk || romname == sfrushrkwo)
 			{
-				static int configMinForceSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRushRock"), 0, settingsFilename);
-				static int configMaxForceSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRushRock"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSFRushRock"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSFRushRock"), 100, settingsFilename);
-				static int configAlternativeMinForceRightSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSFRushRock"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSFRushRock"), 100, settingsFilename);
-				static int configFeedbackLengthSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSFRushRock"), 120, settingsFilename);
-				static int PowerModeSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRushRock"), 0, settingsFilename);
-				static int EnableForceSpringEffectSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRushRock"), 0, settingsFilename);
-				static int ForceSpringStrengthSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRushRock"), 0, settingsFilename);
-
 				configMinForce = configMinForceSFRushRock;
 				configMaxForce = configMaxForceSFRushRock;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftSFRushRock;
@@ -980,16 +1281,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == crusnwld || romname == crusnwld24 || romname == crusnwld23 || romname == crusnwld20 || romname == crusnwld19 || romname == crusnwld17 || romname == crusnwld13)
 			{
-				static int configMinForceCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCrusnWld"), 0, settingsFilename);
-				static int configMaxForceCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCrusnWld"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCrusnWld"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCrusnWld"), 100, settingsFilename);
-				static int configAlternativeMinForceRightCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCrusnWld"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCrusnWld"), 100, settingsFilename);
-				static int configFeedbackLengthCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCrusnWld"), 120, settingsFilename);
-				static int PowerModeCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCrusnWld"), 0, settingsFilename);
-				static int EnableForceSpringEffectCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCrusnWld"), 0, settingsFilename);
-				static int ForceSpringStrengthCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCrusnWld"), 0, settingsFilename);
+
 
 				configMinForce = configMinForceCrusnWld;
 				configMaxForce = configMaxForceCrusnWld;
@@ -1007,17 +1299,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == offroadc || romname == offroadc4 || romname == offroadc3 || romname == offroadc1)
 			{
-				static int configMinForceOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOffRoadC"), 0, settingsFilename);
-				static int configMaxForceOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOffRoadC"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftOffRoadC"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftOffRoadC"), 100, settingsFilename);
-				static int configAlternativeMinForceRightOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightOffRoadC"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightOffRoadC"), 100, settingsFilename);
-				static int configFeedbackLengthOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthOffRoadC"), 120, settingsFilename);
-				static int PowerModeOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeOffRoadC"), 0, settingsFilename);
-				static int EnableForceSpringEffectOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectOffRoadC"), 0, settingsFilename);
-				static int ForceSpringStrengthOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthOffRoadC"), 0, settingsFilename);
-
 				configMinForce = configMinForceOffRoadC;
 				configMaxForce = configMaxForceOffRoadC;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftOffRoadC;
@@ -1034,17 +1315,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == crusnusa || romname == crusnusa40 || romname == crusnusa21)
 			{
-				static int configMinForceCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCrusnUSA"), 0, settingsFilename);
-				static int configMaxForceCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCrusnUSA"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCrusnUSA"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCrusnUSA"), 100, settingsFilename);
-				static int configAlternativeMinForceRightCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCrusnUSA"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCrusnUSA"), 100, settingsFilename);
-				static int configFeedbackLengthCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCrusnUSA"), 120, settingsFilename);
-				static int PowerModeCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCrusnUSA"), 0, settingsFilename);
-				static int EnableForceSpringEffectCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCrusnUSA"), 0, settingsFilename);
-				static int ForceSpringStrengthCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCrusnUSA"), 0, settingsFilename);
-
 				configMinForce = configMinForceCrusnUSA;
 				configMaxForce = configMaxForceCrusnUSA;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftCrusnUSA;
@@ -1061,17 +1331,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == calspeed || romname == calspeeda || romname == calspeedb)
 			{
-				static int configMinForceCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCalSpeed"), 0, settingsFilename);
-				static int configMaxForceCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCalSpeed"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCalSpeed"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCalSpeed"), 100, settingsFilename);
-				static int configAlternativeMinForceRightCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCalSpeed"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCalSpeed"), 100, settingsFilename);
-				static int configFeedbackLengthCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCalSpeed"), 120, settingsFilename);
-				static int PowerModeCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCalSpeed"), 0, settingsFilename);
-				static int EnableForceSpringEffectCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCalSpeed"), 0, settingsFilename);
-				static int ForceSpringStrengthCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCalSpeed"), 0, settingsFilename);
-
 				configMinForce = configMinForceCalSpeed;
 				configMaxForce = configMaxForceCalSpeed;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftCalSpeed;
@@ -1088,17 +1347,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == sf2049 || romname == sf2049se || romname == sf2049te)
 			{
-				static int configMinForceSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRush2049"), 0, settingsFilename);
-				static int configMaxForceSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRush2049"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSFRush2049"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSFRush2049"), 100, settingsFilename);
-				static int configAlternativeMinForceRightSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSFRush2049"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSFRush2049"), 100, settingsFilename);
-				static int configFeedbackLengthSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSFRush2049"), 120, settingsFilename);
-				static int PowerModeSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRush2049"), 0, settingsFilename);
-				static int EnableForceSpringEffectSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRush2049"), 0, settingsFilename);
-				static int ForceSpringStrengthSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRush2049"), 0, settingsFilename);
-
 				configMinForce = configMinForceSFRush2049;
 				configMaxForce = configMaxForceSFRush2049;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftSFRush2049;
@@ -1119,17 +1367,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				romname == racedrivg || romname == racedriv1 || romname == racedriv2 || romname == racedriv3 || romname == racedriv4 || romname == racedriv || romname == racedrivcb4 || 
 				romname == racedrivcb || romname == racedrivcg4 || romname == racedrivcg || romname == racedrivc2 || romname == racedrivc4 || romname == racedrivc || romname == racedrivpan)
 			{
-				static int configMinForceHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceHardD"), 0, settingsFilename);
-				static int configMaxForceHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceHardD"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftHardD"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftHardD"), 100, settingsFilename);
-				static int configAlternativeMinForceRightHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightHardD"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightHardD"), 100, settingsFilename);
-				static int configFeedbackLengthHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthHardD"), 120, settingsFilename);
-				static int PowerModeHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeHardD"), 0, settingsFilename);
-				static int EnableForceSpringEffectHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectHardD"), 0, settingsFilename);
-				static int ForceSpringStrengthHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthHardD"), 0, settingsFilename);
-
 				configMinForce = configMinForceHardD;
 				configMaxForce = configMaxForceHardD;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftHardD;
@@ -1146,15 +1383,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == revx || romname == revxp5)
 			{
-				static int configMinForceRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRevX"), 0, settingsFilename);
-				static int configMaxForceRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRevX"), 100, settingsFilename);
-				static int configMinForceRevXDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRevXDevice2"), 0, settingsFilename);
-				static int configMaxForceRevXDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRevXDevice2"), 100, settingsFilename);
-				static int configMinForceRevXDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRevXDevice3"), 0, settingsFilename);
-				static int configMaxForceRevXDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRevXDevice3"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorRevX"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorRevX"), 0, settingsFilename);
-
 				configMinForce = configMinForceRevX;
 				configMaxForce = configMaxForceRevX;
 				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorRevX;
@@ -1169,13 +1397,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == zombraid || romname == zombraidpj || romname == zombraidp)
 			{
-				static int configMinForceZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceZombRaid"), 0, settingsFilename);
-				static int configMaxForceZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceZombRaid"), 100, settingsFilename);
-				static int configMinForceZombRaidDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceZombRaidDevice2"), 0, settingsFilename);
-				static int configMaxForceZombRaidDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceZombRaidDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorZombRaid"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorZombRaid = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorZombRaid"), 0, settingsFilename);
-
 				configMinForce = configMinForceZombRaid;
 				configMaxForce = configMaxForceZombRaid;
 				configMinForceDevice2 = configMinForceZombRaidDevice2;
@@ -1188,15 +1409,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == bbusters || romname == bbustersu || romname == bbustersua || romname == bbustersj)
 			{
-				static int configMinForceBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceBBusters"), 0, settingsFilename);
-				static int configMaxForceBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceBBusters"), 100, settingsFilename);
-				static int configMinForceBBustersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceBBustersDevice2"), 0, settingsFilename);
-				static int configMaxForceBBustersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceBBustersDevice2"), 100, settingsFilename);
-				static int configMinForceBBustersDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceBBustersDevice3"), 0, settingsFilename);
-				static int configMaxForceBBustersDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceBBustersDevice3"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorBBusters"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorBBusters = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorBBusters"), 0, settingsFilename);
-
 				configMinForce = configMinForceBBusters;
 				configMaxForce = configMaxForceBBusters;
 				configMinForceDevice2 = configMinForceBBustersDevice2;
@@ -1211,13 +1423,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == mechatt || romname == mechattu || romname == mechattu1 || romname == mechattj)
 			{
-				static int configMinForceMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceMechatt"), 0, settingsFilename);
-				static int configMaxForceMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceMechatt"), 100, settingsFilename);
-				static int configMinForceMechattDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceMechattDevice2"), 0, settingsFilename);
-				static int configMaxForceMechattDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceMechattDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorMechatt"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorMechatt = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorMechatt"), 0, settingsFilename);
-
 				configMinForce = configMinForceMechatt;
 				configMaxForce = configMaxForceMechatt;
 				configMinForceDevice2 = configMinForceMechattDevice2;
@@ -1230,13 +1435,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == tshoot)
 			{
-				static int configMinForceTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTShoot"), 0, settingsFilename);
-				static int configMaxForceTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTShoot"), 100, settingsFilename);
-				static int configMinForceTShootDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTShootDevice2"), 0, settingsFilename);
-				static int configMaxForceTShootDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTShootDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTShoot"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorTShoot = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTShoot"), 0, settingsFilename);
-
 				configMinForce = configMinForceTShoot;
 				configMaxForce = configMaxForceTShoot;
 				configMinForceDevice2 = configMinForceTShootDevice2;
@@ -1249,13 +1447,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == gunbustru || romname == gunbustr || romname == gunbustrj)
 			{
-				static int configMinForceGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGunBuster"), 0, settingsFilename);
-				static int configMaxForceGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGunBuster"), 100, settingsFilename);
-				static int configMinForceGunBusterDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGunBusterDevice2"), 0, settingsFilename);
-				static int configMaxForceGunBusterDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGunBusterDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorGunBuster"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorGunBuster = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorGunBuster"), 0, settingsFilename);
-
 				configMinForce = configMinForceGunBuster;
 				configMaxForce = configMaxForceGunBuster;
 				configMinForceDevice2 = configMinForceGunBusterDevice2;
@@ -1268,13 +1459,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == alien3 || romname == alien3u)
 			{
-				static int configMinForceAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAlien3"), 0, settingsFilename);
-				static int configMaxForceAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAlien3"), 100, settingsFilename);
-				static int configMinForceAlien3Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAlien3Device2"), 0, settingsFilename);
-				static int configMaxForceAlien3Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAlien3Device2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorAlien3"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorAlien3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorAlien3"), 0, settingsFilename);
-
 				configMinForce = configMinForceAlien3;
 				configMaxForce = configMaxForceAlien3;
 				configMinForceDevice2 = configMinForceAlien3Device2;
@@ -1287,13 +1471,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == ptblank2 || romname == ptblank2ua)
 			{
-				static int configMinForcePointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePointBlank2"), 0, settingsFilename);
-				static int configMaxForcePointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePointBlank2"), 100, settingsFilename);
-				static int configMinForcePointBlank2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePointBlank2Device2"), 0, settingsFilename);
-				static int configMaxForcePointBlank2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePointBlank2Device2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorPointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorPointBlank2"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorPointBlank2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorPointBlank2"), 0, settingsFilename);
-
 				configMinForce = configMinForcePointBlank2;
 				configMaxForce = configMaxForcePointBlank2;
 				configMinForceDevice2 = configMinForcePointBlank2Device2;
@@ -1306,13 +1483,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == ghlpanic)
 			{
-				static int configMinForceGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGhoulPanic"), 0, settingsFilename);
-				static int configMaxForceGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGhoulPanic"), 100, settingsFilename);
-				static int configMinForceGhoulPanicDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceGhoulPanicDevice2"), 0, settingsFilename);
-				static int configMaxForceGhoulPanicDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceGhoulPanicDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorGhoulPanic"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorGhoulPanic = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorGhoulPanic"), 0, settingsFilename);
-
 				configMinForce = configMinForceGhoulPanic;
 				configMaxForce = configMaxForceGhoulPanic;
 				configMinForceDevice2 = configMinForceGhoulPanicDevice2;
@@ -1325,13 +1495,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == spacegun || romname == spacegunu || romname == spacegunj)
 			{
-				static int configMinForceSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSpacegun"), 0, settingsFilename);
-				static int configMaxForceSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSpacegun"), 100, settingsFilename);
-				static int configMinForceSpacegunDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSpacegunDevice2"), 0, settingsFilename);
-				static int configMaxForceSpacegunDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSpacegunDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorSpacegun"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorSpacegun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorSpacegun"), 0, settingsFilename);
-
 				configMinForce = configMinForceSpacegun;
 				configMaxForce = configMaxForceSpacegun;
 				configMinForceDevice2 = configMinForceSpacegunDevice2;
@@ -1344,13 +1507,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == term2 || romname == term2la1 || romname == term2la2 || romname == term2la3 || romname == term2lg1)
 			{
-				static int configMinForceTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTerm2"), 0, settingsFilename);
-				static int configMaxForceTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTerm2"), 100, settingsFilename);
-				static int configMinForceTerm2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTerm2Device2"), 0, settingsFilename);
-				static int configMaxForceTerm2Device2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTerm2Device2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTerm2"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorTerm2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTerm2"), 0, settingsFilename);
-
 				configMinForce = configMinForceTerm2;
 				configMaxForce = configMaxForceTerm2;
 				configMinForceDevice2 = configMinForceTerm2Device2;
@@ -1363,13 +1519,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == rchase || romname == rchasej)
 			{
-				static int configMinForceRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRchase"), 0, settingsFilename);
-				static int configMaxForceRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRchase"), 100, settingsFilename);
-				static int configMinForceRchaseDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRchaseDevice2"), 0, settingsFilename);
-				static int configMaxForceRchaseDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRchaseDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorRchase"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorRchase = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorRchase"), 0, settingsFilename);
-
 				configMinForce = configMinForceRchase;
 				configMaxForce = configMaxForceRchase;
 				configMinForceDevice2 = configMinForceRchaseDevice2;
@@ -1382,15 +1531,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == lghost || romname == lghostd || romname == lghostu || romname == lghostud || romname == lghostj)
 			{
-				static int configMinForceLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLGhost"), 0, settingsFilename);
-				static int configMaxForceLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLGhost"), 100, settingsFilename);
-				static int configMinForceLGhostDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLGhostDevice2"), 0, settingsFilename);
-				static int configMaxForceLGhostDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLGhostDevice2"), 100, settingsFilename);
-				static int configMinForceLGhostDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLGhostDevice3"), 0, settingsFilename);
-				static int configMaxForceLGhostDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLGhostDevice3"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorLGhost"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorLGhost = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorLGhost"), 0, settingsFilename);
-
 				configMinForce = configMinForceLGhost;
 				configMaxForce = configMaxForceLGhost;
 				configMinForceDevice2 = configMinForceLGhostDevice2;
@@ -1405,11 +1545,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == timecris || romname == timecrisa)
 			{
-				static int configMinForceTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTimeCris"), 0, settingsFilename);
-				static int configMaxForceTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTimeCris"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTimeCris"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorTimeCris = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTimeCris"), 0, settingsFilename);
-
 				configMinForce = configMinForceTimeCris;
 				configMaxForce = configMaxForceTimeCris;
 				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorTimeCris;
@@ -1420,13 +1555,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == othunder || romname == othundero || romname == othunderuo || romname == othunderu || romname == othunderj)
 			{
-				static int configMinForceOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOThunder"), 0, settingsFilename);
-				static int configMaxForceOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOThunder"), 100, settingsFilename);
-				static int configMinForceOThunderDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOThunderDevice2"), 0, settingsFilename);
-				static int configMaxForceOThunderDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOThunderDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorOThunder"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorOThunder = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorOThunder"), 0, settingsFilename);
-
 				configMinForce = configMinForceOThunder;
 				configMaxForce = configMaxForceOThunder;
 				configMinForceDevice2 = configMinForceOThunderDevice2;
@@ -1439,13 +1567,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == opwolf || romname == opwolfp || romname == opwolfj || romname == opwolfu || romname == opwolfa)
 			{
-				static int configMinForceOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOpWolf"), 0, settingsFilename);
-				static int configMaxForceOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOpWolf"), 100, settingsFilename);
-				static int configMinForceOpWolfDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOpWolfDevice2"), 0, settingsFilename);
-				static int configMaxForceOpWolfDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOpWolfDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorOpWolf"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorOpWolf = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorOpWolf"), 0, settingsFilename);
-
 				configMinForce = configMinForceOpWolf;
 				configMaxForce = configMaxForceOpWolf;
 				configMinForceDevice2 = configMinForceOpWolfDevice2;
@@ -1458,13 +1579,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == undrfire || romname == undrfireu || romname == undrfirej)
 			{
-				static int configMinForceUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceUFire"), 0, settingsFilename);
-				static int configMaxForceUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceUFire"), 100, settingsFilename);
-				static int configMinForceUFireDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceUFireDevice2"), 0, settingsFilename);
-				static int configMaxForceUFireDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceUFireDevice2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorUFire"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorUFire = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorUFire"), 0, settingsFilename);
-
 				configMinForce = configMinForceUFire;
 				configMaxForce = configMaxForceUFire;
 				configMinForceDevice2 = configMinForceUFireDevice2;
@@ -1477,25 +1591,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == orunners || romname == orunnersu || romname == orunnersj)
 			{
-				static int configMinForceORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceORunners"), 0, settingsFilename);
-				static int configMaxForceORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceORunners"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftORunners"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftORunners"), 100, settingsFilename);
-				static int configAlternativeMinForceRightORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightORunners"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightORunners"), 100, settingsFilename);
-				static int configMinForceORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceORunnersDevice2"), 0, settingsFilename);
-				static int configMaxForceORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceORunnersDevice2"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftORunnersDevice2"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftORunnersDevice2"), 100, settingsFilename);
-				static int configAlternativeMinForceRightORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightORunnersDevice2"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightORunnersDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightORunnersDevice2"), 100, settingsFilename);
-				static int configFeedbackLengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthORunners"), 120, settingsFilename);
-				static int EnableForceSpringEffectORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectORunners"), 0, settingsFilename);
-				static int ForceSpringStrengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthORunners"), 0, settingsFilename);
-				static int SinePeriodORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodORunners"), 0, settingsFilename);
-				static int SineFadePeriodORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodORunners"), 0, settingsFilename);
-				static int SineStrengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthORunners"), 0, settingsFilename);
-
 				configMinForce = configMinForceORunners;
 				configMaxForce = configMaxForceORunners;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftORunners;
@@ -1520,19 +1615,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == toutrun || romname == toutrund || romname == toutrunj || romname == toutrunjd)
 			{
-				static int configMinForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTOutrun"), 0, settingsFilename);
-				static int configMaxForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTOutrun"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftTOutrun"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftTOutrun"), 100, settingsFilename);
-				static int configAlternativeMinForceRightTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightTOutrun"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightTOutrun"), 100, settingsFilename);
-				static int configFeedbackLengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthTOutrun"), 120, settingsFilename);
-				static int EnableForceSpringEffectTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectTOutrun"), 0, settingsFilename);
-				static int ForceSpringStrengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthTOutrun"), 0, settingsFilename);
-				static int SinePeriodTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodTOutrun"), 0, settingsFilename);
-				static int SineFadePeriodTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodTOutrun"), 0, settingsFilename);
-				static int SineStrengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthTOutrun"), 0, settingsFilename);
-
 				configMinForce = configMinForceTOutrun;
 				configMaxForce = configMaxForceTOutrun;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftTOutrun;
@@ -1551,19 +1633,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == cbombers || romname == cbombersj || romname == cbombersp)
 			{
-				static int configMinForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCBombers"), 0, settingsFilename);
-				static int configMaxForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCBombers"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCBombers"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCBombers"), 100, settingsFilename);
-				static int configAlternativeMinForceRightCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCBombers"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCBombers"), 100, settingsFilename);
-				static int configFeedbackLengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCBombers"), 120, settingsFilename);
-				static int EnableForceSpringEffectCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCBombers"), 0, settingsFilename);
-				static int ForceSpringStrengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCBombers"), 0, settingsFilename);
-				static int SinePeriodCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodCBombers"), 0, settingsFilename);
-				static int SineFadePeriodCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodCBombers"), 0, settingsFilename);
-				static int SineStrengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCBombers"), 0, settingsFilename);
-
 				configMinForce = configMinForceCBombers;
 				configMaxForce = configMaxForceCBombers;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftCBombers;
@@ -1582,19 +1651,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == outrunra || romname == outrun || romname == outruneh)
 			{
-				static int configMinForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOutrun"), 0, settingsFilename);
-				static int configMaxForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOutrun"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftOutrun"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftOutrun"), 100, settingsFilename);
-				static int configAlternativeMinForceRightOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightOutrun"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightOutrun"), 100, settingsFilename);
-				static int configFeedbackLengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthOutrun"), 120, settingsFilename);
-				static int EnableForceSpringEffectOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectOutrun"), 0, settingsFilename);
-				static int ForceSpringStrengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthOutrun"), 0, settingsFilename);
-				static int SinePeriodOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodOutrun"), 0, settingsFilename);
-				static int SineFadePeriodOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodOutrun"), 0, settingsFilename);
-				static int SineStrengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthOutrun"), 0, settingsFilename);
-
 				configMinForce = configMinForceOutrun;
 				configMaxForce = configMaxForceOutrun;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftOutrun;
@@ -1613,19 +1669,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == pdrift || romname == pdrifta || romname == pdrifte || romname == pdriftj || romname == pdriftl)
 			{
-				static int configMinForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePDrift"), 0, settingsFilename);
-				static int configMaxForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePDrift"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftPDrift"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftPDrift"), 100, settingsFilename);
-				static int configAlternativeMinForceRightPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightPDrift"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightPDrift"), 100, settingsFilename);
-				static int configFeedbackLengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthPDrift"), 120, settingsFilename);
-				static int EnableForceSpringEffectPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectPDrift"), 0, settingsFilename);
-				static int ForceSpringStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthPDrift"), 0, settingsFilename);
-				static int SinePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodPDrift"), 0, settingsFilename);
-				static int SineFadePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodPDrift"), 0, settingsFilename);
-				static int SineStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthPDrift"), 0, settingsFilename);
-
 				configMinForce = configMinForcePDrift;
 				configMaxForce = configMaxForcePDrift;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftPDrift;
@@ -1644,11 +1687,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == aburner2 || romname == aburner2g)
 			{
-				static int configMinForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAfterBurner2"), 0, settingsFilename);
-				static int configMaxForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAfterBurner2"), 100, settingsFilename);
-				static int RumbleStrengthLeftMotorAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorAfterBurner2"), 0, settingsFilename);
-				static int RumbleStrengthRightMotorAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorAfterBurner2"), 0, settingsFilename);
-
 				configMinForce = configMinForceAfterBurner2;
 				configMaxForce = configMaxForceAfterBurner2;
 				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorAfterBurner2;
@@ -1659,19 +1697,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == cischeat)
 			{
-				static int configMinForceCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCisHeat"), 0, settingsFilename);
-				static int configMaxForceCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCisHeat"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftCisHeat"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftCisHeat"), 100, settingsFilename);
-				static int configAlternativeMinForceRightCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightCisHeat"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightCisHeat"), 100, settingsFilename);
-				static int configFeedbackLengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthCisHeat"), 120, settingsFilename);
-				static int EnableForceSpringEffectCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCisHeat"), 0, settingsFilename);
-				static int ForceSpringStrengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCisHeat"), 0, settingsFilename);
-				static int SinePeriodCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodCisHeat"), 0, settingsFilename);
-				static int SineFadePeriodCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodCisHeat"), 0, settingsFilename);
-				static int SineStrengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCisHeat"), 0, settingsFilename);
-
 				configMinForce = configMinForceCisHeat;
 				configMaxForce = configMaxForceCisHeat;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftCisHeat;
@@ -1690,19 +1715,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == f1gpstar || romname == f1gpstaro)
 			{
-				static int configMinForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar"), 0, settingsFilename);
-				static int configMaxForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftF1GpStar"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftF1GpStar"), 100, settingsFilename);
-				static int configAlternativeMinForceRightF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightF1GpStar"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightF1GpStar"), 100, settingsFilename);
-				static int configFeedbackLengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthF1GpStar"), 120, settingsFilename);
-				static int EnableForceSpringEffectF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectF1GpStar"), 0, settingsFilename);
-				static int ForceSpringStrengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthF1GpStar"), 0, settingsFilename);
-				static int SinePeriodF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodF1GpStar"), 0, settingsFilename);
-				static int SineFadePeriodF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodF1GpStar"), 0, settingsFilename);
-				static int SineStrengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar"), 0, settingsFilename);
-
 				configMinForce = configMinForceF1GpStar;
 				configMaxForce = configMaxForceF1GpStar;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftF1GpStar;
@@ -1721,19 +1733,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 			if (romname == f1gpstr2)
 			{
-				static int configMinForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar2"), 0, settingsFilename);
-				static int configMaxForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar2"), 100, settingsFilename);
-				static int configAlternativeMinForceLeftF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftF1GpStar2"), 0, settingsFilename);
-				static int configAlternativeMaxForceLeftF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftF1GpStar2"), 100, settingsFilename);
-				static int configAlternativeMinForceRightF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightF1GpStar2"), 0, settingsFilename);
-				static int configAlternativeMaxForceRightF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightF1GpStar2"), 100, settingsFilename);
-				static int configFeedbackLengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthF1GpStar2"), 120, settingsFilename);
-				static int EnableForceSpringEffectF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectF1GpStar2"), 0, settingsFilename);
-				static int ForceSpringStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthF1GpStar2"), 0, settingsFilename);
-				static int SinePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodF1GpStar2"), 0, settingsFilename);
-				static int SineFadePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodF1GpStar2"), 0, settingsFilename);
-				static int SineStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar2"), 0, settingsFilename);
-
 				configMinForce = configMinForceF1GpStar2;
 				configMaxForce = configMaxForceF1GpStar2;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftF1GpStar2;
