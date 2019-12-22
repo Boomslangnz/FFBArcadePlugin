@@ -894,6 +894,13 @@ int configAlternativeMinForceLeftDevice3 = GetPrivateProfileInt(TEXT("Settings")
 int configAlternativeMaxForceLeftDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDevice3"), 100, settingsFilename);
 int configAlternativeMinForceRightDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDevice3"), 0, settingsFilename);
 int configAlternativeMaxForceRightDevice3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDevice3"), 100, settingsFilename);
+int SinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriod"), 0, settingsFilename);
+int SineFadePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriod"), 0, settingsFilename);
+int SineStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrength"), 0, settingsFilename);
+int RumbleStrengthLeftMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotor"), 0, settingsFilename);
+int RumbleStrengthRightMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotor"), 0, settingsFilename);
+int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
+int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
 
 char chainedDLL[256];
 
