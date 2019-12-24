@@ -2046,36 +2046,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			}
 		}
 
-		if (RunningFFB == SanFranActive) //San Francisco Rush
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-		}
-
 		if (RunningFFB == SanFranRockActive) //San Francisco Rush The Rock
 		{
 			if (Emulator == MAME)
