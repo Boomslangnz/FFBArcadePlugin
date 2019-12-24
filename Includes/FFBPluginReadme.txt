@@ -37,7 +37,7 @@ For more advanced information read below
 
 -PowerMode is to raise the strength of low values to increase strength feel on certain games
 
--Some games such as Road Fighters 3D have input support. Go to Input section and enable Input Support and 
+-Some games such as Road Fighters 3D have input support. Go to Input section and enable Input Support and set up axis/buttons
 
 
 *** OUTPUT SUPPORT ***
