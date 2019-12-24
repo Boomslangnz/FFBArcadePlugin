@@ -69,6 +69,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/HOTD4.h"
 #include "Game Files/Rambo.h"
 #include "Game Files/Transformers.h"
+#include "Game Files/H2Overdrive.h"
 
 // typedefs 
 typedef unsigned char U8;
@@ -955,6 +956,7 @@ const int KO_Drive = 39;
 const int Transformers_ = 40;
 const int Golden_Gun = 41;
 const int Dirty_Drivin = 42;
+const int H2_Overdrive = 43;
 
 HINSTANCE Get_hInstance()
 {
@@ -2081,6 +2083,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case Dirty_Drivin:
 		game = new DirtyDrivin;
+		break;
+	case H2_Overdrive:
+		game = new H2Overdrive;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
