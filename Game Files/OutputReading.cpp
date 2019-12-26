@@ -468,6 +468,16 @@ static int SinePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Si
 static int SineFadePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodF1GpStar2"), 0, settingsFilename);
 static int SineStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar2"), 0, settingsFilename);
 
+static int configMinForceHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceHyperDrive"), 0, settingsFilename);
+static int configMaxForceHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceHyperDrive"), 100, settingsFilename);
+static int configAlternativeMinForceLeftHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftHyperDrive"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftHyperDrive"), 100, settingsFilename);
+static int configAlternativeMinForceRightHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightHyperDrive"), 0, settingsFilename);
+static int configAlternativeMaxForceRightHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightHyperDrive"), 100, settingsFilename);
+static int configFeedbackLengthHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthHyperDrive"), 120, settingsFilename);
+static int EnableForceSpringEffectHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectHyperDrive"), 0, settingsFilename);
+static int ForceSpringStrengthHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthHyperDrive"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -967,6 +977,7 @@ std::string undrfirej("undrfirej");
 std::string cbombers("cbombers");
 std::string cbombersj("cbombersj");
 std::string cbombersp("cbombersp");
+std::string hyprdriv("hyprdriv");
 
 //Our string to load game from
 std::string Daytona2Active("Daytona2Active");
@@ -987,6 +998,7 @@ std::string RacingActive2("RacingActive2");
 std::string AfterburnerActive("AfterburnerActive");
 std::string OutrunActive("OutrunActive");
 std::string PDriftActive("PDriftActive");
+std::string HyperDriveActive("HyperDriveActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -1747,6 +1759,21 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SineStrength = SineStrengthF1GpStar2;
 
 				RunningFFB = "RacingActive2";
+			}
+
+			if (romname == hyprdriv)
+			{
+				configMinForce = configMinForceHyperDrive;
+				configMaxForce = configMaxForceHyperDrive;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftHyperDrive;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftHyperDrive;
+				configAlternativeMinForceRight = configAlternativeMinForceRightHyperDrive;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightHyperDrive;
+				configFeedbackLength = configFeedbackLengthHyperDrive;
+				EnableForceSpringEffect = EnableForceSpringEffectHyperDrive;
+				ForceSpringStrength = ForceSpringStrengthHyperDrive;
+				
+				RunningFFB = "HyperDriveActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2686,6 +2713,36 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					double percentForce = (stateFFB) / 127.0;
 					double percentLength = 100;
 					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
+		}
+
+		if (RunningFFB == HyperDriveActive) //Hyper Drive
+		{
+			if (Emulator == MAME)
+			{
+				if (name == wheel)
+				{
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(newstateFFB);
+					helpers->log((char*)ffs.c_str());
+
+					stateFFB = newstateFFB;
+				}
+
+				if ((stateFFB > 0x80) && (stateFFB < 0x100))
+				{
+					double percentForce = (256 - stateFFB) / 127.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+				{
+					double percentForce = (stateFFB) / 127.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
