@@ -16,11 +16,18 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 void DirtyDrivin::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
+	float ffstiffness = helpers->ReadFloat32(0x886EC0, false);
 	float ff = helpers->ReadFloat32(0x886EC4, false);
 
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
+
+	//if (ffstiffness > 0)
+	//{
+		//double percentForce = ffstiffness / 1.25;
+		//triggers->Spring(percentForce);
+	//}
 
 	if (ff > 0)
 	{

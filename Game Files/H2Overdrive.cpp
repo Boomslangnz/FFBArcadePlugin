@@ -16,11 +16,18 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 void H2Overdrive::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
+	float ffstiffness = helpers->ReadFloat32(0x392C54, true);
 	float ff = helpers->ReadFloat32(0x392C58, true);
 
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
+
+	if (ffstiffness > 0)
+	{
+		double percentForce = ffstiffness / 1.25;
+		triggers->Spring(percentForce);
+	}
 
 	if (ff > 0)
 	{

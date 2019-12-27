@@ -115,6 +115,7 @@ extremely generous.
 -GTI Club Supermini Festa
 -Gun Buster
 -House of the dead 4
+-Hyperdrive
 -Indy 500
 -Initial D Zero
 -Initial D 4
@@ -166,6 +167,7 @@ extremely generous.
 -Turbo Outrun
 -Turkey Shoot
 -Under Fire
+-Vapor TRX
 -Virtua Racing
 -Wacky Races
 -Wangan Midnight Maximum Tune 5
