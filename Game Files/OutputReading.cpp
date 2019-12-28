@@ -996,22 +996,15 @@ std::string Daytona2Active("Daytona2Active");
 std::string DirtDevilsActive("DirtDevilsActive");
 std::string Srally2Active("Srally2Active");
 std::string VirtuaRacingActive("VirtuaRacingActive");
-std::string SanFranActive("SanFranActive");
-std::string SanFranRockActive("SanFranRockActive");
-std::string CrusnWldActive("CrusnWldActive");
-std::string OffroadChallengeActive("OffroadChallengeActive");
-std::string CrusnUSAActive("CrusnUSAActive");
-std::string CalSpeedActive("CalSpeedActive");
-std::string SanFran2049Active("SanFran2049Active");
 std::string HardDrivinActive("HardDrivinActive"); 
 std::string LightGunActive("LightGunActive");
+std::string RacingFullValueActive1("RacingFullValueActive1");
+std::string RacingFullValueActive2("RacingFullValueActive2");
 std::string RacingActive1("RacingActive1");
 std::string RacingActive2("RacingActive2");
 std::string AfterburnerActive("AfterburnerActive");
 std::string OutrunActive("OutrunActive");
 std::string PDriftActive("PDriftActive");
-std::string HyperDriveActive("HyperDriveActive");
-std::string VaporTrxActive("VaporTrxActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -1285,7 +1278,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectSFRush;
 				ForceSpringStrength = ForceSpringStrengthSFRush;
 
-				RunningFFB = "SanFranActive";
+				RunningFFB = "RacingFullValueActive2";
 			}
 
 			if (romname == sfrushrk || romname == sfrushrkwo)
@@ -1301,7 +1294,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectSFRushRock;
 				ForceSpringStrength = ForceSpringStrengthSFRushRock;
 
-				RunningFFB = "SanFranRockActive";
+				RunningFFB = "RacingFullValueActive2";
 			}
 
 			if (romname == crusnwld || romname == crusnwld24 || romname == crusnwld23 || romname == crusnwld20 || romname == crusnwld19 || romname == crusnwld17 || romname == crusnwld13)
@@ -1319,7 +1312,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectCrusnWld;
 				ForceSpringStrength = ForceSpringStrengthCrusnWld;
 
-				RunningFFB = "CrusnWldActive";
+				RunningFFB = "RacingFullValueActive2";
 			}
 
 			if (romname == offroadc || romname == offroadc4 || romname == offroadc3 || romname == offroadc1)
@@ -1335,7 +1328,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectOffRoadC;
 				ForceSpringStrength = ForceSpringStrengthOffRoadC;
 
-				RunningFFB = "OffroadChallengeActive";
+				RunningFFB = "RacingFullValueActive2";
 			}
 
 			if (romname == crusnusa || romname == crusnusa40 || romname == crusnusa21)
@@ -1351,7 +1344,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectCrusnUSA;
 				ForceSpringStrength = ForceSpringStrengthCrusnUSA;
 
-				RunningFFB = "CrusnUSAActive";
+				RunningFFB = "RacingFullValueActive2";
 			}
 
 			if (romname == calspeed || romname == calspeeda || romname == calspeedb)
@@ -1367,7 +1360,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectCalSpeed;
 				ForceSpringStrength = ForceSpringStrengthCalSpeed;
 
-				RunningFFB = "CalSpeedActive";
+				RunningFFB = "RacingFullValueActive1";
 			}
 
 			if (romname == sf2049 || romname == sf2049se || romname == sf2049te)
@@ -1383,7 +1376,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectSFRush2049;
 				ForceSpringStrength = ForceSpringStrengthSFRush2049;
 
-				RunningFFB = "SanFran2049Active";
+				RunningFFB = "RacingFullValueActive1";
 			}
 
 			if (romname == harddriv1 || romname == harddrivb6 || romname == harddrivb || romname == harddrivg4 || romname == harddrivg || romname == harddrivj6 || romname == harddrivj ||
@@ -1786,7 +1779,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectHyperDrive;
 				ForceSpringStrength = ForceSpringStrengthHyperDrive;
 				
-				RunningFFB = "HyperDriveActive";
+				RunningFFB = "RacingFullValueActive1";
 			}
 
 			if (romname == vaportrx || romname == vaportrp)
@@ -1801,7 +1794,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				EnableForceSpringEffect = EnableForceSpringEffectVaporTrx;
 				ForceSpringStrength = ForceSpringStrengthVaporTrx;
 				
-				RunningFFB = "VaporTrxActive";
+				RunningFFB = "RacingFullValueActive1";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2071,7 +2064,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 			}			
 		}
 
-		if (RunningFFB == SanFranActive) //San Francisco Rush
+		if (RunningFFB == RacingFullValueActive1) //Mame games using all values 
 		{
 			if (Emulator == MAME)
 			{
@@ -2084,24 +2077,31 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					stateFFB = newstateFFB;
 				}
 
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
+				UINT8 static oldff = 0;
+				UINT8 newff = stateFFB;
+
+				if (oldff != newff)
 				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					if ((stateFFB > 0x80) && (stateFFB < 0x100))
+					{
+						double percentForce = (256 - stateFFB) / 127.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+					else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+					{
+						double percentForce = (stateFFB) / 127.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
 				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
+				oldff = newff;
 			}
 		}
 
-		if (RunningFFB == SanFranRockActive) //San Francisco Rush The Rock
+		if (RunningFFB == RacingFullValueActive2) //Mame games using all values (reverse direction to above)
 		{
 			if (Emulator == MAME)
 			{
@@ -2114,140 +2114,27 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					stateFFB = newstateFFB;
 				}
 
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-		}
+				UINT8 static oldff = 0;
+				UINT8 newff = stateFFB;
 
-		if (RunningFFB == CrusnWldActive) //Cruis'n World
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
+				if (oldff != newff)
 				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
+					if ((stateFFB > 0x80) && (stateFFB < 0x100))
+					{
+						double percentForce = (256 - stateFFB) / 127.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+					else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+					{
+						double percentForce = (stateFFB) / 127.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
 				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-		}
-
-		if (RunningFFB == OffroadChallengeActive) //Off Road Challenge
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-		}
-
-		if (RunningFFB == CrusnUSAActive) //Crusn USA
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}
-		}
-
-		if (RunningFFB == CalSpeedActive) //California Speed
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
+				oldff = newff;
 			}
 		}
 
@@ -2712,96 +2599,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 						triggers->Sine(0, 0, 0);
 						triggers->Rumble(0, 0, 0);
 					}
-				}
-			}
-		}
-
-		if (RunningFFB == SanFran2049Active) //San Fran 2049
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-		}
-
-		if (RunningFFB == HyperDriveActive) //Hyper Drive
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-		}
-
-		if (RunningFFB == VaporTrxActive) //VaporTrx
-		{
-			if (Emulator == MAME)
-			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
 		}
