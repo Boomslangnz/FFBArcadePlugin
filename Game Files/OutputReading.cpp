@@ -74,8 +74,6 @@ static int configAlternativeMinForceRightDaytona2 = GetPrivateProfileInt(TEXT("S
 static int configAlternativeMaxForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDaytona2"), 100, settingsFilename);
 static int configFeedbackLengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDaytona2"), 120, settingsFilename);
 static int PowerModeDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDaytona2"), 0, settingsFilename);
-static int EnableForceSpringEffectDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytona2"), 0, settingsFilename);
-static int ForceSpringStrengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytona2"), 0, settingsFilename);
 
 static int configMinForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceScud"), 0, settingsFilename);
 static int configMaxForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceScud"), 100, settingsFilename);
@@ -85,8 +83,6 @@ static int configAlternativeMinForceRightScud = GetPrivateProfileInt(TEXT("Setti
 static int configAlternativeMaxForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightScud"), 100, settingsFilename);
 static int configFeedbackLengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthScud"), 120, settingsFilename);
 static int PowerModeScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeScud"), 0, settingsFilename);
-static int EnableForceSpringEffectScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectScud"), 0, settingsFilename);
-static int ForceSpringStrengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthScud"), 0, settingsFilename);
 
 static int configMinForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLeMans"), 0, settingsFilename);
 static int configMaxForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLeMans"), 100, settingsFilename);
@@ -96,7 +92,6 @@ static int configAlternativeMinForceRightLeMans = GetPrivateProfileInt(TEXT("Set
 static int configAlternativeMaxForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightLeMans"), 100, settingsFilename);
 static int configFeedbackLengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthLeMans"), 120, settingsFilename);
 static int PowerModeLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeLeMans"), 0, settingsFilename);
-static int EnableForceSpringEffectLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectLeMans"), 0, settingsFilename);
 
 static int ForceSpringStrengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthLeMans"), 0, settingsFilename);
 static int configMinForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDirtDevils"), 0, settingsFilename);
@@ -790,6 +785,41 @@ int __stdcall mame_output(const char* name, int value)
 	return 1;
 }
 
+static bool __stdcall ExitHook(UINT uExitCode)
+{
+	TerminateProcess(GetCurrentProcess(), 0);
+	return 0;
+}
+
+static bool Hook(void* toHook, void* ourFunct, int len) {
+
+	if (len < 5) {
+		return false;
+	}
+
+	DWORD curProtection;
+	VirtualProtect(toHook, len, PAGE_EXECUTE_READWRITE, &curProtection);
+
+	memset(toHook, 0x90, len);
+
+#ifdef _WIN64
+	DWORD64 relativeAddress = ((DWORD64)ourFunct - (DWORD64)toHook) - 5;
+
+	*(DWORD64*)toHook = 0xE9;
+	*(DWORD64*)((DWORD64)toHook + 1) = relativeAddress;
+#else
+	DWORD relativeAddress = ((DWORD)ourFunct - (DWORD)toHook) - 5;
+
+	*(DWORD*)toHook = 0xE9;
+	*(DWORD*)((DWORD)toHook + 1) = relativeAddress;
+#endif
+
+	DWORD temp;
+	VirtualProtect(toHook, len, curProtection, &temp);
+
+	return true;
+}
+
 static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 {
 	const DWORD TITLE_SIZE = 1024;
@@ -823,6 +853,13 @@ DWORD WINAPI ThreadForForcedSpring(LPVOID lpParam)
 		ForceSpringEffect = true;
 	}	
 
+	return 0;
+}
+
+DWORD WINAPI ThreadForDaytonaStartEffect(LPVOID lpParam)
+{
+	Sleep(1300);
+	Effect2 = false;
 	return 0;
 }
 
@@ -1045,6 +1082,21 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	{
 		CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
 
+		HMODULE hMod = GetModuleHandleA("KERNEL32.dll");
+		if (hMod)
+		{
+			int hookLength = 6;
+#ifdef _WIN64
+			DWORD64 hookAddress = (DWORD64)GetProcAddress(GetModuleHandle(L"KERNEL32.dll"), "ExitProcess");
+#else
+			DWORD hookAddress = (DWORD)GetProcAddress(GetModuleHandle(L"KERNEL32.dll"), "ExitProcess");
+#endif
+			if (hookAddress)
+			{
+				Hook((void*)hookAddress, ExitHook, hookLength);
+			}
+		}
+
 		wchar_t* deviceGUIDString2 = new wchar_t[256];
 		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
 		char joystick_guid[256];
@@ -1164,8 +1216,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				configAlternativeMaxForceRight = configAlternativeMaxForceRightDaytona2;
 				configFeedbackLength = configFeedbackLengthDaytona2;
 				PowerMode = PowerModeDaytona2;					
-				EnableForceSpringEffect = EnableForceSpringEffectDaytona2;
-				ForceSpringStrength = ForceSpringStrengthDaytona2;
 
 				RunningFFB = "Daytona2Active";
 			}
@@ -1180,8 +1230,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				configAlternativeMaxForceRight = configAlternativeMaxForceRightScud;
 				configFeedbackLength = configFeedbackLengthScud;
 				PowerMode = PowerModeScud;
-				EnableForceSpringEffect = EnableForceSpringEffectScud;
-				ForceSpringStrength = ForceSpringStrengthScud;
 
 				RunningFFB = "Daytona2Active";
 			}
@@ -1196,8 +1244,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				configAlternativeMaxForceRight = configAlternativeMaxForceRightLeMans;
 				configFeedbackLength = configFeedbackLengthLeMans;
 				PowerMode = PowerModeLeMans;
-				EnableForceSpringEffect = EnableForceSpringEffectLeMans;
-				ForceSpringStrength = ForceSpringStrengthLeMans;
 
 				RunningFFB = "Daytona2Active";
 			}
@@ -1834,12 +1880,15 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	
 	if (RomGameName && EmuName)
 	{
-		if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race,Le Mans 24
+		if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race & LeMans
 		{
 			if (Emulator == Supermodel)
 			{
+				ForceSpringEffect = false;
+
 				if (name == RawDrive)
 				{
+
 					helpers->log("got value: ");
 					std::string ffs = std::to_string(newstateFFB);
 					helpers->log((char*)ffs.c_str());
@@ -1847,7 +1896,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					stateFFB = newstateFFB;
 				}
 
-				if ((stateFFB > 0x09) && (stateFFB < 0x10))
+				if ((stateFFB > 0x09) && (stateFFB < 0x20))
 				{
 					//Spring
 					double percentForce = (stateFFB - 9) / 16.0;
@@ -1873,8 +1922,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				{
 					//Uncentering
 					double percentForce = (stateFFB - 63) / 16.0;
-					triggers->Rumble(percentForce, percentForce, 100);
-					triggers->Sine(40, 0, percentForce);
+					triggers->Spring(0);							
 				}
 
 				if ((stateFFB > 0x4F) && (stateFFB < 0x60))
@@ -1894,6 +1942,40 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 
+				UINT8 static oldff = 0;
+				UINT8 newff = stateFFB;
+
+				if (stateFFB == 0x9C)
+				{
+					if (oldff != newff)
+					{
+						Effect1 = true;
+					}
+				}
+
+				if (Effect1)
+				{
+					triggers->Sine(100, 0, 0.8);
+					Effect1 = false;
+				}
+
+				if (stateFFB == 0x05)
+				{
+					triggers->Sine(40, 0, 0.5);
+					triggers->Friction(0.5);
+				}
+
+				if (stateFFB == 0x75)
+				{
+					Effect2 = true;
+					CreateThread(NULL, 0, ThreadForDaytonaStartEffect, NULL, 0, NULL);
+				}
+
+				if (Effect2)
+				{
+					triggers->Sine(70, 60, 0.5);
+				}
+
 				//Test Menu
 				if (stateFFB == 0x80)
 				{
@@ -1911,6 +1993,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					triggers->Rumble(0, 0.5, 100);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0.5);
 				}
+				oldff = newff;
 			}
 		}
 
