@@ -14,6 +14,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "ChaseHQ2.h"
 
+static bool removecel = false;
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int RemoveCelShadedFilter = GetPrivateProfileInt(TEXT("Settings"), TEXT("RemoveCelShadedFilter"), 0, settingsFilename);
+
 int ttx2chasehq2(int ffRaw) {
 	switch (ffRaw) {
 		// moving right, from weakest to strongest (30 => 16).
@@ -85,7 +89,7 @@ int ttx2chasehq2(int ffRaw) {
 	}
 }
 
-void ChaseHQ2::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+void ChaseHQ2::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	int ff = 0;
 	{
@@ -101,9 +105,24 @@ void ChaseHQ2::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		ff = ttx2chasehq2(ffRaw);
 	}
 
+	if (RemoveCelShadedFilter == 1)
+	{
+		if (!removecel)
+		{
+			helpers->WriteNop(0x31FFA, true);
+			helpers->WriteNop(0x31FFB, true);
+			helpers->WriteNop(0x31FFC, true);
+			helpers->WriteNop(0x31FFD, true);
+			helpers->WriteNop(0x31FFE, true);
+			helpers->WriteNop(0x31FFF, true);
+			removecel = true;
+		}
+		helpers->WriteByte(0x130CB30, 0x00, true); // Remove Cel Shaded Filter
+	}
+
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
-	helpers->log((char *)ffs.c_str());
+	helpers->log((char*)ffs.c_str());
 
 	if (ff > 15)
 	{
