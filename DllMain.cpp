@@ -1675,8 +1675,8 @@ void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault)
 
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	tempEffect.condition.left_sat[0] = (short)(coeff); //Needed for Logitech G920 wheel
-	tempEffect.condition.right_sat[0] = (short)(coeff); //Needed for Logitech G920 wheel
+	tempEffect.condition.left_sat[0] = (short)(coeff * 2.0); //Needed for Logitech G920 wheel
+	tempEffect.condition.right_sat[0] = (short)(coeff * 2.0); //Needed for Logitech G920 wheel
 	tempEffect.condition.center[0] = 0;
 
 	SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
@@ -1707,8 +1707,8 @@ void TriggerSpringEffectInfinite(double strength)
 
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	tempEffect.condition.left_sat[0] = (short)(coeff) * 10; //Needed for Logitech G920 wheel
-	tempEffect.condition.right_sat[0] = (short)(coeff) * 10; //Needed for Logitech G920 wheel
+	tempEffect.condition.left_sat[0] = (short)(coeff * 2.0); //Needed for Logitech G920 wheel
+	tempEffect.condition.right_sat[0] = (short)(coeff * 2.0); //Needed for Logitech G920 wheel
 	tempEffect.condition.center[0] = 0;
 
 	SDL_HapticUpdateEffect(haptic, effects.effect_spring_id, &tempEffect);
@@ -2910,6 +2910,8 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			hlp.log("hooked FFBPluginGUI.exe, aborting");
 			break;
 		}
+
+		SetErrorMode(SEM_FAILCRITICALERRORS | SEM_NOGPFAULTERRORBOX);
 
 		hlp.log("creating ffb loop thread...");
 		CreateFFBLoopThread();

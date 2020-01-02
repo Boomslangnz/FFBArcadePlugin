@@ -785,41 +785,6 @@ int __stdcall mame_output(const char* name, int value)
 	return 1;
 }
 
-static bool __stdcall ExitHook(UINT uExitCode)
-{
-	TerminateProcess(GetCurrentProcess(), 0);
-	return 0;
-}
-
-static bool Hook(void* toHook, void* ourFunct, int len) {
-
-	if (len < 5) {
-		return false;
-	}
-
-	DWORD curProtection;
-	VirtualProtect(toHook, len, PAGE_EXECUTE_READWRITE, &curProtection);
-
-	memset(toHook, 0x90, len);
-
-#ifdef _WIN64
-	DWORD64 relativeAddress = ((DWORD64)ourFunct - (DWORD64)toHook) - 5;
-
-	*(DWORD64*)toHook = 0xE9;
-	*(DWORD64*)((DWORD64)toHook + 1) = relativeAddress;
-#else
-	DWORD relativeAddress = ((DWORD)ourFunct - (DWORD)toHook) - 5;
-
-	*(DWORD*)toHook = 0xE9;
-	*(DWORD*)((DWORD)toHook + 1) = relativeAddress;
-#endif
-
-	DWORD temp;
-	VirtualProtect(toHook, len, curProtection, &temp);
-
-	return true;
-}
-
 static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 {
 	const DWORD TITLE_SIZE = 1024;
@@ -1077,25 +1042,10 @@ std::string MAME("MAME");
 std::string Supermodel("Supermodel");
 
 void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
-
+	
 	if (!init)
 	{
 		CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
-
-		HMODULE hMod = GetModuleHandleA("KERNEL32.dll");
-		if (hMod)
-		{
-			int hookLength = 6;
-#ifdef _WIN64
-			DWORD64 hookAddress = (DWORD64)GetProcAddress(GetModuleHandle(L"KERNEL32.dll"), "ExitProcess");
-#else
-			DWORD hookAddress = (DWORD)GetProcAddress(GetModuleHandle(L"KERNEL32.dll"), "ExitProcess");
-#endif
-			if (hookAddress)
-			{
-				Hook((void*)hookAddress, ExitHook, hookLength);
-			}
-		}
 
 		wchar_t* deviceGUIDString2 = new wchar_t[256];
 		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
@@ -1888,7 +1838,6 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 				if (name == RawDrive)
 				{
-
 					helpers->log("got value: ");
 					std::string ffs = std::to_string(newstateFFB);
 					helpers->log((char*)ffs.c_str());
@@ -2160,28 +2109,21 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					stateFFB = newstateFFB;
 				}
 
-				UINT8 static oldff = 0;
-				UINT8 newff = stateFFB;
-
-				if (oldff != newff)
+				if ((stateFFB > 0x80) && (stateFFB < 0x100))
 				{
-					if ((stateFFB > 0x80) && (stateFFB < 0x100))
-					{
-						double percentForce = (256 - stateFFB) / 127.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
-					else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-					{
-						double percentForce = (stateFFB) / 127.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
+					double percentForce = (256 - stateFFB) / 127.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
-				oldff = newff;
-			}
+				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+				{
+					double percentForce = (stateFFB) / 127.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}			
 		}
 
 		if (RunningFFB == RacingFullValueActive2) //Mame games using all values (reverse direction to above)
@@ -2197,28 +2139,21 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					stateFFB = newstateFFB;
 				}
 
-				UINT8 static oldff = 0;
-				UINT8 newff = stateFFB;
-
-				if (oldff != newff)
+				if ((stateFFB > 0x80) && (stateFFB < 0x100))
 				{
-					if ((stateFFB > 0x80) && (stateFFB < 0x100))
-					{
-						double percentForce = (256 - stateFFB) / 127.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-					{
-						double percentForce = (stateFFB) / 127.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
+					double percentForce = (256 - stateFFB) / 127.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
-				oldff = newff;
-			}
+				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+				{
+					double percentForce = (stateFFB) / 127.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}		
 		}
 
 		if (RunningFFB == LightGunActive) //LightGun Games
