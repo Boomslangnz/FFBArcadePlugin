@@ -18,8 +18,14 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
 static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
+static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
 
 void InitialD0::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
+	{
+		ExitProcess(0);
+	}
 
 	UINT8 ff = helpers->ReadByte(0x168317F, true);
 	UINT8 static oldff = 0;

@@ -2934,6 +2934,24 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		hlp.log((char*)processName.c_str());
 		keepRunning = false;
 
+		if (haptic > 0)
+		{
+			SDL_HapticStopAll(haptic);
+			SDL_HapticClose(haptic); // release the haptic device / clean-up.
+		}
+
+		if (haptic2 > 0)
+		{
+			SDL_HapticStopAll(haptic2);
+			SDL_HapticClose(haptic2);
+		}
+
+		if (haptic3 > 0)
+		{
+			SDL_HapticStopAll(haptic3);
+			SDL_HapticClose(haptic3);
+		}
+
 		if (gl_hOriginalDll)
 		{
 			FreeLibrary(gl_hOriginalDll);
@@ -2964,7 +2982,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			if (EnableRumble == 1)
 			{
 				SDL_JoystickRumble(GameController, 0, 0, 0);
-			}			
+			}
 		}
 
 		if (GameController2)
@@ -2974,28 +2992,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 				SDL_JoystickRumble(GameController2, 0, 0, 0);
 			}
 		}
-
-		// this doesn't seem to really work...hmm...if i ALT+F4, then the program quits and haptic is still set.
-		// try setting GameId to HEAVY (-5 or -6..can't remember) and then force quit. Wheel will stay heavy :/.
-		if (haptic)
-		{
-			SDL_HapticStopEffect(haptic, effects.effect_constant_id);
-			SDL_HapticStopEffect(haptic, effects.effect_friction_id);
-			SDL_HapticStopEffect(haptic, effects.effect_leftright_id);
-			SDL_HapticStopEffect(haptic, effects.effect_sine_id);
-			SDL_HapticStopEffect(haptic, effects.effect_spring_id);
-			SDL_HapticStopEffect(haptic, effects.effect_vibration_id);
-			SDL_HapticStopAll(haptic);
-			SDL_HapticClose(haptic); // release the haptic device / clean-up.
-		}
-
-		if (haptic2)
-		{
-			SDL_HapticStopEffect(haptic2, effects.effect_sine_id_device2);
-			SDL_HapticStopAll(haptic2);
-			SDL_HapticClose(haptic2);
-		}
-
 		break;
 	}
 

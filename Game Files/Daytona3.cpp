@@ -125,7 +125,7 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		{
 			//SendMessage(hWnd, WM_CLOSE, NULL, NULL);
 			system("taskkill /f /im InpWrapper.exe");
-			TerminateProcess(GetCurrentProcess(), 0);
+			ExitProcess(0);
 		}
 	}
 

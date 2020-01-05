@@ -62,7 +62,7 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 	{
 		if (hWnd > NULL)
 		{
-			TerminateProcess(GetCurrentProcess(), 0);
+			ExitProcess(0);
 		}
 	}
 	if (!init)

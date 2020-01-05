@@ -27,7 +27,7 @@ static bool init = false;
 
 static bool __stdcall ExitHook(UINT uExitCode)
 {
-	TerminateProcess(GetCurrentProcess(), 0);
+	ExitProcess(0);
 	return 0;
 }
 
