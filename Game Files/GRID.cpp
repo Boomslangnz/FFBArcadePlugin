@@ -17,20 +17,12 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
+static bool gearshift = false;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 0, settingsFilename);
 static int GearChangeStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearChangeStrength"), 20, settingsFilename);
 static int GearChangeLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearChangeLength"), 200, settingsFilename);
-
-static int GearChangeThread(void* ptr)
-{
-	myHelpers->log("gear change");
-	double percentForce = GearChangeStrength / 100.0;
-	myTriggers->Sine(GearChangeLength, 0, percentForce);
-	myTriggers->Rumble(0, percentForce, 150);
-	return 0;
-}
 
 void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -47,7 +39,7 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	UINT8 Wheels = helpers->ReadByte(PanelBase3 + 0xB4, false);
 	UINT8 Skids = helpers->ReadByte(PanelBase3 + 0x100, false);
 	UINT8 AI = helpers->ReadByte(PanelBase3 + 0x3D4, false);
-	UINT8 gear = helpers->ReadByte(0x346A5C6C, false);
+	UINT8 gear = helpers->ReadByte(0x414F7898, false);
 	INT_PTR speedoBase = helpers->ReadIntPtr(0x28C008, true);
 	INT_PTR speedoBase1 = helpers->ReadIntPtr(speedoBase + 0xD0, false);
 	INT_PTR speedoBase2 = helpers->ReadIntPtr(speedoBase1 + 0x460, false);
@@ -63,7 +55,16 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 
 	if ((oldgear != newgear) && (speedo > 0))
 	{
-		SDL_Thread* gearChangeThread = SDL_CreateThread(GearChangeThread, "GearChangeThread", (void*)NULL);
+		gearshift = true;
+	}
+
+	if (gearshift)
+	{
+		myHelpers->log("gear change");
+		double percentForce = GearChangeStrength / 100.0;
+		myTriggers->Sine(GearChangeLength, 0, percentForce);
+		myTriggers->Rumble(0, percentForce, 150);
+		gearshift = false;
 	}
 
 	if (Wheels > 0)
