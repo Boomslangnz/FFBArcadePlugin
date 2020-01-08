@@ -122,6 +122,7 @@
     <ClCompile Include="Game Files\GoldenGun.cpp" />
     <ClCompile Include="Game Files\DirtyDrivin.cpp" />
     <ClCompile Include="Game Files\H2Overdrive.cpp" />
+    <ClCompile Include="Game Files\SnoCross.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -261,6 +262,9 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\H2Overdrive.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\SnoCross.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

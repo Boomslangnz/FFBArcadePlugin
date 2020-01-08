@@ -49,6 +49,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/OutRun2Real.h"
 #include "Game Files/SegaRacingClassic.h"
 #include "Game Files/SegaRally3.h"
+#include "Game Files/SnoCross.h"
 #include "Game Files/OldMame.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
@@ -957,6 +958,7 @@ const int Transformers_ = 40;
 const int Golden_Gun = 41;
 const int Dirty_Drivin = 42;
 const int H2_Overdrive = 43;
+const int Sno_Cross = 44;
 
 HINSTANCE Get_hInstance()
 {
@@ -2086,6 +2088,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case H2_Overdrive:
 		game = new H2Overdrive;
+		break;
+	case Sno_Cross:
+		game = new SnoCross;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

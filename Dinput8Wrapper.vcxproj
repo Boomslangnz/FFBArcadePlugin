@@ -84,6 +84,7 @@
     <ClCompile Include="Game Files\SegaRacingClassic.cpp" />
     <ClCompile Include="Game Files\FordRacing.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX.cpp" />
+    <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
@@ -117,6 +118,7 @@
     <ClInclude Include="Game Files\SegaRacingClassic.h" />
     <ClInclude Include="Game Files\FordRacing.h" />
     <ClInclude Include="Game Files\MarioKartGPDX.h" />
+    <ClInclude Include="Game Files\SnoCross.h" />
     <ClInclude Include="Game Files\SonicSegaAllStarsRacing.h" />
     <ClInclude Include="Game Files\TestGame.h" />
     <ClInclude Include="Game Files\Transformers.h" />
