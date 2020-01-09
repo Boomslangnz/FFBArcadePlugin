@@ -17,23 +17,29 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 void SnoCross::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	float ff = helpers->ReadFloat32(0x99AB6C, false);
+	static float oldff = 0;
+	float newff = ff;
 
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
 
-	if (ff > 0)
+	if (oldff != newff)
 	{
-		double percentForce = ff / 1.24;
-		double percentLength = 100;
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		if (ff > 0)
+		{
+			double percentForce = ff / 1.2401;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+		else if (ff < 0)
+		{
+			double percentForce = -ff / 1.2401;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
 	}
-	else if (ff < 0)
-	{
-		double percentForce = -ff / 1.24;
-		double percentLength = 100;
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-	}
+	oldff = newff;
 }
