@@ -29,6 +29,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 // include all game header files here.
 #include "Game Files/TestGame.h"
 #include "Game Files/AliensExtermination.h"
+#include "Game Files/Batman.h"
+#include "Game Files/BG4JP.h"
 #include "Game Files/ChaseHQ2.h"
 #include "Game Files/Daytona3.h"
 #include "Game Files/DirtyDrivin.h"
@@ -53,7 +55,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/OldMame.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
-#include "Game Files/BG4JP.h"
 #include "Game Files/Machstorm.h"
 #include "Game Files/AfterburnerClimax.h"
 #include "Game Files/PokkenTournament.h"
@@ -959,6 +960,7 @@ const int Golden_Gun = 41;
 const int Dirty_Drivin = 42;
 const int H2_Overdrive = 43;
 const int Sno_Cross = 44;
+const int Bat_man = 45;
 
 HINSTANCE Get_hInstance()
 {
@@ -2091,6 +2093,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case Sno_Cross:
 		game = new SnoCross;
+		break;
+	case Bat_man:
+		game = new Batman;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

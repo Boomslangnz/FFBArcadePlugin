@@ -22,8 +22,10 @@ static int DaytonaAIMultiplayerHack = GetPrivateProfileInt(TEXT("Settings"), TEX
 static int DaytonaForcePanoramicAttract = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaForcePanoramicAttract"), 0, settingsFilename);
 static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
 static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
+static int EnableOutputs = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableOutputs"), 0, settingsFilename);
 
 static bool init = false;
+static bool outputinit = false;
 
 static bool __stdcall ExitHook(UINT uExitCode)
 {
@@ -81,6 +83,15 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 	if (EnableForceSpringEffect == 1)
 	{
 		triggers->Springi(ForceSpringStrength / 100.0);
+	}
+
+	if (!outputinit)
+	{
+		if (EnableOutputs == 1)
+		{
+			HMODULE lib = LoadLibraryA("OutputBlaster.dll");
+		}
+		outputinit = true;
 	}
 
 	HMODULE hMod = GetModuleHandleA("KERNEL32.dll");
