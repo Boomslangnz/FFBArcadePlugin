@@ -91,6 +91,7 @@ extremely generous.
 -Alien Extermination
 -Afterburner II
 -Afterburner Climax
+-Batman (2013)
 -Beast Busters
 -Battle Gear 4 Tuned (Japan version v2.07)
 -California Speed
@@ -160,6 +161,7 @@ extremely generous.
 -Sega Rally 2
 -Sega Rally 3
 -Super GT 24h
+-SnoCross
 -Sonic & Sega All Stars Racing
 -Space gun
 -Terminator 2
