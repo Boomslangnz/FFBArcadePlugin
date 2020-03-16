@@ -366,6 +366,8 @@ static int ForceSpringStrengthORunners = GetPrivateProfileInt(TEXT("Settings"), 
 static int SinePeriodORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodORunners"), 0, settingsFilename);
 static int SineFadePeriodORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodORunners"), 0, settingsFilename);
 static int SineStrengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthORunners"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorORunners"), 0, settingsFilename);
+static int RumbleStrengthRightMotorORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorORunners"), 0, settingsFilename);
 
 static int configMinForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTOutrun"), 0, settingsFilename);
 static int configMaxForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTOutrun"), 100, settingsFilename);
@@ -379,6 +381,8 @@ static int ForceSpringStrengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), T
 static int SinePeriodTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodTOutrun"), 0, settingsFilename);
 static int SineFadePeriodTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodTOutrun"), 0, settingsFilename);
 static int SineStrengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthTOutrun"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTOutrun"), 0, settingsFilename);
+static int RumbleStrengthRightMotorTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTOutrun"), 0, settingsFilename);
 
 static int configMinForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCBombers"), 0, settingsFilename);
 static int configMaxForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCBombers"), 100, settingsFilename);
@@ -392,6 +396,8 @@ static int ForceSpringStrengthCBombers = GetPrivateProfileInt(TEXT("Settings"), 
 static int SinePeriodCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodCBombers"), 0, settingsFilename);
 static int SineFadePeriodCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodCBombers"), 0, settingsFilename);
 static int SineStrengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCBombers"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorCBombers"), 0, settingsFilename);
+static int RumbleStrengthRightMotorCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorCBombers"), 0, settingsFilename);
 
 static int configMinForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOutrun"), 0, settingsFilename);
 static int configMaxForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOutrun"), 100, settingsFilename);
@@ -405,6 +411,8 @@ static int ForceSpringStrengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TE
 static int SinePeriodOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodOutrun"), 0, settingsFilename);
 static int SineFadePeriodOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodOutrun"), 0, settingsFilename);
 static int SineStrengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthOutrun"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorOutrun"), 0, settingsFilename);
+static int RumbleStrengthRightMotorOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorOutrun"), 0, settingsFilename);
 
 static int configMinForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePDrift"), 0, settingsFilename);
 static int configMaxForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePDrift"), 100, settingsFilename);
@@ -418,6 +426,8 @@ static int ForceSpringStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TE
 static int SinePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodPDrift"), 0, settingsFilename);
 static int SineFadePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodPDrift"), 0, settingsFilename);
 static int SineStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthPDrift"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorPDrift"), 0, settingsFilename);
+static int RumbleStrengthRightMotorPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorPDrift"), 0, settingsFilename);
 
 static int configMinForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAfterBurner2"), 0, settingsFilename);
 static int configMaxForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAfterBurner2"), 100, settingsFilename);
@@ -436,6 +446,8 @@ static int ForceSpringStrengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), T
 static int SinePeriodCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodCisHeat"), 0, settingsFilename);
 static int SineFadePeriodCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodCisHeat"), 0, settingsFilename);
 static int SineStrengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCisHeat"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorCisHeat"), 0, settingsFilename);
+static int RumbleStrengthRightMotorCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorCisHeat"), 0, settingsFilename);
 
 static int configMinForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar"), 0, settingsFilename);
 static int configMaxForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar"), 100, settingsFilename);
@@ -449,6 +461,8 @@ static int ForceSpringStrengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), 
 static int SinePeriodF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodF1GpStar"), 0, settingsFilename);
 static int SineFadePeriodF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodF1GpStar"), 0, settingsFilename);
 static int SineStrengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorF1GpStar"), 0, settingsFilename);
+static int RumbleStrengthRightMotorF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorF1GpStar"), 0, settingsFilename);
 
 static int configMinForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar2"), 0, settingsFilename);
 static int configMaxForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar2"), 100, settingsFilename);
@@ -462,6 +476,8 @@ static int ForceSpringStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"),
 static int SinePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodF1GpStar2"), 0, settingsFilename);
 static int SineFadePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodF1GpStar2"), 0, settingsFilename);
 static int SineStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar2"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorF1GpStar2"), 0, settingsFilename);
+static int RumbleStrengthRightMotorF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorF1GpStar2"), 0, settingsFilename);
 
 static int configMinForceHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceHyperDrive"), 0, settingsFilename);
 static int configMaxForceHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceHyperDrive"), 100, settingsFilename);
@@ -1623,6 +1639,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodORunners;
 				SineFadePeriod = SineFadePeriodORunners;
 				SineStrength = SineStrengthORunners;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorORunners;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorORunners;
 
 				RunningFFB = "RacingActive1";
 			}
@@ -1641,6 +1659,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodTOutrun;
 				SineFadePeriod = SineFadePeriodTOutrun;
 				SineStrength = SineStrengthTOutrun;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorTOutrun;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorTOutrun;
 
 				RunningFFB = "RacingActive1";
 			}
@@ -1659,6 +1679,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodCBombers;
 				SineFadePeriod = SineFadePeriodCBombers;
 				SineStrength = SineStrengthCBombers;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorCBombers;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorCBombers;
 
 				RunningFFB = "RacingActive1";
 			}
@@ -1677,6 +1699,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodOutrun;
 				SineFadePeriod = SineFadePeriodOutrun;
 				SineStrength = SineStrengthOutrun;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorOutrun;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorOutrun;
 
 				RunningFFB = "OutrunActive";
 			}
@@ -1695,6 +1719,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodPDrift;
 				SineFadePeriod = SineFadePeriodPDrift;
 				SineStrength = SineStrengthPDrift;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorPDrift;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorPDrift;
 
 				RunningFFB = "PDriftActive";
 			}
@@ -1723,6 +1749,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodCisHeat;
 				SineFadePeriod = SineFadePeriodCisHeat;
 				SineStrength = SineStrengthCisHeat;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorCisHeat;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorCisHeat;
 
 				RunningFFB = "RacingActive2";
 			}
@@ -1741,6 +1769,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodF1GpStar;
 				SineFadePeriod = SineFadePeriodF1GpStar;
 				SineStrength = SineStrengthF1GpStar;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorF1GpStar;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorF1GpStar;
 
 				RunningFFB = "RacingActive2";
 			}
@@ -1759,6 +1789,8 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				SinePeriod = SinePeriodF1GpStar2;
 				SineFadePeriod = SineFadePeriodF1GpStar2;
 				SineStrength = SineStrengthF1GpStar2;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorF1GpStar2;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorF1GpStar2;
 
 				RunningFFB = "RacingActive2";
 			}
