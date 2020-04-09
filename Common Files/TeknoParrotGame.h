@@ -7,9 +7,11 @@ class TeknoParrotGame : public Game {
 	HANDLE hSection;
 	LPVOID secData;
 	int ffbOffset = 0;
+	int ffbOffset2 = 0;
 
 protected:
 	int GetTeknoParrotFFB();
+	int GetTeknoParrotFFB2();
 	TeknoParrotGame();
 
 public:

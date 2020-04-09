@@ -12,9 +12,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #pragma once
-#include "../Common Files/Game.h"
-class PokkenTournament : public Game {
+#include "../Common Files/TeknoParrotGame.h"
 
+class PokkenTournament : public TeknoParrotGame {
 public:
-	void FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers);
+	PokkenTournament() : TeknoParrotGame() { }
+	void FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers);
 };
