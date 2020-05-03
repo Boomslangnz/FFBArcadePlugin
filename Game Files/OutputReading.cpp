@@ -512,6 +512,7 @@ static bool DontSineUntilRaceStart = false;
 static bool HardDrivinFrame = false;
 static bool Motion = false;
 static bool MotionFalse = false;
+static bool StartEffectOnce = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -1948,8 +1949,19 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 				if (stateFFB == 0x75)
 				{
-					Effect2 = true;
-					CreateThread(NULL, 0, ThreadForDaytonaStartEffect, NULL, 0, NULL);
+					if (!StartEffectOnce)
+					{
+						StartEffectOnce = true;
+						Effect2 = true;
+						CreateThread(NULL, 0, ThreadForDaytonaStartEffect, NULL, 0, NULL);
+					}
+				}
+				else
+				{
+					if (StartEffectOnce)
+					{
+						StartEffectOnce = false;
+					}
 				}
 
 				if (Effect2)
