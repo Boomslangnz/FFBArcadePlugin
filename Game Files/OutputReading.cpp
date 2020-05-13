@@ -647,7 +647,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
 	mame_updatestate_ptr = mame_updatestate;
 	mame_output_ptr = mame_output;
 
-	dll_init(1, L"Test", mame_start_ptr, mame_stop_ptr, mame_copydata_ptr, mame_updatestate_ptr, mame_output_ptr);
+	dll_init(0, L"Test", mame_start_ptr, mame_stop_ptr, mame_copydata_ptr, mame_updatestate_ptr, mame_output_ptr);
 
 	while (GetMessage(&msg, NULL, 0, 0))
 	{
