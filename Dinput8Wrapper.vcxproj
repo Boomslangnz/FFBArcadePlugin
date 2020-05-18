@@ -40,6 +40,7 @@
     <ClInclude Include="Game Files\InitialD5.h" />
     <ClInclude Include="Game Files\InitialD4Japan.h" />
     <ClInclude Include="Game Files\M2Emulator.h" />
+    <ClInclude Include="Game Files\R-Tuned.h" />
     <ClInclude Include="Game Files\Rambo.h" />
     <ClInclude Include="Game Files\RoadFighters3D.h" />
     <ClInclude Include="Game Files\LGI.h" />
@@ -81,6 +82,7 @@
     <ClCompile Include="Game Files\OldMame.cpp" />
     <ClCompile Include="Game Files\OutRun2Fake.cpp" />
     <ClCompile Include="Game Files\PokkenTournament.cpp" />
+    <ClCompile Include="Game Files\R-Tuned.cpp" />
     <ClCompile Include="Game Files\Rambo.cpp" />
     <ClCompile Include="Game Files\SegaRally3.cpp" />
     <ClCompile Include="Game Files\SegaRacingClassic.cpp" />

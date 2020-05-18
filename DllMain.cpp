@@ -70,6 +70,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/KODrive.h"
 #include "Game Files/HOTD4.h"
 #include "Game Files/Rambo.h"
+#include "Game Files/R-Tuned.h"
 #include "Game Files/Transformers.h"
 #include "Game Files/H2Overdrive.h"
 
@@ -961,6 +962,7 @@ const int Dirty_Drivin = 42;
 const int H2_Overdrive = 43;
 const int Sno_Cross = 44;
 const int Bat_man = 45;
+const int R_Tuned = 46;
 
 HINSTANCE Get_hInstance()
 {
@@ -2096,6 +2098,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case Bat_man:
 		game = new Batman;
+		break;
+	case R_Tuned:
+		game = new RTuned;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
