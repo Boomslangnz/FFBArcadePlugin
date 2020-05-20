@@ -31,11 +31,10 @@ void RTuned::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigger
 	{
 		UINT8 LetsEnableFFB = helpers->ReadByte(0x8519C58, /* isRelativeOffset */ false);
 
-		if (LetsEnableFFB == 0x0C)
+		if (LetsEnableFFB == 0x03)
 		{
-			helpers->WriteIntPtr(0x8519C60, 0xFFFFFFFF, false);
-			helpers->WriteIntPtr(0x8519C64, 0xFFFFFFFF, false);
 			EnableFFB = true;
+			helpers->WriteByte(0x8519C58, 0x07, false);	
 		}
 	}
 
