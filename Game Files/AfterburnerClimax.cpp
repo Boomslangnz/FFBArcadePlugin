@@ -27,16 +27,18 @@ void AfterburnerClimax::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 	int Rumble1Length = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumble1Length"), 0, settingsFilename);
 	int Rumble2Length = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumble2Length"), 0, settingsFilename);
 	
-	if (ff == 64)
-		{
-			double percentForce = ((Rumble1Strength) / 100.0);
-			double percentLength = (Rumble1Length);
-			triggers->Rumble(percentForce, percentForce, percentLength);
-		}
-	else if (ff == 80)
-		{
-			double percentForce = ((Rumble2Strength) / 100.0);
-			double percentLength = (Rumble2Length);
-			triggers->Rumble(percentForce, percentForce, percentLength);
-		}
+	if (ff == 0x40)
+	{
+		double percentForce = ((Rumble1Strength) / 100.0);
+		double percentLength = (Rumble1Length);
+		triggers->Rumble(percentForce, percentForce, percentLength);
+	}
+		
+	if (ff == 0x50)
+	{
+		double percentForce = ((Rumble2Strength) / 100.0);
+		double percentLength = (Rumble2Length);
+		triggers->Rumble(percentForce, percentForce, percentLength);
+	}
+		
 }

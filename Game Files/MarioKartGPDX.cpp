@@ -35,7 +35,6 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 
 	// Large Shake when hitting walls, other karts or getting hit by items
 	if ((4194308 == ff1) & (ff10 == 1))
-
 	{
 		double percentForce = 1.0;
 		double percentForce1 = 3.5;
@@ -45,7 +44,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	}
 
 	// small friction when driving on dirt while moving
-	else  if ((3 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
+	if ((3 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = (0.3);
 		double percentLength = (100);
@@ -53,7 +52,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		triggers->Friction(percentForce);
 	}
 	//	Small constant when hitting bumps
-	else  if ((10 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
+	if ((10 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = (0.2);
 		double percentLength = (50);
@@ -62,8 +61,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 	// Wheel rumbles while driving on grass
-	else if ((4 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
-
+	if ((4 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = 0.2;
 		double percentLength = (50);
@@ -71,14 +69,13 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		triggers->Sine(50, 50, percentForce);
 	}
 	//wheel hard to turn while driving through water
-	else  if ((7 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
+	if ((7 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = (0.65);
 		triggers->Friction(percentForce);
 	}
 	//Wheel rumbles lightly when driving over tiles
-	else if ((12 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
-
+	if ((12 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = 0.1;
 		double percentForce1 = 0.2;
@@ -87,8 +84,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		triggers->Sine(70, 70, percentForce);
 	}
 	//Wheel rumbles lightly when driving over sand
-	else if ((14 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
-
+	if ((14 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = 0.1;
 		double percentForce1 = 0.2;
@@ -97,8 +93,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		triggers->Sine(70, 70, percentForce);
 	}
 	//Wheel rumbles lightly when driving over rough part of track
-	else if ((11 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
-
+	if ((11 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = 0.1;
 		double percentForce1 = 0.2;
@@ -107,8 +102,7 @@ void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 		triggers->Sine(40, 50, percentForce);
 	}
 	//Wheel rumbles moderately when driving over wooden bridges
-	else if ((8 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
-
+	if ((8 == ff3) & (ff10 == 1) & (ff5 == 1) & (ff11 == 1065353216))
 	{
 		double percentForce = 0.4;
 		double percentLength = (100);

@@ -2086,21 +2086,21 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					triggers->Spring(percentForce);
 				}
 
-				else if ((stateFFB == 0x20) || (stateFFB == 0x28))
+				if ((stateFFB == 0x20) || (stateFFB == 0x28))
 				{
 					//Clutch
 					double percentForce = 0.4;
 					triggers->Friction(percentForce);
 				}
 
-				else if ((stateFFB > 0x2F) && (stateFFB < 0x40))
+				if ((stateFFB > 0x2F) && (stateFFB < 0x40))
 				{
 					//Centering
 					double percentForce = (stateFFB - 47) / 11.0;
 					triggers->Spring(percentForce);
 				}
 
-				else if ((stateFFB == 0x40) || (stateFFB == 0x46) || (stateFFB == 0x4A))
+				if ((stateFFB == 0x40) || (stateFFB == 0x46) || (stateFFB == 0x4A))
 				{
 					if (stateFFB == 0x40)
 					{
@@ -2121,7 +2121,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					}
 				}
 
-				else if ((stateFFB == 0x50) || (stateFFB == 0x5F))
+				if ((stateFFB == 0x50) || (stateFFB == 0x5F))
 				{
 					//Roll Left
 					double percentForce = 0.5;
