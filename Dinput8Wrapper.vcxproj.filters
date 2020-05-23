@@ -275,6 +275,9 @@
     <ClInclude Include="Game Files\R-Tuned.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Common Files\SignatureScanning.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="DLLWrapper.asm" />

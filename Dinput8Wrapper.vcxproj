@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common Files\SignatureScanning.h" />
     <ClInclude Include="Game Files\AliensExtermination.h" />
     <ClInclude Include="Game Files\Batman.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />

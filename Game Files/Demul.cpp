@@ -18,6 +18,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include "../Common Files/SignatureScanning.h"
+
+static bool FFBGameInit = false;
+static INT_PTR FFBAddress;
 
 int nascar(int ffnas) {
 	switch (ffnas) {
@@ -118,13 +122,20 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring))
 		{
-			UINT8 ffnas = helpers->ReadByte(0x30060C, /* isRelativeOffset */ true); //Nascar Arcade
+			if (!FFBGameInit)
+			{
+				FFBGameInit = true;
+				aAddy2 = PatternScan("\x13\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x50\x72\x6F\x64\x75\x63\x65\x64\x20\x42\x79\x20", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+				FFBAddress = (int)aAddy2 - 0x2F0;
+			}
+			
+			UINT8 ffnas = helpers->ReadByte(FFBAddress, false); //Nascar Arcade
 			std::string ffs = std::to_string(ffnas);
 			helpers->log((char*)ffs.c_str());
 			helpers->log("got value: ");
 			ffnascar = nascar(ffnas);
 
-			if ((ffnascar > 16)& (ffnascar < 33))
+			if ((ffnascar > 0x10) && (ffnascar < 0x21))
 			{
 				helpers->log("moving wheel left");
 				double percentForce = (ffnascar - 16) / 16.0;
@@ -132,7 +143,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
-			else if ((ffnascar > 0)& (ffnascar < 17))
+			else if ((ffnascar > 0x00) && (ffnascar < 0x11))
 			{
 				helpers->log("moving wheel right");
 				double percentForce = (17 - ffnascar) / 16.0;
