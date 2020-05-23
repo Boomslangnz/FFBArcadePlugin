@@ -228,7 +228,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 			//Uncentering
 			double percentForce = (ff - 63) / 8.0;
 			double percentLength = 100;
-			triggers->Sine(70, 80, percentForce);
+			triggers->Sine(40, 0, percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
 
