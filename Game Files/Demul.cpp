@@ -20,8 +20,14 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <windows.h>
 #include "../Common Files/SignatureScanning.h"
 
+static bool NascarRunning = false;
+static bool InitialDRunning = false;
 static bool FFBGameInit = false;
+static bool KickStartWait = false;
+static bool WindowSearch = false;
+
 static INT_PTR FFBAddress;
+static int ffnascar = 0;
 
 int nascar(int ffnas) {
 	switch (ffnas) {
@@ -103,54 +109,136 @@ static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 
 	if (GetWindowText(hwnd, windowTitle, TITLE_SIZE))
 	{
-		//_tprintf(TEXT("%s\n"), windowTitle);
-		// Uncomment to print all windows being enumerated
 		if (_tcsstr(windowTitle, LPCTSTR(substring)) != NULL)
 		{
-			// We found the window! Stop enumerating.
 			return false;
 		}
 	}
-	return true; // Need to continue enumerating windows
+	return true;
 }
+
+const TCHAR substring[] = TEXT("FPS");
+const TCHAR substring1[] = TEXT("NASCAR");
+const TCHAR substring2[] = TEXT("Initial D Arcade Stage");
 
 void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
-	const TCHAR substring[] = TEXT("NASCAR");
-	EnumWindows(FindWindowBySubstr, (LPARAM)substring);
-	int ffnascar = 0;
+	if (!WindowSearch)
 	{
 		if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring))
 		{
-			if (!FFBGameInit)
+			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring1))
 			{
-				FFBGameInit = true;
-				aAddy2 = PatternScan("\x13\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x50\x72\x6F\x64\x75\x63\x65\x64\x20\x42\x79\x20", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-				FFBAddress = (int)aAddy2 - 0x2F0;
+				NascarRunning = true;
+				WindowSearch = true;
 			}
-			
-			UINT8 ffnas = helpers->ReadByte(FFBAddress, false); //Nascar Arcade
-			std::string ffs = std::to_string(ffnas);
-			helpers->log((char*)ffs.c_str());
-			helpers->log("got value: ");
-			ffnascar = nascar(ffnas);
 
-			if ((ffnascar > 0x10) && (ffnascar < 0x21))
+			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring2))
+			{
+				InitialDRunning = true;
+				WindowSearch = true;
+			}
+		}
+	}
+
+	if (NascarRunning)
+	{
+		if (!FFBGameInit)
+		{
+			FFBGameInit = true;
+			aAddy2 = PatternScan("\x13\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x50\x72\x6F\x64\x75\x63\x65\x64\x20\x42\x79\x20", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+			FFBAddress = (int)aAddy2 - 0x2F0;
+		}
+
+		UINT8 ffnas = helpers->ReadByte(FFBAddress, false);
+		std::string ffs = std::to_string(ffnas);
+		helpers->log((char*)ffs.c_str());
+		helpers->log("got value: ");
+		ffnascar = nascar(ffnas);
+
+		if ((ffnascar > 0x10) && (ffnascar < 0x21))
+		{
+			helpers->log("moving wheel left");
+			double percentForce = (ffnascar - 16) / 16.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if ((ffnascar > 0x00) && (ffnascar < 0x11))
+		{
+			helpers->log("moving wheel right");
+			double percentForce = (17 - ffnascar) / 16.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+	}
+
+	if (InitialDRunning)
+	{
+		if (!FFBGameInit)
+		{
+			Sleep(6000);
+			FFBGameInit = true;
+			aAddy2 = PatternScan("\x88\xA9\x00\x09", "xxxx");
+			FFBAddress = (int)aAddy2 + 0x01;
+		}
+
+		UINT8 ff1 = helpers->ReadByte(FFBAddress, false);
+		UINT8 ff2 = helpers->ReadByte(FFBAddress + 0x01, false);
+		UINT8 ff3 = helpers->ReadByte(FFBAddress + 0x02, false);
+
+		std::string ffs = std::to_string(ff1);
+		helpers->log((char*)ffs.c_str());
+		helpers->log("got value: ");
+
+		if (!KickStartWait)
+		{
+			if (FFBAddress > 0)
+			{
+				Sleep(6000);
+				KickStartWait = true;
+			}
+		}
+
+		if (KickStartWait)
+		{
+			if ((ff1 == 0x80) && (ff3 == 0x01))
+			{
+				triggers->Spring(1.0);
+			}
+
+			if ((ff1 == 0x85) && (ff2 == 0x3F) && (ff3 > 0x00) && (ff3 < 0x30))
+			{
+				double percentForce = ff3 / 47.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+				triggers->Sine(40, 0, percentForce);
+			}
+
+			if ((ff1 == 0x86) && (ff2 == 0x02) && (ff3 > 0x09) && (ff3 < 0x3C))
+			{
+				double percentForce = (60 - ff3) / 43.0;
+				double percentLength = 100;
+				triggers->Spring(percentForce);
+			}
+
+			if ((ff1 == 0x84) && (ff2 == 0x00) && (ff3 > 0x37) && (ff3 < 0x80))
 			{
 				helpers->log("moving wheel left");
-				double percentForce = (ffnascar - 16) / 16.0;
+				double percentForce = (128 - ff3) / 72.0;
 				double percentLength = 100;
 				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
-			else if ((ffnascar > 0x00) && (ffnascar < 0x11))
+			else if ((ff1 == 0x84) && (ff2 == 0x01) && (ff3 > 0x00) && (ff3 < 0x49))
 			{
 				helpers->log("moving wheel right");
-				double percentForce = (17 - ffnascar) / 16.0;
+				double percentForce = (ff3 / 72.0);
 				double percentLength = 100;
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
 		}
 	}
-}	
+}
