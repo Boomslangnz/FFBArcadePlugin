@@ -118,6 +118,7 @@ static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 }
 
 const TCHAR substring[] = TEXT("FPS");
+const TCHAR substring0[] = TEXT("spg");
 const TCHAR substring1[] = TEXT("NASCAR");
 const TCHAR substring2[] = TEXT("Initial D Arcade Stage");
 
@@ -125,7 +126,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 	if (!WindowSearch)
 	{
-		if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring))
+		if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring) || !EnumWindows(FindWindowBySubstr, (LPARAM)substring0))
 		{
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring1))
 			{
