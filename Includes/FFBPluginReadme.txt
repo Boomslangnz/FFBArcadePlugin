@@ -66,7 +66,7 @@ output                    windows
 - Reaver from Teknoparrot . Huge thanks to Reaver for supplying code necessary for some games & general force feedback,
 extremely generous.
 
-- Jackchen for his Daytona Championship USA FFB work at beginning of year.
+- Jackchen for his Daytona Championship USA FFB work.
 
 - seam for always testing and helping
 
@@ -118,13 +118,16 @@ extremely generous.
 -House of the dead 4
 -Hyperdrive
 -Indy 500
--Initial D Zero
+-Initial D 
+-Initial D 2
+-Initial D 3
 -Initial D 4
 -Initial D 4 Japan
 -Initial D 5
 -Initial D 6
 -Initial D 7
 -Initial D 8
+-Initial D Zero
 -KO Drive
 -Laser Ghost
 -LeMans 24
@@ -150,6 +153,7 @@ extremely generous.
 (will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 on OLDMame Plugin)
 -Revolution X
 -Road Fighters 3D
+-R-Tuned : Ultimate Street Racing
 -San Francisco Rush
 -San Francisco Rush The Rock
 -San Francisco Rush 2049
