@@ -3116,187 +3116,196 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 		if (RunningFFB == RaveRacerActive) //Rave Racer
 		{
-			if (!RaveRacerFind)
+			if (Emulator == MAME)
 			{
-				aAddy2 = PatternScan("\x08\x00\x20\x00\x20\x00\x20\x00\x20\x00\x03", "xxxxxxxxxxx");
-
-				UINT8 CheckAddy2 = (int)aAddy2 + 0x1B;
-				if (CheckAddy2 == 0x3B)
+				if (!RaveRacerFind)
 				{
-					FFBAddress = (int)aAddy2 + 0x20;
-					RaveRacerFind = true;
+					aAddy2 = PatternScan("\x08\x00\x20\x00\x20\x00\x20\x00\x20\x00\x03", "xxxxxxxxxxx");
+
+					UINT8 CheckAddy2 = (int)aAddy2 + 0x1B;
+					if (CheckAddy2 == 0x3B)
+					{
+						FFBAddress = (int)aAddy2 + 0x20;
+						RaveRacerFind = true;
+					}
 				}
-			}
-			else
-			{
-				UINT8 FFB = helpers->ReadByte(FFBAddress, false);
-				UINT8 ffrave = raveracer(FFB);
-
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(ffrave);
-				helpers->log((char*)ffs.c_str());
-
-				if ((ffrave > 0x3D) && (ffrave < 0x7C))
+				else
 				{
-					double percentForce = (124 - ffrave) / 61.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ffrave > 0x00) && (ffrave < 0x3E))
-				{
-					double percentForce = (ffrave) / 61.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					UINT8 FFB = helpers->ReadByte(FFBAddress, false);
+					UINT8 ffrave = raveracer(FFB);
+
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(ffrave);
+					helpers->log((char*)ffs.c_str());
+
+					if ((ffrave > 0x3D) && (ffrave < 0x7C))
+					{
+						double percentForce = (124 - ffrave) / 61.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+					else if ((ffrave > 0x00) && (ffrave < 0x3E))
+					{
+						double percentForce = (ffrave) / 61.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
 				}
 			}
 		}
 
 		if (RunningFFB == DaytonaActive)
 		{
-			if (!PatternFind)
+			if (Emulator == MAME)
 			{
-				if (romname == daytona || romname == daytonas || romname == daytonase)
+				if (!PatternFind)
 				{
-					aAddy2 = PatternScan("\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8E\x0E\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3F\x42\x3F\x00\x02\x02\x01\x00\x00\x14\x1C\x00\x00\x00\x00\x00", "xxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???x?x?xx?x?xxxx");
-
-					if ((UINT8)aAddy2 == 0x05)
+					if (romname == daytona || romname == daytonas || romname == daytonase)
 					{
-						FFBAddress = (int)aAddy2 + 0x3D;
-						PatternFind = true;
+						aAddy2 = PatternScan("\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8E\x0E\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3F\x42\x3F\x00\x02\x02\x01\x00\x00\x14\x1C\x00\x00\x00\x00\x00", "xxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???x?x?xx?x?xxxx");
+
+						if ((UINT8)aAddy2 == 0x05)
+						{
+							FFBAddress = (int)aAddy2 + 0x3D;
+							PatternFind = true;
+						}
+					}
+
+					if (romname == indy500 || romname == indy500d || romname == indy500to)
+					{
+						aAddy2 = PatternScan("\xFF\x4E\x00\x00\x00\x00\x01", "xxxxxxx");
+
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x02, false);
+						if (CheckAddy2 == 0x01)
+						{
+							FFBAddress = (int)aAddy2 - 0x02;
+							PatternFind = true;
+						}
+					}
+
+					if (romname == stcc)
+					{
+						aAddy2 = PatternScan("\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\xFF\xFF\xFF", "xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x1F, false);
+						if ((CheckAddy2 == 0x4E) || (CheckAddy2 == 0x4F))
+						{
+							FFBAddress = (int)aAddy2 + 0x19;
+							PatternFind = true;
+						}
+					}
+
+					if (romname == sgt24h)
+					{
+						aAddy2 = PatternScan("\x03\x00\x00\x00\x09\x00\x00\x00\x1F\x00\x00\x00\x13\x00\x00\x00\x04\x00\x00\x00\x0F", "xxxxxxxxxxxxxxxxxxxxx");
+
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x14, false);
+						if (CheckAddy2 == 0x0C)
+						{
+							FFBAddress = (int)aAddy2 + 0x50;
+							PatternFind = true;
+						}
 					}
 				}
-
-				if (romname == indy500 || romname == indy500d || romname == indy500to)
+				else
 				{
-					aAddy2 = PatternScan("\xFF\x4E\x00\x00\x00\x00\x01", "xxxxxxx");
+					ff = helpers->ReadByte(FFBAddress, false);
 
-					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x02, false);
-					if (CheckAddy2 == 0x01)
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(ff);
+					helpers->log((char*)ffs.c_str());
+
+					if ((ff > 0x09) && (ff < 0x18))
 					{
-						FFBAddress = (int)aAddy2 - 0x02;
-						PatternFind = true;
+						//Spring
+						double percentForce = (ff - 15) / 8.0;
+						double percentLength = 100;
+						triggers->Spring(percentForce);
 					}
-				}
 
-				if (romname == stcc)
-				{
-					aAddy2 = PatternScan("\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\xFF\xFF\xFF", "xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-
-					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x1F, false);
-					if ((CheckAddy2 == 0x4E) || (CheckAddy2 == 0x4F))
+					if ((ff > 0x1F) && (ff < 0x28))
 					{
-						FFBAddress = (int)aAddy2 + 0x19;
-						PatternFind = true;
+						//Clutch
+						double percentForce = (ff - 31) / 8.0;
+						double percentLength = 100;
+						triggers->Friction(percentForce);
 					}
-				}
 
-				if (romname == sgt24h)
-				{
-					aAddy2 = PatternScan("\x03\x00\x00\x00\x09\x00\x00\x00\x1F\x00\x00\x00\x13\x00\x00\x00\x04\x00\x00\x00\x0F", "xxxxxxxxxxxxxxxxxxxxx");
-
-					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x14, false);
-					if (CheckAddy2 == 0x0C)
+					if ((ff > 0x2F) && (ff < 0x3D))
 					{
-						FFBAddress = (int)aAddy2 + 0x50;
-						PatternFind = true;
+						//Centering
+						double percentForce = (ff - 47) / 13.0;
+						double percentLength = 100;
+						triggers->Spring(percentForce);
 					}
-				}
-			}
-			else
-			{
-				ff = helpers->ReadByte(FFBAddress, false);
 
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(ff);
-				helpers->log((char*)ffs.c_str());
+					if ((ff > 0x3F) && (ff < 0x48))
+					{
+						//Uncentering
+						double percentForce = (ff - 63) / 8.0;
+						double percentLength = 100;
+						triggers->Sine(40, 0, percentForce);
+						triggers->Rumble(percentForce, percentForce, percentLength);
+					}
 
-				if ((ff > 0x09) && (ff < 0x18))
-				{
-					//Spring
-					double percentForce = (ff - 15) / 8.0;
-					double percentLength = 100;
-					triggers->Spring(percentForce);
-				}
-
-				if ((ff > 0x1F) && (ff < 0x28))
-				{
-					//Clutch
-					double percentForce = (ff - 31) / 8.0;
-					double percentLength = 100;
-					triggers->Friction(percentForce);
-				}
-
-				if ((ff > 0x2F) && (ff < 0x3D))
-				{
-					//Centering
-					double percentForce = (ff - 47) / 13.0;
-					double percentLength = 100;
-					triggers->Spring(percentForce);
-				}
-
-				if ((ff > 0x3F) && (ff < 0x48))
-				{
-					//Uncentering
-					double percentForce = (ff - 63) / 8.0;
-					double percentLength = 100;
-					triggers->Sine(40, 0, percentForce);
-					triggers->Rumble(percentForce, percentForce, percentLength);
-				}
-
-				if ((ff > 0x4F) && (ff < 0x58))
-				{
-					//Roll Left
-					double percentForce = (ff - 79) / 8.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x5F) && (ff < 0x68))
-				{
-					//Roll Right
-					double percentForce = (ff - 95) / 8.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					if ((ff > 0x4F) && (ff < 0x58))
+					{
+						//Roll Left
+						double percentForce = (ff - 79) / 8.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+					else if ((ff > 0x5F) && (ff < 0x68))
+					{
+						//Roll Right
+						double percentForce = (ff - 95) / 8.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
 				}
 			}
 		}
 
 		if (RunningFFB == SrallyActive)
 		{
-			if (!PatternFind)
+			if (Emulator == MAME)
 			{
-				aAddy2 = PatternScan("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x70\xFF\x00\x00\x70\xFF", "xxxxxxxxxxxxxxxx");
-
-				if ((UINT8)aAddy2 == 0x53)
+				if (!PatternFind)
 				{
-					FFBAddress = (int)aAddy2 - 0x0A;
-					PatternFind = true;
+					aAddy2 = PatternScan("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x70\xFF\x00\x00\x70\xFF", "xxxxxxxxxxxxxxxx");
+
+					if ((UINT8)aAddy2 == 0x53)
+					{
+						FFBAddress = (int)aAddy2 - 0x0A;
+						PatternFind = true;
+					}
 				}
-			}
-			else
-			{
-				ff = helpers->ReadByte(FFBAddress, false);
-
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(ff);
-				helpers->log((char*)ffs.c_str());
-
-				if ((ff > 0xBF) && (ff < 0xDF))
+				else
 				{
-					double percentForce = (ff - 191) / 31.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((ff > 0x7F) && (ff < 0x9F))
-				{
-					double percentForce = (ff - 127) / 31.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					ff = helpers->ReadByte(FFBAddress, false);
+
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(ff);
+					helpers->log((char*)ffs.c_str());
+
+					if ((ff > 0xBF) && (ff < 0xDF))
+					{
+						double percentForce = (ff - 191) / 31.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+					else if ((ff > 0x7F) && (ff < 0x9F))
+					{
+						double percentForce = (ff - 127) / 31.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
 				}
 			}
 		}
