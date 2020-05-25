@@ -522,6 +522,28 @@ static int configFeedbackLengthDaytonaMAME = GetPrivateProfileInt(TEXT("Settings
 static int EnableForceSpringEffectDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytonaMAME"), 0, settingsFilename);
 static int ForceSpringStrengthDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytonaMAME"), 0, settingsFilename);
 
+static int configMinForceSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSRallyMAME"), 0, settingsFilename);
+static int configMaxForceSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSRallyMAME"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSRallyMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSRallyMAME"), 100, settingsFilename);
+static int configAlternativeMinForceRightSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSRallyMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSRallyMAME"), 100, settingsFilename);
+static int PowerModeSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSRallyMAME"), 0, settingsFilename);
+static int configFeedbackLengthSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSRallyMAME"), 120, settingsFilename);
+static int EnableForceSpringEffectSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSRallyMAME"), 0, settingsFilename);
+static int ForceSpringStrengthSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSRallyMAME"), 0, settingsFilename);
+
+static int configMinForceIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceIndy500MAME"), 0, settingsFilename);
+static int configMaxForceIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceIndy500MAME"), 100, settingsFilename);
+static int configAlternativeMinForceLeftIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftIndy500MAME"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftIndy500MAME"), 100, settingsFilename);
+static int configAlternativeMinForceRightIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightIndy500MAME"), 0, settingsFilename);
+static int configAlternativeMaxForceRightIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightIndy500MAME"), 100, settingsFilename);
+static int PowerModeIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeIndy500MAME"), 0, settingsFilename);
+static int configFeedbackLengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthIndy500MAME"), 120, settingsFilename);
+static int EnableForceSpringEffectIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectIndy500MAME"), 0, settingsFilename);
+static int ForceSpringStrengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthIndy500MAME"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -562,6 +584,7 @@ int stateFFB3;
 int stateFFBDevice2;
 int stateFFBDevice3;
 static int FFBAddress;
+static UINT8 ff;
 
 std::string wheelA("wheel");
 
@@ -1184,6 +1207,9 @@ std::string crusnusa21("crusnusa21");
 std::string calspeed("calspeed");
 std::string calspeeda("calspeeda");
 std::string calspeedb("calspeedb");
+std::string indy500("indy500");
+std::string indy500d("indy500d");
+std::string indy500to("indy500to");
 std::string outrunra("outrunra");
 std::string outrun("outrun");
 std::string outruneh("outruneh");
@@ -1278,6 +1304,10 @@ std::string alien3u("alien3u");
 std::string ptblank2("ptblank2");
 std::string ptblank2ua("ptblank2ua");
 std::string ghlpanic("ghlpanic");
+std::string srallyc("srallyc");
+std::string srallycb("srallycb");
+std::string srallycdxa("srallycdxa");
+std::string srallycdx("srallycdx");
 std::string spacegun("spacegun");
 std::string spacegunu("spacegunu");
 std::string spacegunj("spacegunj");
@@ -1308,6 +1338,7 @@ std::string vaportrp("vaportrp");
 std::string DaytonaActive("DaytonaActive");
 std::string Daytona2Active("Daytona2Active");
 std::string DirtDevilsActive("DirtDevilsActive");
+std::string SrallyActive("SrallyActive");
 std::string Srally2Active("Srally2Active");
 std::string VirtuaRacingActive("VirtuaRacingActive");
 std::string HardDrivinActive("HardDrivinActive"); 
@@ -2152,6 +2183,38 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				ForceSpringStrength = ForceSpringStrengthDaytonaMAME;
 
 				RunningFFB = "DaytonaActive";
+			}
+
+			if (romname == indy500 || romname == indy500d || romname == indy500to)
+			{
+				configMinForce = configMinForceIndy500MAME;
+				configMaxForce = configMaxForceIndy500MAME;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftIndy500MAME;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftIndy500MAME;
+				configAlternativeMinForceRight = configAlternativeMinForceRightIndy500MAME;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightIndy500MAME;
+				configFeedbackLength = configFeedbackLengthIndy500MAME;
+				PowerMode = PowerModeIndy500MAME;
+				EnableForceSpringEffect = EnableForceSpringEffectIndy500MAME;
+				ForceSpringStrength = ForceSpringStrengthIndy500MAME;
+
+				RunningFFB = "DaytonaActive";
+			}
+
+			if (romname == srallyc || romname == srallycb || romname == srallycdx || romname == srallycdxa)
+			{
+				configMinForce = configMinForceSRallyMAME;
+				configMaxForce = configMaxForceSRallyMAME;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftSRallyMAME;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftSRallyMAME;
+				configAlternativeMinForceRight = configAlternativeMinForceRightSRallyMAME;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightSRallyMAME;
+				configFeedbackLength = configFeedbackLengthSRallyMAME;
+				PowerMode = PowerModeSRallyMAME;
+				EnableForceSpringEffect = EnableForceSpringEffectSRallyMAME;
+				ForceSpringStrength = ForceSpringStrengthSRallyMAME;
+
+				RunningFFB = "SrallyActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -3036,17 +3099,36 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		{
 			if (!PatternFind)
 			{
-				aAddy2 = PatternScan("\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8E\x0E\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3F\x42\x3F\x00\x02\x02\x01\x00\x00\x14\x1C\x00\x00\x00\x00\x00", "xxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???x?x?xx?x?xxxx");
-
-				if ((UINT8)aAddy2 == 0x05)
+				if (romname == daytona || romname == daytonas || romname == daytonase)
 				{
-					FFBAddress = (int)aAddy2 + 0x3D;
-					PatternFind = true;
+					aAddy2 = PatternScan("\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8E\x0E\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3F\x42\x3F\x00\x02\x02\x01\x00\x00\x14\x1C\x00\x00\x00\x00\x00", "xxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???x?x?xx?x?xxxx");
+
+					if ((UINT8)aAddy2 == 0x05)
+					{
+						FFBAddress = (int)aAddy2 + 0x3D;
+						PatternFind = true;
+					}
+				}
+
+				if (romname == indy500 || romname == indy500d || romname == indy500to)
+				{
+					aAddy2 = PatternScan("\xFF\x4E\x00\x00\x00\x00\x01", "xxxxxxx");
+
+					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x02, false);
+					if (CheckAddy2 == 0x01)
+					{
+						FFBAddress = (int)aAddy2 - 0x02;
+						PatternFind = true;
+					}
 				}
 			}
 			else
 			{
-				UINT8 ff = helpers->ReadByte(FFBAddress, false);
+				ff = helpers->ReadByte(FFBAddress, false);
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(ff);
+				helpers->log((char*)ffs.c_str());
 
 				if ((ff > 0x09) && (ff < 0x18))
 				{
@@ -3093,6 +3175,43 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				{
 					//Roll Right
 					double percentForce = (ff - 95) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+			}
+		}
+
+		if (RunningFFB == SrallyActive)
+		{
+			if (!PatternFind)
+			{
+				aAddy2 = PatternScan("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x70\xFF\x00\x00\x70\xFF", "xxxxxxxxxxxxxxxx");
+
+				if ((UINT8)aAddy2 == 0x53)
+				{
+					FFBAddress = (int)aAddy2 - 0x0A;
+					PatternFind = true;
+				}
+			}
+			else
+			{
+				ff = helpers->ReadByte(FFBAddress, false);
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(ff);
+				helpers->log((char*)ffs.c_str());
+
+				if ((ff > 0xBF) && (ff < 0xDF))
+				{
+					double percentForce = (ff - 191) / 31.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ff > 0x7F) && (ff < 0x9F))
+				{
+					double percentForce = (ff - 127) / 31.0;
 					double percentLength = 100;
 					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
