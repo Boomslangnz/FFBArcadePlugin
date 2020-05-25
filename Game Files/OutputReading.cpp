@@ -15,6 +15,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include <tchar.h>
 #include "SDL.h"
+#include "../Common Files/SignatureScanning.h"
 
 HINSTANCE ProcDLL = NULL;
 extern int joystick_index1;
@@ -499,6 +500,17 @@ static int configFeedbackLengthVaporTrx = GetPrivateProfileInt(TEXT("Settings"),
 static int EnableForceSpringEffectVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectVaporTrx"), 0, settingsFilename);
 static int ForceSpringStrengthVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthVaporTrx"), 0, settingsFilename);
 
+static int configMinForceRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRaveRacer"), 0, settingsFilename);
+static int configMaxForceRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRaveRacer"), 100, settingsFilename);
+static int configAlternativeMinForceLeftRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftRaveRacer"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftRaveRacer"), 100, settingsFilename);
+static int configAlternativeMinForceRightRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightRaveRacer"), 0, settingsFilename);
+static int configAlternativeMaxForceRightRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightRaveRacer"), 100, settingsFilename);
+static int PowerModeRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeRaveRacer"), 0, settingsFilename);
+static int configFeedbackLengthRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthRaveRacer"), 120, settingsFilename);
+static int EnableForceSpringEffectRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectRaveRacer"), 0, settingsFilename);
+static int ForceSpringStrengthRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthRaveRacer"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -513,6 +525,7 @@ static bool HardDrivinFrame = false;
 static bool Motion = false;
 static bool MotionFalse = false;
 static bool StartEffectOnce = false;
+static bool RaveRacerFind = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -536,6 +549,7 @@ int stateFFB2;
 int stateFFB3;
 int stateFFBDevice2;
 int stateFFBDevice3;
+static int FFBAddress;
 
 std::string wheelA("wheel");
 
@@ -817,6 +831,268 @@ static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 	return true;
 }
 
+static int raveracer(int ffRaw) {
+	switch (ffRaw) {
+
+		//case 0xFE:
+			//return 128;
+	case 0x7E:
+		return 123;
+		//case 0xBE:
+			//return 126;
+	case 0x3E:
+		return 122;
+	case 0xDE:
+		return 121;
+	case 0x5E:
+		return 120;
+	case 0x9E:
+		return 119;
+	case 0x1E:
+		return 118;
+	case 0xEE:
+		return 117;
+	case 0x6E:
+		return 116;
+	case 0xAE:
+		return 115;
+	case 0xCE:
+		return 114;
+	case 0x2E:
+		return 113;
+	case 0x4E:
+		return 112;
+	case 0x8E:
+		return 111;
+	case 0x0E:
+		return 110;
+	case 0xF6:
+		return 109;
+	case 0x76:
+		return 108;
+	case 0xB6:
+		return 107;
+	case 0x36:
+		return 106;
+	case 0xD6:
+		return 105;
+	case 0x56:
+		return 104;
+	case 0x96:
+		return 103;
+	case 0x16:
+		return 102;
+	case 0xE6:
+		return 101;
+	case 0x66:
+		return 100;
+	case 0xA6:
+		return 99;
+	case 0xC6:
+		return 98;
+	case 0x26:
+		return 97;
+	case 0x46:
+		return 96;
+	case 0x86:
+		return 95;
+	case 0x06:
+		return 94;
+	case 0xFA:
+		return 93;
+	case 0x7A:
+		return 92;
+	case 0xBA:
+		return 91;
+	case 0x3A:
+		return 90;
+	case 0xDA:
+		return 89;
+	case 0x5A:
+		return 88;
+	case 0x9A:
+		return 87;
+	case 0x1A:
+		return 86;
+	case 0xEA:
+		return 85;
+	case 0x6A:
+		return 84;
+	case 0xAA:
+		return 83;
+	case 0xCA:
+		return 82;
+	case 0x2A:
+		return 81;
+	case 0x4A:
+		return 80;
+	case 0x8A:
+		return 79;
+	case 0x0A:
+		return 78;
+	case 0xF2:
+		return 77;
+	case 0x72:
+		return 76;
+	case 0xB2:
+		return 75;
+	case 0x32:
+		return 74;
+	case 0xD2:
+		return 73;
+	case 0x52:
+		return 72;
+	case 0x92:
+		return 71;
+	case 0x12:
+		return 70;
+	case 0xE2:
+		return 69;
+	case 0x62:
+		return 68;
+	case 0xA2:
+		return 67;
+	case 0xC2:
+		return 66;
+	case 0x22:
+		return 65;
+	case 0x42:
+		return 64;
+	case 0x82:
+		return 63;
+	case 0x02:
+		return 62;
+
+
+	case 0x80:
+		return 61;
+	case 0x40:
+		return 60;
+	case 0x20:
+		return 59;
+	case 0xC0:
+		return 58;
+	case 0xA0:
+		return 57;
+	case 0x60:
+		return 56;
+	case 0xE0:
+		return 55;
+	case 0x10:
+		return 54;
+	case 0x90:
+		return 53;
+	case 0x50:
+		return 52;
+	case 0xD0:
+		return 51;
+	case 0x30:
+		return 50;
+	case 0xB0:
+		return 49;
+	case 0x70:
+		return 48;
+	case 0xF0:
+		return 47;
+	case 0x08:
+		return 46;
+	case 0x88:
+		return 45;
+	case 0x48:
+		return 44;
+	case 0x28:
+		return 43;
+	case 0xC8:
+		return 42;
+	case 0xA8:
+		return 41;
+	case 0x68:
+		return 40;
+	case 0xE8:
+		return 39;
+	case 0x18:
+		return 38;
+	case 0x98:
+		return 37;
+	case 0x58:
+		return 36;
+	case 0xD8:
+		return 35;
+	case 0x38:
+		return 34;
+	case 0xB8:
+		return 33;
+	case 0x78:
+		return 32;
+	case 0xF8:
+		return 31;
+	case 0x04:
+		return 30;
+	case 0x84:
+		return 29;
+	case 0x44:
+		return 28;
+	case 0x24:
+		return 27;
+	case 0xC4:
+		return 26;
+	case 0xA4:
+		return 25;
+	case 0x64:
+		return 24;
+	case 0xE4:
+		return 23;
+	case 0x14:
+		return 22;
+	case 0x94:
+		return 21;
+	case 0x54:
+		return 20;
+	case 0xD4:
+		return 19;
+	case 0x34:
+		return 18;
+	case 0xB4:
+		return 17;
+	case 0x74:
+		return 16;
+	case 0xF4:
+		return 15;
+	case 0x0C:
+		return 14;
+	case 0x8C:
+		return 13;
+	case 0x4C:
+		return 12;
+	case 0x2C:
+		return 11;
+	case 0xCC:
+		return 10;
+	case 0xAC:
+		return 9;
+	case 0x6C:
+		return 8;
+	case 0xEC:
+		return 7;
+	case 0x1C:
+		return 6;
+	case 0x9C:
+		return 5;
+	case 0x5C:
+		return 4;
+	case 0xDC:
+		return 3;
+	case 0x3C:
+		return 2;
+		//case 0xBC:
+			//return 3;
+	case 0x7C:
+		return 1;
+		//case 0xFC:
+			//return 1;
+	}
+}
+
 DWORD WINAPI ThreadForOutputs(LPVOID lpParam)
 {
 	WinMain(hInstance, hPrevInstance, lpCmdLine, nCmdShow);
@@ -946,6 +1222,9 @@ std::string racedrivc2("racedrivc2");
 std::string racedrivc4("racedrivc4");
 std::string racedrivc("racedrivc");
 std::string racedrivpan("racedrivpan");
+std::string raveracw("raveracw");
+std::string raveracj("raveracj");
+std::string raveracja("raveracja");
 std::string othunder("othunder");
 std::string othundero("othundero");
 std::string othunderuo("othunderuo");
@@ -1021,6 +1300,7 @@ std::string RacingFullValueActive1("RacingFullValueActive1");
 std::string RacingFullValueActive2("RacingFullValueActive2");
 std::string RacingActive1("RacingActive1");
 std::string RacingActive2("RacingActive2");
+std::string RaveRacerActive("RaveRacerActive");
 std::string AfterburnerActive("AfterburnerActive");
 std::string OutrunActive("OutrunActive");
 std::string PDriftActive("PDriftActive");
@@ -1824,6 +2104,22 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				ForceSpringStrength = ForceSpringStrengthVaporTrx;
 				
 				RunningFFB = "RacingFullValueActive1";
+			}
+
+			if (romname == raveracw || romname == raveracj || romname == raveracja)
+			{
+				configMinForce = configMinForceRaveRacer;
+				configMaxForce = configMaxForceRaveRacer;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftRaveRacer;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftRaveRacer;
+				configAlternativeMinForceRight = configAlternativeMinForceRightRaveRacer;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightRaveRacer;
+				configFeedbackLength = configFeedbackLengthRaveRacer;
+				PowerMode = PowerModeRaveRacer;
+				EnableForceSpringEffect = EnableForceSpringEffectRaveRacer;
+				ForceSpringStrength = ForceSpringStrengthRaveRacer;
+
+				RunningFFB = "RaveRacerActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2661,6 +2957,45 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 						triggers->Sine(0, 0, 0);
 						triggers->Rumble(0, 0, 0);
 					}
+				}
+			}
+		}
+
+		if (RunningFFB == RaveRacerActive) //Rave Racer
+		{
+			if (!RaveRacerFind)
+			{
+				aAddy2 = PatternScan("\x08\x00\x20\x00\x20\x00\x20\x00\x20\x00\x03", "xxxxxxxxxxx");
+
+				UINT8 CheckAddy2 = (int)aAddy2 + 0x1B;
+				if (CheckAddy2 == 0x3B)
+				{
+					FFBAddress = (int)aAddy2 + 0x20;
+					RaveRacerFind = true;
+				}
+			}
+			else
+			{
+				UINT8 FFB = helpers->ReadByte(FFBAddress, false);
+				UINT8 ffrave = raveracer(FFB);
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(ffrave);
+				helpers->log((char*)ffs.c_str());
+
+				if ((ffrave > 0x3D) && (ffrave < 0x7C))
+				{
+					double percentForce = (124 - ffrave) / 61.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((ffrave > 0x00) && (ffrave < 0x3E))
+				{
+					double percentForce = (ffrave) / 61.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
 		}

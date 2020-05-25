@@ -52,7 +52,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/SegaRacingClassic.h"
 #include "Game Files/SegaRally3.h"
 #include "Game Files/SnoCross.h"
-#include "Game Files/OldMame.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
 #include "Game Files/Machstorm.h"
@@ -949,7 +948,6 @@ const int Road_Fighters_3D = 29;
 const int LGI_3D = 30;
 const int LGI_ = 31;
 const int INITIAL_D_0 = 32;
-const int OLDMAME_ = 33;
 const int SUPERMODEL_READING = 34;
 const int OUTRUN_2Real = 35;
 const int ALIENS_EXTERMINATION = 36;
@@ -2077,9 +2075,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case LGI_:
 		game = new LGI;
-		break;
-	case OLDMAME_:
-		game = new OldMame;
 		break;
 	case KO_Drive:
 		game = new KODrive;

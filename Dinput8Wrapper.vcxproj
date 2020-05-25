@@ -36,7 +36,6 @@
     <ClInclude Include="Game Files\Demul.h" />
     <ClInclude Include="dinput8.def">
     </ClInclude>
-    <ClInclude Include="Game Files\OldMame.h" />
     <ClInclude Include="Game Files\MarioKartGPDX1.10.h" />
     <ClInclude Include="Game Files\InitialD5.h" />
     <ClInclude Include="Game Files\InitialD4Japan.h" />
@@ -80,7 +79,6 @@
     <ClCompile Include="Game Files\InitialD7.cpp" />
     <ClCompile Include="Game Files\InitialD8.cpp" />
     <ClCompile Include="Game Files\Machstorm.cpp" />
-    <ClCompile Include="Game Files\OldMame.cpp" />
     <ClCompile Include="Game Files\OutRun2Fake.cpp" />
     <ClCompile Include="Game Files\PokkenTournament.cpp" />
     <ClCompile Include="Game Files\R-Tuned.cpp" />

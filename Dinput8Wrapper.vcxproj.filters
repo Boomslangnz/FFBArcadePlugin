@@ -114,8 +114,6 @@
     <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
     <ClCompile Include="Game Files\InitialD0.cpp" />
-    <ClCompile Include="Game Files\OldMame.cpp" />
-    <ClCompile Include="Game Files\OutputReading.cpp" />
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
     <ClCompile Include="Game Files\Rambo.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
@@ -125,6 +123,7 @@
     <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\Batman.cpp" />
     <ClCompile Include="Game Files\R-Tuned.cpp" />
+    <ClCompile Include="Game Files\OutputReading.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -242,12 +241,6 @@
     <ClInclude Include="Game Files\InitialD0.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game Files\OldMame.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\OutputReading.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game Files\AliensExtermination.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
@@ -276,6 +269,9 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Common Files\SignatureScanning.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\OutputReading.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>
