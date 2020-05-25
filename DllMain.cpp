@@ -46,7 +46,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/InitialD7.h"
 #include "Game Files/InitialD8.h"
 #include "Game Files/MarioKartGPDX.h"
-#include "Game Files/OutputReading.h"
+#include "Game Files/MAMESupermodel.h"
 #include "Game Files/OutRun2Fake.h"
 #include "Game Files/OutRun2Real.h"
 #include "Game Files/SegaRacingClassic.h"
@@ -937,7 +937,7 @@ const int INITIAL_D_8 = 18;
 const int POKKEN_TOURNAMENT = 19;
 const int MARIO_KART_GPDX_110 = 20;
 const int Sonic_Sega_AllStars_Racing = 21;
-const int OUTPUT_READING = 22;
+const int MAME_ = 22;
 const int INITIAL_D_5 = 23;
 const int INITIAL_D_4_Japan = 24;
 const int M2_Emulator = 25;
@@ -948,7 +948,7 @@ const int Road_Fighters_3D = 29;
 const int LGI_3D = 30;
 const int LGI_ = 31;
 const int INITIAL_D_0 = 32;
-const int SUPERMODEL_READING = 34;
+const int SUPERMODEL_ = 34;
 const int OUTRUN_2Real = 35;
 const int ALIENS_EXTERMINATION = 36;
 const int RAMBO_ = 37;
@@ -1971,11 +1971,11 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case DAYTONA_3:
 		game = new Daytona3;
 		break;
-	case SUPERMODEL_READING:
-		game = new OutputReading;
+	case SUPERMODEL_:
+		game = new MAMESupermodel;
 		break;
-	case OUTPUT_READING:
-		game = new OutputReading;
+	case MAME_:
+		game = new MAMESupermodel;
 		break;
 	case FORD_RACING:
 		game = new FordRacing;

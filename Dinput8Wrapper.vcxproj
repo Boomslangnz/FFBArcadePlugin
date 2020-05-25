@@ -30,7 +30,7 @@
     <ClInclude Include="Game Files\HOTD4.h" />
     <ClInclude Include="Game Files\InitialD0.h" />
     <ClInclude Include="Game Files\KODrive.h" />
-    <ClInclude Include="Game Files\OutputReading.h" />
+    <ClInclude Include="Game Files\MAMESupermodel.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
     <ClInclude Include="Game Files\ButtonRumble.h" />
     <ClInclude Include="Game Files\Demul.h" />
@@ -63,7 +63,7 @@
     <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\InitialD0.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
-    <ClCompile Include="Game Files\OutputReading.cpp" />
+    <ClCompile Include="Game Files\MAMESupermodel.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\ButtonRumble.cpp" />
     <ClCompile Include="Common Files\TeknoParrotGame.cpp" />

@@ -11,7 +11,7 @@ You should have received a copy of the GNU General Public License
 along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include "OutputReading.h"
+#include "MAMESupermodel.h"
 #include <string>
 #include <tchar.h>
 #include "SDL.h"
@@ -1411,7 +1411,7 @@ std::string bank_motor_position("bank_motor_position");
 std::string MAME("MAME");
 std::string Supermodel("Supermodel");
 
-void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	
 	if (!init)
 	{
