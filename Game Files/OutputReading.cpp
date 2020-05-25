@@ -544,6 +544,17 @@ static int configFeedbackLengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings
 static int EnableForceSpringEffectIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectIndy500MAME"), 0, settingsFilename);
 static int ForceSpringStrengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthIndy500MAME"), 0, settingsFilename);
 
+static int configMinForceSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSTCCMAME"), 0, settingsFilename);
+static int configMaxForceSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSTCCMAME"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSTCCMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSTCCMAME"), 100, settingsFilename);
+static int configAlternativeMinForceRightSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSTCCMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSTCCMAME"), 100, settingsFilename);
+static int PowerModeSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSTCCMAME"), 0, settingsFilename);
+static int configFeedbackLengthSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSTCCMAME"), 120, settingsFilename);
+static int EnableForceSpringEffectSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSTCCMAME"), 0, settingsFilename);
+static int ForceSpringStrengthSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSTCCMAME"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -1311,6 +1322,9 @@ std::string srallycdx("srallycdx");
 std::string spacegun("spacegun");
 std::string spacegunu("spacegunu");
 std::string spacegunj("spacegunj");
+std::string stcc("stcc");
+std::string stcca("stcca");
+std::string stccb("stccb");
 std::string rchase("rchase");
 std::string rchasej("rchasej");
 std::string lghost("lghost");
@@ -2197,6 +2211,22 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				PowerMode = PowerModeIndy500MAME;
 				EnableForceSpringEffect = EnableForceSpringEffectIndy500MAME;
 				ForceSpringStrength = ForceSpringStrengthIndy500MAME;
+
+				RunningFFB = "DaytonaActive";
+			}
+
+			if (romname == stcc)
+			{
+				configMinForce = configMinForceSTCCMAME;
+				configMaxForce = configMaxForceSTCCMAME;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftSTCCMAME;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftSTCCMAME;
+				configAlternativeMinForceRight = configAlternativeMinForceRightSTCCMAME;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightSTCCMAME;
+				configFeedbackLength = configFeedbackLengthSTCCMAME;
+				PowerMode = PowerModeSTCCMAME;
+				EnableForceSpringEffect = EnableForceSpringEffectSTCCMAME;
+				ForceSpringStrength = ForceSpringStrengthSTCCMAME;
 
 				RunningFFB = "DaytonaActive";
 			}
@@ -3118,6 +3148,18 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					if (CheckAddy2 == 0x01)
 					{
 						FFBAddress = (int)aAddy2 - 0x02;
+						PatternFind = true;
+					}
+				}
+
+				if (romname == stcc)
+				{
+					aAddy2 = PatternScan("\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\xFF\xFF\xFF", "xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+
+					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x1F, false);
+					if ((CheckAddy2 == 0x4E) || (CheckAddy2 == 0x4F))
+					{
+						FFBAddress = (int)aAddy2 + 0x19;
 						PatternFind = true;
 					}
 				}
