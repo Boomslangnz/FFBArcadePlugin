@@ -511,6 +511,17 @@ static int configFeedbackLengthRaveRacer = GetPrivateProfileInt(TEXT("Settings")
 static int EnableForceSpringEffectRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectRaveRacer"), 0, settingsFilename);
 static int ForceSpringStrengthRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthRaveRacer"), 0, settingsFilename);
 
+static int configMinForceDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDaytonaMAME"), 0, settingsFilename);
+static int configMaxForceDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDaytonaMAME"), 100, settingsFilename);
+static int configAlternativeMinForceLeftDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDaytonaMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDaytonaMAME"), 100, settingsFilename);
+static int configAlternativeMinForceRightDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDaytonaMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceRightDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDaytonaMAME"), 100, settingsFilename);
+static int PowerModeDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDaytonaMAME"), 0, settingsFilename);
+static int configFeedbackLengthDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDaytonaMAME"), 120, settingsFilename);
+static int EnableForceSpringEffectDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytonaMAME"), 0, settingsFilename);
+static int ForceSpringStrengthDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytonaMAME"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -526,6 +537,7 @@ static bool Motion = false;
 static bool MotionFalse = false;
 static bool StartEffectOnce = false;
 static bool RaveRacerFind = false;
+static bool PatternFind = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -1159,6 +1171,9 @@ std::string crusnwld20("crusnwld20");
 std::string crusnwld19("crusnwld19");
 std::string crusnwld17("crusnwld17");
 std::string crusnwld13("crusnwld13");
+std::string daytona("daytona");
+std::string daytonas("daytonas");
+std::string daytonase("daytonase");
 std::string offroadc("offroadc");
 std::string offroadc4("offroadc4");
 std::string offroadc3("offroadc3");
@@ -1290,6 +1305,7 @@ std::string vaportrx("vaportrx");
 std::string vaportrp("vaportrp");
 
 //Our string to load game from
+std::string DaytonaActive("DaytonaActive");
 std::string Daytona2Active("Daytona2Active");
 std::string DirtDevilsActive("DirtDevilsActive");
 std::string Srally2Active("Srally2Active");
@@ -2120,6 +2136,22 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				ForceSpringStrength = ForceSpringStrengthRaveRacer;
 
 				RunningFFB = "RaveRacerActive";
+			}
+
+			if (romname == daytona || romname == daytonas || romname == daytonase)
+			{
+				configMinForce = configMinForceDaytonaMAME;
+				configMaxForce = configMaxForceDaytonaMAME;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftDaytonaMAME;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftDaytonaMAME;
+				configAlternativeMinForceRight = configAlternativeMinForceRightDaytonaMAME;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightDaytonaMAME;
+				configFeedbackLength = configFeedbackLengthDaytonaMAME;
+				PowerMode = PowerModeDaytonaMAME;
+				EnableForceSpringEffect = EnableForceSpringEffectDaytonaMAME;
+				ForceSpringStrength = ForceSpringStrengthDaytonaMAME;
+
+				RunningFFB = "DaytonaActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -2996,6 +3028,74 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					double percentLength = 100;
 					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
+		}
+
+		if (RunningFFB == DaytonaActive)
+		{
+			if (!PatternFind)
+			{
+				aAddy2 = PatternScan("\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8E\x0E\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3F\x42\x3F\x00\x02\x02\x01\x00\x00\x14\x1C\x00\x00\x00\x00\x00", "xxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???x?x?xx?x?xxxx");
+
+				if ((UINT8)aAddy2 == 0x05)
+				{
+					FFBAddress = (int)aAddy2 + 0x3D;
+					PatternFind = true;
+				}
+			}
+			else
+			{
+				UINT8 ff = helpers->ReadByte(FFBAddress, false);
+
+				if ((ff > 0x09) && (ff < 0x18))
+				{
+					//Spring
+					double percentForce = (ff - 15) / 8.0;
+					double percentLength = 100;
+					triggers->Spring(percentForce);
+				}
+
+				if ((ff > 0x1F) && (ff < 0x28))
+				{
+					//Clutch
+					double percentForce = (ff - 31) / 8.0;
+					double percentLength = 100;
+					triggers->Friction(percentForce);
+				}
+
+				if ((ff > 0x2F) && (ff < 0x3D))
+				{
+					//Centering
+					double percentForce = (ff - 47) / 13.0;
+					double percentLength = 100;
+					triggers->Spring(percentForce);
+				}
+
+				if ((ff > 0x3F) && (ff < 0x48))
+				{
+					//Uncentering
+					double percentForce = (ff - 63) / 8.0;
+					double percentLength = 100;
+					triggers->Sine(40, 0, percentForce);
+					triggers->Rumble(percentForce, percentForce, percentLength);
+				}
+
+				if ((ff > 0x4F) && (ff < 0x58))
+				{
+					//Roll Left
+					double percentForce = (ff - 79) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ff > 0x5F) && (ff < 0x68))
+				{
+					//Roll Right
+					double percentForce = (ff - 95) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
 		}
