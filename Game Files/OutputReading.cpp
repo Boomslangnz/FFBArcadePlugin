@@ -555,6 +555,17 @@ static int configFeedbackLengthSTCCMAME = GetPrivateProfileInt(TEXT("Settings"),
 static int EnableForceSpringEffectSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSTCCMAME"), 0, settingsFilename);
 static int ForceSpringStrengthSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSTCCMAME"), 0, settingsFilename);
 
+static int configMinForceSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSuperGTMAME"), 0, settingsFilename);
+static int configMaxForceSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSuperGTMAME"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSuperGTMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSuperGTMAME"), 100, settingsFilename);
+static int configAlternativeMinForceRightSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSuperGTMAME"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSuperGTMAME"), 100, settingsFilename);
+static int PowerModeSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSuperGTMAME"), 0, settingsFilename);
+static int configFeedbackLengthSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSuperGTMAME"), 120, settingsFilename);
+static int EnableForceSpringEffectSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSuperGTMAME"), 0, settingsFilename);
+static int ForceSpringStrengthSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSuperGTMAME"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -1315,6 +1326,7 @@ std::string alien3u("alien3u");
 std::string ptblank2("ptblank2");
 std::string ptblank2ua("ptblank2ua");
 std::string ghlpanic("ghlpanic");
+std::string sgt24h("sgt24h");
 std::string srallyc("srallyc");
 std::string srallycb("srallycb");
 std::string srallycdxa("srallycdxa");
@@ -2215,7 +2227,7 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				RunningFFB = "DaytonaActive";
 			}
 
-			if (romname == stcc)
+			if (romname == stcc || romname == stcca || romname == stccb)
 			{
 				configMinForce = configMinForceSTCCMAME;
 				configMaxForce = configMaxForceSTCCMAME;
@@ -2227,6 +2239,22 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 				PowerMode = PowerModeSTCCMAME;
 				EnableForceSpringEffect = EnableForceSpringEffectSTCCMAME;
 				ForceSpringStrength = ForceSpringStrengthSTCCMAME;
+
+				RunningFFB = "DaytonaActive";
+			}
+
+			if (romname == sgt24h)
+			{
+				configMinForce = configMinForceSuperGTMAME;
+				configMaxForce = configMaxForceSuperGTMAME;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftSuperGTMAME;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftSuperGTMAME;
+				configAlternativeMinForceRight = configAlternativeMinForceRightSuperGTMAME;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightSuperGTMAME;
+				configFeedbackLength = configFeedbackLengthSuperGTMAME;
+				PowerMode = PowerModeSuperGTMAME;
+				EnableForceSpringEffect = EnableForceSpringEffectSuperGTMAME;
+				ForceSpringStrength = ForceSpringStrengthSuperGTMAME;
 
 				RunningFFB = "DaytonaActive";
 			}
@@ -3160,6 +3188,18 @@ void OutputReading::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 					if ((CheckAddy2 == 0x4E) || (CheckAddy2 == 0x4F))
 					{
 						FFBAddress = (int)aAddy2 + 0x19;
+						PatternFind = true;
+					}
+				}
+
+				if (romname == sgt24h)
+				{
+					aAddy2 = PatternScan("\x03\x00\x00\x00\x09\x00\x00\x00\x1F\x00\x00\x00\x13\x00\x00\x00\x04\x00\x00\x00\x0F", "xxxxxxxxxxxxxxxxxxxxx");
+
+					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x14, false);
+					if (CheckAddy2 == 0x0C)
+					{
+						FFBAddress = (int)aAddy2 + 0x50;
 						PatternFind = true;
 					}
 				}
