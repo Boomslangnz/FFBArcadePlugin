@@ -33,8 +33,8 @@ void RTuned::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigger
 
 		if (LetsEnableFFB == 0x03)
 		{
-			EnableFFB = true;
 			helpers->WriteByte(0x8519C58, 0x07, false);	
+			EnableFFB = true;
 		}
 	}
 
