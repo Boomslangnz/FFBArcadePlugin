@@ -566,6 +566,17 @@ static int configFeedbackLengthSuperGTMAME = GetPrivateProfileInt(TEXT("Settings
 static int EnableForceSpringEffectSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSuperGT"), 0, settingsFilename);
 static int ForceSpringStrengthSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSuperGT"), 0, settingsFilename);
 
+static int configMinForceSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSuperChase"), 0, settingsFilename);
+static int configMaxForceSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSuperChase"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSuperChase"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSuperChase"), 100, settingsFilename);
+static int configAlternativeMinForceRightSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSuperChase"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSuperChase"), 100, settingsFilename);
+static int PowerModeSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSuperChase"), 0, settingsFilename);
+static int configFeedbackLengthSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSuperChase"), 120, settingsFilename);
+static int EnableForceSpringEffectSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSuperChase"), 0, settingsFilename);
+static int ForceSpringStrengthSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSuperChase"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -1334,6 +1345,7 @@ std::string srallycdx("srallycdx");
 std::string spacegun("spacegun");
 std::string spacegunu("spacegunu");
 std::string spacegunj("spacegunj");
+std::string superchs("superchs");
 std::string stcc("stcc");
 std::string stcca("stcca");
 std::string stccb("stccb");
@@ -1377,6 +1389,7 @@ std::string RaveRacerActive("RaveRacerActive");
 std::string AfterburnerActive("AfterburnerActive");
 std::string OutrunActive("OutrunActive");
 std::string PDriftActive("PDriftActive");
+std::string SuperChaseActive("SuperChaseActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -1663,10 +1676,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "RacingFullValueActive2";
 			}
 
-			if (romname == crusnwld || romname == crusnwld24 || romname == crusnwld23 || romname == crusnwld20 || romname == crusnwld19 || romname == crusnwld17 || romname == crusnwld13)
+			if (romname == crusnwld || romname == crusnwld24 || romname == crusnwld23 || romname == crusnwld20 || romname == crusnwld19 || romname == crusnwld17)
 			{
-
-
 				configMinForce = configMinForceCrusnWld;
 				configMaxForce = configMaxForceCrusnWld;
 				configAlternativeMinForceLeft = configAlternativeMinForceLeftCrusnWld;
@@ -1679,6 +1690,22 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				ForceSpringStrength = ForceSpringStrengthCrusnWld;
 
 				RunningFFB = "RacingFullValueActive2";
+			}
+
+			if (romname == superchs)
+			{
+				configMinForce = configMinForceSuperChase;
+				configMaxForce = configMaxForceSuperChase;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftSuperChase;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftSuperChase;
+				configAlternativeMinForceRight = configAlternativeMinForceRightSuperChase;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightSuperChase;
+				configFeedbackLength = configFeedbackLengthSuperChase;
+				PowerMode = PowerModeSuperChase;
+				EnableForceSpringEffect = EnableForceSpringEffectSuperChase;
+				ForceSpringStrength = ForceSpringStrengthSuperChase;
+
+				RunningFFB = "SuperChaseActive";
 			}
 
 			if (romname == offroadc || romname == offroadc4 || romname == offroadc3 || romname == offroadc1)
@@ -3305,6 +3332,48 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						double percentLength = 100;
 						triggers->Rumble(percentForce, 0, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+				}
+			}
+		}
+
+		if (RunningFFB == SuperChaseActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (!PatternFind)
+				{
+					aAddy2 = PatternScan("\xD2\x00\xFF\xFF\x00\x01\xE4", "xxxxxxx");
+
+					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x32, false);
+					if (CheckAddy2 == 0x04)
+					{
+						FFBAddress = (int)aAddy2 + 0x32;
+						PatternFind = true;
+					}
+				}
+				else
+				{
+					ff = helpers->ReadByte(FFBAddress, false);
+
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(ff);
+					helpers->log((char*)ffs.c_str());
+
+					if (ff & 0x01)
+					{
+						double percentForce = 1.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+
+					if (ff & 0x02)
+					{
+						double percentForce = 1.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 					}
 				}
 			}
