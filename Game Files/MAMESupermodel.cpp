@@ -1346,6 +1346,9 @@ std::string spacegun("spacegun");
 std::string spacegunu("spacegunu");
 std::string spacegunj("spacegunj");
 std::string superchs("superchs");
+std::string superchsp("superchsp");
+std::string superchsj("superchsj");
+std::string superchsu("superchsu");
 std::string stcc("stcc");
 std::string stcca("stcca");
 std::string stccb("stccb");
@@ -1692,7 +1695,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "RacingFullValueActive2";
 			}
 
-			if (romname == superchs)
+			if (romname == superchs || romname == superchsj || romname == superchsp || romname == superchsu)
 			{
 				configMinForce = configMinForceSuperChase;
 				configMaxForce = configMaxForceSuperChase;
