@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 1.9a
+Version 2.0
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -100,7 +100,7 @@ extremely generous.
 -Cisco Heat
 -Crusn'USA
 -Crusn' World
--Daytona USA
+-Daytona USA (M2 Emulator & MAME)
 -Daytona USA 2 - Power Edition
 -Daytona USA 2 - Battle on the Edge
 -Daytona Championship USA 
@@ -118,16 +118,16 @@ extremely generous.
 -House of the dead 4
 -Hyperdrive
 -Indy 500
--Initial D 
--Initial D 2
--Initial D 3
--Initial D 4
--Initial D 4 Japan
--Initial D 5
--Initial D 6
--Initial D 7
--Initial D 8
--Initial D Zero
+-Initial D Arcade Stage
+-Initial D Arcade Stage 2
+-Initial D Arcade Stage 3
+-Initial D Arcade Stage 4
+-Initial D Arcade Stage 4 Japan
+-Initial D Arcade Stage 5
+-Initial D Arcade Stage 6
+-Initial D Arcade Stage 7
+-Initial D Arcade Stage 8
+-Initial D Arcade Stage Zero
 -KO Drive
 -Laser Ghost
 -LeMans 24
@@ -150,7 +150,6 @@ extremely generous.
 -Rail Chase
 -Rambo
 -Rave Racer TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK!
-(will ONLY work on either Mame Binary 32 or 64 bit or MameUI64 for Mame version 0.199 or 0.206 on OLDMame Plugin)
 -Revolution X
 -Road Fighters 3D
 -R-Tuned : Ultimate Street Racing
@@ -159,12 +158,14 @@ extremely generous.
 -San Francisco Rush 2049
 -Scud Race
 -Scud Race Plus
--Sega Touring Car Championship
+-Sega Touring Car Championship (M2 Emulator & MAME)
 -Sega Racing Classic
--Sega Rally Championship
+-Sega Rally Championship (M2 Emulator & MAME)
 -Sega Rally 2
 -Sega Rally 3
--Super GT 24h
+-Super Chase - Criminal Termination
+-Super GT 24h (M2 Emulator & MAME)
+-Smashing Drive
 -SnoCross
 -Sonic & Sega All Stars Racing
 -Space gun
