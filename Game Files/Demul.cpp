@@ -21,8 +21,54 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "../Common Files/SignatureScanning.h"
 
 extern wchar_t* settingsFilename;
+extern int DeviceGUID;
+extern int configFeedbackLength;
+extern int configGameId;
+extern int configMinForce;
+extern int configMaxForce;
+extern int PowerMode;
+extern int EnableRumble;
+extern int ReverseRumble;
+extern int configFeedbackLength;
+extern int configAlternativeMinForceLeft;
+extern int configAlternativeMaxForceLeft;
+extern int configAlternativeMinForceRight;
+extern int configAlternativeMaxForceRight;
 extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
+
+static int configMinForceInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceInitialDDemul"), 0, settingsFilename);
+static int configMaxForceInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceInitialDDemul"), 100, settingsFilename);
+static int configAlternativeMinForceLeftInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftInitialDDemul"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftInitialDDemul"), 100, settingsFilename);
+static int configAlternativeMinForceRightInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightInitialDDemul"), 0, settingsFilename);
+static int configAlternativeMaxForceRightInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightInitialDDemul"), 100, settingsFilename);
+static int PowerModeInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeInitialDDemul"), 0, settingsFilename);
+static int configFeedbackLengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthInitialDDemul"), 120, settingsFilename);
+static int EnableForceSpringEffectInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectInitialDDemul"), 0, settingsFilename);
+static int ForceSpringStrengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthInitialDDemul"), 0, settingsFilename);
+
+static int configMinForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceNascarRacing"), 0, settingsFilename);
+static int configMaxForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceNascarRacing"), 100, settingsFilename);
+static int configAlternativeMinForceLeftNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftNascarRacing"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftNascarRacing"), 100, settingsFilename);
+static int configAlternativeMinForceRightNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightNascarRacing"), 0, settingsFilename);
+static int configAlternativeMaxForceRightNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightNascarRacing"), 100, settingsFilename);
+static int PowerModeNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeNascarRacing"), 0, settingsFilename);
+static int configFeedbackLengthNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthNascarRacing"), 120, settingsFilename);
+static int EnableForceSpringEffectNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectNascarRacing"), 0, settingsFilename);
+static int ForceSpringStrengthNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthNascarRacing"), 0, settingsFilename);
+
+static int configMinForceSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSmashingDrive"), 0, settingsFilename);
+static int configMaxForceSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSmashingDrive"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSmashingDrive"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSmashingDrive"), 100, settingsFilename);
+static int configAlternativeMinForceRightSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSmashingDrive"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSmashingDrive"), 100, settingsFilename);
+static int PowerModeSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSmashingDrive"), 0, settingsFilename);
+static int configFeedbackLengthSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSmashingDrive"), 120, settingsFilename);
+static int EnableForceSpringEffectSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSmashingDrive"), 0, settingsFilename);
+static int ForceSpringStrengthSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSmashingDrive"), 0, settingsFilename);
 
 static bool NascarRunning = false;
 static bool InitialDRunning = false;
@@ -141,18 +187,51 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		{
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring1))
 			{
+				configMinForce = configMinForceNascarRacing;
+				configMaxForce = configMaxForceNascarRacing;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftNascarRacing;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftNascarRacing;
+				configAlternativeMinForceRight = configAlternativeMinForceRightNascarRacing;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightNascarRacing;
+				configFeedbackLength = configFeedbackLengthNascarRacing;
+				PowerMode = PowerModeNascarRacing;
+				EnableForceSpringEffect = EnableForceSpringEffectNascarRacing;
+				ForceSpringStrength = ForceSpringStrengthNascarRacing;
+
 				NascarRunning = true;
 				WindowSearch = true;
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring2))
 			{
+				configMinForce = configMinForceInitialDDemul;
+				configMaxForce = configMaxForceInitialDDemul;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftInitialDDemul;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftInitialDDemul;
+				configAlternativeMinForceRight = configAlternativeMinForceRightInitialDDemul;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightInitialDDemul;
+				configFeedbackLength = configFeedbackLengthInitialDDemul;
+				PowerMode = PowerModeInitialDDemul;
+				EnableForceSpringEffect = EnableForceSpringEffectInitialDDemul;
+				ForceSpringStrength = ForceSpringStrengthInitialDDemul;
+
 				InitialDRunning = true;
 				WindowSearch = true;
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring3))
 			{
+				configMinForce = configMinForceSmashingDrive;
+				configMaxForce = configMaxForceSmashingDrive;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftSmashingDrive;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftSmashingDrive;
+				configAlternativeMinForceRight = configAlternativeMinForceRightSmashingDrive;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightSmashingDrive;
+				configFeedbackLength = configFeedbackLengthSmashingDrive;
+				PowerMode = PowerModeSmashingDrive;
+				EnableForceSpringEffect = EnableForceSpringEffectSmashingDrive;
+				ForceSpringStrength = ForceSpringStrengthSmashingDrive;
+
 				SmashingDriveRunning = true;
 				WindowSearch = true;
 			}
