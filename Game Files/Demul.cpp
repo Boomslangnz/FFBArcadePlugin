@@ -26,6 +26,7 @@ extern int ForceSpringStrength;
 
 static bool NascarRunning = false;
 static bool InitialDRunning = false;
+static bool SmashingDriveRunning = false;
 static bool FFBGameInit = false;
 static bool KickStartWait = false;
 static bool WindowSearch = false;
@@ -125,6 +126,7 @@ const TCHAR substring[] = TEXT("FPS");
 const TCHAR substring0[] = TEXT("spg");
 const TCHAR substring1[] = TEXT("NASCAR");
 const TCHAR substring2[] = TEXT("Initial D Arcade Stage");
+const TCHAR substring3[] = TEXT("Smashing Drive");
 
 void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -148,6 +150,12 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				InitialDRunning = true;
 				WindowSearch = true;
 			}
+
+			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring3))
+			{
+				SmashingDriveRunning = true;
+				WindowSearch = true;
+			}
 		}
 	}
 
@@ -168,7 +176,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 		if ((ffnascar > 0x10) && (ffnascar < 0x21))
 		{
-			helpers->log("moving wheel left");
+			helpers->log("moving wheel right");
 			double percentForce = (ffnascar - 16) / 16.0;
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
@@ -176,7 +184,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		}
 		else if ((ffnascar > 0x00) && (ffnascar < 0x11))
 		{
-			helpers->log("moving wheel right");
+			helpers->log("moving wheel left");
 			double percentForce = (17 - ffnascar) / 16.0;
 			double percentLength = 100;
 			triggers->Rumble(0, percentForce, percentLength);
@@ -235,7 +243,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 			if ((ff1 == 0x84) && (ff2 == 0x00) && (ff3 > 0x37) && (ff3 < 0x80))
 			{
-				helpers->log("moving wheel left");
+				helpers->log("moving wheel right");
 				double percentForce = (128 - ff3) / 72.0;
 				double percentLength = 100;
 				triggers->Rumble(percentForce, 0, percentLength);
@@ -243,8 +251,48 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			}
 			else if ((ff1 == 0x84) && (ff2 == 0x01) && (ff3 > 0x00) && (ff3 < 0x49))
 			{
-				helpers->log("moving wheel right");
+				helpers->log("moving wheel left");
 				double percentForce = (ff3 / 72.0);
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+	}
+
+	if (SmashingDriveRunning)
+	{
+		if (!FFBGameInit)
+		{	
+			aAddy2 = PatternScan("\xC0\xF3\x51\x00\x60\x9A\x2C\x01", "xxxxxxxx");
+			
+			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 - 0x0E, false);
+			if (CheckAddy == 0x07)
+			{
+				FFBAddress = (int)aAddy2 - 0xD0;
+				FFBGameInit = true;
+			}
+		}
+		else
+		{
+			INT_PTR FFBSmashingDrive = helpers->ReadIntPtr(FFBAddress, false);
+
+			std::string ffs = std::to_string(FFBSmashingDrive);
+			helpers->log((char*)ffs.c_str());
+			helpers->log("got value: ");
+
+			if ((FFBSmashingDrive > 0x01) && (FFBSmashingDrive < 0x100))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = FFBSmashingDrive / 255.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((FFBSmashingDrive > 0x1FF) && (FFBSmashingDrive < 0xFF01))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (FFBSmashingDrive / 65280.0);
 				double percentLength = 100;
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
