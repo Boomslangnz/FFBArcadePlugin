@@ -51,6 +51,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/OutRun2Real.h"
 #include "Game Files/SegaRacingClassic.h"
 #include "Game Files/SegaRally3.h"
+#include "Game Files/SegaRally3Other.h"
 #include "Game Files/SnoCross.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
@@ -832,6 +833,14 @@ LPCDIDATAFORMAT WINAPI DirectInputGetdfDIJoystick()
 	return originalGetdfDIJoystick();
 }
 
+void MEMwrite(void* adr, void* ptr, int size)
+{
+	DWORD OldProtection;
+	VirtualProtect(adr, size, PAGE_EXECUTE_READWRITE, &OldProtection);
+	memcpy(adr, ptr, size);
+	VirtualProtect(adr, size, OldProtection, &OldProtection);
+}
+
 // global variables 
 SDL_Haptic* haptic;
 SDL_Haptic* haptic2 = NULL;
@@ -961,6 +970,7 @@ const int H2_Overdrive = 43;
 const int Sno_Cross = 44;
 const int Bat_man = 45;
 const int R_Tuned = 46;
+const int SEGA_RALLY_3_Other = 47;
 
 HINSTANCE Get_hInstance()
 {
@@ -2019,6 +2029,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case SEGA_RALLY_3:
 		game = new SegaRally3;
 		break;
+	case SEGA_RALLY_3_Other:
+		game = new SegaRally3Other;
+		break;
 	case WACKY_RACES:
 		game = new WackyRaces;
 		break;
@@ -2210,6 +2223,10 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			}
 			hlp.log(buffer);
 			gl_hOriginalDll = LoadLibraryA(buffer);
+			if (configGameId == 47)
+			{
+				MEMwrite((void*)(0x57B2F0), (void*)"\x33\xC0\x40\xC3", 4);
+			}
 			if (configGameId == 29)
 			{
 				gl_hjgtDll = LoadLibraryA("jgt.dll");

@@ -65,22 +65,23 @@ static bool Hook(void * toHook, void * ourFunct, int len) {
 static DWORD jmpBackAddy;
 
 void FordRacingOther::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-	HMODULE hMod = GetModuleHandleA("inpout32.dll");
-	if (hMod)
+	if (!init)
 	{
-		if (!init)
+		HMODULE hMod = GetModuleHandleA("inpout32.dll");
+		if (hMod)
 		{
+
 			int hookLength = 6;
 			DWORD hookAddress = (DWORD)GetProcAddress(GetModuleHandle(L"inpout32.dll"), "Out32");
 			if (hookAddress)
-			{	
+			{
 				jmpBackAddy = hookAddress + hookLength;
 				Hook((void*)hookAddress, Out32, hookLength);
 				init = true;
 			}
-
 		}
 	}
+		
 	myTriggers = triggers;
 	myConstants = constants;
 	myHelpers = helpers;
