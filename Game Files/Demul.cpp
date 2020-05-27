@@ -20,6 +20,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <windows.h>
 #include "../Common Files/SignatureScanning.h"
 
+extern wchar_t* settingsFilename;
+extern int EnableForceSpringEffect;
+extern int ForceSpringStrength;
+
 static bool NascarRunning = false;
 static bool InitialDRunning = false;
 static bool FFBGameInit = false;
@@ -123,6 +127,11 @@ const TCHAR substring1[] = TEXT("NASCAR");
 const TCHAR substring2[] = TEXT("Initial D Arcade Stage");
 
 void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	if (EnableForceSpringEffect == 1)
+	{
+		triggers->Springi(ForceSpringStrength / 100.0);
+	}
 
 	if (!WindowSearch)
 	{
