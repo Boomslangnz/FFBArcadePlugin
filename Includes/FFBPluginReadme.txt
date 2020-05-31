@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 2.0
+Version 2.1
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -107,6 +107,7 @@ extremely generous.
 -Dirt Devils
 -Dirty Drivin
 -Emergency Call Ambulance
+-Faster Than Speed
 -F-1 Grand Prix Star
 -F-1 Grand Prix Star II
 -Ford Racing
@@ -135,6 +136,7 @@ extremely generous.
 -Let's Go Island 3D
 -Machstorm
 -Mario Kart GP DX
+-Maximum Speed
 -Mechanized Attack
 -Nascar Racing
 -OffRoad Challenge
@@ -149,7 +151,7 @@ extremely generous.
 -Power Drift
 -Rail Chase
 -Rambo
--Rave Racer TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK!
+-Rave Racer (TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK)
 -Revolution X
 -Road Fighters 3D
 -R-Tuned : Ultimate Street Racing
@@ -175,7 +177,7 @@ extremely generous.
 -Turkey Shoot
 -Under Fire
 -Vapor TRX
--Virtua Racing
+-Virtua Racing (CHANGE TO UPRIGHT CABINET)
 -Wacky Races
 -Wangan Midnight Maximum Tune 5
 -Le Mans 24
