@@ -70,9 +70,21 @@ static int configFeedbackLengthSmashingDrive = GetPrivateProfileInt(TEXT("Settin
 static int EnableForceSpringEffectSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSmashingDrive"), 0, settingsFilename);
 static int ForceSpringStrengthSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSmashingDrive"), 0, settingsFilename);
 
+static int configMinForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSmashingDrive"), 0, settingsFilename);
+static int configMaxForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSmashingDrive"), 100, settingsFilename);
+static int configAlternativeMinForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSmashingDrive"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSmashingDrive"), 100, settingsFilename);
+static int configAlternativeMinForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSmashingDrive"), 0, settingsFilename);
+static int configAlternativeMaxForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSmashingDrive"), 100, settingsFilename);
+static int PowerModeMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSmashingDrive"), 0, settingsFilename);
+static int configFeedbackLengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSmashingDrive"), 120, settingsFilename);
+static int EnableForceSpringEffectMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSmashingDrive"), 0, settingsFilename);
+static int ForceSpringStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSmashingDrive"), 0, settingsFilename);
+
 static bool NascarRunning = false;
 static bool InitialDRunning = false;
 static bool SmashingDriveRunning = false;
+static bool MaximumSpeedRunning = false;
 static bool FFBGameInit = false;
 static bool KickStartWait = false;
 static bool WindowSearch = false;
@@ -173,6 +185,7 @@ const TCHAR substring0[] = TEXT("spg");
 const TCHAR substring1[] = TEXT("NASCAR");
 const TCHAR substring2[] = TEXT("Initial D Arcade Stage");
 const TCHAR substring3[] = TEXT("Smashing Drive");
+const TCHAR substring4[] = TEXT("Maximum Speed");
 
 void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -233,6 +246,23 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				ForceSpringStrength = ForceSpringStrengthSmashingDrive;
 
 				SmashingDriveRunning = true;
+				WindowSearch = true;
+			}
+
+			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring4))
+			{
+				configMinForce = configMinForceMaximumSpeed;
+				configMaxForce = configMaxForceMaximumSpeed;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftMaximumSpeed;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftMaximumSpeed;
+				configAlternativeMinForceRight = configAlternativeMinForceRightMaximumSpeed;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightMaximumSpeed;
+				configFeedbackLength = configFeedbackLengthMaximumSpeed;
+				PowerMode = PowerModeMaximumSpeed;
+				EnableForceSpringEffect = EnableForceSpringEffectMaximumSpeed;
+				ForceSpringStrength = ForceSpringStrengthMaximumSpeed;
+
+				MaximumSpeedRunning = true;
 				WindowSearch = true;
 			}
 		}
@@ -372,6 +402,47 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			{
 				helpers->log("moving wheel left");
 				double percentForce = (FFBSmashingDrive / 65280.0);
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+	}
+
+	if (MaximumSpeedRunning)
+	{
+		if (!FFBGameInit)
+		{
+			aAddy2 = PatternScan("\x48\x03\x00\x00\xE0\x01\x00\x00\x2C\x01\x00\x00\xB4\x00\x00\x00\x00\x00\x00\x00\x20\xFE\xFF\xFF", "xxxxxxxxxxxxxxxxxxxxxxxx");
+
+			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 + 0x21, false);
+			if (CheckAddy == 0xFC)
+			{
+				FFBAddress = (int)aAddy2 + 0x18;
+				FFBGameInit = true;
+			}
+		}
+		else
+		{
+			UINT8 FFBMaximumSpeed = helpers->ReadIntPtr(FFBAddress, false);
+			UINT8 FFBMaximumSpeed2 = helpers->ReadByte(FFBAddress + 0x01, false);
+
+			std::string ffs = std::to_string(FFBMaximumSpeed);
+			helpers->log((char*)ffs.c_str());
+			helpers->log("got value: ");
+
+			if ((FFBMaximumSpeed > 0x7F) && (FFBMaximumSpeed < 0x100) && (FFBMaximumSpeed2 == 0xFF))
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (256 - FFBMaximumSpeed) / 128.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((FFBMaximumSpeed > 0x00) && (FFBMaximumSpeed < 0x81) && (FFBMaximumSpeed2 == 0x00))
+			{
+				helpers->log("moving wheel left");
+				double percentForce = FFBMaximumSpeed / 128.0;
 				double percentLength = 100;
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
