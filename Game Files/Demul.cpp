@@ -92,11 +92,23 @@ static int configFeedbackLengthFasterSpeed = GetPrivateProfileInt(TEXT("Settings
 static int EnableForceSpringEffectFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectFasterSpeed"), 0, settingsFilename);
 static int ForceSpringStrengthFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthFasterSpeed"), 0, settingsFilename);
 
+static int configMinForceATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceATVTrack"), 0, settingsFilename);
+static int configMaxForceATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceATVTrack"), 100, settingsFilename);
+static int configAlternativeMinForceLeftATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftATVTrack"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftATVTrack"), 100, settingsFilename);
+static int configAlternativeMinForceRightATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightATVTrack"), 0, settingsFilename);
+static int configAlternativeMaxForceRightATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightATVTrack"), 100, settingsFilename);
+static int PowerModeATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeATVTrack"), 0, settingsFilename);
+static int configFeedbackLengthATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthATVTrack"), 120, settingsFilename);
+static int EnableForceSpringEffectATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectATVTrack"), 0, settingsFilename);
+static int ForceSpringStrengthATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthATVTrack"), 0, settingsFilename);
+
 static bool NascarRunning = false;
 static bool InitialDRunning = false;
 static bool SmashingDriveRunning = false;
 static bool MaximumSpeedRunning = false;
 static bool FasterThanSpeedRunning = false;
+static bool ATVTrackRunning = false;
 static bool FFBGameInit = false;
 static bool KickStartWait = false;
 static bool WindowSearch = false;
@@ -252,6 +264,7 @@ const TCHAR substring2[] = TEXT("Initial D Arcade Stage");
 const TCHAR substring3[] = TEXT("Smashing Drive");
 const TCHAR substring4[] = TEXT("Maximum Speed");
 const TCHAR substring5[] = TEXT("Faster Than Speed");
+const TCHAR substring6[] = TEXT("ATV Track");
 
 void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -346,6 +359,23 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				ForceSpringStrength = ForceSpringStrengthFasterSpeed;
 
 				FasterThanSpeedRunning = true;
+				WindowSearch = true;
+			}
+
+			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring6))
+			{
+				configMinForce = configMinForceATVTrack;
+				configMaxForce = configMaxForceATVTrack;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftATVTrack;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftATVTrack;
+				configAlternativeMinForceRight = configAlternativeMinForceRightATVTrack;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightATVTrack;
+				configFeedbackLength = configFeedbackLengthATVTrack;
+				PowerMode = PowerModeATVTrack;
+				EnableForceSpringEffect = EnableForceSpringEffectATVTrack;
+				ForceSpringStrength = ForceSpringStrengthATVTrack;
+
+				ATVTrackRunning = true;
 				WindowSearch = true;
 			}
 		}
@@ -565,6 +595,43 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		{
 			helpers->log("moving wheel left");
 			double percentForce = fffaster / 11.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+	}
+
+	if (ATVTrackRunning)
+	{
+		if (!FFBGameInit)
+		{
+			aAddy2 = PatternScan("\x49\x55\x4C\x00\x00\x00\x05", "xxxxxxx");
+
+			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 - 0x04, false);
+			if (CheckAddy == 0x1E)
+			{
+				FFBAddress = (int)aAddy2 - 0x1A;
+				FFBGameInit = true;
+			}
+		}
+
+		float FFBATVTrack = helpers->ReadFloat32(FFBAddress, false);
+		std::string ffs = std::to_string(FFBATVTrack);
+		helpers->log((char*)ffs.c_str());
+		helpers->log("got value: ");
+
+		if (FFBATVTrack > 0)
+		{
+			helpers->log("moving wheel right");
+			double percentForce = FFBATVTrack;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if (FFBATVTrack < 0)
+		{
+			helpers->log("moving wheel left");
+			double percentForce = -FFBATVTrack;
 			double percentLength = 100;
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
