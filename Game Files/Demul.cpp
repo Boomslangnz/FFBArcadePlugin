@@ -70,27 +70,40 @@ static int configFeedbackLengthSmashingDrive = GetPrivateProfileInt(TEXT("Settin
 static int EnableForceSpringEffectSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSmashingDrive"), 0, settingsFilename);
 static int ForceSpringStrengthSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSmashingDrive"), 0, settingsFilename);
 
-static int configMinForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSmashingDrive"), 0, settingsFilename);
-static int configMaxForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSmashingDrive"), 100, settingsFilename);
-static int configAlternativeMinForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSmashingDrive"), 0, settingsFilename);
-static int configAlternativeMaxForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSmashingDrive"), 100, settingsFilename);
-static int configAlternativeMinForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSmashingDrive"), 0, settingsFilename);
-static int configAlternativeMaxForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSmashingDrive"), 100, settingsFilename);
-static int PowerModeMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSmashingDrive"), 0, settingsFilename);
-static int configFeedbackLengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSmashingDrive"), 120, settingsFilename);
-static int EnableForceSpringEffectMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSmashingDrive"), 0, settingsFilename);
-static int ForceSpringStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSmashingDrive"), 0, settingsFilename);
+static int configMinForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceMaximumSpeed"), 0, settingsFilename);
+static int configMaxForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceMaximumSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftMaximumSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftMaximumSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightMaximumSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightMaximumSpeed"), 100, settingsFilename);
+static int PowerModeMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeMaximumSpeed"), 0, settingsFilename);
+static int configFeedbackLengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthMaximumSpeed"), 120, settingsFilename);
+static int EnableForceSpringEffectMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectMaximumSpeed"), 0, settingsFilename);
+static int ForceSpringStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthMaximumSpeed"), 0, settingsFilename);
+
+static int configMinForceFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceFasterSpeed"), 0, settingsFilename);
+static int configMaxForceFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceFasterSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceLeftFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftFasterSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftFasterSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceRightFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightFasterSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceRightFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightFasterSpeed"), 100, settingsFilename);
+static int PowerModeFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeFasterSpeed"), 0, settingsFilename);
+static int configFeedbackLengthFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthFasterSpeed"), 120, settingsFilename);
+static int EnableForceSpringEffectFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectFasterSpeed"), 0, settingsFilename);
+static int ForceSpringStrengthFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthFasterSpeed"), 0, settingsFilename);
 
 static bool NascarRunning = false;
 static bool InitialDRunning = false;
 static bool SmashingDriveRunning = false;
 static bool MaximumSpeedRunning = false;
+static bool FasterThanSpeedRunning = false;
 static bool FFBGameInit = false;
 static bool KickStartWait = false;
 static bool WindowSearch = false;
 
 static INT_PTR FFBAddress;
 static int ffnascar = 0;
+static int fffaster = 0;
 
 int nascar(int ffnas) {
 	switch (ffnas) {
@@ -165,6 +178,58 @@ int nascar(int ffnas) {
 	}
 }
 
+int fasterspeed(int ffspeed) {
+	switch (ffspeed) {
+	case 0x1F:
+		return 22;
+	case 0x1D:
+		return 21;
+	case 0x1B:
+		return 20;
+	case 0x19:
+		return 19;
+	case 0x17:
+		return 18;
+	case 0x15:
+		return 17;
+	case 0x13:
+		return 16;
+	case 0x11:
+		return 15;
+	case 0x0F:
+		return 14;
+	case 0x0D:
+		return 13;
+	case 0x0B:
+		return 12;
+
+	case 0x1E:
+		return 11;
+	case 0x1C:
+		return 10;
+	case 0x1A:
+		return 9;
+	case 0x18:
+		return 8;
+	case 0x16:
+		return 7;
+	case 0x14:
+		return 6;
+	case 0x12:
+		return 5;
+	case 0x10:
+		return 4;
+	case 0x0E:
+		return 3;
+	case 0x0C:
+		return 2;
+	case 0x0A:
+		return 1;
+	default:
+		return 0;
+	}
+}
+
 static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 {
 	const DWORD TITLE_SIZE = 1024;
@@ -186,6 +251,7 @@ const TCHAR substring1[] = TEXT("NASCAR");
 const TCHAR substring2[] = TEXT("Initial D Arcade Stage");
 const TCHAR substring3[] = TEXT("Smashing Drive");
 const TCHAR substring4[] = TEXT("Maximum Speed");
+const TCHAR substring5[] = TEXT("Faster Than Speed");
 
 void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -263,6 +329,23 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				ForceSpringStrength = ForceSpringStrengthMaximumSpeed;
 
 				MaximumSpeedRunning = true;
+				WindowSearch = true;
+			}
+
+			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring5))
+			{
+				configMinForce = configMinForceFasterSpeed;
+				configMaxForce = configMaxForceFasterSpeed;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftFasterSpeed;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftFasterSpeed;
+				configAlternativeMinForceRight = configAlternativeMinForceRightFasterSpeed;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightFasterSpeed;
+				configFeedbackLength = configFeedbackLengthFasterSpeed;
+				PowerMode = PowerModeFasterSpeed;
+				EnableForceSpringEffect = EnableForceSpringEffectFasterSpeed;
+				ForceSpringStrength = ForceSpringStrengthFasterSpeed;
+
+				FasterThanSpeedRunning = true;
 				WindowSearch = true;
 			}
 		}
@@ -447,6 +530,44 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
+		}
+	}
+
+	if (FasterThanSpeedRunning)
+	{
+		if (!FFBGameInit)
+		{
+			aAddy2 = PatternScan("\x01\x00\x10\x00\x00\x00\x00\x00\x00\x2F\x76", "xxxxxxxxxxx");
+
+			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 + 0x0E, false);
+			if (CheckAddy == 0x0C)
+			{
+				FFBAddress = (int)aAddy2 + 0x0F;
+				FFBGameInit = true;
+			}
+		}
+
+		UINT8 ffbfaster = helpers->ReadByte(FFBAddress, false);
+		std::string ffs = std::to_string(ffbfaster);
+		helpers->log((char*)ffs.c_str());
+		helpers->log("got value: ");
+		fffaster = fasterspeed(ffbfaster);
+
+		if ((fffaster > 0x0B) && (fffaster < 0x17))
+		{
+			helpers->log("moving wheel right");
+			double percentForce = (fffaster - 11) / 11.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if ((fffaster > 0x00) && (fffaster < 0x0C))
+		{
+			helpers->log("moving wheel left");
+			double percentForce = fffaster / 11.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 	}
 }
