@@ -599,7 +599,7 @@ static int PowerModeAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TE
 static int configFeedbackLengthAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthAceDriverVictory"), 120, settingsFilename);
 static int EnableForceSpringEffectAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriverVictory"), 0, settingsFilename);
 static int ForceSpringStrengthAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriverVictory"), 0, settingsFilename);
-static int FFBDivideAceDriverVictoryLap = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideAceDriverVictoryLap"), 0, settingsFilename);
+static int FFBDivideAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideAceDriverVictory"), 0, settingsFilename);
 
 static int configMinForceAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriver"), 0, settingsFilename);
 static int configMaxForceAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriver"), 100, settingsFilename);
@@ -2374,7 +2374,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				PowerMode = PowerModeAceDriverVictory;
 				EnableForceSpringEffect = EnableForceSpringEffectAceDriverVictory;
 				ForceSpringStrength = ForceSpringStrengthAceDriverVictory;
-				Divide = FFBDivideAceDriverVictoryLap * 1.0;
+				Divide = FFBDivideAceDriverVictory * 1.0;
 
 				RunningFFB = "NamcoFFBActive";
 			}
