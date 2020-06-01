@@ -577,6 +577,17 @@ static int configFeedbackLengthSuperChase = GetPrivateProfileInt(TEXT("Settings"
 static int EnableForceSpringEffectSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSuperChase"), 0, settingsFilename);
 static int ForceSpringStrengthSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSuperChase"), 0, settingsFilename);
 
+static int configMinForceDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDirtDash"), 0, settingsFilename);
+static int configMaxForceDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDirtDash"), 100, settingsFilename);
+static int configAlternativeMinForceLeftDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDirtDash"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDirtDash"), 100, settingsFilename);
+static int configAlternativeMinForceRightDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDirtDash"), 0, settingsFilename);
+static int configAlternativeMaxForceRightDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDirtDash"), 100, settingsFilename);
+static int PowerModeDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDirtDash"), 0, settingsFilename);
+static int configFeedbackLengthDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDirtDash"), 120, settingsFilename);
+static int EnableForceSpringEffectDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDirtDash"), 0, settingsFilename);
+static int ForceSpringStrengthDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDirtDash"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -1230,6 +1241,7 @@ std::string crusnwld13("crusnwld13");
 std::string daytona("daytona");
 std::string daytonas("daytonas");
 std::string daytonase("daytonase");
+std::string dirtdash("dirtdash");
 std::string offroadc("offroadc");
 std::string offroadc4("offroadc4");
 std::string offroadc3("offroadc3");
@@ -1378,6 +1390,7 @@ std::string vaportrp("vaportrp");
 //Our string to load game from
 std::string DaytonaActive("DaytonaActive");
 std::string Daytona2Active("Daytona2Active");
+std::string DirtDashActive("DirtDashActive");
 std::string DirtDevilsActive("DirtDevilsActive");
 std::string SrallyActive("SrallyActive");
 std::string Srally2Active("Srally2Active");
@@ -2303,6 +2316,22 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				ForceSpringStrength = ForceSpringStrengthSRallyMAME;
 
 				RunningFFB = "SrallyActive";
+			}
+
+			if (romname == dirtdash)
+			{
+				configMinForce = configMinForceDirtDash;
+				configMaxForce = configMaxForceDirtDash;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftDirtDash;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftDirtDash;
+				configAlternativeMinForceRight = configAlternativeMinForceRightDirtDash;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightDirtDash;
+				configFeedbackLength = configFeedbackLengthDirtDash;
+				PowerMode = PowerModeDirtDash;
+				EnableForceSpringEffect = EnableForceSpringEffectDirtDash;
+				ForceSpringStrength = ForceSpringStrengthDirtDash;
+
+				RunningFFB = "DirtDashActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -3377,6 +3406,47 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						double percentLength = 100;
 						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+				}
+			}
+		}
+
+		if (RunningFFB == DirtDashActive)
+		{
+			if (Emulator == MAME)
+			{
+				if (!PatternFind)
+				{
+					aAddy2 = PatternScan("\x28\x00\x28\x00\x00\x00\x28", "xxxxxxx");
+
+					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x12, false);
+					if (CheckAddy2 == 0x01)
+					{
+						FFBAddress = (int)aAddy2 + 0x132;
+						PatternFind = true;
+					}
+				}
+				else
+				{
+					DWORD FFBDirtDash = helpers->ReadInt32(FFBAddress, false);
+
+					helpers->log("got value: ");
+					std::string ffs = std::to_string(FFBDirtDash);
+					helpers->log((char*)ffs.c_str());
+
+					if ((FFBDirtDash > 0x00) && (FFBDirtDash < 0x77A))
+					{
+						double percentForce = (FFBDirtDash / 1913.0);
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+					else if ((FFBDirtDash > 0xF9F3) && (FFBDirtDash < 0xFFFF))
+					{
+						double percentForce = ((65535 - FFBDirtDash) / 1547.0);
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 					}
 				}
 			}
