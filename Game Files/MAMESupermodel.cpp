@@ -3433,16 +3433,16 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					std::string ffs = std::to_string(FFBDirtDash);
 					helpers->log((char*)ffs.c_str());
 
-					if ((FFBDirtDash > 0x00) && (FFBDirtDash < 0x77A))
+					if ((FFBDirtDash >= 0x00) && (FFBDirtDash < 0x77A))
 					{
 						double percentForce = (FFBDirtDash / 1913.0);
 						double percentLength = 100;
 						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 					}
-					else if ((FFBDirtDash > 0xF9F3) && (FFBDirtDash < 0xFFFF))
+					else if ((FFBDirtDash > 0xF886) && (FFBDirtDash < 0x10000))
 					{
-						double percentForce = ((65535 - FFBDirtDash) / 1547.0);
+						double percentForce = ((65536 - FFBDirtDash) / 1913.0);
 						double percentLength = 100;
 						triggers->Rumble(percentForce, 0, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
