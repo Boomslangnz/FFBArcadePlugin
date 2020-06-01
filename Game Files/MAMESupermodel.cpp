@@ -587,6 +587,7 @@ static int PowerModeDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("Powe
 static int configFeedbackLengthDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDirtDash"), 120, settingsFilename);
 static int EnableForceSpringEffectDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDirtDash"), 0, settingsFilename);
 static int ForceSpringStrengthDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDirtDash"), 0, settingsFilename);
+static int FFBDivideDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideDirtDash"), 0, settingsFilename);
 
 static int configMinForceAceDriverVictory= GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriverVictory"), 0, settingsFilename);
 static int configMaxForceAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriverVictory"), 100, settingsFilename);
@@ -598,17 +599,19 @@ static int PowerModeAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TE
 static int configFeedbackLengthAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthAceDriverVictory"), 120, settingsFilename);
 static int EnableForceSpringEffectAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriverVictory"), 0, settingsFilename);
 static int ForceSpringStrengthAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriverVictory"), 0, settingsFilename);
+static int FFBDivideAceDriverVictoryLap = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideAceDriverVictoryLap"), 0, settingsFilename);
 
-static int configMinForceAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriverEvolution"), 0, settingsFilename);
-static int configMaxForceAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriverEvolution"), 100, settingsFilename);
-static int configAlternativeMinForceLeftAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftAceDriverEvolution"), 0, settingsFilename);
-static int configAlternativeMaxForceLeftAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftAceDriverEvolution"), 100, settingsFilename);
-static int configAlternativeMinForceRightAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightAceDriverEvolution"), 0, settingsFilename);
-static int configAlternativeMaxForceRightAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightAceDriverEvolution"), 100, settingsFilename);
-static int PowerModeAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeAceDriverEvolution"), 0, settingsFilename);
-static int configFeedbackLengthAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthAceDriverEvolution"), 120, settingsFilename);
-static int EnableForceSpringEffectAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriverEvolution"), 0, settingsFilename);
-static int ForceSpringStrengthAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriverEvolution"), 0, settingsFilename);
+static int configMinForceAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriver"), 0, settingsFilename);
+static int configMaxForceAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriver"), 100, settingsFilename);
+static int configAlternativeMinForceLeftAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftAceDriver"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftAceDriver"), 100, settingsFilename);
+static int configAlternativeMinForceRightAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightAceDriver"), 0, settingsFilename);
+static int configAlternativeMaxForceRightAceDriver= GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightAceDriver"), 100, settingsFilename);
+static int PowerModeAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeAceDriver"), 0, settingsFilename);
+static int configFeedbackLengthAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthAceDriver"), 120, settingsFilename);
+static int EnableForceSpringEffectAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriver"), 0, settingsFilename);
+static int ForceSpringStrengthAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriver"), 0, settingsFilename);
+static int FFBDivideAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideAceDriver"), 0, settingsFilename);
 
 static bool init = false;
 static bool initSpring = false;
@@ -2354,7 +2357,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				PowerMode = PowerModeDirtDash;
 				EnableForceSpringEffect = EnableForceSpringEffectDirtDash;
 				ForceSpringStrength = ForceSpringStrengthDirtDash;
-				Divide = 1913.0;
+				Divide = FFBDivideDirtDash * 1.0;
 
 				RunningFFB = "NamcoFFBActive";
 			}
@@ -2371,24 +2374,24 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				PowerMode = PowerModeAceDriverVictory;
 				EnableForceSpringEffect = EnableForceSpringEffectAceDriverVictory;
 				ForceSpringStrength = ForceSpringStrengthAceDriverVictory;
-				Divide = 643.0;
+				Divide = FFBDivideAceDriverVictoryLap * 1.0;
 
 				RunningFFB = "NamcoFFBActive";
 			}
 
 			if (romname == acedrvrw)
 			{
-				configMinForce = configMinForceAceDriverEvolution;
-				configMaxForce = configMaxForceAceDriverEvolution;
-				configAlternativeMinForceLeft = configAlternativeMinForceLeftAceDriverEvolution;
-				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftAceDriverEvolution;
-				configAlternativeMinForceRight = configAlternativeMinForceRightAceDriverEvolution;
-				configAlternativeMaxForceRight = configAlternativeMaxForceRightAceDriverEvolution;
-				configFeedbackLength = configFeedbackLengthAceDriverEvolution;
-				PowerMode = PowerModeAceDriverEvolution;
-				EnableForceSpringEffect = EnableForceSpringEffectAceDriverEvolution;
-				ForceSpringStrength = ForceSpringStrengthAceDriverEvolution;
-				Divide = 643.0;
+				configMinForce = configMinForceAceDriver;
+				configMaxForce = configMaxForceAceDriver;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftAceDriver;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftAceDriver;
+				configAlternativeMinForceRight = configAlternativeMinForceRightAceDriver;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightAceDriver;
+				configFeedbackLength = configFeedbackLengthAceDriver;
+				PowerMode = PowerModeAceDriver;
+				EnableForceSpringEffect = EnableForceSpringEffectAceDriver;
+				ForceSpringStrength = ForceSpringStrengthAceDriver;
+				Divide = FFBDivideAceDriver * 1.0;
 
 				RunningFFB = "NamcoFFBActive";
 			}
