@@ -588,6 +588,28 @@ static int configFeedbackLengthDirtDash = GetPrivateProfileInt(TEXT("Settings"),
 static int EnableForceSpringEffectDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDirtDash"), 0, settingsFilename);
 static int ForceSpringStrengthDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDirtDash"), 0, settingsFilename);
 
+static int configMinForceAceDriverVictory= GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriverVictory"), 0, settingsFilename);
+static int configMaxForceAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriverVictory"), 100, settingsFilename);
+static int configAlternativeMinForceLeftAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftAceDriverVictory"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftAceDriverVictory"), 100, settingsFilename);
+static int configAlternativeMinForceRightAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightAceDriverVictory"), 0, settingsFilename);
+static int configAlternativeMaxForceRightAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightAceDriverVictory"), 100, settingsFilename);
+static int PowerModeAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeAceDriverVictory"), 0, settingsFilename);
+static int configFeedbackLengthAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthAceDriverVictory"), 120, settingsFilename);
+static int EnableForceSpringEffectAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriverVictory"), 0, settingsFilename);
+static int ForceSpringStrengthAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriverVictory"), 0, settingsFilename);
+
+static int configMinForceAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriverEvolution"), 0, settingsFilename);
+static int configMaxForceAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriverEvolution"), 100, settingsFilename);
+static int configAlternativeMinForceLeftAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftAceDriverEvolution"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftAceDriverEvolution"), 100, settingsFilename);
+static int configAlternativeMinForceRightAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightAceDriverEvolution"), 0, settingsFilename);
+static int configAlternativeMaxForceRightAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightAceDriverEvolution"), 100, settingsFilename);
+static int PowerModeAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeAceDriverEvolution"), 0, settingsFilename);
+static int configFeedbackLengthAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthAceDriverEvolution"), 120, settingsFilename);
+static int EnableForceSpringEffectAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriverEvolution"), 0, settingsFilename);
+static int ForceSpringStrengthAceDriverEvolution = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriverEvolution"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -626,6 +648,7 @@ int stateFFB2;
 int stateFFB3;
 int stateFFBDevice2;
 int stateFFBDevice3;
+double Divide;
 static int FFBAddress;
 static UINT8 ff;
 
@@ -1224,6 +1247,7 @@ std::string srally2pa("srally2pa");
 //MAME Games
 std::string aburner2("aburner2");
 std::string aburner2g("aburner2g");
+std::string acedrvrw("acedrvrw");
 std::string vformula("vformula");
 std::string vr("vr");
 std::string sfrush("sfrush");
@@ -1385,17 +1409,18 @@ std::string cbombersp("cbombersp");
 std::string hyprdriv("hyprdriv");
 std::string vaportrx("vaportrx");
 std::string vaportrp("vaportrp");
+std::string victlapw("victlapw");
 
 //Our string to load game from
 std::string DaytonaActive("DaytonaActive");
 std::string Daytona2Active("Daytona2Active");
-std::string DirtDashActive("DirtDashActive");
 std::string DirtDevilsActive("DirtDevilsActive");
 std::string SrallyActive("SrallyActive");
 std::string Srally2Active("Srally2Active");
 std::string VirtuaRacingActive("VirtuaRacingActive");
 std::string HardDrivinActive("HardDrivinActive"); 
 std::string LightGunActive("LightGunActive");
+std::string NamcoFFBActive("NamcoFFBActive");
 std::string RacingFullValueActive1("RacingFullValueActive1");
 std::string RacingFullValueActive2("RacingFullValueActive2");
 std::string RacingActive1("RacingActive1");
@@ -2329,8 +2354,43 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				PowerMode = PowerModeDirtDash;
 				EnableForceSpringEffect = EnableForceSpringEffectDirtDash;
 				ForceSpringStrength = ForceSpringStrengthDirtDash;
+				Divide = 1913.0;
 
-				RunningFFB = "DirtDashActive";
+				RunningFFB = "NamcoFFBActive";
+			}
+
+			if (romname == victlapw)
+			{
+				configMinForce = configMinForceAceDriverVictory;
+				configMaxForce = configMaxForceAceDriverVictory;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftAceDriverVictory;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftAceDriverVictory;
+				configAlternativeMinForceRight = configAlternativeMinForceRightAceDriverVictory;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightAceDriverVictory;
+				configFeedbackLength = configFeedbackLengthAceDriverVictory;
+				PowerMode = PowerModeAceDriverVictory;
+				EnableForceSpringEffect = EnableForceSpringEffectAceDriverVictory;
+				ForceSpringStrength = ForceSpringStrengthAceDriverVictory;
+				Divide = 643.0;
+
+				RunningFFB = "NamcoFFBActive";
+			}
+
+			if (romname == acedrvrw)
+			{
+				configMinForce = configMinForceAceDriverEvolution;
+				configMaxForce = configMaxForceAceDriverEvolution;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftAceDriverEvolution;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftAceDriverEvolution;
+				configAlternativeMinForceRight = configAlternativeMinForceRightAceDriverEvolution;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightAceDriverEvolution;
+				configFeedbackLength = configFeedbackLengthAceDriverEvolution;
+				PowerMode = PowerModeAceDriverEvolution;
+				EnableForceSpringEffect = EnableForceSpringEffectAceDriverEvolution;
+				ForceSpringStrength = ForceSpringStrengthAceDriverEvolution;
+				Divide = 643.0;
+
+				RunningFFB = "NamcoFFBActive";
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
@@ -3410,40 +3470,75 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			}
 		}
 
-		if (RunningFFB == DirtDashActive)
+		if (RunningFFB == NamcoFFBActive)
 		{
 			if (Emulator == MAME)
 			{
 				if (!PatternFind)
 				{
-					aAddy2 = PatternScan("\x28\x00\x28\x00\x00\x00\x28", "xxxxxxx");
-
-					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x12, false);
-					if (CheckAddy2 == 0x01)
+					if (romname == dirtdash)
 					{
-						FFBAddress = (int)aAddy2 + 0x132;
-						PatternFind = true;
+						aAddy2 = PatternScan("\x28\x00\x28\x00\x00\x00\x28", "xxxxxxx");
+
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x12, false);
+						if (CheckAddy2 == 0x01)
+						{
+							FFBAddress = (int)aAddy2 + 0x132;
+							PatternFind = true;
+						}
+					}
+
+					if (romname == victlapw)
+					{
+						aAddy2 = PatternScan("\x0F\x00\x28\x00\x28", "xxxxx");
+
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x16, false);
+						if (CheckAddy2 == 0x38)
+						{
+							FFBAddress = (int)aAddy2 + 0x134;
+							PatternFind = true;
+						}
+					}
+
+					if (romname == acedrvrw)
+					{
+						aAddy2 = PatternScan("\x28\x00\x28\x00\x28\x00\x28\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x38", "xxxxxxxxxxxxxxxxxxxxx");
+
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x15, false);
+						if (CheckAddy2 == 0x80)
+						{
+							FFBAddress = (int)aAddy2 + 0x132;
+							PatternFind = true;
+						}
 					}
 				}
 				else
 				{
-					DWORD FFBDirtDash = helpers->ReadInt32(FFBAddress, false);
+					DWORD FFBNamco = helpers->ReadInt32(FFBAddress, false);
 
 					helpers->log("got value: ");
-					std::string ffs = std::to_string(FFBDirtDash);
+					std::string ffs = std::to_string(FFBNamco);
 					helpers->log((char*)ffs.c_str());
 
-					if ((FFBDirtDash >= 0x00) && (FFBDirtDash < 0x77A))
+					if ((FFBNamco >= 0x00) && (FFBNamco < 0x77A))
 					{
-						double percentForce = (FFBDirtDash / 1913.0);
+						double percentForce = (FFBNamco / Divide);
 						double percentLength = 100;
+						if (percentForce > 1.0)
+						{
+							percentForce = 1.0;
+						}
 						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 					}
-					else if ((FFBDirtDash > 0xF886) && (FFBDirtDash < 0x10000))
+					else if ((FFBNamco > 0xF886) && (FFBNamco < 0x10000))
 					{
-						double percentForce = ((65536 - FFBDirtDash) / 1913.0);
+						double percentForce = ((65536 - FFBNamco) / Divide);
 						double percentLength = 100;
+						if (percentForce > 1.0)
+						{
+							percentForce = 1.0;
+						}
 						triggers->Rumble(percentForce, 0, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 					}
