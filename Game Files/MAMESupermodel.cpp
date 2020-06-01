@@ -602,7 +602,6 @@ static bool HardDrivinFrame = false;
 static bool Motion = false;
 static bool MotionFalse = false;
 static bool StartEffectOnce = false;
-static bool RaveRacerFind = false;
 static bool PatternFind = false;
 
 HINSTANCE hInstance;
@@ -3177,7 +3176,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 		{
 			if (Emulator == MAME)
 			{
-				if (!RaveRacerFind)
+				if (!PatternFind)
 				{
 					aAddy2 = PatternScan("\x08\x00\x20\x00\x20\x00\x20\x00\x20\x00\x03", "xxxxxxxxxxx");
 
@@ -3185,7 +3184,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					if (CheckAddy2 == 0x3B)
 					{
 						FFBAddress = (int)aAddy2 + 0x20;
-						RaveRacerFind = true;
+						PatternFind = true;
 					}
 				}
 				else
