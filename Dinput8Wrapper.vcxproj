@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Common Files\CRCCheck.h" />
     <ClInclude Include="Common Files\SignatureScanning.h" />
     <ClInclude Include="Game Files\AliensExtermination.h" />
     <ClInclude Include="Game Files\Batman.h" />
@@ -55,6 +56,11 @@
   <ItemGroup>
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
     <ClCompile Include="Game Files\Batman.cpp" />
+    <ClCompile Include="Game Files\DemulATVTrackInputs.cpp" />
+    <ClCompile Include="Game Files\DemulFasterThanSpeedInputs.cpp" />
+    <ClCompile Include="Game Files\DemulMaximumSpeedInputs.cpp" />
+    <ClCompile Include="Game Files\DemulNascarInputs.cpp" />
+    <ClCompile Include="Game Files\DemulSmashingDriveInputs.cpp" />
     <ClCompile Include="Game Files\DirtyDrivin.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\GoldenGun.cpp" />
@@ -62,6 +68,7 @@
     <ClCompile Include="Game Files\H2Overdrive.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\InitialD0.cpp" />
+    <ClCompile Include="Game Files\DemulInitialDInputs.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\MAMESupermodel.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />

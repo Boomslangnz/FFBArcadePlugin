@@ -168,30 +168,14 @@ static int ThreadLoop()
 	if (Only2D == 1)
 	{
 		//2D Only
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24C9F, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CA0, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CA1, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAA, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAB, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAC, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBA, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBB, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBC, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x478F, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x4790, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x4791, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DB, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DC, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DD, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391D8, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391D9, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391DA, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391EF, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391F0, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391F1, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x5962F, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x59630, false);
-		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x59631, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24C9F, 3, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CAA, 3, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x24CBA, 3, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x478F, 3, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x3E6DB, 3, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391D8, 3, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x1391EF, 3, false);
+		myHelpers->WriteNop((INT_PTR)gl_hjgtDll + 0x5962F, 3, false);
 		int TwoDee1 = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x00946DA0, false);
 		int TwoDee2 = myHelpers->ReadIntPtr((INT_PTR)TwoDee1 + 0x38, false);
 		int TwoDee3 = myHelpers->ReadIntPtr((INT_PTR)TwoDee2 + 0x94, false);
@@ -309,31 +293,13 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 			init = true;
 		}
 
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D84B, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D84C, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D84D, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D852, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D853, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D854, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D85C, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D85D, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D85E, false);
+			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D84B, 3, false);
+			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D852, 3, false);
+			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18D85C, 3, false);
 			// Spicetools shit below. STOPS test buttons showing in menu etc if not nop
-		    helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA89, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA8A, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA8B, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA8C, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA8D, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA8E, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DAA3, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DAA4, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DAA5, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA97, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA98, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA99, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA9A, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA9B, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA9C, false);
+		    helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA89, 6, false);
+			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DAA3, 3, false);
+			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x18DA97, 6, false);
 
 		// Dpad stuff here to set as any button
 		char DpadUpChar[256];
@@ -391,9 +357,7 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 
 		if (SequentialGears == 1)
 		{
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x95DDA, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x95DDB, false);
-			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x95DDC, false);
+			helpers->WriteNop((INT_PTR)gl_hjgtDll + 0x95DDA, 3, false);
 		}
 
 		const int WHEEL_DEAD_ZONE = (SteeringDeadzone * 100.0);

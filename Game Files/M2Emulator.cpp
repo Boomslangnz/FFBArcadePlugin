@@ -397,9 +397,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
 						Sleep(100);
-						helpers->WriteNop(0xC2130, true);
-						helpers->WriteNop(0xC2131, true);
-						helpers->WriteNop(0xC2132, true);
+						helpers->WriteNop(0xC2130, 3, true);
 					}
 
 					if ((gamestate > 0x1A)& (gamestate < 0x1A))
@@ -501,9 +499,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
 						Sleep(100);
-						helpers->WriteNop(0xC2130, true);
-						helpers->WriteNop(0xC2131, true);
-						helpers->WriteNop(0xC2132, true);
+						helpers->WriteNop(0xC2130, 3, true);
 					}
 
 					if ((gamestate > 0x1A)& (gamestate < 0x1A))
@@ -560,9 +556,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
 						Sleep(100);
-						helpers->WriteNop(0xC2130, true);
-						helpers->WriteNop(0xC2131, true);
-						helpers->WriteNop(0xC2132, true);
+						helpers->WriteNop(0xC2130, 3, true);
 					}
 
 					if ((gamestate > 0x1A)& (gamestate < 0x1A))
@@ -688,9 +682,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
 						Sleep(100);
-						helpers->WriteNop(0xC2130, true);
-						helpers->WriteNop(0xC2131, true);
-						helpers->WriteNop(0xC2132, true);
+						helpers->WriteNop(0xC2130, 3, true);
 					}
 
 					if ((gamestate > 0x1A)& (gamestate < 0x1A))
@@ -761,9 +753,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
 						Sleep(100);
-						helpers->WriteNop(0xC2130, true);
-						helpers->WriteNop(0xC2131, true);
-						helpers->WriteNop(0xC2132, true);
+						helpers->WriteNop(0xC2130, 3, true);
 					}
 
 					if ((gamestate > 0x1A)& (gamestate < 0x1A))
@@ -820,9 +810,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
 					{
 						Sleep(100);
-						helpers->WriteNop(0xC2130, true);
-						helpers->WriteNop(0xC2131, true);
-						helpers->WriteNop(0xC2132, true);
+						helpers->WriteNop(0xC2130, 3, true);
 					}
 
 					if ((gamestate > 0x1A)& (gamestate < 0x1A))

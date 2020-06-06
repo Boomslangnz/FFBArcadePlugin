@@ -1925,7 +1925,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 
 	if (EnableRumble == 1)
 	{
-		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
+		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
 		{
 			// Workaround for SDL_JoystickRumble rumble not stopping issue
 			SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);

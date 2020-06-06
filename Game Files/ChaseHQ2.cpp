@@ -109,12 +109,7 @@ void ChaseHQ2::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 	{
 		if (!removecel)
 		{
-			helpers->WriteNop(0x31FFA, true);
-			helpers->WriteNop(0x31FFB, true);
-			helpers->WriteNop(0x31FFC, true);
-			helpers->WriteNop(0x31FFD, true);
-			helpers->WriteNop(0x31FFE, true);
-			helpers->WriteNop(0x31FFF, true);
+			helpers->WriteNop(0x31FFA, 6, true);
 			removecel = true;
 		}
 		helpers->WriteByte(0x130CB30, 0x00, true); // Remove Cel Shaded Filter

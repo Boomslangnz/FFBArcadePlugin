@@ -71,12 +71,17 @@ INT_PTR Helpers::WriteIntPtr(INT_PTR offset, INT_PTR val, bool isRelativeOffset)
 	return val;
 };
 
-UINT8 Helpers::WriteNop(INT_PTR offset, bool isRelativeOffset)
+UINT8 Helpers::WriteNop(INT_PTR offset, int countBytes, bool isRelativeOffset)
 {
 	U8 nop = 0x90;
 	SIZE_T written;
-	LPVOID trueOffset = (isRelativeOffset ? GetTranslatedOffset(offset) : (LPVOID)offset);
-	WriteProcessMemory(GetCurrentProcess(), trueOffset, &nop, 1, &written);
+	for (int i = 0; i < countBytes; i++)
+	{
+		offset = offset + i;
+		LPVOID trueOffset = (isRelativeOffset ? GetTranslatedOffset(offset) : (LPVOID)offset);
+		WriteProcessMemory(GetCurrentProcess(), trueOffset, &nop, 1, &written);
+		offset = offset - i;
+	}
 	return nop;
 }
 

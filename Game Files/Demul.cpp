@@ -18,7 +18,51 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
+#include "SDL.h"
+#include "../Common Files/CRCCheck.h"
 #include "../Common Files/SignatureScanning.h"
+
+extern void NascarInputsEnabled(Helpers* helpers);
+extern void InitialDInputsEnabled(Helpers* helpers);
+extern void SmashingDriveInputsEnabled(Helpers* helpers);
+extern void ATVTrackInputsEnabled(Helpers* helpers);
+extern void FasterThanSpeedInputsEnabled(Helpers* helpers);
+extern void MaximumSpeedInputsEnabled(Helpers* helpers);
+
+static EffectTriggers* myTriggers;
+static EffectConstants* myConstants;
+static Helpers* myHelpers;
+static HINSTANCE gl_padDemul;
+
+extern int joystick_index1;
+extern int joystick_index2;
+extern SDL_Joystick* GameController2;
+static bool testbuttonA;
+static bool servicebuttonA;
+static bool startbuttonA;
+static bool viewbuttonA;
+static bool shiftupA;
+static bool shiftdownA;
+static bool coinA;
+static bool VolumeMute = false;
+static bool VolumeMute2 = false;
+static bool CRCinit = false;
+static bool NOPinit = false;
+static bool InputFind = false;
+static SDL_Event e;
+
+INT_PTR SteeringAddress;
+INT_PTR AcclAddress;
+INT_PTR BrakeAddress;
+INT_PTR StartViewAddress;
+INT_PTR ShiftUpDownAddress;
+INT_PTR ServiceTestAddress;
+INT_PTR CoinAddress;
+
+static HWND hWnd;
+
+static bool Demul180428 = false;
+static bool Demul111117 = false;
 
 extern wchar_t* settingsFilename;
 extern int DeviceGUID;
@@ -36,6 +80,9 @@ extern int configAlternativeMinForceRight;
 extern int configAlternativeMaxForceRight;
 extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
+
+static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
+static int AutoCloseWindowError = GetPrivateProfileInt(TEXT("Settings"), TEXT("AutoCloseWindowError"), 0, settingsFilename);
 
 static int configMinForceInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceInitialDDemul"), 0, settingsFilename);
 static int configMaxForceInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceInitialDDemul"), 100, settingsFilename);
@@ -242,6 +289,233 @@ int fasterspeed(int ffspeed) {
 	}
 }
 
+static int InitialDFFBLoop()
+{
+	UINT8 ff1 = myHelpers->ReadByte(FFBAddress, false);
+	UINT8 ff2 = myHelpers->ReadByte(FFBAddress + 0x01, false);
+	UINT8 ff3 = myHelpers->ReadByte(FFBAddress + 0x02, false);
+
+	if (KickStartWait)
+	{
+		if ((ff1 == 0x80) && (ff3 == 0x01))
+		{
+			myTriggers->Spring(1.0);
+		}
+
+		if ((ff1 == 0x85) && (ff2 == 0x3F) && (ff3 > 0x00) && (ff3 < 0x30))
+		{
+			double percentForce = ff3 / 47.0;
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, percentForce, percentLength);
+			myTriggers->Sine(40, 0, percentForce);
+		}
+
+		if ((ff1 == 0x86) && (ff2 == 0x02) && (ff3 > 0x09) && (ff3 < 0x3C))
+		{
+			double percentForce = (60 - ff3) / 43.0;
+			double percentLength = 100;
+			myTriggers->Spring(percentForce);
+		}
+
+		if ((ff1 == 0x84) && (ff2 == 0x00) && (ff3 > 0x37) && (ff3 < 0x80))
+		{
+			double percentForce = (128 - ff3) / 72.0;
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, 0, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if ((ff1 == 0x84) && (ff2 == 0x01) && (ff3 > 0x00) && (ff3 < 0x49))
+		{
+			double percentForce = (ff3 / 72.0);
+			double percentLength = 100;
+			myTriggers->Rumble(0, percentForce, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+	}
+	return 0;
+}
+
+static int SmashingDriveFFBLoop()
+{
+	INT_PTR FFBSmashingDrive = myHelpers->ReadIntPtr(FFBAddress, false);
+
+	if ((FFBSmashingDrive > 0x01) && (FFBSmashingDrive < 0x100))
+	{
+		double percentForce = FFBSmashingDrive / 255.0;
+		double percentLength = 100;
+		myTriggers->Rumble(percentForce, 0, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+	}
+	else if ((FFBSmashingDrive > 0x1FF) && (FFBSmashingDrive < 0xFF01))
+	{
+		double percentForce = (FFBSmashingDrive / 65280.0);
+		double percentLength = 100;
+		myTriggers->Rumble(0, percentForce, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+	}
+	return 0;
+}
+
+static int ATVTrackFFBLoop()
+{
+	float FFBATVTrack = myHelpers->ReadFloat32(FFBAddress, false);
+
+	if (FFBATVTrack > 0)
+	{
+		double percentForce = FFBATVTrack;
+		double percentLength = 100;
+		myTriggers->Rumble(percentForce, 0, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+	}
+	else if (FFBATVTrack < 0)
+	{
+		double percentForce = -FFBATVTrack;
+		double percentLength = 100;
+		myTriggers->Rumble(0, percentForce, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+	}
+	return 0;
+}
+
+static int FasterThanSpeedFFBLoop()
+{
+	UINT8 ffbfaster = myHelpers->ReadByte(FFBAddress, false);
+	fffaster = fasterspeed(ffbfaster);
+
+	if ((fffaster > 0x0B) && (fffaster < 0x17))
+	{
+		double percentForce = (fffaster - 11) / 11.0;
+		double percentLength = 100;
+		myTriggers->Rumble(percentForce, 0, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+	}
+	else if ((fffaster > 0x00) && (fffaster < 0x0C))
+	{
+		double percentForce = fffaster / 11.0;
+		double percentLength = 100;
+		myTriggers->Rumble(0, percentForce, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+	}
+	return 0;
+}
+
+static int MaximumSpeedFFBLoop()
+{
+	UINT8 FFBMaximumSpeed = myHelpers->ReadIntPtr(FFBAddress, false);
+	UINT8 FFBMaximumSpeed2 = myHelpers->ReadByte(FFBAddress + 0x01, false);
+
+	if ((FFBMaximumSpeed > 0x7F) && (FFBMaximumSpeed < 0x100) && (FFBMaximumSpeed2 == 0xFF))
+	{
+		double percentForce = (256 - FFBMaximumSpeed) / 128.0;
+		double percentLength = 100;
+		myTriggers->Rumble(percentForce, 0, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+	}
+	else if ((FFBMaximumSpeed > 0x00) && (FFBMaximumSpeed < 0x81) && (FFBMaximumSpeed2 == 0x00))
+	{
+		double percentForce = FFBMaximumSpeed / 128.0;
+		double percentLength = 100;
+		myTriggers->Rumble(0, percentForce, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+	}
+	return 0;
+}
+
+static int NascarFFBLoop()
+{
+	UINT8 ffnas = myHelpers->ReadByte(FFBAddress, false);
+	ffnascar = nascar(ffnas);
+
+	if ((ffnascar > 0x10) && (ffnascar < 0x21))
+	{
+		double percentForce = (ffnascar - 16) / 16.0;
+		double percentLength = 100;
+		myTriggers->Rumble(percentForce, 0, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+	}
+	else if ((ffnascar > 0x00) && (ffnascar < 0x11))
+	{
+		double percentForce = (17 - ffnascar) / 16.0;
+		double percentLength = 100;
+		myTriggers->Rumble(0, percentForce, percentLength);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+	}
+	return 0;
+}
+
+static DWORD WINAPI NascarRunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		NascarFFBLoop();
+		Sleep(16);
+	}
+}
+
+static DWORD WINAPI InitialDRunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		InitialDFFBLoop();
+		Sleep(16);
+	}
+}
+
+static DWORD WINAPI SmashingDriveRunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		SmashingDriveFFBLoop();
+		Sleep(16);
+	}
+}
+
+static DWORD WINAPI ATVTrackRunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		ATVTrackFFBLoop();
+		Sleep(16);
+	}
+}
+
+static DWORD WINAPI FasterThanSpeedRunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		FasterThanSpeedFFBLoop();
+		Sleep(16);
+	}
+}
+
+static DWORD WINAPI MaximumSpeedRunningLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		MaximumSpeedFFBLoop();
+		Sleep(16);
+	}
+}
+
+void changeVolume()
+{
+	INPUT ip = { 0 };
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wVk = VK_VOLUME_MUTE;
+	SendInput(1, &ip, sizeof(INPUT));
+	ip.ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, &ip, sizeof(INPUT));
+}
+
+static DWORD WINAPI VolumeMuteThread(LPVOID lpParam)
+{
+	SendMessage(hWnd, WM_CLOSE, NULL, NULL);
+	Sleep(1500);
+	changeVolume();
+	VolumeMute = true;
+	return 0;
+}
+
 static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
 {
 	const DWORD TITLE_SIZE = 1024;
@@ -268,6 +542,142 @@ const TCHAR substring6[] = TEXT("ATV Track");
 
 void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
+	myTriggers = triggers;
+	myConstants = constants;
+	myHelpers = helpers;
+
+	if (AutoCloseWindowError == 1)
+	{
+		if (!VolumeMute)
+		{
+			if (!VolumeMute2)
+			{
+				changeVolume();
+				VolumeMute2 = true;
+			}
+
+			//Remove window error popup
+			hWnd = FindWindowA(0, ("padDemul"));
+			if (hWnd > NULL)
+			{
+				CreateThread(NULL, 0, VolumeMuteThread, NULL, 0, NULL);
+			}
+		}
+	}
+
+	if (!CRCinit)
+	{
+		if (InputDeviceWheelEnable == 1)
+		{
+			static char newCrc[0x400];
+			// Craft CRC detection without virtual address
+			memcpy(newCrc, GetModuleHandle(nullptr), 0x400);
+			DWORD pePTR = *(DWORD*)(newCrc + 0x3C);
+
+			// Overwrite ImageBase with 8 bytes of 0
+			*(DWORD*)(newCrc + pePTR + 0x18) = 0x00000000;
+			*(DWORD*)(newCrc + pePTR + 0x18 + 4) = 0x00000000;
+#ifdef _AMD64_
+			* (DWORD*)(newCrc + pePTR + 50) = 0x00000000;
+#endif
+			* (DWORD*)(newCrc + pePTR + 54) = 0x00000000;
+			uint32_t newCrcResult = GetCRC32(newCrc, 0x400);
+			switch (newCrcResult)
+			{
+			case 0x875a800d:
+				Demul180428 = true;
+				break;
+			case 0x04f85ceb:
+				Demul111117 = true;
+				break;
+			}
+
+			if ((Demul180428) || (Demul111117))
+			{
+				CRCinit = true;
+			}
+		}
+	}
+
+	if (NOPinit)
+	{
+		gl_padDemul = LoadLibraryA("padDemul.dll");
+
+		if (Demul180428)
+		{
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x27013, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26F31, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x271F7, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x276BD, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x272FF, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26FBD, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x27685, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x276A2, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26FEC, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x270A3, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26FE1, 3, false);
+		}
+
+		if (Demul111117)
+		{
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26B31, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26DD0, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x272AD, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26B9C, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x27275, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x27292, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26BC2, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26BBA, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26BE3, 3, false);
+		}
+
+		if (NascarRunning)
+		{
+			helpers->WriteByte(SteeringAddress, 0x80, false);
+			helpers->WriteByte(AcclAddress, 0x00, false);
+			helpers->WriteByte(BrakeAddress, 0x00, false);
+			helpers->WriteByte(ShiftUpDownAddress, 0x28, false);
+			NascarInputsEnabled(helpers);
+		}
+
+		if (InitialDRunning)
+		{
+			helpers->WriteByte(SteeringAddress, 0x80, false);
+			helpers->WriteByte(AcclAddress, 0x00, false);
+			helpers->WriteByte(BrakeAddress, 0x00, false);
+			InitialDInputsEnabled(helpers);
+		}
+
+		if (SmashingDriveRunning)
+		{
+			helpers->WriteByte(SteeringAddress, 0x80, false);
+			SmashingDriveInputsEnabled(helpers);
+		}
+
+		if (ATVTrackRunning)
+		{
+			helpers->WriteByte(SteeringAddress, 0x80, false);
+			helpers->WriteByte(AcclAddress, 0x00, false);
+			ATVTrackInputsEnabled(helpers);
+		}
+
+		if (FasterThanSpeedRunning)
+		{
+			helpers->WriteByte(SteeringAddress, 0x80, false);
+			helpers->WriteByte(AcclAddress, 0x00, false);
+			helpers->WriteByte(BrakeAddress, 0x00, false);
+			FasterThanSpeedInputsEnabled(helpers);
+		}
+
+		if (MaximumSpeedRunning)
+		{
+			helpers->WriteByte(SteeringAddress, 0x80, false);
+			helpers->WriteByte(AcclAddress, 0x00, false);
+			helpers->WriteByte(BrakeAddress, 0x00, false);
+			MaximumSpeedInputsEnabled(helpers);
+		}
+	}
+		
 	if (EnableForceSpringEffect == 1)
 	{
 		triggers->Springi(ForceSpringStrength / 100.0);
@@ -385,33 +795,34 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!FFBGameInit)
 		{
-			FFBGameInit = true;
 			aAddy2 = PatternScan("\x13\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x50\x72\x6F\x64\x75\x63\x65\x64\x20\x42\x79\x20", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			FFBAddress = (int)aAddy2 - 0x2F0;
+			CreateThread(NULL, 0, NascarRunningLoop, NULL, 0, NULL);
+			FFBGameInit = true;
 		}
-
-		UINT8 ffnas = helpers->ReadByte(FFBAddress, false);
-		std::string ffs = std::to_string(ffnas);
-		helpers->log((char*)ffs.c_str());
-		helpers->log("got value: ");
-		ffnascar = nascar(ffnas);
-
-		if ((ffnascar > 0x10) && (ffnascar < 0x21))
+		else
 		{
-			helpers->log("moving wheel right");
-			double percentForce = (ffnascar - 16) / 16.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if ((ffnascar > 0x00) && (ffnascar < 0x11))
-		{
-			helpers->log("moving wheel left");
-			double percentForce = (17 - ffnascar) / 16.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
+			if (InputDeviceWheelEnable == 1)
+			{
+				if (!InputFind)
+				{
+					aAddy = PatternScan("\x11\x00\x16\x1F\x05\x04\x1D\x0D\x07\x12\x18\x14\x02\x13\x09\x15\x0E\x19\x01\x1C\x08\x1A\x17\x03\x0F\x1B\x00\x10\x0A\x0B\x0C\x06\x01", "x?xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+					UINT8 CheckaAddy = helpers->ReadByte((int)aAddy + 0x01, false);
+					if (CheckaAddy == 0x1E)
+					{
+						SteeringAddress = (int)aAddy - 0xC45;
+						AcclAddress = (int)aAddy - 0xC0D;
+						BrakeAddress = (int)aAddy - 0xBD5;
+						ShiftUpDownAddress = (int)aAddy - 0xDEA;
+						ServiceTestAddress = (int)aAddy - 0x108A;
+						StartViewAddress = (int)aAddy - 0xF8E;
+						CoinAddress = (int)aAddy - 0xFE2;
+						NOPinit = true;
+						InputFind = true;
+					}
+				}
+			}
+		}	
 	}
 
 	if (InitialDRunning)
@@ -419,69 +830,45 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		if (!FFBGameInit)
 		{
 			Sleep(6000);
-			FFBGameInit = true;
 			aAddy2 = PatternScan("\x88\xA9\x00\x09", "xxxx");
 			FFBAddress = (int)aAddy2 + 0x01;
+			FFBGameInit = true;
 		}
-
-		UINT8 ff1 = helpers->ReadByte(FFBAddress, false);
-		UINT8 ff2 = helpers->ReadByte(FFBAddress + 0x01, false);
-		UINT8 ff3 = helpers->ReadByte(FFBAddress + 0x02, false);
-
-		std::string ffs = std::to_string(ff1);
-		helpers->log((char*)ffs.c_str());
-		helpers->log("got value: ");
 
 		if (!KickStartWait)
 		{
 			if (FFBAddress > 0)
 			{
 				Sleep(6000);
+				CreateThread(NULL, 0, InitialDRunningLoop, NULL, 0, NULL);
 				KickStartWait = true;
 			}
 		}
-
-		if (KickStartWait)
-		{
-			if ((ff1 == 0x80) && (ff3 == 0x01))
+		else
+		{ 
+			if (InputDeviceWheelEnable == 1)
 			{
-				triggers->Spring(1.0);
-			}
-
-			if ((ff1 == 0x85) && (ff2 == 0x3F) && (ff3 > 0x00) && (ff3 < 0x30))
-			{
-				double percentForce = ff3 / 47.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, percentForce, percentLength);
-				triggers->Sine(40, 0, percentForce);
-			}
-
-			if ((ff1 == 0x86) && (ff2 == 0x02) && (ff3 > 0x09) && (ff3 < 0x3C))
-			{
-				double percentForce = (60 - ff3) / 43.0;
-				double percentLength = 100;
-				triggers->Spring(percentForce);
-			}
-
-			if ((ff1 == 0x84) && (ff2 == 0x00) && (ff3 > 0x37) && (ff3 < 0x80))
-			{
-				helpers->log("moving wheel right");
-				double percentForce = (128 - ff3) / 72.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((ff1 == 0x84) && (ff2 == 0x01) && (ff3 > 0x00) && (ff3 < 0x49))
-			{
-				helpers->log("moving wheel left");
-				double percentForce = (ff3 / 72.0);
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				if (!InputFind)
+				{
+					aAddy = PatternScan("\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\xFF\xFF\x00\x00\x00\x00\x00\x00\x00\x00", "xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+					UINT8 CheckaAddy = helpers->ReadByte((int)aAddy - 0x2A0, false);
+					if (CheckaAddy == 0x01)
+					{
+						SteeringAddress = (int)aAddy - 0x85;
+						AcclAddress = (int)aAddy - 0x4D;
+						BrakeAddress = (int)aAddy - 0x15;
+						StartViewAddress = (int)aAddy - 0x14A;
+						ShiftUpDownAddress = (int)aAddy - 0xDA;
+						ServiceTestAddress = (int)aAddy - 0x246;
+						CoinAddress = (int)aAddy - 0x19E;
+						NOPinit = true;
+						InputFind = true;
+					}
+				}
 			}
 		}
 	}
-
+		
 	if (SmashingDriveRunning)
 	{
 		if (!FFBGameInit)
@@ -492,32 +879,27 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			if (CheckAddy == 0x07)
 			{
 				FFBAddress = (int)aAddy2 - 0xD0;
+				CreateThread(NULL, 0, SmashingDriveRunningLoop, NULL, 0, NULL);
 				FFBGameInit = true;
 			}
 		}
 		else
 		{
-			INT_PTR FFBSmashingDrive = helpers->ReadIntPtr(FFBAddress, false);
-
-			std::string ffs = std::to_string(FFBSmashingDrive);
-			helpers->log((char*)ffs.c_str());
-			helpers->log("got value: ");
-
-			if ((FFBSmashingDrive > 0x01) && (FFBSmashingDrive < 0x100))
+			if (InputDeviceWheelEnable == 1)
 			{
-				helpers->log("moving wheel right");
-				double percentForce = FFBSmashingDrive / 255.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((FFBSmashingDrive > 0x1FF) && (FFBSmashingDrive < 0xFF01))
-			{
-				helpers->log("moving wheel left");
-				double percentForce = (FFBSmashingDrive / 65280.0);
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				if (!InputFind)
+				{
+					aAddy = PatternScan("\x0C\x00\x0E\x0F\x08\x09\x0A\x0B\x1C\x1D\x1E\x1F\x18\x19\x1A\x1B\x04\x05\x06\x07\x00\x01\x02\x03\x14\x15\x16\x17\x10\x11", "x?xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+					UINT8 CheckaAddy = helpers->ReadByte((int)aAddy + 0x01, false);
+					if (CheckaAddy == 0x0D)
+					{
+						SteeringAddress = (int)aAddy - 0x80A;
+						ServiceTestAddress = (int)aAddy - 0x95A;
+						AcclAddress = (int)aAddy - 0x896;
+						NOPinit = true;
+						InputFind = true;
+					}
+				}
 			}
 		}
 	}
@@ -532,33 +914,30 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			if (CheckAddy == 0xFC)
 			{
 				FFBAddress = (int)aAddy2 + 0x18;
+				CreateThread(NULL, 0, MaximumSpeedRunningLoop, NULL, 0, NULL);
 				FFBGameInit = true;
 			}
 		}
 		else
 		{
-			UINT8 FFBMaximumSpeed = helpers->ReadIntPtr(FFBAddress, false);
-			UINT8 FFBMaximumSpeed2 = helpers->ReadByte(FFBAddress + 0x01, false);
-
-			std::string ffs = std::to_string(FFBMaximumSpeed);
-			helpers->log((char*)ffs.c_str());
-			helpers->log("got value: ");
-
-			if ((FFBMaximumSpeed > 0x7F) && (FFBMaximumSpeed < 0x100) && (FFBMaximumSpeed2 == 0xFF))
+			if (InputDeviceWheelEnable == 1)
 			{
-				helpers->log("moving wheel right");
-				double percentForce = (256 - FFBMaximumSpeed) / 128.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((FFBMaximumSpeed > 0x00) && (FFBMaximumSpeed < 0x81) && (FFBMaximumSpeed2 == 0x00))
-			{
-				helpers->log("moving wheel left");
-				double percentForce = FFBMaximumSpeed / 128.0;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				if (!InputFind)
+				{
+					aAddy = PatternScan("\x14\x00\x05\x10\x0C\x18\x19\x04\x0B\x11\x0D\x1C\x1D\x02\x1F\x08\x06\x17\x0A\x0E\x16\x1A\x07\x15\x0F\x13\x01\x12\x03\x1E\x09", "x?xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+					UINT8 CheckaAddy = helpers->ReadByte((int)aAddy + 0x01, false);
+					if (CheckaAddy == 0x1B)
+					{
+						SteeringAddress = (int)aAddy - 0x1316;
+						AcclAddress = (int)aAddy - 0x12DE;
+						BrakeAddress = (int)aAddy - 0x12A6;
+						ShiftUpDownAddress = (int)aAddy - 0x14F2;
+						ServiceTestAddress = (int)aAddy - 0x14F1;
+						CoinAddress = (int)aAddy - 0x136A;
+						NOPinit = true;
+						InputFind = true;
+					}
+				}
 			}
 		}
 	}
@@ -573,32 +952,32 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			if (CheckAddy == 0x0C)
 			{
 				FFBAddress = (int)aAddy2 + 0x0F;
+				CreateThread(NULL, 0, FasterThanSpeedRunningLoop, NULL, 0, NULL);
 				FFBGameInit = true;
 			}
 		}
-
-		UINT8 ffbfaster = helpers->ReadByte(FFBAddress, false);
-		std::string ffs = std::to_string(ffbfaster);
-		helpers->log((char*)ffs.c_str());
-		helpers->log("got value: ");
-		fffaster = fasterspeed(ffbfaster);
-
-		if ((fffaster > 0x0B) && (fffaster < 0x17))
+		else
 		{
-			helpers->log("moving wheel right");
-			double percentForce = (fffaster - 11) / 11.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if ((fffaster > 0x00) && (fffaster < 0x0C))
-		{
-			helpers->log("moving wheel left");
-			double percentForce = fffaster / 11.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
+			if (InputDeviceWheelEnable == 1)
+			{
+				if (!InputFind)
+				{
+					aAddy = PatternScan("\x14\x00\x05\x10\x0C\x18\x19\x04\x0B\x11\x0D\x1C\x1D\x02\x1F\x08\x06\x17\x0A\x0E\x16\x1A\x07\x15\x0F\x13\x01\x12\x03\x1E\x09", "x?xxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+					UINT8 CheckaAddy = helpers->ReadByte((int)aAddy + 0x01, false);
+					if (CheckaAddy == 0x1B)
+					{
+						SteeringAddress = (int)aAddy - 0x1316;
+						AcclAddress = (int)aAddy - 0x12DE;
+						BrakeAddress = (int)aAddy - 0x12A6;
+						ShiftUpDownAddress = (int)aAddy - 0x14F2;
+						ServiceTestAddress = (int)aAddy - 0x14F1;
+						CoinAddress = (int)aAddy - 0x136A;
+						NOPinit = true;
+						InputFind = true;
+					}
+				}
+			}
+		}	
 	}
 
 	if (ATVTrackRunning)
@@ -606,35 +985,33 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		if (!FFBGameInit)
 		{
 			aAddy2 = PatternScan("\x49\x55\x4C\x00\x00\x00\x05", "xxxxxxx");
-
 			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 - 0x04, false);
 			if (CheckAddy == 0x1E)
 			{
 				FFBAddress = (int)aAddy2 - 0x1A;
+				CreateThread(NULL, 0, ATVTrackRunningLoop, NULL, 0, NULL);
 				FFBGameInit = true;
 			}
 		}
-
-		float FFBATVTrack = helpers->ReadFloat32(FFBAddress, false);
-		std::string ffs = std::to_string(FFBATVTrack);
-		helpers->log((char*)ffs.c_str());
-		helpers->log("got value: ");
-
-		if (FFBATVTrack > 0)
-		{
-			helpers->log("moving wheel right");
-			double percentForce = FFBATVTrack;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if (FFBATVTrack < 0)
-		{
-			helpers->log("moving wheel left");
-			double percentForce = -FFBATVTrack;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		else
+		{ 
+			if (InputDeviceWheelEnable == 1)
+			{
+				if (!InputFind)
+				{
+					aAddy = PatternScan("\x11\x00\x16\x1F\x05\x04\x1D\x0D\x07\x12\x18\x14\x02\x13\x09\x15\x0E\x19\x01\x1C\x08\x1A\x17\x03\x0F\x1B\x00\x10\x0A\x0B\x0C\x06\x01", "x?xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+					UINT8 CheckaAddy = helpers->ReadByte((int)aAddy + 0x01, false);
+					if (CheckaAddy == 0x1E)
+					{
+						SteeringAddress = (int)aAddy - 0xA16;
+						AcclAddress = (int)aAddy - 0x9DE;
+						BrakeAddress = (int)aAddy - 0xABE;
+						ServiceTestAddress = (int)aAddy - 0xB82;
+						NOPinit = true;
+						InputFind = true;
+					}
+				}
+			}
 		}
 	}
 }
