@@ -848,6 +848,7 @@ SDL_Haptic* haptic3 = NULL;
 EffectCollection effects;
 EffectConstants effectConst;
 Helpers hlp;
+EffectTriggers t;
 
 bool keepRunning = true;
 float wheel = 0.0f;
@@ -981,8 +982,8 @@ HINSTANCE Get_hInstance()
 
 void Initialize(int device_index)
 {
+	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
 	hlp.log("in initialize");
-	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC | SDL_INIT_TIMER);
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_JoystickUpdate();
 	char joystick_guid[256];
@@ -1053,7 +1054,6 @@ void Initialize(int device_index)
 	SDL_HapticSetGain(haptic, 100); // HapticSetGain should be between 0 and 100 as per https://wiki.libsdl.org/SDL_HapticSetGain
 	hlp.log("setting haptic auto center to 0");
 	SDL_HapticSetAutocenter(haptic, 0); // 0 disables autocenter https://wiki.libsdl.org/SDL_HapticSetAutocenter
-
 
 	SDL_HapticEffect tempEffect;
 	hlp.log("creating base effects...");
@@ -1148,7 +1148,6 @@ void Initialize(int device_index)
 		effects.effect_sine_id_device3 = SDL_HapticNewEffect(haptic3, &tempEffect3);
 	}
 	
-
 	// TODO: why don't we just define this as hackFix = true in the other file?
 	// Was there a reason to put it here?
 //	extern bool hackFix;
@@ -1914,43 +1913,9 @@ int WorkaroundToFixRumble(void* ptr)
 	return 0;
 }
 
-DWORD WINAPI FFBLoop(LPVOID lpParam)
+DWORD WINAPI FFBLoop2(LPVOID lpParam)
 {
-	hlp.log("In FFBLoop");
-
-	if ((configGameId != 29) && (configGameId != 34)) //For games which need code to run quicker etc. Some games will crash if no sleep added
-	{
-		Sleep(2500);
-	}
-
-	if (EnableRumble == 1)
-	{
-		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
-		{
-			// Workaround for SDL_JoystickRumble rumble not stopping issue
-			SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
-		}
-
-		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
-		char RumbleDisableChar[256];
-		GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
-		std::string rumbletrue("true");
-		std::string rumbleTRUE("TRUE");
-		std::string rumbleTrue("True");
-		std::string rumdisable(RumbleDisableChar);
-
-		if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
-		{
-			WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
-		}
-	}
-
-	SDL_HapticStopAll(haptic);
-	Initialize(0);
-	hlp.log("Initialize() complete");
-
 	// assign FFB effects here
-	EffectTriggers t;
 	t.Constant = &TriggerConstantEffect;
 	t.Spring = &TriggerSpringEffect;
 	t.Friction = &TriggerFrictionEffect;
@@ -2141,6 +2106,44 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		}
 	}
 	hlp.log("about to exit FFBLoop");
+	return 0;
+}
+
+DWORD WINAPI FFBLoop(LPVOID lpParam)
+{
+	hlp.log("In FFBLoop");
+
+	if (EnableRumble == 1)
+	{
+		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
+		{
+			// Workaround for SDL_JoystickRumble rumble not stopping issue
+			SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
+		}
+
+		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
+		char RumbleDisableChar[256];
+		GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
+		std::string rumbletrue("true");
+		std::string rumbleTRUE("TRUE");
+		std::string rumbleTrue("True");
+		std::string rumdisable(RumbleDisableChar);
+
+		if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
+		{
+			WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
+		}
+	}
+
+	SDL_HapticStopAll(haptic);
+	CreateThread(NULL, 0, FFBLoop2, (LPVOID)&keepRunning, 0, NULL);
+	if (configGameId != 29) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	{
+		Sleep(2500);
+	}
+	Initialize(0);
+	hlp.log("Initialize() complete");
+
 	return 0;
 }
 

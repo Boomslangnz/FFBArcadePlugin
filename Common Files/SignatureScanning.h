@@ -82,8 +82,6 @@ static char* PatternScan(char* pattern, char* mask)
 
 					if (match != aAddy2)
 					{
-						delete[] buffer;
-						buffer = 0;
 						break;
 					}
 				}
@@ -92,8 +90,11 @@ static char* PatternScan(char* pattern, char* mask)
 
 		currentChunk = currentChunk + mbi.RegionSize;
 
-		if (buffer) delete[] buffer;
-		buffer = 0;
+		if (buffer)
+		{
+			delete[] buffer;
+			buffer = 0;
+		}
 	}
 	return match;
 }

@@ -17,6 +17,251 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "SDL.h"
 #include "../Common Files/SignatureScanning.h"
 
+//Supermodel Emulator Games
+std::string dayto2pe("dayto2pe");
+std::string daytona2("daytona2");
+std::string dirtdvlsa("dirtdvlsa");
+std::string dirtdvls("dirtdvls");
+std::string dirtdvlsj("dirtdvlsj");
+std::string dirtdvlsg("dirtdvlsg");
+std::string ecau("ecau");
+std::string eca("eca");
+std::string ecap("ecap");
+std::string ecaj("ecaj");
+std::string lemans24("lemans24");
+std::string scud("scud");
+std::string scuda("scuda");
+std::string scudj("scudj");
+std::string scudplus("scudplus");
+std::string scudplusa("scudplusa");
+std::string srally2("srally2");
+std::string srally2x("srally2x");
+std::string srally2p("srally2p");
+std::string srally2pa("srally2pa");
+
+//MAME Games
+std::string aburner2("aburner2");
+std::string aburner2g("aburner2g");
+std::string acedrvrw("acedrvrw");
+std::string vformula("vformula");
+std::string vr("vr");
+std::string sfrush("sfrush");
+std::string sfrushrk("sfrushrk");
+std::string sfrushrkwo("sfrushrkwo");
+std::string sfrusha("sfrusha");
+std::string crusnwld("crusnwld");
+std::string crusnwld24("crusnwld24");
+std::string crusnwld23("crusnwld23");
+std::string crusnwld20("crusnwld20");
+std::string crusnwld19("crusnwld19");
+std::string crusnwld17("crusnwld17");
+std::string crusnwld13("crusnwld13");
+std::string daytona("daytona");
+std::string daytonas("daytonas");
+std::string daytonase("daytonase");
+std::string dirtdash("dirtdash");
+std::string offroadc("offroadc");
+std::string offroadc4("offroadc4");
+std::string offroadc3("offroadc3");
+std::string offroadc1("offroadc1");
+std::string crusnusa("crusnusa");
+std::string crusnusa40("crusnusa40");
+std::string crusnusa21("crusnusa21");
+std::string calspeed("calspeed");
+std::string calspeeda("calspeeda");
+std::string calspeedb("calspeedb");
+std::string indy500("indy500");
+std::string indy500d("indy500d");
+std::string indy500to("indy500to");
+std::string outrunra("outrunra");
+std::string outrun("outrun");
+std::string outruneh("outruneh");
+std::string toutrun("toutrun");
+std::string toutrund("toutrund");
+std::string toutrunj("toutrunj");
+std::string toutrunjd("toutrunjd");
+std::string pdrift("pdrift");
+std::string pdrifta("pdrifta");
+std::string pdrifte("pdrifte");
+std::string pdriftj("pdriftj");
+std::string pdriftl("pdriftl");
+std::string orunners("orunners");
+std::string orunnersu("orunnersu");
+std::string orunnersj("orunnersj");
+std::string sf2049("sf2049");
+std::string sf2049se("sf2049se");
+std::string sf2049te("sf2049te");
+std::string harddriv("harddriv");
+std::string harddriv1("harddriv1");
+std::string harddrivb6("harddrivb6");
+std::string harddrivb("harddrivb");
+std::string harddrivg4("harddrivg4");
+std::string harddrivg("harddrivg");
+std::string harddrivj6("harddrivj6");
+std::string harddrivj("harddrivj");
+std::string harddriv2("harddriv2");
+std::string harddriv3("harddriv3");
+std::string harddrivcb("harddrivcb");
+std::string harddrivcg("harddrivcg");
+std::string harddrivc1("harddrivc1");
+std::string harddrivc("harddrivc");
+std::string hdrivairp("hdrivairp");
+std::string hdrivair("hdrivair");
+std::string racedrivb1("racedrivb1");
+std::string racedrivb4("racedrivb4");
+std::string racedrivb("racedrivb");
+std::string racedrivg1("racedrivg1");
+std::string racedrivg4("racedrivg4");
+std::string racedrivg("racedrivg");
+std::string racedriv1("racedriv1");
+std::string racedriv2("racedriv2");
+std::string racedriv3("racedriv3");
+std::string racedriv4("racedriv4");
+std::string racedriv("racedriv");
+std::string racedrivcb4("racedrivcb4");
+std::string racedrivcb("racedrivcb");
+std::string racedrivcg4("racedrivcg4");
+std::string racedrivcg("racedrivcg");
+std::string racedrivc2("racedrivc2");
+std::string racedrivc4("racedrivc4");
+std::string racedrivc("racedrivc");
+std::string racedrivpan("racedrivpan");
+std::string raveracw("raveracw");
+std::string raveracj("raveracj");
+std::string raveracja("raveracja");
+std::string othunder("othunder");
+std::string othundero("othundero");
+std::string othunderuo("othunderuo");
+std::string othunderu("othunderu");
+std::string othunderj("othunderj");
+std::string opwolf("opwolf");
+std::string opwolfp("opwolfp");
+std::string opwolfj("opwolfj");
+std::string opwolfu("opwolfu");
+std::string opwolfa("opwolfa");
+std::string revx("revx");
+std::string revxp5("revxp5");
+std::string term2("term2");
+std::string term2la1("term2la1");
+std::string term2pa2("term2pa2");
+std::string term2la2("term2la2");
+std::string term2la3("term2la3");
+std::string term2lg1("term2lg1");
+std::string zombraid("zombraid");
+std::string zombraidpj("zombraidpj");
+std::string zombraidp("zombraidp");
+std::string bbusters("bbusters");
+std::string bbustersu("bbustersu");
+std::string bbustersua("bbustersua");
+std::string bbustersj("bbustersj");
+std::string mechatt("mechatt");
+std::string mechattu("mechattu");
+std::string mechattu1("mechattu1");
+std::string mechattj("mechattj");
+std::string tshoot("tshoot");
+std::string gunbustru("gunbustru");
+std::string gunbustr("gunbustr");
+std::string gunbustrj("gunbustrj");
+std::string alien3("alien3");
+std::string alien3u("alien3u");
+std::string ptblank2("ptblank2");
+std::string ptblank2ua("ptblank2ua");
+std::string ghlpanic("ghlpanic");
+std::string sgt24h("sgt24h");
+std::string srallyc("srallyc");
+std::string srallycb("srallycb");
+std::string srallycdxa("srallycdxa");
+std::string srallycdx("srallycdx");
+std::string spacegun("spacegun");
+std::string spacegunu("spacegunu");
+std::string spacegunj("spacegunj");
+std::string superchs("superchs");
+std::string superchsp("superchsp");
+std::string superchsj("superchsj");
+std::string superchsu("superchsu");
+std::string stcc("stcc");
+std::string stcca("stcca");
+std::string stccb("stccb");
+std::string rchase("rchase");
+std::string rchasej("rchasej");
+std::string lghost("lghost");
+std::string lghostd("lghostd");
+std::string lghostu("lghostu");
+std::string lghostud("lghostud");
+std::string lghostj("lghostj");
+std::string timecris("timecris");
+std::string timecrisa("timecrisa");
+std::string cischeat("cischeat");
+std::string f1gpstar("f1gpstar");
+std::string f1gpstaro("f1gpstaro");
+std::string f1gpstr2("f1gpstr2");
+std::string undrfire("undrfire");
+std::string undrfireu("undrfireu");
+std::string undrfirej("undrfirej");
+std::string cbombers("cbombers");
+std::string cbombersj("cbombersj");
+std::string cbombersp("cbombersp");
+std::string hyprdriv("hyprdriv");
+std::string vaportrx("vaportrx");
+std::string vaportrp("vaportrp");
+std::string victlapw("victlapw");
+
+//Our string to load game from
+std::string M2Active("M2Active");
+std::string M2PatternActive("M2PatternActive");
+std::string Daytona2Active("Daytona2Active");
+std::string DirtDevilsActive("DirtDevilsActive");
+std::string SrallyActive("SrallyActive");
+std::string Srally2Active("Srally2Active");
+std::string VirtuaRacingActive("VirtuaRacingActive");
+std::string HardDrivinActive("HardDrivinActive");
+std::string LightGunActive("LightGunActive");
+std::string NamcoFFBActive("NamcoFFBActive");
+std::string RacingFullValueActive1("RacingFullValueActive1");
+std::string RacingFullValueActive2("RacingFullValueActive2");
+std::string RacingActive1("RacingActive1");
+std::string RacingActive2("RacingActive2");
+std::string RaveRacerActive("RaveRacerActive");
+std::string AfterburnerActive("AfterburnerActive");
+std::string OutrunActive("OutrunActive");
+std::string PDriftActive("PDriftActive");
+std::string SuperChaseActive("SuperChaseActive");
+
+//Names of FFB Outputs
+std::string RawDrive("RawDrive");
+std::string digit0("digit0");
+std::string digit1("digit1");
+std::string wheel("wheel");
+std::string lamp1("lamp1");
+std::string led2("led2");
+std::string cpuled6("cpuled6");
+std::string Vibration_motor("Vibration_motor");
+std::string vibration_motor("vibration_motor");
+std::string Wheel_vibration("Wheel_vibration");
+std::string upright_wheel_motor("upright_wheel_motor");
+std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
+std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
+std::string Left_Gun_Recoil("Left_Gun_Recoil");
+std::string Right_Gun_Recoil("Right_Gun_Recoil");
+std::string Player1_Recoil_Piston("Player1_Recoil_Piston");
+std::string Player2_Recoil_Piston("Player2_Recoil_Piston");
+std::string Player1_Gun_Recoil("Player1_Gun_Recoil");
+std::string Player2_Gun_Recoil("Player2_Gun_Recoil");
+std::string Player3_Gun_Recoil("Player3_Gun_Recoil");
+std::string P1_Gun_Recoil("P1_Gun_Recoil");
+std::string P2_Gun_Recoil("P2_Gun_Recoil");
+std::string P3_Gun_Recoil("P3_Gun_Recoil");
+std::string P1_gun_recoil("P1_gun_recoil");
+std::string P2_gun_recoil("P2_gun_recoil");
+std::string mcuout1("mcuout1");
+std::string Bank_Motor_Speed("Bank_Motor_Speed");
+std::string Bank_Motor_Direction("Bank_Motor_Direction");
+std::string bank_motor_position("bank_motor_position");
+
+//Emulator Name
+std::string MAME("MAME");
+std::string Supermodel("Supermodel");
+
 HINSTANCE ProcDLL = NULL;
 extern int joystick_index1;
 extern int joystick_index2;
@@ -544,17 +789,6 @@ static int configFeedbackLengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings
 static int EnableForceSpringEffectIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectIndy500"), 0, settingsFilename);
 static int ForceSpringStrengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthIndy500"), 0, settingsFilename);
 
-static int configMinForceSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSTCC"), 0, settingsFilename);
-static int configMaxForceSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSTCC"), 100, settingsFilename);
-static int configAlternativeMinForceLeftSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSTCC"), 0, settingsFilename);
-static int configAlternativeMaxForceLeftSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSTCC"), 100, settingsFilename);
-static int configAlternativeMinForceRightSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSTCC"), 0, settingsFilename);
-static int configAlternativeMaxForceRightSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSTCC"), 100, settingsFilename);
-static int PowerModeSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSTCC"), 0, settingsFilename);
-static int configFeedbackLengthSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSTCC"), 120, settingsFilename);
-static int EnableForceSpringEffectSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSTCC"), 0, settingsFilename);
-static int ForceSpringStrengthSTCCMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSTCC"), 0, settingsFilename);
-
 static int configMinForceSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSuperGT"), 0, settingsFilename);
 static int configMaxForceSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSuperGT"), 100, settingsFilename);
 static int configAlternativeMinForceLeftSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSuperGT"), 0, settingsFilename);
@@ -628,6 +862,9 @@ static bool Motion = false;
 static bool MotionFalse = false;
 static bool StartEffectOnce = false;
 static bool PatternFind = false;
+static bool Scan = false;
+static bool ScanFirstBootDelay = false;
+static bool PatternLaunch = false;
 
 HINSTANCE hInstance;
 HINSTANCE hPrevInstance;
@@ -920,19 +1157,59 @@ int __stdcall mame_output(const char* name, int value)
 	return 1;
 }
 
-static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
-{
-	const DWORD TITLE_SIZE = 1024;
-	TCHAR windowTitle[TITLE_SIZE];
+//static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
+//{
+//	const DWORD TITLE_SIZE = 1024;
+//	TCHAR windowTitle[TITLE_SIZE];
+//
+//	if (GetWindowText(hwnd, windowTitle, TITLE_SIZE))
+//	{
+//		if (_tcsstr(windowTitle, LPCTSTR(substring)) != NULL)
+//		{
+//			return false;
+//		}
+//	}
+//	return true;
+//}
 
-	if (GetWindowText(hwnd, windowTitle, TITLE_SIZE))
+static DWORD WINAPI ScanThread(LPVOID lpParam)
+{
+	if (romname == raveracw || romname == raveracj || romname == raveracja) //Rave Racer
 	{
-		if (_tcsstr(windowTitle, LPCTSTR(substring)) != NULL)
-		{
-			return false;
-		}
+		aAddy2 = PatternScan("\xF8\x89\xC2\x00\x9C\x0B\x40\x05\x64\x38\x05\x64\x39\x36\x14\x74\x07\x14\x73\x07", "xxxxxxxxxxxxxxxxxxxx");
 	}
-	return true;
+
+	if (romname == daytona || romname == daytonas || romname == daytonase) //Daytona USA
+	{
+		aAddy2 = PatternScan("\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8E\x0E\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3F\x42\x3F\x00\x02\x02\x01\x00\x00\x14\x1C\x00\x00\x00\x00\x00", "xxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???x?x?xx?x?xxxx");
+	}
+
+	if (romname == indy500 || romname == indy500d || romname == indy500to) //Indy500
+	{
+		aAddy2 = PatternScan("\xFF\x4E\x00\x00\x00\x00\x01", "xxxxxxx");
+	}
+
+	if (romname == sgt24h) //Sega GT 24hr
+	{
+		aAddy2 = PatternScan("\x03\x00\x00\x00\x09\x00\x00\x00\x1F\x00\x00\x00\x13\x00\x00\x00\x04\x00\x00\x00\x0F", "xxxxxxxxxxxxxxxxxxxxx");
+	}
+
+	if (romname == srallyc || romname == srallycb || romname == srallycdx || romname == srallycdxa) //Sega Rally
+	{
+		aAddy2 = PatternScan("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x70\xFF\x00\x00\x70\xFF", "xxxxxxxxxxxxxxxx");
+	}
+
+	if (romname == superchs || romname == superchsj || romname == superchsp || romname == superchsu) //Super Chase Criminal Termination
+	{
+		aAddy2 = PatternScan("\x80\x38\x00\x50\x49\x5A\x05\x70\x11\x01\x4B\x54\x4F", "xxxxxxxxxxxxx");
+	}
+
+	if ((romname == dirtdash) || (romname == acedrvrw) || (romname == victlapw)) //Dirt Dash, Ace Driver & Ace Driver Victory Lap
+	{
+		aAddy2 = PatternScan("\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+	}
+
+	return 0;
 }
 
 static int raveracer(int ffRaw) {
@@ -1205,16 +1482,7 @@ DWORD WINAPI ThreadForOutputs(LPVOID lpParam)
 
 DWORD WINAPI ThreadForForcedSpring(LPVOID lpParam)
 {
-	if (configGameId == 34)
-	{
-		Sleep(2500);
-		ForceSpringEffect = true;
-	}
-	else
-	{
-		ForceSpringEffect = true;
-	}	
-
+	ForceSpringEffect = true;
 	return 0;
 }
 
@@ -1225,250 +1493,8 @@ DWORD WINAPI ThreadForDaytonaStartEffect(LPVOID lpParam)
 	return 0;
 }
 
-//Supermodel Emulator Games
-std::string dayto2pe("dayto2pe");
-std::string daytona2("daytona2");
-std::string dirtdvlsa("dirtdvlsa");
-std::string dirtdvls("dirtdvls");
-std::string dirtdvlsj("dirtdvlsj");
-std::string dirtdvlsg("dirtdvlsg");
-std::string ecau("ecau");
-std::string eca("eca");
-std::string ecap("ecap");
-std::string ecaj("ecaj");
-std::string lemans24("lemans24");
-std::string scud("scud");
-std::string scuda("scuda");
-std::string scudj("scudj");
-std::string scudplus("scudplus");
-std::string scudplusa("scudplusa");
-std::string srally2("srally2");
-std::string srally2x("srally2x");
-std::string srally2p("srally2p");
-std::string srally2pa("srally2pa");
-
-//MAME Games
-std::string aburner2("aburner2");
-std::string aburner2g("aburner2g");
-std::string acedrvrw("acedrvrw");
-std::string vformula("vformula");
-std::string vr("vr");
-std::string sfrush("sfrush");
-std::string sfrushrk("sfrushrk");
-std::string sfrushrkwo("sfrushrkwo");
-std::string sfrusha("sfrusha");
-std::string crusnwld("crusnwld");
-std::string crusnwld24("crusnwld24");
-std::string crusnwld23("crusnwld23");
-std::string crusnwld20("crusnwld20");
-std::string crusnwld19("crusnwld19");
-std::string crusnwld17("crusnwld17");
-std::string crusnwld13("crusnwld13");
-std::string daytona("daytona");
-std::string daytonas("daytonas");
-std::string daytonase("daytonase");
-std::string dirtdash("dirtdash");
-std::string offroadc("offroadc");
-std::string offroadc4("offroadc4");
-std::string offroadc3("offroadc3");
-std::string offroadc1("offroadc1");
-std::string crusnusa("crusnusa");
-std::string crusnusa40("crusnusa40");
-std::string crusnusa21("crusnusa21");
-std::string calspeed("calspeed");
-std::string calspeeda("calspeeda");
-std::string calspeedb("calspeedb");
-std::string indy500("indy500");
-std::string indy500d("indy500d");
-std::string indy500to("indy500to");
-std::string outrunra("outrunra");
-std::string outrun("outrun");
-std::string outruneh("outruneh");
-std::string toutrun("toutrun");
-std::string toutrund("toutrund");
-std::string toutrunj("toutrunj");
-std::string toutrunjd("toutrunjd");
-std::string pdrift("pdrift");
-std::string pdrifta("pdrifta");
-std::string pdrifte("pdrifte");
-std::string pdriftj("pdriftj");
-std::string pdriftl("pdriftl");
-std::string orunners("orunners");
-std::string orunnersu("orunnersu");
-std::string orunnersj("orunnersj");
-std::string sf2049("sf2049");
-std::string sf2049se("sf2049se");
-std::string sf2049te("sf2049te");
-std::string harddriv("harddriv");
-std::string harddriv1("harddriv1");
-std::string harddrivb6("harddrivb6");
-std::string harddrivb("harddrivb");
-std::string harddrivg4("harddrivg4");
-std::string harddrivg("harddrivg");
-std::string harddrivj6("harddrivj6");
-std::string harddrivj("harddrivj");
-std::string harddriv2("harddriv2");
-std::string harddriv3("harddriv3");
-std::string harddrivcb("harddrivcb");
-std::string harddrivcg("harddrivcg");
-std::string harddrivc1("harddrivc1");
-std::string harddrivc("harddrivc");
-std::string hdrivairp("hdrivairp");
-std::string hdrivair("hdrivair");
-std::string racedrivb1("racedrivb1");
-std::string racedrivb4("racedrivb4");
-std::string racedrivb("racedrivb");
-std::string racedrivg1("racedrivg1");
-std::string racedrivg4("racedrivg4");
-std::string racedrivg("racedrivg");
-std::string racedriv1("racedriv1");
-std::string racedriv2("racedriv2");
-std::string racedriv3("racedriv3");
-std::string racedriv4("racedriv4");
-std::string racedriv("racedriv");
-std::string racedrivcb4("racedrivcb4");
-std::string racedrivcb("racedrivcb");
-std::string racedrivcg4("racedrivcg4");
-std::string racedrivcg("racedrivcg");
-std::string racedrivc2("racedrivc2");
-std::string racedrivc4("racedrivc4");
-std::string racedrivc("racedrivc");
-std::string racedrivpan("racedrivpan");
-std::string raveracw("raveracw");
-std::string raveracj("raveracj");
-std::string raveracja("raveracja");
-std::string othunder("othunder");
-std::string othundero("othundero");
-std::string othunderuo("othunderuo");
-std::string othunderu("othunderu");
-std::string othunderj("othunderj");
-std::string opwolf("opwolf");
-std::string opwolfp("opwolfp");
-std::string opwolfj("opwolfj");
-std::string opwolfu("opwolfu");
-std::string opwolfa("opwolfa");
-std::string revx("revx");
-std::string revxp5("revxp5");
-std::string term2("term2");
-std::string term2la1("term2la1");
-std::string term2pa2("term2pa2");
-std::string term2la2("term2la2");
-std::string term2la3("term2la3");
-std::string term2lg1("term2lg1");
-std::string zombraid("zombraid");
-std::string zombraidpj("zombraidpj");
-std::string zombraidp("zombraidp");
-std::string bbusters("bbusters");
-std::string bbustersu("bbustersu");
-std::string bbustersua("bbustersua");
-std::string bbustersj("bbustersj");
-std::string mechatt("mechatt");
-std::string mechattu("mechattu");
-std::string mechattu1("mechattu1");
-std::string mechattj("mechattj");
-std::string tshoot("tshoot");
-std::string gunbustru("gunbustru");
-std::string gunbustr("gunbustr");
-std::string gunbustrj("gunbustrj");
-std::string alien3("alien3");
-std::string alien3u("alien3u");
-std::string ptblank2("ptblank2");
-std::string ptblank2ua("ptblank2ua");
-std::string ghlpanic("ghlpanic");
-std::string sgt24h("sgt24h");
-std::string srallyc("srallyc");
-std::string srallycb("srallycb");
-std::string srallycdxa("srallycdxa");
-std::string srallycdx("srallycdx");
-std::string spacegun("spacegun");
-std::string spacegunu("spacegunu");
-std::string spacegunj("spacegunj");
-std::string superchs("superchs");
-std::string superchsp("superchsp");
-std::string superchsj("superchsj");
-std::string superchsu("superchsu");
-std::string stcc("stcc");
-std::string stcca("stcca");
-std::string stccb("stccb");
-std::string rchase("rchase");
-std::string rchasej("rchasej");
-std::string lghost("lghost");
-std::string lghostd("lghostd");
-std::string lghostu("lghostu");
-std::string lghostud("lghostud");
-std::string lghostj("lghostj");
-std::string timecris("timecris");
-std::string timecrisa("timecrisa");
-std::string cischeat("cischeat");
-std::string f1gpstar("f1gpstar");
-std::string f1gpstaro("f1gpstaro");
-std::string f1gpstr2("f1gpstr2");
-std::string undrfire("undrfire");
-std::string undrfireu("undrfireu");
-std::string undrfirej("undrfirej");
-std::string cbombers("cbombers");
-std::string cbombersj("cbombersj");
-std::string cbombersp("cbombersp");
-std::string hyprdriv("hyprdriv");
-std::string vaportrx("vaportrx");
-std::string vaportrp("vaportrp");
-std::string victlapw("victlapw");
-
-//Our string to load game from
-std::string DaytonaActive("DaytonaActive");
-std::string Daytona2Active("Daytona2Active");
-std::string DirtDevilsActive("DirtDevilsActive");
-std::string SrallyActive("SrallyActive");
-std::string Srally2Active("Srally2Active");
-std::string VirtuaRacingActive("VirtuaRacingActive");
-std::string HardDrivinActive("HardDrivinActive"); 
-std::string LightGunActive("LightGunActive");
-std::string NamcoFFBActive("NamcoFFBActive");
-std::string RacingFullValueActive1("RacingFullValueActive1");
-std::string RacingFullValueActive2("RacingFullValueActive2");
-std::string RacingActive1("RacingActive1");
-std::string RacingActive2("RacingActive2");
-std::string RaveRacerActive("RaveRacerActive");
-std::string AfterburnerActive("AfterburnerActive");
-std::string OutrunActive("OutrunActive");
-std::string PDriftActive("PDriftActive");
-std::string SuperChaseActive("SuperChaseActive");
-
-//Names of FFB Outputs
-std::string RawDrive("RawDrive");
-std::string digit0("digit0");
-std::string wheel("wheel");
-std::string lamp1("lamp1");
-std::string led2("led2");
-std::string Vibration_motor("Vibration_motor");
-std::string vibration_motor("vibration_motor");
-std::string Wheel_vibration("Wheel_vibration");
-std::string upright_wheel_motor("upright_wheel_motor");
-std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
-std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
-std::string Left_Gun_Recoil("Left_Gun_Recoil");
-std::string Right_Gun_Recoil("Right_Gun_Recoil");
-std::string Player1_Recoil_Piston("Player1_Recoil_Piston");
-std::string Player2_Recoil_Piston("Player2_Recoil_Piston");
-std::string Player1_Gun_Recoil("Player1_Gun_Recoil");
-std::string Player2_Gun_Recoil("Player2_Gun_Recoil");
-std::string Player3_Gun_Recoil("Player3_Gun_Recoil");
-std::string P1_Gun_Recoil("P1_Gun_Recoil");
-std::string P2_Gun_Recoil("P2_Gun_Recoil");
-std::string P3_Gun_Recoil("P3_Gun_Recoil");
-std::string P1_gun_recoil("P1_gun_recoil");
-std::string P2_gun_recoil("P2_gun_recoil");
-std::string mcuout1("mcuout1");
-std::string Bank_Motor_Speed("Bank_Motor_Speed");
-std::string Bank_Motor_Direction("Bank_Motor_Direction");
-std::string bank_motor_position("bank_motor_position");
-
-//Emulator Name
-std::string MAME("MAME");
-std::string Supermodel("Supermodel");
-
 void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
-	
+
 	if (!init)
 	{
 		CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
@@ -2278,7 +2304,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				EnableForceSpringEffect = EnableForceSpringEffectDaytonaMAME;
 				ForceSpringStrength = ForceSpringStrengthDaytonaMAME;
 
-				RunningFFB = "DaytonaActive";
+				RunningFFB = "M2PatternActive";
 			}
 
 			if (romname == indy500 || romname == indy500d || romname == indy500to)
@@ -2294,23 +2320,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				EnableForceSpringEffect = EnableForceSpringEffectIndy500MAME;
 				ForceSpringStrength = ForceSpringStrengthIndy500MAME;
 
-				RunningFFB = "DaytonaActive";
-			}
-
-			if (romname == stcc || romname == stcca || romname == stccb)
-			{
-				configMinForce = configMinForceSTCCMAME;
-				configMaxForce = configMaxForceSTCCMAME;
-				configAlternativeMinForceLeft = configAlternativeMinForceLeftSTCCMAME;
-				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftSTCCMAME;
-				configAlternativeMinForceRight = configAlternativeMinForceRightSTCCMAME;
-				configAlternativeMaxForceRight = configAlternativeMaxForceRightSTCCMAME;
-				configFeedbackLength = configFeedbackLengthSTCCMAME;
-				PowerMode = PowerModeSTCCMAME;
-				EnableForceSpringEffect = EnableForceSpringEffectSTCCMAME;
-				ForceSpringStrength = ForceSpringStrengthSTCCMAME;
-
-				RunningFFB = "DaytonaActive";
+				RunningFFB = "M2PatternActive";
 			}
 
 			if (romname == sgt24h)
@@ -2326,7 +2336,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				EnableForceSpringEffect = EnableForceSpringEffectSuperGTMAME;
 				ForceSpringStrength = ForceSpringStrengthSuperGTMAME;
 
-				RunningFFB = "DaytonaActive";
+				RunningFFB = "M2PatternActive";
 			}
 
 			if (romname == srallyc || romname == srallycb || romname == srallycdx || romname == srallycdxa)
@@ -2403,573 +2413,684 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 		}
 	}
 
-	if (!EmuName)
-	{
-		//Select code to run via emulator name using partial window title to avoid issues with FPS showing etc
-		const TCHAR MAMEstring[] = TEXT("MAME");
-		EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring);
+	//if (!EmuName)
+	//{
+	//	//Select code to run via emulator name using partial window title to avoid issues with FPS showing etc
+	//	const TCHAR MAMEstring[] = TEXT("MAME");
+	//	EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring);
 
-		const TCHAR Supermodelstring[] = TEXT("Supermodel");
-		EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring);
+	//	const TCHAR Supermodelstring[] = TEXT("Supermodel");
+	//	EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring);
 
-		if (!EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring))
-		{
-			EmulatorName = "MAME";
-		}
+	//	if (!EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring))
+	//	{
+	//		EmulatorName = "MAME";
+	//	}
 
-		if (!EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring))
-		{
-			EmulatorName = "Supermodel";
-		}
+	//	if (!EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring))
+	//	{
+	//		EmulatorName = "Supermodel";
+	//	}
 
-		Emulator = new char[256]; // Emulator name
-		sprintf(Emulator, "%s", EmulatorName);
+	//	Emulator = new char[256]; // Emulator name
+	//	sprintf(Emulator, "%s", EmulatorName);
 
-		if ((EmulatorName != NULL) && (EmulatorName[0] != '\0'))
-		{
-			EmuName = true;
-		}
-	}
-	
-	if (RomGameName && EmuName)
+	//	if ((EmulatorName != NULL) && (EmulatorName[0] != '\0'))
+	//	{
+	//		EmuName = true;
+	//	}
+	//}
+
+	if (RomGameName)
 	{
 		if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race & LeMans
 		{
-			if (Emulator == Supermodel)
+			ForceSpringEffect = false;
+
+			if (name == RawDrive)
 			{
-				ForceSpringEffect = false;
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-				if (name == RawDrive)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if ((stateFFB > 0x09) && (stateFFB < 0x20))
-				{
-					//Spring
-					double percentForce = (stateFFB - 9) / 16.0;
-					triggers->Spring(percentForce);
-				}
-
-				if ((stateFFB > 0x1F) && (stateFFB < 0x30))
-				{
-					//Clutch
-					double percentForce = (stateFFB - 31) / 16.0;
-					triggers->Friction(percentForce);
-				}
-
-				if ((stateFFB > 0x2F) && (stateFFB < 0x40))
-				{
-					//Centering
-					double percentForce = (stateFFB - 47) / 16.0;
-					triggers->Rumble(percentForce, percentForce, 100);
-					triggers->Sine(40, 0, percentForce);
-				}
-
-				if ((stateFFB > 0x3F) && (stateFFB < 0x50))
-				{
-					//Uncentering
-					double percentForce = (stateFFB - 63) / 16.0;
-					triggers->Spring(0);							
-				}
-
-				if ((stateFFB > 0x4F) && (stateFFB < 0x60))
-				{
-					//Roll Right
-					double percentForce = (stateFFB - 79) / 16.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((stateFFB > 0x5F) && (stateFFB < 0x70))
-				{
-					//Roll Left
-					double percentForce = (stateFFB - 95) / 16.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-
-				UINT8 static oldff = 0;
-				UINT8 newff = stateFFB;
-
-				if (stateFFB == 0x9C)
-				{
-					if (oldff != newff)
-					{
-						Effect1 = true;
-					}
-				}
-
-				if (Effect1)
-				{
-					triggers->Sine(100, 0, 0.8);
-					Effect1 = false;
-				}
-
-				if (stateFFB == 0x05)
-				{
-					triggers->Sine(40, 0, 0.5);
-					triggers->Friction(0.5);
-				}
-
-				if (stateFFB == 0x75)
-				{
-					if (!StartEffectOnce)
-					{
-						StartEffectOnce = true;
-						Effect2 = true;
-						CreateThread(NULL, 0, ThreadForDaytonaStartEffect, NULL, 0, NULL);
-					}
-				}
-				else
-				{
-					if (StartEffectOnce)
-					{
-						StartEffectOnce = false;
-					}
-				}
-
-				if (Effect2)
-				{
-					triggers->Sine(70, 60, 0.5);
-				}
-
-				//Test Menu
-				if (stateFFB == 0x80)
-				{
-					triggers->Rumble(0, 0, 0);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-				}
-				else if (stateFFB == 0x81)
-				{
-					triggers->Rumble(0.5, 0, 100);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0.5);
-				}
-				else if (stateFFB == 0x82)
-				{
-					triggers->Rumble(0, 0.5, 100);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0.5);
-				}
-				oldff = newff;
+				stateFFB = newstateFFB;
 			}
-		}
 
+			if ((stateFFB > 0x09) && (stateFFB < 0x20))
+			{
+				//Spring
+				double percentForce = (stateFFB - 9) / 16.0;
+				triggers->Spring(percentForce);
+			}
+
+			if ((stateFFB > 0x1F) && (stateFFB < 0x30))
+			{
+				//Clutch
+				double percentForce = (stateFFB - 31) / 16.0;
+				triggers->Friction(percentForce);
+			}
+
+			if ((stateFFB > 0x2F) && (stateFFB < 0x40))
+			{
+				//Centering
+				double percentForce = (stateFFB - 47) / 16.0;
+				triggers->Rumble(percentForce, percentForce, 100);
+				triggers->Sine(40, 0, percentForce);
+			}
+
+			if ((stateFFB > 0x3F) && (stateFFB < 0x50))
+			{
+				//Uncentering
+				double percentForce = (stateFFB - 63) / 16.0;
+				triggers->Spring(0);
+			}
+
+			if ((stateFFB > 0x4F) && (stateFFB < 0x60))
+			{
+				//Roll Right
+				double percentForce = (stateFFB - 79) / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((stateFFB > 0x5F) && (stateFFB < 0x70))
+			{
+				//Roll Left
+				double percentForce = (stateFFB - 95) / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+
+			UINT8 static oldff = 0;
+			UINT8 newff = stateFFB;
+
+			if (stateFFB == 0x9C)
+			{
+				if (oldff != newff)
+				{
+					Effect1 = true;
+				}
+			}
+
+			if (Effect1)
+			{
+				triggers->Sine(100, 0, 0.8);
+				Effect1 = false;
+			}
+
+			if (stateFFB == 0x05)
+			{
+				triggers->Sine(40, 0, 0.5);
+				triggers->Friction(0.5);
+			}
+
+			if (stateFFB == 0x75)
+			{
+				if (!StartEffectOnce)
+				{
+					StartEffectOnce = true;
+					Effect2 = true;
+					CreateThread(NULL, 0, ThreadForDaytonaStartEffect, NULL, 0, NULL);
+				}
+			}
+			else
+			{
+				if (StartEffectOnce)
+				{
+					StartEffectOnce = false;
+				}
+			}
+
+			if (Effect2)
+			{
+				triggers->Sine(70, 60, 0.5);
+			}
+
+			//Test Menu
+			if (stateFFB == 0x80)
+			{
+				triggers->Rumble(0, 0, 0);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+			}
+			else if (stateFFB == 0x81)
+			{
+				triggers->Rumble(0.5, 0, 100);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0.5);
+			}
+			else if (stateFFB == 0x82)
+			{
+				triggers->Rumble(0, 0.5, 100);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0.5);
+			}
+			oldff = newff;
+		}
+		
 		if (RunningFFB == DirtDevilsActive) //Dirt Devils
 		{
-			if (Emulator == Supermodel)
+			if (name == RawDrive)
 			{
-				if (name == RawDrive)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-					stateFFB = newstateFFB;
-				}
+				stateFFB = newstateFFB;
+			}
 
-				if (stateFFB == 0x10)
-				{
-					double percentForce = 0.7;
-					triggers->Spring(percentForce);
-				}
+			if (stateFFB == 0x10)
+			{
+				double percentForce = 0.7;
+				triggers->Spring(percentForce);
+			}
 
-				if ((stateFFB == 0x27) || (stateFFB == 0x30))
-				{
-					DirtDevilSine = false;
-				}
+			if ((stateFFB == 0x27) || (stateFFB == 0x30))
+			{
+				DirtDevilSine = false;
+			}
 
-				if (stateFFB == 0x2F)
-				{
-					DirtDevilSine = true;
-				}
+			if (stateFFB == 0x2F)
+			{
+				DirtDevilSine = true;
+			}
 
-				if (DirtDevilSine)
-				{
-					double percentForce = (stateFFB - 31) / 16.0;
-					triggers->Sine(60, 0, percentForce);
-					triggers->Rumble(percentForce, percentForce, 100);
-				}
+			if (DirtDevilSine)
+			{
+				double percentForce = (stateFFB - 31) / 16.0;
+				triggers->Sine(60, 0, percentForce);
+				triggers->Rumble(percentForce, percentForce, 100);
 			}
 		}
 
 		if (RunningFFB == Srally2Active) //Sega Rally 2, Emergency Call Ambulance
 		{
-			if (Emulator == Supermodel)
+			if (name == RawDrive)
 			{
-				if (name == RawDrive)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-					stateFFB = newstateFFB;
-				}
+				stateFFB = newstateFFB;
+			}
 
-				if ((stateFFB > 0x00) && (stateFFB < 0x26))
-				{
-					double percentForce = (stateFFB) / 37.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB > 0x3F) && (stateFFB < 0x66))
-				{
-					double percentForce = (stateFFB - 64) / 37.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
+			if ((stateFFB > 0x00) && (stateFFB < 0x26))
+			{
+				double percentForce = (stateFFB) / 37.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((stateFFB > 0x3F) && (stateFFB < 0x66))
+			{
+				double percentForce = (stateFFB - 64) / 37.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
 		}
 
 		if (RunningFFB == VirtuaRacingActive) //Virtua Racing
 		{
-			if (Emulator == MAME)
+			if (name == digit0)
 			{
-				if (name == digit0)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-					stateFFB = newstateFFB;
+				stateFFB = newstateFFB;
+			}
+
+			if ((stateFFB == 0x03) || (stateFFB == 0x07) || (stateFFB == 0x09) || (stateFFB == 0x10))
+			{
+				if (stateFFB == 0x07)
+				{
+					DontSineUntilRaceStart = true;
 				}
-
-				if ((stateFFB == 0x03) || (stateFFB == 0x07) || (stateFFB == 0x09) || (stateFFB == 0x10))
+				if (stateFFB == 0x09)
 				{
-					if (stateFFB == 0x07)
-					{
-						DontSineUntilRaceStart = true;
-					}
-					if (stateFFB == 0x09)
-					{
-						DontSineUntilRaceStart = false;
-					}
-					//Spring
-					double percentForce = 0.8;
-					triggers->Spring(percentForce);
+					DontSineUntilRaceStart = false;
 				}
+				//Spring
+				double percentForce = 0.8;
+				triggers->Spring(percentForce);
+			}
 
-				if ((stateFFB == 0x20) || (stateFFB == 0x28))
+			if ((stateFFB == 0x20) || (stateFFB == 0x28))
+			{
+				//Clutch
+				double percentForce = 0.4;
+				triggers->Friction(percentForce);
+			}
+
+			if ((stateFFB > 0x2F) && (stateFFB < 0x40))
+			{
+				//Centering
+				double percentForce = (stateFFB - 47) / 11.0;
+				triggers->Spring(percentForce);
+			}
+
+			if ((stateFFB == 0x40) || (stateFFB == 0x46) || (stateFFB == 0x4A))
+			{
+				if (stateFFB == 0x40)
 				{
-					//Clutch
+					//Uncentering
 					double percentForce = 0.4;
-					triggers->Friction(percentForce);
+					triggers->Rumble(percentForce, percentForce, 100);
+					triggers->Sine(70, 30, percentForce);
 				}
-
-				if ((stateFFB > 0x2F) && (stateFFB < 0x40))
+				else
 				{
-					//Centering
-					double percentForce = (stateFFB - 47) / 11.0;
-					triggers->Spring(percentForce);
-				}
-
-				if ((stateFFB == 0x40) || (stateFFB == 0x46) || (stateFFB == 0x4A))
-				{
-					if (stateFFB == 0x40)
+					if (DontSineUntilRaceStart)
 					{
 						//Uncentering
 						double percentForce = 0.4;
 						triggers->Rumble(percentForce, percentForce, 100);
 						triggers->Sine(70, 30, percentForce);
 					}
-					else
-					{
-						if (DontSineUntilRaceStart)
-						{
-							//Uncentering
-							double percentForce = 0.4;
-							triggers->Rumble(percentForce, percentForce, 100);
-							triggers->Sine(70, 30, percentForce);
-						}
-					}
 				}
+			}
 
-				if ((stateFFB == 0x50) || (stateFFB == 0x5F))
-				{
-					//Roll Left
-					double percentForce = 0.5;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB == 0x60) || (stateFFB == 0x6F))
-				{
-					//Roll Right
-					double percentForce = 0.5;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}			
+			if ((stateFFB == 0x50) || (stateFFB == 0x5F))
+			{
+				//Roll Left
+				double percentForce = 0.5;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((stateFFB == 0x60) || (stateFFB == 0x6F))
+			{
+				//Roll Right
+				double percentForce = 0.5;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
 		}
 
 		if (RunningFFB == RacingFullValueActive1) //Mame games using all values 
 		{
-			if (Emulator == MAME)
+			if (name == wheel)
 			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-					stateFFB = newstateFFB;
-				}
+				stateFFB = newstateFFB;
+			}
 
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}			
+			if ((stateFFB > 0x80) && (stateFFB < 0x100))
+			{
+				double percentForce = (256 - stateFFB) / 127.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+			{
+				double percentForce = (stateFFB) / 127.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
 		}
 
 		if (RunningFFB == RacingFullValueActive2) //Mame games using all values (reverse direction to above)
 		{
-			if (Emulator == MAME)
+			if (name == wheel)
 			{
-				if (name == wheel)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-					stateFFB = newstateFFB;
-				}
+				stateFFB = newstateFFB;
+			}
 
-				if ((stateFFB > 0x80) && (stateFFB < 0x100))
-				{
-					double percentForce = (256 - stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-				else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-				{
-					double percentForce = (stateFFB) / 127.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-			}		
+			if ((stateFFB > 0x80) && (stateFFB < 0x100))
+			{
+				double percentForce = (256 - stateFFB) / 127.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if ((stateFFB > 0x00) && (stateFFB < 0x80))
+			{
+				double percentForce = (stateFFB) / 127.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
 		}
 
 		if (RunningFFB == LightGunActive) //LightGun Games
 		{
-			if (Emulator == MAME)
+			if (name == Player1_Recoil_Piston || name == Player1_Gun_Recoil || name == Left_Gun_Recoil || name == P1_Gun_Recoil || name == mcuout1 || name == P1_gun_recoil)
 			{
-				if (name == Player1_Recoil_Piston || name == Player1_Gun_Recoil || name == Left_Gun_Recoil || name == P1_Gun_Recoil || name == mcuout1 || name == P1_gun_recoil)
-				{
-					helpers->log("P1 value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
+				helpers->log("P1 value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-					if (newstateFFB == 0)
-					{
-						Effect1 = false;
-					}
-
-					stateFFB = newstateFFB;
-				}
-
-				if (name == Player2_Recoil_Piston || name == Player2_Gun_Recoil || name == Right_Gun_Recoil || name == P2_Gun_Recoil || name == P2_gun_recoil)
-				{
-					helpers->log("P2 value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0)
-					{
-						Effect2 = false;
-					}
-
-					stateFFBDevice2 = newstateFFB;
-				}
-
-				if (name == Player3_Gun_Recoil || name == P3_Gun_Recoil)
-				{
-					helpers->log("P3 value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0)
-					{
-						Effect3 = false;
-					}
-
-					stateFFBDevice3 = newstateFFB;
-				}
-
-				if (stateFFB == 0x01)
-				{
-					Effect1 = true;
-				}
-				else
+				if (newstateFFB == 0)
 				{
 					Effect1 = false;
 				}
 
-				if (stateFFBDevice2 == 0x01)
-				{
-					Effect2 = true;
-				}
-				else
+				stateFFB = newstateFFB;
+			}
+
+			if (name == Player2_Recoil_Piston || name == Player2_Gun_Recoil || name == Right_Gun_Recoil || name == P2_Gun_Recoil || name == P2_gun_recoil)
+			{
+				helpers->log("P2 value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				if (newstateFFB == 0)
 				{
 					Effect2 = false;
 				}
 
-				if (stateFFBDevice3 == 0x01)
-				{
-					Effect3 = true;
-				}
-				else
+				stateFFBDevice2 = newstateFFB;
+			}
+
+			if (name == Player3_Gun_Recoil || name == P3_Gun_Recoil)
+			{
+				helpers->log("P3 value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				if (newstateFFB == 0)
 				{
 					Effect3 = false;
 				}
 
-				if (Effect1)
-				{
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
+				stateFFBDevice3 = newstateFFB;
+			}
 
-				if (!Effect1)
-				{
-					triggers->Rumble(0, 0, 0);
-				}
+			if (stateFFB == 0x01)
+			{
+				Effect1 = true;
+			}
+			else
+			{
+				Effect1 = false;
+			}
 
-				if (Effect2)
-				{
-					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
+			if (stateFFBDevice2 == 0x01)
+			{
+				Effect2 = true;
+			}
+			else
+			{
+				Effect2 = false;
+			}
 
-				if (!Effect2)
-				{
-					triggers->RumbleDevice2(0, 0, 0);
-				}
+			if (stateFFBDevice3 == 0x01)
+			{
+				Effect3 = true;
+			}
+			else
+			{
+				Effect3 = false;
+			}
 
-				if (Effect3)
-				{
-					triggers->RumbleDevice3(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
+			if (Effect1)
+			{
+				triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			}
 
-				if (!Effect3)
-				{
-					triggers->RumbleDevice3(0, 0, 0);
-				}
+			if (!Effect1)
+			{
+				triggers->Rumble(0, 0, 0);
+			}
+
+			if (Effect2)
+			{
+				triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			}
+
+			if (!Effect2)
+			{
+				triggers->RumbleDevice2(0, 0, 0);
+			}
+
+			if (Effect3)
+			{
+				triggers->RumbleDevice3(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			}
+
+			if (!Effect3)
+			{
+				triggers->RumbleDevice3(0, 0, 0);
 			}
 		}
 
 		if (RunningFFB == RacingActive1) //Outrunners,Turbo Outrun,CBombers
 		{
-			if (Emulator == MAME)
+			if (name == MA_Steering_Wheel_motor || name == upright_wheel_motor || name == Vibration_motor || name == Wheel_vibration)
 			{
-				if (name == MA_Steering_Wheel_motor || name == upright_wheel_motor || name == Vibration_motor || name == Wheel_vibration)
-				{
-					helpers->log("P1 value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
+				helpers->log("P1 value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
 
-					if (newstateFFB == 0)
-					{
-						Effect1 = false;
-					}
-
-					stateFFB = newstateFFB;
-				}
-
-				if (name == MB_Steering_Wheel_motor)
-				{
-					helpers->log("P2 value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0)
-					{
-						Effect2 = false;
-					}
-
-					stateFFBDevice2 = newstateFFB;
-				}
-
-				if (stateFFB == 0x01)
-				{
-					Effect1 = true;
-				}
-				else
+				if (newstateFFB == 0)
 				{
 					Effect1 = false;
 				}
 
-				if (stateFFBDevice2 == 0x01)
-				{
-					Effect2 = true;
-				}
-				else
+				stateFFB = newstateFFB;
+			}
+
+			if (name == MB_Steering_Wheel_motor)
+			{
+				helpers->log("P2 value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				if (newstateFFB == 0)
 				{
 					Effect2 = false;
 				}
 
-				if (Effect1)
-				{
-					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
+				stateFFBDevice2 = newstateFFB;
+			}
 
-				if (!Effect1)
-				{
-					triggers->Sine(0, 0, 0);
-					triggers->Rumble(0, 0, 0);
-				}
+			if (stateFFB == 0x01)
+			{
+				Effect1 = true;
+			}
+			else
+			{
+				Effect1 = false;
+			}
 
-				if (Effect2)
-				{
-					triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-					triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-				}
+			if (stateFFBDevice2 == 0x01)
+			{
+				Effect2 = true;
+			}
+			else
+			{
+				Effect2 = false;
+			}
 
-				if (!Effect2)
-				{
-					triggers->SineDevice2(0, 0, 0);
-					triggers->RumbleDevice2(0, 0, 0);
-				}
+			if (Effect1)
+			{
+				triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+				triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			}
+
+			if (!Effect1)
+			{
+				triggers->Sine(0, 0, 0);
+				triggers->Rumble(0, 0, 0);
+			}
+
+			if (Effect2)
+			{
+				triggers->SineDevice2(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+				triggers->RumbleDevice2(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			}
+
+			if (!Effect2)
+			{
+				triggers->SineDevice2(0, 0, 0);
+				triggers->RumbleDevice2(0, 0, 0);
 			}
 		}
 
 		if (RunningFFB == RacingActive2) //Cisco Heat,F1 GpStar //Keep seperate as names is led2 and could possibly interfere with other outputs
 		{
-			if (Emulator == MAME)
+			if (name == led2)
 			{
-				if (name == led2)
+				helpers->log("P1 value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				if (newstateFFB == 0)
 				{
-					helpers->log("P1 value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0)
-					{
-						Effect1 = false;
-					}
-
-					stateFFB = newstateFFB;
+					Effect1 = false;
 				}
 
+				stateFFB = newstateFFB;
+			}
+
+			if (stateFFB == 0x01)
+			{
+				Effect1 = true;
+			}
+			else
+			{
+				Effect1 = false;
+			}
+
+			if (Effect1)
+			{
+				triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
+				triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			}
+
+			if (!Effect1)
+			{
+				triggers->Sine(0, 0, 0);
+				triggers->Rumble(0, 0, 0);
+			}
+		}
+
+		if (RunningFFB == AfterburnerActive) //Afterburner
+		{
+			if (name == lamp1)
+			{
+				helpers->log("P1 value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				if (newstateFFB == 0)
+				{
+					Effect1 = false;
+				}
+
+				stateFFB = newstateFFB;
+			}
+
+			if (stateFFB == 0x01)
+			{
+				Effect1 = true;
+			}
+			else
+			{
+				Effect1 = false;
+			}
+
+			if (Effect1)
+			{
+				triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
+			}
+
+			if (!Effect1)
+			{
+				triggers->Rumble(0, 0, 0);
+			}
+		}
+
+		if (RunningFFB == OutrunActive)
+		{
+			if (name == Bank_Motor_Direction)
+			{
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				if (newstateFFB != 0)
+				{
+					stateFFB = newstateFFB;
+				}
+			}
+
+			if (name == Vibration_motor)
+			{
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+				if (newstateFFB > 0)
+				{
+
+				}
+
+				if (newstateFFB == 0)
+				{
+					Effect1 = false;
+				}
+
+				stateFFB2 = newstateFFB;
+			}
+
+			if (name == Bank_Motor_Speed)
+			{
+				stateFFB3 = newstateFFB;
+			}
+
+			if (Motion)
+			{
 				if (stateFFB == 0x01)
+				{
+					double percentForce = (1 + stateFFB3) / 8.0;
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				if (stateFFB == 0x02)
+				{
+					double percentForce = (1 + stateFFB3) / 8.0;
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
+
+			if (stateFFB == 1)
+			{
+				Motion = true;
+				MotionFalse = false;
+			}
+
+			if (stateFFB2 == 1)
+			{
+				Motion = false;
+			}
+
+			if (StopConstant == 255)
+			{
+				MotionFalse = true;
+			}
+
+			if (MotionFalse)
+			{
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+				Motion = false;
+				StopConstant = 0;
+				MotionFalse = false;
+			}
+
+			if (!Motion)
+			{
+
+				if (stateFFB2 == 0x01)
 				{
 					Effect1 = true;
 				}
@@ -2992,25 +3113,84 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			}
 		}
 
-		if (RunningFFB == AfterburnerActive) //Afterburner
+		if (RunningFFB == PDriftActive)
 		{
-			if (Emulator == MAME)
+			if (name == bank_motor_position)
 			{
-				if (name == lamp1)
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				stateFFB = newstateFFB;
+			}
+
+			if (name == vibration_motor)
+			{
+				stateFFB2 = newstateFFB;
+			}
+
+			if (name == upright_wheel_motor)
+			{
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				if (newstateFFB == 0)
 				{
-					helpers->log("P1 value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0)
-					{
-						Effect1 = false;
-					}
-
-					stateFFB = newstateFFB;
+					Effect1 = false;
 				}
 
-				if (stateFFB == 0x01)
+				stateFFB3 = newstateFFB;
+			}
+
+			if (Motion)
+			{
+				if ((stateFFB > 0x00) && (stateFFB < 0x04))
+				{
+					double percentForce = (4 - stateFFB) / 3.0;
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((stateFFB > 0x04) && (stateFFB < 0x08))
+				{
+					double percentForce = (stateFFB - 4) / 3.0;
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				if (stateFFB2 >= 0)
+				{
+					double percentForce = stateFFB2 / 7.0;
+					triggers->Sine(60, 0, percentForce / 3.0);
+				}
+			}
+
+			if (stateFFB == 4)
+			{
+				Motion = true;
+				MotionFalse = false;
+			}
+
+			if (stateFFB3 == 1)
+			{
+				Motion = false;
+			}
+
+			if (StopConstant == 255)
+			{
+				MotionFalse = true;
+			}
+
+			if (MotionFalse)
+			{
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+				Motion = false;
+				StopConstant = 0;
+				MotionFalse = false;
+			}
+
+			if (!Motion)
+			{
+				if (stateFFB3 == 0x01)
 				{
 					Effect1 = true;
 				}
@@ -3021,271 +3201,117 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 				if (Effect1)
 				{
+					triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
 					triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
 				}
 
 				if (!Effect1)
 				{
+					triggers->Sine(0, 0, 0);
 					triggers->Rumble(0, 0, 0);
-				}
-			}
-		}
-
-		if (RunningFFB == OutrunActive)
-		{
-			if (Emulator == MAME)
-			{
-				if (name == Bank_Motor_Direction)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB != 0)
-					{
-						stateFFB = newstateFFB;
-					}				
-				}
-
-				if (name == Vibration_motor)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0)
-					{
-						Effect1 = false;
-					}
-
-					stateFFB2 = newstateFFB;
-				}
-
-				if (name == Bank_Motor_Speed)
-				{
-					stateFFB3 = newstateFFB;					
-				}
-
-				if (Motion)
-				{
-					if (stateFFB == 0x01)
-					{
-						double percentForce = (1 + stateFFB3) / 8.0;
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
-					if (stateFFB == 0x02)
-					{
-						double percentForce = (1 + stateFFB3) / 8.0;
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-				}
-				
-				if (stateFFB == 1)
-				{
-					Motion = true;
-					MotionFalse = false;
-				}
-
-				if (stateFFB2 == 1)
-				{
-					Motion = false;
-				}
-
-				if (StopConstant == 255)
-				{
-					MotionFalse = true;
-				}
-
-				if (MotionFalse)
-				{
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-					Motion = false;
-					StopConstant = 0;
-					MotionFalse = false;				
-				}
-
-				if (!Motion)
-				{
-					
-					if (stateFFB2 == 0x01)
-					{
-						Effect1 = true;
-					}
-					else
-					{
-						Effect1 = false;
-					}
-
-					if (Effect1)
-					{
-						triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-						triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-					}
-
-					if (!Effect1)
-					{
-						triggers->Sine(0, 0, 0);
-						triggers->Rumble(0, 0, 0);
-					}
-				}			
-			}
-		}
-
-		if (RunningFFB == PDriftActive)
-		{
-			if (Emulator == MAME)
-			{
-				if (name == bank_motor_position)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					stateFFB = newstateFFB;
-				}
-
-				if (name == vibration_motor)
-				{
-					stateFFB2 = newstateFFB;
-				}
-
-				if (name == upright_wheel_motor)
-				{
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(newstateFFB);
-					helpers->log((char*)ffs.c_str());
-
-					if (newstateFFB == 0)
-					{
-						Effect1 = false;
-					}
-
-					stateFFB3 = newstateFFB;
-				}
-
-				if (Motion)
-				{
-					if ((stateFFB > 0x00) && (stateFFB < 0x04))
-					{
-						double percentForce = (4 - stateFFB) / 3.0;
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
-					else if ((stateFFB > 0x04) && (stateFFB < 0x08))
-					{
-						double percentForce = (stateFFB - 4) / 3.0;
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-
-					if (stateFFB2 >= 0)
-					{
-						double percentForce = stateFFB2 / 7.0;
-						triggers->Sine(60, 0, percentForce / 3.0);
-					}
-				}
-
-				if (stateFFB == 4)
-				{
-					Motion = true;
-					MotionFalse = false;
-				}
-
-				if (stateFFB3 == 1)
-				{
-					Motion = false;
-				}
-
-				if (StopConstant == 255)
-				{
-					MotionFalse = true;
-				}
-
-				if (MotionFalse)
-				{
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-					Motion = false;
-					StopConstant = 0;
-					MotionFalse = false;
-				}
-
-				if (!Motion)
-				{
-					if (stateFFB3 == 0x01)
-					{
-						Effect1 = true;
-					}
-					else
-					{
-						Effect1 = false;
-					}
-
-					if (Effect1)
-					{
-						triggers->Sine(SinePeriod, SineFadePeriod, SineStrength / 100.0);
-						triggers->Rumble(RumbleStrengthLeftMotor / 100.0, RumbleStrengthRightMotor / 100.0, 100);
-					}
-
-					if (!Effect1)
-					{
-						triggers->Sine(0, 0, 0);
-						triggers->Rumble(0, 0, 0);
-					}
 				}
 			}
 		}
 
 		if (RunningFFB == RaveRacerActive) //Rave Racer
 		{
-			if (Emulator == MAME)
+			if (!PatternFind)
 			{
-				if (!PatternFind)
+				if (!PatternLaunch)
 				{
-					aAddy2 = PatternScan("\x08\x00\x20\x00\x20\x00\x20\x00\x20\x00\x03", "xxxxxxxxxxx");
-
-					UINT8 CheckAddy2 = (int)aAddy2 + 0x1B;
-					if (CheckAddy2 == 0x3B)
+					if (name == cpuled6)
 					{
-						FFBAddress = (int)aAddy2 + 0x20;
-						PatternFind = true;
+						if (newstateFFB == 0)
+						{
+							PatternLaunch = true;
+						}
 					}
 				}
 				else
 				{
-					UINT8 FFB = helpers->ReadByte(FFBAddress, false);
-					UINT8 ffrave = raveracer(FFB);
-
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(ffrave);
-					helpers->log((char*)ffs.c_str());
-
-					if ((ffrave > 0x3D) && (ffrave < 0x7C))
+					if (!Scan)
 					{
-						double percentForce = (124 - ffrave) / 61.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+						CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+						Scan = true;
 					}
-					else if ((ffrave > 0x00) && (ffrave < 0x3E))
+
+					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0xDF, false);
+					if (CheckAddy2 == 0xC2)
 					{
-						double percentForce = (ffrave) / 61.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+						FFBAddress = (int)aAddy2 - 0x1C0;
+						PatternFind = true;
 					}
+				}
+			}
+			else
+			{
+				UINT8 FFB = helpers->ReadByte(FFBAddress, false);
+				UINT8 ffrave = raveracer(FFB);
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(ffrave);
+				helpers->log((char*)ffs.c_str());
+
+				if ((ffrave > 0x3D) && (ffrave < 0x7C))
+				{
+					double percentForce = (124 - ffrave) / 61.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((ffrave > 0x00) && (ffrave < 0x3E))
+				{
+					double percentForce = (ffrave) / 61.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
 		}
 
-		if (RunningFFB == DaytonaActive)
+		if (RunningFFB == M2PatternActive)
 		{
-			if (Emulator == MAME)
+			if (!PatternFind)
 			{
-				if (!PatternFind)
+				if (!PatternLaunch)
 				{
 					if (romname == daytona || romname == daytonas || romname == daytonase)
 					{
-						aAddy2 = PatternScan("\x05\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x8E\x0E\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xFF\xFF\x00\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x3F\x42\x3F\x00\x02\x02\x01\x00\x00\x14\x1C\x00\x00\x00\x00\x00", "xxxxxxxxxxx??xxxxxxxxxxxxxxxxxxxxxxxxxxxxxx???x?x?xx?x?xxxx");
+						Sleep(8000);
+						PatternLaunch = true;
+					}
+
+					if (romname == indy500 || romname == indy500d || romname == indy500to)
+					{
+						if (name == digit1)
+						{
+							if (newstateFFB == 0x3D)
+							{
+								PatternLaunch = true;
+							}
+						}
+					}
+
+					if (romname == sgt24h)
+					{
+						if (name == digit0)
+						{
+							if (newstateFFB == 0x01)
+							{
+								PatternLaunch = true;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (romname == daytona || romname == daytonas || romname == daytonase)
+					{
+						if (!Scan)
+						{
+							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+							Scan = true;
+						}
 
 						if ((UINT8)aAddy2 == 0x05)
 						{
@@ -3296,7 +3322,11 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 					if (romname == indy500 || romname == indy500d || romname == indy500to)
 					{
-						aAddy2 = PatternScan("\xFF\x4E\x00\x00\x00\x00\x01", "xxxxxxx");
+						if (!Scan)
+						{
+							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+							Scan = true;
+						}
 
 						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x02, false);
 						if (CheckAddy2 == 0x01)
@@ -3306,21 +3336,13 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						}
 					}
 
-					if (romname == stcc)
-					{
-						aAddy2 = PatternScan("\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\xFF\xFF\xFF", "xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
-
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x1F, false);
-						if ((CheckAddy2 == 0x4E) || (CheckAddy2 == 0x4F))
-						{
-							FFBAddress = (int)aAddy2 + 0x19;
-							PatternFind = true;
-						}
-					}
-
 					if (romname == sgt24h)
 					{
-						aAddy2 = PatternScan("\x03\x00\x00\x00\x09\x00\x00\x00\x1F\x00\x00\x00\x13\x00\x00\x00\x04\x00\x00\x00\x0F", "xxxxxxxxxxxxxxxxxxxxx");
+						if (!Scan)
+						{
+							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+							Scan = true;
+						}
 
 						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x14, false);
 						if (CheckAddy2 == 0x0C)
@@ -3330,74 +3352,85 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						}
 					}
 				}
-				else
+			}
+			else
+			{
+				ff = helpers->ReadByte(FFBAddress, false);
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(ff);
+				helpers->log((char*)ffs.c_str());
+
+				if ((ff > 0x09) && (ff < 0x18))
 				{
-					ff = helpers->ReadByte(FFBAddress, false);
+					//Spring
+					double percentForce = (ff - 15) / 8.0;
+					double percentLength = 100;
+					triggers->Spring(percentForce);
+				}
 
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(ff);
-					helpers->log((char*)ffs.c_str());
+				if ((ff > 0x1F) && (ff < 0x28))
+				{
+					//Clutch
+					double percentForce = (ff - 31) / 8.0;
+					double percentLength = 100;
+					triggers->Friction(percentForce);
+				}
 
-					if ((ff > 0x09) && (ff < 0x18))
-					{
-						//Spring
-						double percentForce = (ff - 15) / 8.0;
-						double percentLength = 100;
-						triggers->Spring(percentForce);
-					}
+				if ((ff > 0x2F) && (ff < 0x3D))
+				{
+					//Centering
+					double percentForce = (ff - 47) / 13.0;
+					double percentLength = 100;
+					triggers->Spring(percentForce);
+				}
 
-					if ((ff > 0x1F) && (ff < 0x28))
-					{
-						//Clutch
-						double percentForce = (ff - 31) / 8.0;
-						double percentLength = 100;
-						triggers->Friction(percentForce);
-					}
+				if ((ff > 0x3F) && (ff < 0x48))
+				{
+					//Uncentering
+					double percentForce = (ff - 63) / 8.0;
+					double percentLength = 100;
+					triggers->Sine(40, 0, percentForce);
+					triggers->Rumble(percentForce, percentForce, percentLength);
+				}
 
-					if ((ff > 0x2F) && (ff < 0x3D))
-					{
-						//Centering
-						double percentForce = (ff - 47) / 13.0;
-						double percentLength = 100;
-						triggers->Spring(percentForce);
-					}
-
-					if ((ff > 0x3F) && (ff < 0x48))
-					{
-						//Uncentering
-						double percentForce = (ff - 63) / 8.0;
-						double percentLength = 100;
-						triggers->Sine(40, 0, percentForce);
-						triggers->Rumble(percentForce, percentForce, percentLength);
-					}
-
-					if ((ff > 0x4F) && (ff < 0x58))
-					{
-						//Roll Left
-						double percentForce = (ff - 79) / 8.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ff > 0x5F) && (ff < 0x68))
-					{
-						//Roll Right
-						double percentForce = (ff - 95) / 8.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
+				if ((ff > 0x4F) && (ff < 0x58))
+				{
+					//Roll Left
+					double percentForce = (ff - 79) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ff > 0x5F) && (ff < 0x68))
+				{
+					//Roll Right
+					double percentForce = (ff - 95) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
 		}
 
 		if (RunningFFB == SrallyActive)
 		{
-			if (Emulator == MAME)
+			if (!PatternFind)
 			{
-				if (!PatternFind)
+				if (!PatternLaunch)
 				{
-					aAddy2 = PatternScan("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x70\xFF\x00\x00\x70\xFF", "xxxxxxxxxxxxxxxx");
+					if (name == digit1)
+					{
+						PatternLaunch = true;
+					}
+				}
+				else
+				{
+					if (!Scan)
+					{
+						CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+						Scan = true;
+					}
 
 					if ((UINT8)aAddy2 == 0x53)
 					{
@@ -3405,199 +3438,226 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						PatternFind = true;
 					}
 				}
-				else
+			}
+			else
+			{
+				ff = helpers->ReadByte(FFBAddress, false);
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(ff);
+				helpers->log((char*)ffs.c_str());
+
+				if ((ff > 0xBF) && (ff < 0xDF))
 				{
-					ff = helpers->ReadByte(FFBAddress, false);
-
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(ff);
-					helpers->log((char*)ffs.c_str());
-
-					if ((ff > 0xBF) && (ff < 0xDF))
-					{
-						double percentForce = (ff - 191) / 31.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-					else if ((ff > 0x7F) && (ff < 0x9F))
-					{
-						double percentForce = (ff - 127) / 31.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
+					double percentForce = (ff - 191) / 31.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((ff > 0x7F) && (ff < 0x9F))
+				{
+					double percentForce = (ff - 127) / 31.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
 		}
-
+		
 		if (RunningFFB == SuperChaseActive)
 		{
-			if (Emulator == MAME)
+			if (!PatternFind)
 			{
-				if (!PatternFind)
+				if (!PatternLaunch)
 				{
-					aAddy2 = PatternScan("\xD2\x00\xFF\xFF\x00\x01\xE4", "xxxxxxx");
-
-					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x32, false);
-					if (CheckAddy2 == 0x04)
-					{
-						FFBAddress = (int)aAddy2 + 0x32;
-						PatternFind = true;
-					}
+					Sleep(8000);
+					PatternLaunch = true;
 				}
-				else
+
+				if (!Scan)
 				{
-					ff = helpers->ReadByte(FFBAddress, false);
+					CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+					Scan = true;
+				}
 
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(ff);
-					helpers->log((char*)ffs.c_str());
+				UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x12, false);
+				if (CheckAddy2 == 0x5A)
+				{
+					FFBAddress = (int)aAddy2 + 0x6C8;
+					PatternFind = true;
+				}
+			}
+			else
+			{
+				ff = helpers->ReadByte(FFBAddress, false);
 
-					if (ff & 0x01)
-					{
-						double percentForce = 1.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(ff);
+				helpers->log((char*)ffs.c_str());
 
-					if (ff & 0x02)
-					{
-						double percentForce = 1.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
+				if (ff & 0x01)
+				{
+					double percentForce = 1.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (ff & 0x02)
+				{
+					double percentForce = 1.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
 		}
-
+		
 		if (RunningFFB == NamcoFFBActive)
 		{
-			if (Emulator == MAME)
+			if (!PatternFind)
 			{
-				if (!PatternFind)
+				if (!PatternLaunch)
+				{
+					if (name == cpuled6)
+					{
+						if (newstateFFB == 0)
+						{
+							PatternLaunch = true;
+						}
+					}
+				}
+				else
 				{
 					if (romname == dirtdash)
 					{
-						aAddy2 = PatternScan("\x28\x00\x28\x00\x00\x00\x28", "xxxxxxx");
+						if (!Scan)
+						{
+							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+							Scan = true;
+						}
 
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x12, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x3E6, false);
 						if (CheckAddy2 == 0x01)
 						{
-							FFBAddress = (int)aAddy2 + 0x132;
+							FFBAddress = (int)aAddy2 - 0x2C6;
 							PatternFind = true;
 						}
 					}
 
 					if (romname == victlapw)
 					{
-						aAddy2 = PatternScan("\x0F\x00\x28\x00\x28", "xxxxx");
+						if (!Scan)
+						{
+							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+							Scan = true;
+						}
 
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x16, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x3E4, false);
 						if (CheckAddy2 == 0x38)
 						{
-							FFBAddress = (int)aAddy2 + 0x134;
+							FFBAddress = (int)aAddy2 - 0x2C6;
 							PatternFind = true;
 						}
 					}
 
 					if (romname == acedrvrw)
 					{
-						aAddy2 = PatternScan("\x28\x00\x28\x00\x28\x00\x28\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x38", "xxxxxxxxxxxxxxxxxxxxx");
+						if (!Scan)
+						{
+							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
+							Scan = true;
+						}
 
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x15, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x3E3, false);
 						if (CheckAddy2 == 0x80)
 						{
-							FFBAddress = (int)aAddy2 + 0x132;
+							FFBAddress = (int)aAddy2 - 0x2C6;
 							PatternFind = true;
 						}
 					}
 				}
-				else
+			}
+			else
+			{
+				DWORD FFBNamco = helpers->ReadInt32(FFBAddress, false);
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(FFBNamco);
+				helpers->log((char*)ffs.c_str());
+
+				if ((FFBNamco >= 0x00) && (FFBNamco < 0x77A))
 				{
-					DWORD FFBNamco = helpers->ReadInt32(FFBAddress, false);
-
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(FFBNamco);
-					helpers->log((char*)ffs.c_str());
-
-					if ((FFBNamco >= 0x00) && (FFBNamco < 0x77A))
+					double percentForce = (FFBNamco / Divide);
+					double percentLength = 100;
+					if (percentForce > 1.0)
 					{
-						double percentForce = (FFBNamco / Divide);
-						double percentLength = 100;
-						if (percentForce > 1.0)
-						{
-							percentForce = 1.0;
-						}
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+						percentForce = 1.0;
 					}
-					else if ((FFBNamco > 0xF886) && (FFBNamco < 0x10000))
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+				else if ((FFBNamco > 0xF886) && (FFBNamco < 0x10000))
+				{
+					double percentForce = ((65536 - FFBNamco) / Divide);
+					double percentLength = 100;
+					if (percentForce > 1.0)
 					{
-						double percentForce = ((65536 - FFBNamco) / Divide);
-						double percentLength = 100;
-						if (percentForce > 1.0)
-						{
-							percentForce = 1.0;
-						}
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+						percentForce = 1.0;
 					}
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 			}
 		}
 
 		if (RunningFFB == HardDrivinActive) //Hard Drivin
 		{
-			if (Emulator == MAME)
+			if (!HardDrivinFrame)
 			{
-				if (!HardDrivinFrame)
+				HardDrivinFrame = true;
+			}
+
+			if ((frame & 7) == 4)
+			{
+				HardDrivinFFB = (vals[0] & 15) + ((vals[3] & 7) << 5);
+
+				if ((vals[1] & 0xF0) == 0xF0)
 				{
-					HardDrivinFrame = true;
+					HardDrivinFFB |= 0x10;
 				}
-			
-				if ((frame & 7) == 4)
+
+				if ((vals[2] & 0xF0) == 0xF0)
 				{
-					HardDrivinFFB = (vals[0] & 15) + ((vals[3] & 7) << 5);
-
-					if ((vals[1] & 0xF0) == 0xF0)
-					{
-						HardDrivinFFB |= 0x10;
-					}
-					 
-					if ((vals[2] & 0xF0) == 0xF0)
-					{
-						HardDrivinFFB = -HardDrivinFFB;
-					}
-
-					helpers->log("got value: ");
-					std::string ffs = std::to_string(HardDrivinFFB);
-					helpers->log((char*)ffs.c_str());			
-
-					static char test[256];
-					memset(test, 0, 256);
-					sprintf(test, "hex print: %d", HardDrivinFFB);
-					OutputDebugStringA(test);
-
-/*					if (HardDrivinFFB > 0)
-					{
-						double percentForce = HardDrivinFFB / 100.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
-
-					if (HardDrivinFFB < 0)
-					{
-						HardDrivinFFB = -HardDrivinFFB;
-						double percentForce = HardDrivinFFB / 100.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}	*/				
+					HardDrivinFFB = -HardDrivinFFB;
 				}
+
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(HardDrivinFFB);
+				helpers->log((char*)ffs.c_str());
+
+				static char test[256];
+				memset(test, 0, 256);
+				sprintf(test, "hex print: %d", HardDrivinFFB);
+				OutputDebugStringA(test);
+
+				/*				if (HardDrivinFFB > 0)
+								{
+								double percentForce = HardDrivinFFB / 100.0;
+								double percentLength = 100;
+								triggers->Rumble(percentForce, 0, percentLength);
+								triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+							}
+
+							if (HardDrivinFFB < 0)
+							{
+								HardDrivinFFB = -HardDrivinFFB;
+								double percentForce = HardDrivinFFB / 100.0;
+								double percentLength = 100;
+								triggers->Rumble(0, percentForce, percentLength);
+								triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+							}	*/
+
 			}
 		}
 	}
