@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 2.1
+Version 2.2
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy & pinkimo.
 
@@ -181,4 +181,3 @@ extremely generous.
 -Virtua Racing (CHANGE TO UPRIGHT CABINET)
 -Wacky Races
 -Wangan Midnight Maximum Tune 5
--Le Mans 24
