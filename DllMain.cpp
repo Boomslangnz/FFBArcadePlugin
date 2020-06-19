@@ -915,6 +915,18 @@ int RumbleStrengthLeftMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumbl
 int RumbleStrengthRightMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotor"), 0, settingsFilename);
 int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
 int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
+int EnableFFBStrengthDynamicAdjustment = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthDynamicAdjustment"), 0, settingsFilename);
+int IncreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseFFBStrength"), NULL, settingsFilename);
+int DecreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DecreaseFFBStrength"), NULL, settingsFilename);
+int ResetFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFFBStrength"), NULL, settingsFilename);
+int StepFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("StepFFBStrength"), 5, settingsFilename);
+
+int defaultCenterMaxForce = configMaxForce;
+int defaultCenterMinForce = configMinForce;
+int defaultAlternativeCenterMaxForceRight = configAlternativeMaxForceRight;
+int defaultAlternativeCenterMinForceRight = configAlternativeMinForceRight;
+int defaultAlternativeCenterMaxForceLeft = configAlternativeMaxForceLeft;
+int defaultAlternativeCenterMinForceLeft = configAlternativeMinForceRight;
 
 char chainedDLL[256];
 
@@ -2147,10 +2159,101 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	return 0;
 }
 
+DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
+{
+	SDL_Event e;
+
+	while (true)
+	{
+		while (SDL_WaitEvent(&e) != 0)
+		{
+			if (e.type == SDL_JOYBUTTONDOWN)
+			{
+				if (e.jbutton.which == joystick_index1)
+				{
+					if (e.jbutton.button == IncreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
+							{
+								configAlternativeMaxForceRight += StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
+							{
+								configAlternativeMaxForceLeft -= StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce >= 0) && (configMaxForce < 100))
+							{
+								configMaxForce += StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+					}
+
+					if (e.jbutton.button == DecreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
+							{
+								configAlternativeMaxForceRight -= StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
+							{
+								configAlternativeMaxForceLeft += StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce > 0) && (configMaxForce <= 100))
+							{
+								configMaxForce -= StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+					}
+
+					if (e.jbutton.button == ResetFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							configAlternativeMaxForceRight = defaultAlternativeCenterMaxForceRight;
+							configAlternativeMinForceRight = defaultAlternativeCenterMinForceRight;
+							configAlternativeMaxForceLeft = defaultAlternativeCenterMaxForceLeft;
+							configAlternativeMinForceRight = defaultAlternativeCenterMinForceLeft;
+						}
+						else
+						{
+							configMaxForce = defaultCenterMaxForce;
+							configMinForce = defaultCenterMinForce;
+						}
+					}
+				}
+			}
+		}
+
+		Sleep(16);
+	}
+}
+
 void CreateFFBLoopThread()
 {
 	hlp.log("Before CreateThread");
 	CreateThread(NULL, 0, FFBLoop, (LPVOID)&keepRunning, 0, NULL);
+
+	if (EnableFFBStrengthDynamicAdjustment == 1)
+	{
+		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
+	}
+
 	hlp.log("After CreateThread");
 }
 
