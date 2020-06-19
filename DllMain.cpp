@@ -915,6 +915,7 @@ int RumbleStrengthLeftMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumbl
 int RumbleStrengthRightMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotor"), 0, settingsFilename);
 int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
 int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
+int AutoCloseWindowError = GetPrivateProfileInt(TEXT("Settings"), TEXT("AutoCloseWindowError"), 0, settingsFilename);
 int EnableFFBStrengthDynamicAdjustment = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthDynamicAdjustment"), 0, settingsFilename);
 int IncreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseFFBStrength"), NULL, settingsFilename);
 int DecreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DecreaseFFBStrength"), NULL, settingsFilename);
@@ -1916,6 +1917,16 @@ void TriggerSpringEffect(double strength)
 	TriggerSpringEffectWithDefaultOption(strength, false);
 }
 
+void changeVolume()
+{
+	INPUT ip = { 0 };
+	ip.type = INPUT_KEYBOARD;
+	ip.ki.wVk = VK_VOLUME_MUTE;
+	SendInput(1, &ip, sizeof(INPUT));
+	ip.ki.dwFlags = KEYEVENTF_KEYUP;
+	SendInput(1, &ip, sizeof(INPUT));
+}
+
 int WorkaroundToFixRumble(void* ptr)
 {
 	SDL_Event e;
@@ -2339,6 +2350,13 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			if ((configGameId == 4) || (configGameId == 37))
 			{
 				gl_cgGLDll = LoadLibraryA("cgGL.dll");
+			}
+			if (configGameId == 26)
+			{
+				if (AutoCloseWindowError == 1)
+				{
+					changeVolume();
+				}
 			}
 		}
 		else
