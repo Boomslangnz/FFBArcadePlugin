@@ -1925,6 +1925,91 @@ int WorkaroundToFixRumble(void* ptr)
 	return 0;
 }
 
+DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
+{
+	SDL_Event e;
+
+	while (true)
+	{
+		while (SDL_WaitEvent(&e) != 0)
+		{
+			if (e.type == SDL_JOYBUTTONDOWN)
+			{
+				if (e.jbutton.which == joystick_index1)
+				{
+					if (e.jbutton.button == IncreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
+							{
+								configAlternativeMaxForceRight += StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
+							{
+								configAlternativeMaxForceLeft -= StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce >= 0) && (configMaxForce < 100))
+							{
+								configMaxForce += StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+					}
+
+					if (e.jbutton.button == DecreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
+							{
+								configAlternativeMaxForceRight -= StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
+							{
+								configAlternativeMaxForceLeft += StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce > 0) && (configMaxForce <= 100))
+							{
+								configMaxForce -= StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+					}
+
+					if (e.jbutton.button == ResetFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							configAlternativeMaxForceRight = defaultAlternativeCenterMaxForceRight;
+							configAlternativeMinForceRight = defaultAlternativeCenterMinForceRight;
+							configAlternativeMaxForceLeft = defaultAlternativeCenterMaxForceLeft;
+							configAlternativeMinForceRight = defaultAlternativeCenterMinForceLeft;
+						}
+						else
+						{
+							configMaxForce = defaultCenterMaxForce;
+							configMinForce = defaultCenterMinForce;
+						}
+					}
+				}
+			}
+		}
+
+		Sleep(16);
+	}
+}
+
 DWORD WINAPI FFBLoop2(LPVOID lpParam)
 {
 	// assign FFB effects here
@@ -2154,106 +2239,19 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		Sleep(2500);
 	}
 	Initialize(0);
+	if (EnableFFBStrengthDynamicAdjustment == 1)
+	{
+		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
+	}
 	hlp.log("Initialize() complete");
 
 	return 0;
-}
-
-DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
-{
-	SDL_Event e;
-
-	while (true)
-	{
-		while (SDL_WaitEvent(&e) != 0)
-		{
-			if (e.type == SDL_JOYBUTTONDOWN)
-			{
-				if (e.jbutton.which == joystick_index1)
-				{
-					if (e.jbutton.button == IncreaseFFBStrength)
-					{
-						if (AlternativeFFB == 1)
-						{
-							if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
-							{
-								configAlternativeMaxForceRight += StepFFBStrength;
-								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
-							}
-							if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
-							{
-								configAlternativeMaxForceLeft -= StepFFBStrength;
-								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
-							}
-						}
-						else
-						{
-							if ((configMaxForce >= 0) && (configMaxForce < 100))
-							{
-								configMaxForce += StepFFBStrength;
-								configMaxForce = max(0, min(100, configMaxForce));
-							}
-						}
-					}
-
-					if (e.jbutton.button == DecreaseFFBStrength)
-					{
-						if (AlternativeFFB == 1)
-						{
-							if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
-							{
-								configAlternativeMaxForceRight -= StepFFBStrength;
-								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
-							}
-							if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
-							{
-								configAlternativeMaxForceLeft += StepFFBStrength;
-								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
-							}
-						}
-						else
-						{
-							if ((configMaxForce > 0) && (configMaxForce <= 100))
-							{
-								configMaxForce -= StepFFBStrength;
-								configMaxForce = max(0, min(100, configMaxForce));
-							}
-						}
-					}
-
-					if (e.jbutton.button == ResetFFBStrength)
-					{
-						if (AlternativeFFB == 1)
-						{
-							configAlternativeMaxForceRight = defaultAlternativeCenterMaxForceRight;
-							configAlternativeMinForceRight = defaultAlternativeCenterMinForceRight;
-							configAlternativeMaxForceLeft = defaultAlternativeCenterMaxForceLeft;
-							configAlternativeMinForceRight = defaultAlternativeCenterMinForceLeft;
-						}
-						else
-						{
-							configMaxForce = defaultCenterMaxForce;
-							configMinForce = defaultCenterMinForce;
-						}
-					}
-				}
-			}
-		}
-
-		Sleep(16);
-	}
 }
 
 void CreateFFBLoopThread()
 {
 	hlp.log("Before CreateThread");
 	CreateThread(NULL, 0, FFBLoop, (LPVOID)&keepRunning, 0, NULL);
-
-	if (EnableFFBStrengthDynamicAdjustment == 1)
-	{
-		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
-	}
-
 	hlp.log("After CreateThread");
 }
 
