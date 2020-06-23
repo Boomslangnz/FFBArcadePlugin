@@ -921,6 +921,10 @@ int IncreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseF
 int DecreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DecreaseFFBStrength"), NULL, settingsFilename);
 int ResetFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFFBStrength"), NULL, settingsFilename);
 int StepFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("StepFFBStrength"), 5, settingsFilename);
+int EnablePersistentMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnablePersistentMaxForce"), 0, settingsFilename);
+int PersistentMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForce"), -1, settingsFilename);
+int PersistentAlternativeMaxForceLeft = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeft"), 1, settingsFilename);
+int PersistentAlternativeMaxForceRight = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRight"), -1, settingsFilename);
 
 int defaultCenterMaxForce = configMaxForce;
 int defaultCenterMinForce = configMinForce;
@@ -1936,6 +1940,22 @@ int WorkaroundToFixRumble(void* ptr)
 	return 0;
 }
 
+void WritePersistentMaxForce()
+{
+	if (EnablePersistentMaxForce == 1)
+	{
+		if (AlternativeFFB == 1)
+		{
+			WritePrivateProfileStringA("Settings", "PersistentAlternativeMaxForceLeft", (char*)(std::to_string(configAlternativeMaxForceLeft)).c_str(), ".\\FFBPlugin.ini");
+			WritePrivateProfileStringA("Settings", "PersistentAlternativeMaxForceRight", (char*)(std::to_string(configAlternativeMaxForceRight)).c_str(), ".\\FFBPlugin.ini");
+		}
+		else
+		{
+			WritePrivateProfileStringA("Settings", "PersistentMaxForce", (char*)(std::to_string(configMaxForce)).c_str(), ".\\FFBPlugin.ini");
+		}
+	}
+}
+
 DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 {
 	SDL_Event e;
@@ -1968,9 +1988,11 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 							if ((configMaxForce >= 0) && (configMaxForce < 100))
 							{
 								configMaxForce += StepFFBStrength;
-								configMaxForce = max(0, min(100, configMaxForce));
+								configMaxForce = max(0, min(100, configMaxForce));								
 							}
 						}
+
+						WritePersistentMaxForce();
 					}
 
 					if (e.jbutton.button == DecreaseFFBStrength)
@@ -1996,6 +2018,8 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 								configMaxForce = max(0, min(100, configMaxForce));
 							}
 						}
+
+						WritePersistentMaxForce();
 					}
 
 					if (e.jbutton.button == ResetFFBStrength)
@@ -2012,6 +2036,8 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 							configMaxForce = defaultCenterMaxForce;
 							configMinForce = defaultCenterMinForce;
 						}
+
+						WritePersistentMaxForce();
 					}
 				}
 			}
@@ -2253,6 +2279,30 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	if (EnableFFBStrengthDynamicAdjustment == 1)
 	{
 		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
+	}
+	
+	// Load persistent max force if previously set.
+	if (EnablePersistentMaxForce == 1)
+	{
+		
+		if (AlternativeFFB == 1)
+		{
+			if (PersistentAlternativeMaxForceLeft <= 0)
+			{
+				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeft;
+			}
+			if (PersistentAlternativeMaxForceRight >= 0)
+			{
+				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRight;
+			}
+		}
+		else
+		{
+			if (PersistentMaxForce >= 0)
+			{
+				configMaxForce = PersistentMaxForce;
+			}
+		}
 	}
 	hlp.log("Initialize() complete");
 
