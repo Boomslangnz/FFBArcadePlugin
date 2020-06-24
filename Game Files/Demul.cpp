@@ -28,6 +28,7 @@ extern void SmashingDriveInputsEnabled(Helpers* helpers);
 extern void ATVTrackInputsEnabled(Helpers* helpers);
 extern void FasterThanSpeedInputsEnabled(Helpers* helpers);
 extern void MaximumSpeedInputsEnabled(Helpers* helpers);
+extern void changeVolume();
 
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
@@ -45,7 +46,6 @@ static bool shiftupA;
 static bool shiftdownA;
 static bool coinA;
 static bool VolumeMute = false;
-static bool VolumeMute2 = false;
 static bool CRCinit = false;
 static bool NOPinit = false;
 static bool InputFind = false;
@@ -80,9 +80,9 @@ extern int configAlternativeMinForceRight;
 extern int configAlternativeMaxForceRight;
 extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
+extern int AutoCloseWindowError;
 
 static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
-static int AutoCloseWindowError = GetPrivateProfileInt(TEXT("Settings"), TEXT("AutoCloseWindowError"), 0, settingsFilename);
 
 static int configMinForceInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceInitialDDemul"), 0, settingsFilename);
 static int configMaxForceInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceInitialDDemul"), 100, settingsFilename);
@@ -497,16 +497,6 @@ static DWORD WINAPI MaximumSpeedRunningLoop(LPVOID lpParam)
 	}
 }
 
-void changeVolume()
-{
-	INPUT ip = { 0 };
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wVk = VK_VOLUME_MUTE;
-	SendInput(1, &ip, sizeof(INPUT));
-	ip.ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, &ip, sizeof(INPUT));
-}
-
 static DWORD WINAPI VolumeMuteThread(LPVOID lpParam)
 {
 	SendMessage(hWnd, WM_CLOSE, NULL, NULL);
@@ -550,12 +540,6 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!VolumeMute)
 		{
-			if (!VolumeMute2)
-			{
-				changeVolume();
-				VolumeMute2 = true;
-			}
-
 			//Remove window error popup
 			hWnd = FindWindowA(0, ("padDemul"));
 			if (hWnd > NULL)

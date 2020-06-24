@@ -287,6 +287,9 @@
     <ClInclude Include="Common Files\CRCCheck.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Config\PersistentValues.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="DLLWrapper.asm" />

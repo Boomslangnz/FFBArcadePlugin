@@ -26,6 +26,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "IDirectInputDevice.h"
 #include <d3d11.h>
 
+#include "Config/PersistentValues.h"
+
 // include all game header files here.
 #include "Game Files/TestGame.h"
 #include "Game Files/AliensExtermination.h"
@@ -869,6 +871,10 @@ int joystick1Index = -1;
 int joystick_index2 = -1;
 int joystick_index3 = -1;
 
+LPCSTR CustomPersistentAlternativeMaxForceLeft;
+LPCSTR CustomPersistentAlternativeMaxForceRight;
+LPCSTR CustomPersistentMaxForce;
+
 // settings
 wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 int configMinForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForce"), 0, settingsFilename);
@@ -926,12 +932,8 @@ int PersistentMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("Persistent
 int PersistentAlternativeMaxForceLeft = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeft"), 1, settingsFilename);
 int PersistentAlternativeMaxForceRight = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRight"), -1, settingsFilename);
 
-int defaultCenterMaxForce = configMaxForce;
-int defaultCenterMinForce = configMinForce;
-int defaultAlternativeCenterMaxForceRight = configAlternativeMaxForceRight;
-int defaultAlternativeCenterMinForceRight = configAlternativeMinForceRight;
-int defaultAlternativeCenterMaxForceLeft = configAlternativeMaxForceLeft;
-int defaultAlternativeCenterMinForceLeft = configAlternativeMinForceRight;
+extern void DefaultConfigValues();
+extern void LoadPersistentSetup();
 
 char chainedDLL[256];
 
@@ -1946,12 +1948,12 @@ void WritePersistentMaxForce()
 	{
 		if (AlternativeFFB == 1)
 		{
-			WritePrivateProfileStringA("Settings", "PersistentAlternativeMaxForceLeft", (char*)(std::to_string(configAlternativeMaxForceLeft)).c_str(), ".\\FFBPlugin.ini");
-			WritePrivateProfileStringA("Settings", "PersistentAlternativeMaxForceRight", (char*)(std::to_string(configAlternativeMaxForceRight)).c_str(), ".\\FFBPlugin.ini");
+			WritePrivateProfileStringA("Settings", CustomPersistentAlternativeMaxForceLeft, (char*)(std::to_string(configAlternativeMaxForceLeft)).c_str(), ".\\FFBPlugin.ini");
+			WritePrivateProfileStringA("Settings", CustomPersistentAlternativeMaxForceRight, (char*)(std::to_string(configAlternativeMaxForceRight)).c_str(), ".\\FFBPlugin.ini");
 		}
 		else
 		{
-			WritePrivateProfileStringA("Settings", "PersistentMaxForce", (char*)(std::to_string(configMaxForce)).c_str(), ".\\FFBPlugin.ini");
+			WritePrivateProfileStringA("Settings", CustomPersistentMaxForce, (char*)(std::to_string(configMaxForce)).c_str(), ".\\FFBPlugin.ini");
 		}
 	}
 }
@@ -2024,19 +2026,7 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 
 					if (e.jbutton.button == ResetFFBStrength)
 					{
-						if (AlternativeFFB == 1)
-						{
-							configAlternativeMaxForceRight = defaultAlternativeCenterMaxForceRight;
-							configAlternativeMinForceRight = defaultAlternativeCenterMinForceRight;
-							configAlternativeMaxForceLeft = defaultAlternativeCenterMaxForceLeft;
-							configAlternativeMinForceRight = defaultAlternativeCenterMinForceLeft;
-						}
-						else
-						{
-							configMaxForce = defaultCenterMaxForce;
-							configMinForce = defaultCenterMinForce;
-						}
-
+						DefaultConfigValues();
 						WritePersistentMaxForce();
 					}
 				}
@@ -2049,6 +2039,28 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 
 DWORD WINAPI FFBLoop2(LPVOID lpParam)
 {
+	if (EnableRumble == 1)
+	{
+		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
+		{
+			// Workaround for SDL_JoystickRumble rumble not stopping issue
+			SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
+		}
+
+		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
+		char RumbleDisableChar[256];
+		GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
+		std::string rumbletrue("true");
+		std::string rumbleTRUE("TRUE");
+		std::string rumbleTrue("True");
+		std::string rumdisable(RumbleDisableChar);
+
+		if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
+		{
+			WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
+		}
+	}
+
 	// assign FFB effects here
 	t.Constant = &TriggerConstantEffect;
 	t.Spring = &TriggerSpringEffect;
@@ -2228,7 +2240,7 @@ DWORD WINAPI FFBLoop2(LPVOID lpParam)
 	if (configDefaultFriction >= 0 && configDefaultFriction <= 100) {
 		TriggerFrictionEffectWithDefaultOption(configDefaultFriction / 100.0, true);
 	}
-
+	
 	hlp.log("Entering Game's FFBLoop loop");
 	bool* kr = (bool*)lpParam;
 	while (*kr)
@@ -2247,28 +2259,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if (EnableRumble == 1)
-	{
-		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
-		{
-			// Workaround for SDL_JoystickRumble rumble not stopping issue
-			SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
-		}
-
-		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
-		char RumbleDisableChar[256];
-		GetPrivateProfileStringA("Input.Gamepad", "DisableRumble", "", RumbleDisableChar, 256, ".\\dxgi.ini");
-		std::string rumbletrue("true");
-		std::string rumbleTRUE("TRUE");
-		std::string rumbleTrue("True");
-		std::string rumdisable(RumbleDisableChar);
-
-		if ((rumdisable.compare(rumbletrue) == 0) || (rumdisable.compare(rumbleTrue) == 0) || (rumdisable.compare(rumbleTRUE) == 0))
-		{
-			WritePrivateProfileStringA("Input.Gamepad", "DisableRumble", "false", ".\\dxgi.ini");
-		}
-	}
-
 	SDL_HapticStopAll(haptic);
 	CreateThread(NULL, 0, FFBLoop2, (LPVOID)&keepRunning, 0, NULL);
 	if (configGameId != 29) //For games which need code to run quicker etc. Some games will crash if no sleep added
@@ -2276,6 +2266,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		Sleep(2500);
 	}
 	Initialize(0);
+	hlp.log("Initialize() complete");
 	if (EnableFFBStrengthDynamicAdjustment == 1)
 	{
 		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
@@ -2284,27 +2275,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	// Load persistent max force if previously set.
 	if (EnablePersistentMaxForce == 1)
 	{
-		
-		if (AlternativeFFB == 1)
-		{
-			if (PersistentAlternativeMaxForceLeft <= 0)
-			{
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeft;
-			}
-			if (PersistentAlternativeMaxForceRight >= 0)
-			{
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRight;
-			}
-		}
-		else
-		{
-			if (PersistentMaxForce >= 0)
-			{
-				configMaxForce = PersistentMaxForce;
-			}
-		}
+		Sleep(4000);
+		LoadPersistentSetup();
 	}
-	hlp.log("Initialize() complete");
 
 	return 0;
 }
