@@ -1186,7 +1186,7 @@ static DWORD WINAPI ScanThread(LPVOID lpParam)
 
 	if (romname == indy500 || romname == indy500d || romname == indy500to) //Indy500
 	{
-		aAddy2 = PatternScan("\xFF\x4E\x00\x00\x00\x00\x01", "xxxxxxx");
+		aAddy2 = PatternScan("\x01\xFF\xFF\xFF\x10\x00\xFF\x4E", "xxxx??xx");
 	}
 
 	if (romname == sgt24h) //Sega GT 24hr
@@ -1196,7 +1196,7 @@ static DWORD WINAPI ScanThread(LPVOID lpParam)
 
 	if (romname == srallyc || romname == srallycb || romname == srallycdx || romname == srallycdxa) //Sega Rally
 	{
-		aAddy2 = PatternScan("\xFF\xFF\xFF\xFF\xFF\xFF\xFF\xFF\x00\x00\x70\xFF\x00\x00\x70\xFF", "xxxxxxxxxxxxxxxx");
+		aAddy2 = PatternScan("\x01\x04\x00\x00\x80\x3F\xF2\xFF\xFF\xFF\x01\x00\x02\x00\x00\x00\x0B\x00\x01\x00\x01", "xxxxxxxxxxxxxxxxxxxxx");
 	}
 
 	if (romname == superchs || romname == superchsj || romname == superchsp || romname == superchsu) //Super Chase Criminal Termination
@@ -3327,11 +3327,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
 							Scan = true;
 						}
-
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x02, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x04, false);
 						if (CheckAddy2 == 0x01)
 						{
-							FFBAddress = (int)aAddy2 - 0x02;
+							FFBAddress = (int)aAddy2 + 0x04;
 							PatternFind = true;
 						}
 					}
@@ -3432,9 +3431,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						Scan = true;
 					}
 
-					if ((UINT8)aAddy2 == 0x53)
+					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x35, false);
+					if (CheckAddy2 == 0xFF)
 					{
-						FFBAddress = (int)aAddy2 - 0x0A;
+						FFBAddress = (int)aAddy2 + 0x2B;
 						PatternFind = true;
 					}
 				}
