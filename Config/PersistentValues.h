@@ -9,115 +9,9 @@ extern int configAlternativeMaxForceLeft;
 extern int configAlternativeMinForceRight;
 extern int configAlternativeMaxForceRight;
 extern char* romname;
-extern LPCSTR CustomPersistentAlternativeMaxForceLeft;
-extern LPCSTR CustomPersistentAlternativeMaxForceRight;
-extern LPCSTR CustomPersistentMaxForce;
-
-extern int PersistentMaxForce;
-extern int PersistentAlternativeMaxForceLeft;
-extern int PersistentAlternativeMaxForceRight;
-extern int PersistentMaxForceDaytona2;
-extern int PersistentAlternativeMaxForceLeftDaytona2;
-extern int PersistentAlternativeMaxForceRightDaytona2;
-extern int PersistentMaxForceScud;
-extern int PersistentAlternativeMaxForceLeftScud;
-extern int PersistentAlternativeMaxForceRightScud;
-extern int PersistentMaxForceLeMans;
-extern int PersistentAlternativeMaxForceLeftLeMans;
-extern int PersistentAlternativeMaxForceRightLeMans;
-extern int PersistentMaxForceDirtDevils;
-extern int PersistentAlternativeMaxForceLeftDirtDevils;
-extern int PersistentAlternativeMaxForceRightDirtDevils;
-extern int PersistentMaxForceSRally2;
-extern int PersistentAlternativeMaxForceLeftSRally2;
-extern int PersistentAlternativeMaxForceRightSRally2;
-extern int PersistentMaxForceECA;
-extern int PersistentAlternativeMaxForceLeftECA;
-extern int PersistentAlternativeMaxForceRightECA;
-extern int PersistentMaxForceVirtuaRacing;
-extern int PersistentAlternativeMaxForceLeftVirtuaRacing;
-extern int PersistentAlternativeMaxForceRightVirtuaRacing;
-extern int PersistentMaxForceSFRush;
-extern int PersistentAlternativeMaxForceLeftSFRush;
-extern int PersistentAlternativeMaxForceRightSFRush;
-extern int PersistentMaxForceSFRushRock;
-extern int PersistentAlternativeMaxForceLeftSFRushRock;
-extern int PersistentAlternativeMaxForceRightSFRushRock;
-extern int PersistentMaxForceCrusnWld;
-extern int PersistentAlternativeMaxForceLeftCrusnWld;
-extern int PersistentAlternativeMaxForceRightCrusnWld;
-extern int PersistentMaxForceOffRoadC;
-extern int PersistentAlternativeMaxForceLeftOffRoadC;
-extern int PersistentAlternativeMaxForceRightOffRoadC;
-extern int PersistentMaxForceCrusnUSA;
-extern int PersistentAlternativeMaxForceLeftCrusnUSA;
-extern int PersistentAlternativeMaxForceRightCrusnUSA;
-extern int PersistentMaxForceCalSpeed;
-extern int PersistentAlternativeMaxForceLeftCalSpeed;
-extern int PersistentAlternativeMaxForceRightCalSpeed;
-extern int PersistentMaxForceSFRush2049;
-extern int PersistentAlternativeMaxForceLeftSFRush2049;
-extern int PersistentAlternativeMaxForceRightSFRush2049;
-extern int PersistentMaxForceHardD;
-extern int PersistentAlternativeMaxForceLeftHardD;
-extern int PersistentAlternativeMaxForceRightHardD;
-extern int PersistentMaxForceORunners;
-extern int PersistentAlternativeMaxForceLeftORunners;
-extern int PersistentAlternativeMaxForceRightORunners;
-extern int PersistentMaxForceTOutrun;
-extern int PersistentAlternativeMaxForceLeftTOutrun;
-extern int PersistentAlternativeMaxForceRightTOutrun;
-extern int PersistentMaxForceCBombers;
-extern int PersistentAlternativeMaxForceLeftCBombers;
-extern int PersistentAlternativeMaxForceRightCBombers;
-extern int PersistentMaxForceOutrun;
-extern int PersistentAlternativeMaxForceLeftOutrun;
-extern int PersistentAlternativeMaxForceRightOutrun;
-extern int PersistentMaxForcePDrift;
-extern int PersistentAlternativeMaxForceLeftPDrift;
-extern int PersistentAlternativeMaxForceRightPDrift;
-extern int PersistentMaxForceCisHeat;
-extern int PersistentAlternativeMaxForceLeftCisHeat;
-extern int PersistentAlternativeMaxForceRightCisHeat;
-extern int PersistentMaxForceF1GpStar;
-extern int PersistentAlternativeMaxForceLeftF1GpStar;
-extern int PersistentAlternativeMaxForceRightF1GpStar;
-extern int PersistentMaxForceF1GpStar2;
-extern int PersistentAlternativeMaxForceLeftF1GpStar2;
-extern int PersistentAlternativeMaxForceRightF1GpStar2;
-extern int PersistentMaxForceHyperDrive;
-extern int PersistentAlternativeMaxForceLeftHyperDrive;
-extern int PersistentAlternativeMaxForceRightHyperDrive;
-extern int PersistentMaxForceVaporTrx;
-extern int PersistentAlternativeMaxForceLeftVaporTrx;
-extern int PersistentAlternativeMaxForceRightVaporTrx;
-extern int PersistentMaxForceRaveRacer;
-extern int PersistentAlternativeMaxForceLeftRaveRacer;
-extern int PersistentAlternativeMaxForceRightRaveRacer;
-extern int PersistentMaxForceDaytonaMAME;
-extern int PersistentAlternativeMaxForceLeftDaytonaMAME;
-extern int PersistentAlternativeMaxForceRightDaytonaMAME;
-extern int PersistentMaxForceSRallyMAME;
-extern int PersistentAlternativeMaxForceLeftSRallyMAME;
-extern int PersistentAlternativeMaxForceRightSRallyMAME;
-extern int PersistentMaxForceIndy500MAME;
-extern int PersistentAlternativeMaxForceLeftIndy500MAME;
-extern int PersistentAlternativeMaxForceRightIndy500MAME;
-extern int PersistentMaxForceSuperGTMAME;
-extern int PersistentAlternativeMaxForceLeftSuperGTMAME;
-extern int PersistentAlternativeMaxForceRightSuperGTMAME;
-extern int PersistentMaxForceSuperChase;
-extern int PersistentAlternativeMaxForceLeftSuperChase;
-extern int PersistentAlternativeMaxForceRightSuperChase;
-extern int PersistentMaxForceDirtDash;
-extern int PersistentAlternativeMaxForceLeftDirtDash;
-extern int PersistentAlternativeMaxForceRightDirtDash;
-extern int PersistentMaxForceAceDriverVictory;
-extern int PersistentAlternativeMaxForceLeftAceDriverVictory;
-extern int PersistentAlternativeMaxForceRightAceDriverVictory;
-extern int PersistentMaxForceAceDriver;
-extern int PersistentAlternativeMaxForceLeftAceDriver;
-extern int PersistentAlternativeMaxForceRightAceDriver;
+extern LPCSTR CustomAlternativeMaxForceLeft;
+extern LPCSTR CustomAlternativeMaxForceRight;
+extern LPCSTR CustomMaxForce;
 
 //Supermodel Emulator Games
 static std::string dayto2pe("dayto2pe");
@@ -360,7 +254,7 @@ void DefaultConfigValues()
 	}
 }
 
-void LoadPersistentSetup()
+void CustomFFBStrengthSetup()
 {
 	if (configGameId == 34)
 	{
@@ -368,15 +262,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftDaytona2";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightDaytona2";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftDaytona2;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightDaytona2;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftDaytona2";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightDaytona2";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceDaytona2";
-				configMaxForce = PersistentMaxForceDaytona2;
+				CustomMaxForce = "MaxForceDaytona2";
 			}
 		}
 
@@ -384,15 +275,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftScud";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightScud";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftScud;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightScud;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftScud";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightScud";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceScud";
-				configMaxForce = PersistentMaxForceScud;
+				CustomMaxForce = "MaxForceScud";
 			}
 		}
 
@@ -400,15 +288,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftLeMans";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightLeMans";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftLeMans;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightLeMans;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftLeMans";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightLeMans";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceLeMans";
-				configMaxForce = PersistentMaxForceLeMans;
+				CustomMaxForce = "MaxForceLeMans";
 			}
 		}
 
@@ -416,15 +301,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftDirtDevils";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightDirtDevils";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftDirtDevils;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightDirtDevils;
+				CustomAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftDirtDevils";
+				CustomAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightDirtDevils";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceDirtDevils";
-				configMaxForce = PersistentMaxForceDirtDevils;
+				CustomMaxForce = "MaxForceDirtDevils";
 			}
 		}
 
@@ -432,15 +314,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftSRally2";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightSRally2";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftSRally2;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightSRally2;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSRally2";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSRally2";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceSRally2";
-				configMaxForce = PersistentMaxForceSRally2;
+				CustomMaxForce = "MaxForceSRally2";
 			}
 		}
 
@@ -448,15 +327,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftECA";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightECA";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftECA;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightECA;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftECA";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightECA";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceECA";
-				configMaxForce = PersistentMaxForceECA;
+				CustomMaxForce = "MaxForceECA";
 			}
 		}
 	}
@@ -466,15 +342,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftVirtuaRacing";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightVirtuaRacing";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftVirtuaRacing;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightVirtuaRacing;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftVirtuaRacing";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightVirtuaRacing";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceVirtuaRacing";
-				configMaxForce = PersistentMaxForceVirtuaRacing;
+				CustomMaxForce = "MaxForceVirtuaRacing";
 			}
 		}
 
@@ -482,15 +355,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftSFRush";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightSFRush";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftSFRush;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightSFRush;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSFRush";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSFRush";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceSFRush";
-				configMaxForce = PersistentMaxForceSFRush;
+				CustomMaxForce = "MaxForceSFRush";
 			}
 		}
 
@@ -498,15 +368,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftSFRushRock";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightSFRushRock";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftSFRushRock;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightSFRushRock;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSFRushRock";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSFRushRock";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceSFRushRock";
-				configMaxForce = PersistentMaxForceSFRushRock;
+				CustomMaxForce = "MaxForceSFRushRock";
 			}
 		}
 
@@ -514,15 +381,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftCrusnWld";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightCrusnWld";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftCrusnWld;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightCrusnWld;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftCrusnWld";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightCrusnWld";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceCrusnWld";
-				configMaxForce = PersistentMaxForceCrusnWld;
+				CustomMaxForce = "MaxForceCrusnWld";
 			}
 		}
 
@@ -530,15 +394,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftSuperChase";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightSuperChase";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftSuperChase;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightSuperChase;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSuperChase";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSuperChase";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceSuperChase";
-				configMaxForce = PersistentMaxForceSuperChase;
+				CustomMaxForce = "MaxForceSuperChase";
 			}
 		}
 
@@ -546,15 +407,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftOffRoadC";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightOffRoadC";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftOffRoadC;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightOffRoadC;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftOffRoadC";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightOffRoadC";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceOffRoadC";
-				configMaxForce = PersistentMaxForceOffRoadC;
+				CustomMaxForce = "MaxForceOffRoadC";
 			}
 		}
 
@@ -562,15 +420,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftCrusnUSA";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightCrusnUSA";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftCrusnUSA;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightCrusnUSA;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftCrusnUSA";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightCrusnUSA";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceCrusnUSA";
-				configMaxForce = PersistentMaxForceCrusnUSA;
+				CustomMaxForce = "MaxForceCrusnUSA";
 			}
 		}
 
@@ -578,15 +433,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftCalSpeed";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightCalSpeed";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftCalSpeed;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightCalSpeed;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftCalSpeed";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightCalSpeed";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceCalSpeed";
-				configMaxForce = PersistentMaxForceCalSpeed;
+				CustomMaxForce = "MaxForceCalSpeed";
 			}
 		}
 
@@ -594,15 +446,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftSFRush2049";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightSFRush2049";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftSFRush2049;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightSFRush2049;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSFRush2049";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSFRush2049";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceSFRush2049";
-				configMaxForce = PersistentMaxForceSFRush2049;
+				CustomMaxForce = "MaxForceSFRush2049";
 			}
 		}
 
@@ -614,15 +463,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftHardD";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightHardD";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftHardD;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightHardD;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftHardD";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightHardD";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceHardD";
-				configMaxForce = PersistentMaxForceHardD;
+				CustomMaxForce = "MaxForceHardD";
 			}
 		}
 
@@ -630,15 +476,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftORunners";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightORunners";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftORunners;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightORunners;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftORunners";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightORunners";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceORunners";
-				configMaxForce = PersistentMaxForceORunners;
+				CustomMaxForce = "MaxForceORunners";
 			}
 		}
 
@@ -646,15 +489,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftTOutrun";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightTOutrun";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftTOutrun;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightTOutrun;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftTOutrun";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightTOutrun";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceTOutrun";
-				configMaxForce = PersistentMaxForceTOutrun;
+				CustomMaxForce = "MaxForceTOutrun";
 			}
 		}
 
@@ -662,15 +502,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftCBombers";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightCBombers";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftCBombers;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightCBombers;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftCBombers";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightCBombers";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceCBombers";
-				configMaxForce = PersistentMaxForceCBombers;
+				CustomMaxForce = "MaxForceCBombers";
 			}
 		}
 
@@ -678,15 +515,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftOutrun";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightOutrun";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftOutrun;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightOutrun;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftOutrun";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightOutrun";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceOutrun";
-				configMaxForce = PersistentMaxForceOutrun;
+				CustomMaxForce = "MaxForceOutrun";
 			}
 		}
 
@@ -694,15 +528,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftPDrift";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightPDrift";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftPDrift;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightPDrift;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftPDrift";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightPDrift";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForcePDrift";
-				configMaxForce = PersistentMaxForcePDrift;
+				CustomMaxForce = "MaxForcePDrift";
 			}
 		}
 
@@ -710,15 +541,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftCisHeat";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightCisHeat";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftCisHeat;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightCisHeat;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftCisHeat";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightCisHeat";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceCisHeat";
-				configMaxForce = PersistentMaxForceCisHeat;
+				CustomMaxForce = "MaxForceCisHeat";
 			}
 		}
 
@@ -726,15 +554,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftF1GpStar";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightF1GpStar";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftF1GpStar;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightF1GpStar;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftF1GpStar";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightF1GpStar";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceF1GpStar";
-				configMaxForce = PersistentMaxForceF1GpStar;
+				CustomMaxForce = "MaxForceF1GpStar";
 			}
 		}
 
@@ -742,15 +567,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftF1GpStar2";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightF1GpStar2";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftF1GpStar2;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightF1GpStar2;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftF1GpStar2";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightF1GpStar2";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceF1GpStar2";
-				configMaxForce = PersistentMaxForceF1GpStar2;
+				CustomMaxForce = "MaxForceF1GpStar2";
 			}
 		}
 
@@ -758,15 +580,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftHyperDrive";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightHyperDrive";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftHyperDrive;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightHyperDrive;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftHyperDrive";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightHyperDrive";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceHyperDrive";
-				configMaxForce = PersistentMaxForceHyperDrive;
+				CustomMaxForce = "MaxForceHyperDrive";
 			}
 		}
 
@@ -774,15 +593,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftVaporTrx";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightVaporTrx";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftVaporTrx;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightVaporTrx;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftVaporTrx";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightVaporTrx";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceVaporTrx";
-				configMaxForce = PersistentMaxForceVaporTrx;
+				CustomMaxForce = "MaxForceVaporTrx";
 			}
 		}
 
@@ -790,15 +606,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftRaveRacer";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightRaveRacer";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftRaveRacer;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightRaveRacer;
+				CustomAlternativeMaxForceLeft = "PersistentMaxForceLeftRaveRacer";
+				CustomAlternativeMaxForceRight = "PersistentMaxForceRightRaveRacer";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceRaveRacer";
-				configMaxForce = PersistentMaxForceRaveRacer;
+				CustomMaxForce = "MaxForceRaveRacer";
 			}
 		}
 
@@ -806,15 +619,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftDaytona";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightDaytona";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftDaytonaMAME;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightDaytonaMAME;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftDaytona";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightDaytona";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceDaytona";
-				configMaxForce = PersistentMaxForceDaytonaMAME;
+				CustomMaxForce = "MaxForceDaytona";
 			}
 		}
 
@@ -822,15 +632,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftIndy500";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightIndy500";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftIndy500MAME;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightIndy500MAME;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftIndy500";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightIndy500";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceIndy500";
-				configMaxForce = PersistentMaxForceIndy500MAME;
+				CustomMaxForce = "MaxForceIndy500";
 			}
 		}
 
@@ -838,15 +645,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftSuperGT";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightSuperGT";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftSuperGTMAME;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightSuperGTMAME;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSuperGT";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSuperGT";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceSuperGT";
-				configMaxForce = PersistentMaxForceSuperGTMAME;
+				CustomMaxForce = "MaxForceSuperGT";
 			}
 		}
 
@@ -854,15 +658,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftSRally";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightSRally";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftSRallyMAME;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightSRallyMAME;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSRally";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSRally";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceSRally";
-				configMaxForce = PersistentMaxForceSRallyMAME;
+				CustomMaxForce = "MaxForceSRally";
 			}
 		}
 
@@ -870,15 +671,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftDirtDash";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightDirtDash";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftDirtDash;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightDirtDash;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftDirtDash";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightDirtDash";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceDirtDash";
-				configMaxForce = PersistentMaxForceDirtDash;
+				CustomMaxForce = "MaxForceDirtDash";
 			}
 		}
 
@@ -886,15 +684,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftAceDriverVictory";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightAceDriverVictory";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftAceDriverVictory;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightAceDriverVictory;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftAceDriverVictory";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightAceDriverVictory";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceAceDriverVictory";
-				configMaxForce = PersistentMaxForceAceDriverVictory;
+				CustomMaxForce = "MaxForceAceDriverVictory";
 			}
 		}
 
@@ -902,15 +697,12 @@ void LoadPersistentSetup()
 		{
 			if (AlternativeFFB == 1)
 			{
-				CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeftAceDriver";
-				CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRightAceDriver";
-				configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeftAceDriver;
-				configAlternativeMaxForceRight = PersistentAlternativeMaxForceRightAceDriver;
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftAceDriver";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightAceDriver";
 			}
 			else
 			{
-				CustomPersistentMaxForce = "PersistentMaxForceAceDriver";
-				configMaxForce = PersistentMaxForceAceDriver;
+				CustomMaxForce = "MaxForceAceDriver";
 			}
 		}
 	}
@@ -918,15 +710,12 @@ void LoadPersistentSetup()
 	{
 		if (AlternativeFFB == 1)
 		{
-			CustomPersistentAlternativeMaxForceLeft = "PersistentAlternativeMaxForceLeft";
-			CustomPersistentAlternativeMaxForceRight = "PersistentAlternativeMaxForceRight";
-			configAlternativeMaxForceLeft = PersistentAlternativeMaxForceLeft;
-			configAlternativeMaxForceRight = PersistentAlternativeMaxForceRight;
+			CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeft";
+			CustomAlternativeMaxForceRight = "AlternativeMaxForceRight";
 		}
 		else
 		{
-			CustomPersistentMaxForce = "PersistentMaxForce";
-			configMaxForce = PersistentMaxForce;
+			CustomMaxForce = "MaxForce";
 		}
 	}	
 }

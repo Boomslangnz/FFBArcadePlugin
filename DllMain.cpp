@@ -871,9 +871,9 @@ int joystick1Index = -1;
 int joystick_index2 = -1;
 int joystick_index3 = -1;
 
-LPCSTR CustomPersistentAlternativeMaxForceLeft;
-LPCSTR CustomPersistentAlternativeMaxForceRight;
-LPCSTR CustomPersistentMaxForce;
+LPCSTR CustomAlternativeMaxForceLeft;
+LPCSTR CustomAlternativeMaxForceRight;
+LPCSTR CustomMaxForce;
 
 // settings
 wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -927,13 +927,9 @@ int IncreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseF
 int DecreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DecreaseFFBStrength"), NULL, settingsFilename);
 int ResetFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFFBStrength"), NULL, settingsFilename);
 int StepFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("StepFFBStrength"), 5, settingsFilename);
-int EnablePersistentMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnablePersistentMaxForce"), 0, settingsFilename);
-int PersistentMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForce"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeft = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeft"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRight = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRight"), -1, settingsFilename);
 
 extern void DefaultConfigValues();
-extern void LoadPersistentSetup();
+extern void CustomFFBStrengthSetup();
 
 char chainedDLL[256];
 
@@ -1944,17 +1940,14 @@ int WorkaroundToFixRumble(void* ptr)
 
 void WritePersistentMaxForce()
 {
-	if (EnablePersistentMaxForce == 1)
+	if (AlternativeFFB == 1)
 	{
-		if (AlternativeFFB == 1)
-		{
-			WritePrivateProfileStringA("Settings", CustomPersistentAlternativeMaxForceLeft, (char*)(std::to_string(configAlternativeMaxForceLeft)).c_str(), ".\\FFBPlugin.ini");
-			WritePrivateProfileStringA("Settings", CustomPersistentAlternativeMaxForceRight, (char*)(std::to_string(configAlternativeMaxForceRight)).c_str(), ".\\FFBPlugin.ini");
-		}
-		else
-		{
-			WritePrivateProfileStringA("Settings", CustomPersistentMaxForce, (char*)(std::to_string(configMaxForce)).c_str(), ".\\FFBPlugin.ini");
-		}
+		WritePrivateProfileStringA("Settings", CustomAlternativeMaxForceLeft, (char*)(std::to_string(configAlternativeMaxForceLeft)).c_str(), ".\\FFBPlugin.ini");
+		WritePrivateProfileStringA("Settings", CustomAlternativeMaxForceRight, (char*)(std::to_string(configAlternativeMaxForceRight)).c_str(), ".\\FFBPlugin.ini");
+	}
+	else
+	{
+		WritePrivateProfileStringA("Settings", CustomMaxForce, (char*)(std::to_string(configMaxForce)).c_str(), ".\\FFBPlugin.ini");
 	}
 }
 
@@ -1993,7 +1986,6 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 								configMaxForce = max(0, min(100, configMaxForce));								
 							}
 						}
-
 						WritePersistentMaxForce();
 					}
 
@@ -2020,7 +2012,6 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 								configMaxForce = max(0, min(100, configMaxForce));
 							}
 						}
-
 						WritePersistentMaxForce();
 					}
 
@@ -2032,7 +2023,6 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 				}
 			}
 		}
-
 		Sleep(16);
 	}
 }
@@ -2267,18 +2257,13 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	}
 	Initialize(0);
 	hlp.log("Initialize() complete");
+
 	if (EnableFFBStrengthDynamicAdjustment == 1)
 	{
-		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
-	}
-	
-	// Load persistent max force if previously set.
-	if (EnablePersistentMaxForce == 1)
-	{
 		Sleep(4000);
-		LoadPersistentSetup();
+		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
+		CustomFFBStrengthSetup();
 	}
-
 	return 0;
 }
 
