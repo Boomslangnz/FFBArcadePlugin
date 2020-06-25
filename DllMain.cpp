@@ -25,6 +25,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <thread>
 #include "IDirectInputDevice.h"
 #include <d3d11.h>
+#include <sapi.h>
+#include <atlbase.h>
 
 #include "Config/PersistentValues.h"
 
@@ -927,11 +929,17 @@ int IncreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseF
 int DecreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DecreaseFFBStrength"), NULL, settingsFilename);
 int ResetFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFFBStrength"), NULL, settingsFilename);
 int StepFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("StepFFBStrength"), 5, settingsFilename);
+int EnableFFBStrengthTextToSpeech = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthTextToSpeech"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
 extern void CustomFFBStrengthSetup();
 
 char chainedDLL[256];
+static char FFBStrength1[256];
+static wchar_t FFBStrength2[256];
+
+HRESULT hr;
+CComPtr<ISpVoice> cpVoice;
 
 const int TEST_GAME_CONST = -1;
 const int TEST_GAME_SINE = -2;
@@ -1954,7 +1962,7 @@ void WritePersistentMaxForce()
 DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 {
 	SDL_Event e;
-
+	
 	while (true)
 	{
 		while (SDL_WaitEvent(&e) != 0)
@@ -2019,6 +2027,30 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 					{
 						DefaultConfigValues();
 						WritePersistentMaxForce();
+					}
+
+					if (EnableFFBStrengthTextToSpeech == 1)
+					{
+						if (AlternativeFFB == 1)
+						{
+							sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
+						}
+						else
+						{
+							sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
+						}
+
+						hr = ::CoInitialize(nullptr);
+						hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
+						mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
+						LPWSTR ptr = FFBStrength2;
+
+						if (SUCCEEDED(hr))
+						{
+							hr = cpVoice->SetOutput(NULL, TRUE);
+							hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
+							::CoUninitialize();
+						}
 					}
 				}
 			}
