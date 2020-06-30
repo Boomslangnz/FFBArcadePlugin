@@ -312,13 +312,6 @@ extern int RumbleStrengthLeftMotor;
 extern int RumbleStrengthRightMotor;
 extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
-extern int EnablePersistentMaxForce;
-extern int PersistentMaxForce;
-extern int PersistentAlternativeMaxForceLeft;
-extern int PersistentAlternativeMaxForceRight;
-extern LPCSTR CustomPersistentAlternativeMaxForceLeft;
-extern LPCSTR CustomPersistentAlternativeMaxForceRight;
-extern LPCSTR CustomPersistentMaxForce;
 
 static int configMinForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDaytona2"), 0, settingsFilename);
 static int configMaxForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDaytona2"), 100, settingsFilename);
@@ -328,9 +321,6 @@ static int configAlternativeMinForceRightDaytona2 = GetPrivateProfileInt(TEXT("S
 static int configAlternativeMaxForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDaytona2"), 100, settingsFilename);
 static int configFeedbackLengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDaytona2"), 120, settingsFilename);
 static int PowerModeDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDaytona2"), 0, settingsFilename);
-int PersistentMaxForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceDaytona2"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftDaytona2"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightDaytona2"), -1, settingsFilename);
 
 static int configMinForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceScud"), 0, settingsFilename);
 static int configMaxForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceScud"), 100, settingsFilename);
@@ -340,9 +330,6 @@ static int configAlternativeMinForceRightScud = GetPrivateProfileInt(TEXT("Setti
 static int configAlternativeMaxForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightScud"), 100, settingsFilename);
 static int configFeedbackLengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthScud"), 120, settingsFilename);
 static int PowerModeScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeScud"), 0, settingsFilename);
-int PersistentMaxForceScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceScud"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftScud"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightScud"), -1, settingsFilename);
 
 static int configMinForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceLeMans"), 0, settingsFilename);
 static int configMaxForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceLeMans"), 100, settingsFilename);
@@ -352,9 +339,6 @@ static int configAlternativeMinForceRightLeMans = GetPrivateProfileInt(TEXT("Set
 static int configAlternativeMaxForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightLeMans"), 100, settingsFilename);
 static int configFeedbackLengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthLeMans"), 120, settingsFilename);
 static int PowerModeLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeLeMans"), 0, settingsFilename);
-int PersistentMaxForceLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceLeMans"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftLeMans"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightLeMans"), -1, settingsFilename);
 
 static int configMinForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDirtDevils"), 0, settingsFilename);
 static int configMaxForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDirtDevils"), 100, settingsFilename);
@@ -366,9 +350,6 @@ static int configFeedbackLengthDirtDevils = GetPrivateProfileInt(TEXT("Settings"
 static int PowerModeDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDirtDevils"), 0, settingsFilename);
 static int EnableForceSpringEffectDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDirtDevils"), 0, settingsFilename);
 static int ForceSpringStrengthDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDirtDevils"), 0, settingsFilename);
-int PersistentMaxForceDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceDirtDevils"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftDirtDevils"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightDirtDevils = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightDirtDevils"), -1, settingsFilename);
 
 static int configMinForceSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSRally2"), 0, settingsFilename);
 static int configMaxForceSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSRally2"), 100, settingsFilename);
@@ -380,9 +361,6 @@ static int configFeedbackLengthSRally2 = GetPrivateProfileInt(TEXT("Settings"), 
 static int PowerModeSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSRally2"), 0, settingsFilename);
 static int EnableForceSpringEffectSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSRally2"), 0, settingsFilename);
 static int ForceSpringStrengthSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSRally2"), 0, settingsFilename);
-int PersistentMaxForceSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceSRally2"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftSRally2"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightSRally2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightSRally2"), -1, settingsFilename);
 
 static int configMinForceECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceECA"), 0, settingsFilename);
 static int configMaxForceECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceECA"), 100, settingsFilename);
@@ -394,9 +372,6 @@ static int configFeedbackLengthECA = GetPrivateProfileInt(TEXT("Settings"), TEXT
 static int PowerModeECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeECA"), 0, settingsFilename);
 static int EnableForceSpringEffectECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectECA"), 0, settingsFilename);
 static int ForceSpringStrengthECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthECA"), 0, settingsFilename);
-int PersistentMaxForceECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceECA"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftECA"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightECA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightECA"), -1, settingsFilename);
 
 static int configMinForceVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceVirtuaRacing"), 0, settingsFilename);
 static int configMaxForceVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceVirtuaRacing"), 100, settingsFilename);
@@ -407,9 +382,6 @@ static int configAlternativeMaxForceRightVirtuaRacing = GetPrivateProfileInt(TEX
 static int configFeedbackLengthVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthVirtuaRacing"), 120, settingsFilename);
 static int EnableForceSpringEffectVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectVirtuaRacing"), 0, settingsFilename);
 static int ForceSpringStrengthVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthVirtuaRacing"), 0, settingsFilename);
-int PersistentMaxForceVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceVirtuaRacing"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftVirtuaRacing"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightVirtuaRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightVirtuaRacing"), -1, settingsFilename);
 
 static int configMinForceSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRush"), 0, settingsFilename);
 static int configMaxForceSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRush"), 100, settingsFilename);
@@ -421,9 +393,6 @@ static int configFeedbackLengthSFRush = GetPrivateProfileInt(TEXT("Settings"), T
 static int PowerModeSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRush"), 0, settingsFilename);
 static int EnableForceSpringEffectSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRush"), 0, settingsFilename);
 static int ForceSpringStrengthSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRush"), 0, settingsFilename);
-int PersistentMaxForceSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceSFRush"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftSFRush"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightSFRush = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightSFRush"), -1, settingsFilename);
 
 static int configMinForceSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRushRock"), 0, settingsFilename);
 static int configMaxForceSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRushRock"), 100, settingsFilename);
@@ -435,9 +404,6 @@ static int configFeedbackLengthSFRushRock = GetPrivateProfileInt(TEXT("Settings"
 static int PowerModeSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRushRock"), 0, settingsFilename);
 static int EnableForceSpringEffectSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRushRock"), 0, settingsFilename);
 static int ForceSpringStrengthSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRushRock"), 0, settingsFilename);
-int PersistentMaxForceSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceSFRushRock"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftSFRushRock"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightSFRushRock = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightSFRushRock"), -1, settingsFilename);
 
 static int configMinForceCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCrusnWld"), 0, settingsFilename);
 static int configMaxForceCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCrusnWld"), 100, settingsFilename);
@@ -449,9 +415,6 @@ static int configFeedbackLengthCrusnWld = GetPrivateProfileInt(TEXT("Settings"),
 static int PowerModeCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCrusnWld"), 0, settingsFilename);
 static int EnableForceSpringEffectCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCrusnWld"), 0, settingsFilename);
 static int ForceSpringStrengthCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCrusnWld"), 0, settingsFilename);
-int PersistentMaxForceCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceCrusnWld"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftCrusnWld"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightCrusnWld = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightCrusnWld"), -1, settingsFilename);
 
 static int configMinForceOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOffRoadC"), 0, settingsFilename);
 static int configMaxForceOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOffRoadC"), 100, settingsFilename);
@@ -463,9 +426,6 @@ static int configFeedbackLengthOffRoadC = GetPrivateProfileInt(TEXT("Settings"),
 static int PowerModeOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeOffRoadC"), 0, settingsFilename);
 static int EnableForceSpringEffectOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectOffRoadC"), 0, settingsFilename);
 static int ForceSpringStrengthOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthOffRoadC"), 0, settingsFilename);
-int PersistentMaxForceOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceOffRoadC"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftOffRoadC"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightOffRoadC = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightOffRoadC"), -1, settingsFilename);
 
 static int configMinForceCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCrusnUSA"), 0, settingsFilename);
 static int configMaxForceCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCrusnUSA"), 100, settingsFilename);
@@ -477,9 +437,6 @@ static int configFeedbackLengthCrusnUSA = GetPrivateProfileInt(TEXT("Settings"),
 static int PowerModeCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCrusnUSA"), 0, settingsFilename);
 static int EnableForceSpringEffectCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCrusnUSA"), 0, settingsFilename);
 static int ForceSpringStrengthCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCrusnUSA"), 0, settingsFilename);
-int PersistentMaxForceCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceCrusnUSA"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftCrusnUSA"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightCrusnUSA = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightCrusnUSA"), -1, settingsFilename);
 
 static int configMinForceCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCalSpeed"), 0, settingsFilename);
 static int configMaxForceCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCalSpeed"), 100, settingsFilename);
@@ -491,9 +448,6 @@ static int configFeedbackLengthCalSpeed = GetPrivateProfileInt(TEXT("Settings"),
 static int PowerModeCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeCalSpeed"), 0, settingsFilename);
 static int EnableForceSpringEffectCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectCalSpeed"), 0, settingsFilename);
 static int ForceSpringStrengthCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthCalSpeed"), 0, settingsFilename);
-int PersistentMaxForceCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceCalSpeed"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftCalSpeed"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightCalSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightCalSpeed"), -1, settingsFilename);
 
 static int configMinForceSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSFRush2049"), 0, settingsFilename);
 static int configMaxForceSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSFRush2049"), 100, settingsFilename);
@@ -505,9 +459,6 @@ static int configFeedbackLengthSFRush2049 = GetPrivateProfileInt(TEXT("Settings"
 static int PowerModeSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSFRush2049"), 0, settingsFilename);
 static int EnableForceSpringEffectSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSFRush2049"), 0, settingsFilename);
 static int ForceSpringStrengthSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSFRush2049"), 0, settingsFilename);
-int PersistentMaxForceSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceSFRush2049"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftSFRush2049"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightSFRush2049 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightSFRush2049"), -1, settingsFilename);
 
 static int configMinForceHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceHardD"), 0, settingsFilename);
 static int configMaxForceHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceHardD"), 100, settingsFilename);
@@ -519,9 +470,6 @@ static int configFeedbackLengthHardD = GetPrivateProfileInt(TEXT("Settings"), TE
 static int PowerModeHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeHardD"), 0, settingsFilename);
 static int EnableForceSpringEffectHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectHardD"), 0, settingsFilename);
 static int ForceSpringStrengthHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthHardD"), 0, settingsFilename);
-int PersistentMaxForceHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceHardD"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftHardD"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightHardD = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightHardD"), -1, settingsFilename);
 
 static int configMinForceRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRevX"), 0, settingsFilename);
 static int configMaxForceRevX = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRevX"), 100, settingsFilename);
@@ -666,9 +614,6 @@ static int SineFadePeriodORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 static int SineStrengthORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthORunners"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorORunners"), 0, settingsFilename);
 static int RumbleStrengthRightMotorORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorORunners"), 0, settingsFilename);
-int PersistentMaxForceORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceORunners"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftORunners"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightORunners = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightORunners"), -1, settingsFilename);
 
 static int configMinForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceTOutrun"), 0, settingsFilename);
 static int configMaxForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceTOutrun"), 100, settingsFilename);
@@ -684,9 +629,6 @@ static int SineFadePeriodTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("
 static int SineStrengthTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthTOutrun"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorTOutrun"), 0, settingsFilename);
 static int RumbleStrengthRightMotorTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorTOutrun"), 0, settingsFilename);
-int PersistentMaxForceTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceTOutrun"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftTOutrun"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightTOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightTOutrun"), -1, settingsFilename);
 
 static int configMinForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceCBombers"), 0, settingsFilename);
 static int configMaxForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceCBombers"), 100, settingsFilename);
@@ -702,9 +644,6 @@ static int SineFadePeriodCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 static int SineStrengthCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCBombers"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorCBombers"), 0, settingsFilename);
 static int RumbleStrengthRightMotorCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorCBombers"), 0, settingsFilename);
-int PersistentMaxForceCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceCBombers"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftCBombers"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightCBombers = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightCBombers"), -1, settingsFilename);
 
 static int configMinForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOutrun"), 0, settingsFilename);
 static int configMaxForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOutrun"), 100, settingsFilename);
@@ -720,9 +659,6 @@ static int SineFadePeriodOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("S
 static int SineStrengthOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthOutrun"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorOutrun"), 0, settingsFilename);
 static int RumbleStrengthRightMotorOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorOutrun"), 0, settingsFilename);
-int PersistentMaxForceOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceOutrun"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftOutrun"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightOutrun = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightOutrun"), -1, settingsFilename);
 
 static int configMinForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForcePDrift"), 0, settingsFilename);
 static int configMaxForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForcePDrift"), 100, settingsFilename);
@@ -738,9 +674,6 @@ static int SineFadePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("S
 static int SineStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthPDrift"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorPDrift"), 0, settingsFilename);
 static int RumbleStrengthRightMotorPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorPDrift"), 0, settingsFilename);
-int PersistentMaxForcePDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForcePDrift"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftPDrift"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightPDrift"), -1, settingsFilename);
 
 static int configMinForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAfterBurner2"), 0, settingsFilename);
 static int configMaxForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAfterBurner2"), 100, settingsFilename);
@@ -761,9 +694,6 @@ static int SineFadePeriodCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("
 static int SineStrengthCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthCisHeat"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorCisHeat"), 0, settingsFilename);
 static int RumbleStrengthRightMotorCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorCisHeat"), 0, settingsFilename);
-int PersistentMaxForceCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceCisHeat"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftCisHeat"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightCisHeat = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightCisHeat"), -1, settingsFilename);
 
 static int configMinForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar"), 0, settingsFilename);
 static int configMaxForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar"), 100, settingsFilename);
@@ -779,9 +709,6 @@ static int SineFadePeriodF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 static int SineStrengthF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorF1GpStar"), 0, settingsFilename);
 static int RumbleStrengthRightMotorF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorF1GpStar"), 0, settingsFilename);
-int PersistentMaxForceF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceF1GpStar"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftF1GpStar"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightF1GpStar = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightF1GpStar"), -1, settingsFilename);
 
 static int configMinForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF1GpStar2"), 0, settingsFilename);
 static int configMaxForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF1GpStar2"), 100, settingsFilename);
@@ -797,9 +724,6 @@ static int SineFadePeriodF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT
 static int SineStrengthF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthF1GpStar2"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorF1GpStar2"), 0, settingsFilename);
 static int RumbleStrengthRightMotorF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorF1GpStar2"), 0, settingsFilename);
-int PersistentMaxForceF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceF1GpStar2"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftF1GpStar2"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightF1GpStar2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightF1GpStar2"), -1, settingsFilename);
 
 static int configMinForceHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceHyperDrive"), 0, settingsFilename);
 static int configMaxForceHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceHyperDrive"), 100, settingsFilename);
@@ -810,9 +734,6 @@ static int configAlternativeMaxForceRightHyperDrive = GetPrivateProfileInt(TEXT(
 static int configFeedbackLengthHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthHyperDrive"), 120, settingsFilename);
 static int EnableForceSpringEffectHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectHyperDrive"), 0, settingsFilename);
 static int ForceSpringStrengthHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthHyperDrive"), 0, settingsFilename);
-int PersistentMaxForceHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceHyperDrive"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftHyperDrive"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightHyperDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightHyperDrive"), -1, settingsFilename);
 
 static int configMinForceVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceVaporTrx"), 0, settingsFilename);
 static int configMaxForceVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceVaporTrx"), 100, settingsFilename);
@@ -823,9 +744,6 @@ static int configAlternativeMaxForceRightVaporTrx = GetPrivateProfileInt(TEXT("S
 static int configFeedbackLengthVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthVaporTrx"), 120, settingsFilename);
 static int EnableForceSpringEffectVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectVaporTrx"), 0, settingsFilename);
 static int ForceSpringStrengthVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthVaporTrx"), 0, settingsFilename);
-int PersistentMaxForceVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceVaporTrx"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftVaporTrx"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightVaporTrx = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightVaporTrx"), -1, settingsFilename);
 
 static int configMinForceRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceRaveRacer"), 0, settingsFilename);
 static int configMaxForceRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceRaveRacer"), 100, settingsFilename);
@@ -837,9 +755,6 @@ static int PowerModeRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("Pow
 static int configFeedbackLengthRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthRaveRacer"), 120, settingsFilename);
 static int EnableForceSpringEffectRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectRaveRacer"), 0, settingsFilename);
 static int ForceSpringStrengthRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthRaveRacer"), 0, settingsFilename);
-int PersistentMaxForceRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceRaveRacer"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftRaveRacer"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightRaveRacer = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightRaveRacer"), -1, settingsFilename);
 
 static int configMinForceDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDaytona"), 0, settingsFilename);
 static int configMaxForceDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDaytona"), 100, settingsFilename);
@@ -851,9 +766,6 @@ static int PowerModeDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("P
 static int configFeedbackLengthDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDaytona"), 120, settingsFilename);
 static int EnableForceSpringEffectDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytona"), 0, settingsFilename);
 static int ForceSpringStrengthDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytona"), 0, settingsFilename);
-int PersistentMaxForceDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceDaytona"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftDaytona"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightDaytonaMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightDaytona"), -1, settingsFilename);
 
 static int configMinForceSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSRally"), 0, settingsFilename);
 static int configMaxForceSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSRally"), 100, settingsFilename);
@@ -865,9 +777,6 @@ static int PowerModeSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("Po
 static int configFeedbackLengthSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSRally"), 120, settingsFilename);
 static int EnableForceSpringEffectSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSRally"), 0, settingsFilename);
 static int ForceSpringStrengthSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSRally"), 0, settingsFilename);
-int PersistentMaxForceSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceSRally"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftSRally"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightSRallyMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightSRally"), -1, settingsFilename);
 
 static int configMinForceIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceIndy500"), 0, settingsFilename);
 static int configMaxForceIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceIndy500"), 100, settingsFilename);
@@ -879,9 +788,6 @@ static int PowerModeIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("P
 static int configFeedbackLengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthIndy500"), 120, settingsFilename);
 static int EnableForceSpringEffectIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectIndy500"), 0, settingsFilename);
 static int ForceSpringStrengthIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthIndy500"), 0, settingsFilename);
-int PersistentMaxForceIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceIndy500"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftIndy500"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightIndy500MAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightIndy500"), -1, settingsFilename);
 
 static int configMinForceSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSuperGT"), 0, settingsFilename);
 static int configMaxForceSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSuperGT"), 100, settingsFilename);
@@ -893,9 +799,6 @@ static int PowerModeSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("P
 static int configFeedbackLengthSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSuperGT"), 120, settingsFilename);
 static int EnableForceSpringEffectSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSuperGT"), 0, settingsFilename);
 static int ForceSpringStrengthSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSuperGT"), 0, settingsFilename);
-int PersistentMaxForceSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceSuperGT"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftSuperGT"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightSuperGTMAME = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightSuperGT"), -1, settingsFilename);
 
 static int configMinForceSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSuperChase"), 0, settingsFilename);
 static int configMaxForceSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSuperChase"), 100, settingsFilename);
@@ -907,9 +810,6 @@ static int PowerModeSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("Po
 static int configFeedbackLengthSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSuperChase"), 120, settingsFilename);
 static int EnableForceSpringEffectSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSuperChase"), 0, settingsFilename);
 static int ForceSpringStrengthSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSuperChase"), 0, settingsFilename);
-int PersistentMaxForceSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceSuperChase"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftSuperChase"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightSuperChase = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightSuperChase"), -1, settingsFilename);
 
 static int configMinForceDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDirtDash"), 0, settingsFilename);
 static int configMaxForceDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDirtDash"), 100, settingsFilename);
@@ -922,9 +822,6 @@ static int configFeedbackLengthDirtDash = GetPrivateProfileInt(TEXT("Settings"),
 static int EnableForceSpringEffectDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDirtDash"), 0, settingsFilename);
 static int ForceSpringStrengthDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDirtDash"), 0, settingsFilename);
 static int FFBDivideDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideDirtDash"), 0, settingsFilename);
-int PersistentMaxForceDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceDirtDash"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftDirtDash"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightDirtDash = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightDirtDash"), -1, settingsFilename);
 
 static int configMinForceAceDriverVictory= GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriverVictory"), 0, settingsFilename);
 static int configMaxForceAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriverVictory"), 100, settingsFilename);
@@ -937,9 +834,6 @@ static int configFeedbackLengthAceDriverVictory = GetPrivateProfileInt(TEXT("Set
 static int EnableForceSpringEffectAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriverVictory"), 0, settingsFilename);
 static int ForceSpringStrengthAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriverVictory"), 0, settingsFilename);
 static int FFBDivideAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideAceDriverVictory"), 0, settingsFilename);
-int PersistentMaxForceAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceAceDriverVictory"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftAceDriverVictory"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightAceDriverVictory = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightAceDriverVictory"), -1, settingsFilename);
 
 static int configMinForceAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAceDriver"), 0, settingsFilename);
 static int configMaxForceAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAceDriver"), 100, settingsFilename);
@@ -952,9 +846,6 @@ static int configFeedbackLengthAceDriver = GetPrivateProfileInt(TEXT("Settings")
 static int EnableForceSpringEffectAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectAceDriver"), 0, settingsFilename);
 static int ForceSpringStrengthAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthAceDriver"), 0, settingsFilename);
 static int FFBDivideAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBDivideAceDriver"), 0, settingsFilename);
-int PersistentMaxForceAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForceAceDriver"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeftAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeftAceDriver"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRightAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRightAceDriver"), -1, settingsFilename);
 
 static bool init = false;
 static bool initSpring = false;

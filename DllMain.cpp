@@ -25,6 +25,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <thread>
 #include "IDirectInputDevice.h"
 #include <d3d11.h>
+#include <sapi.h>
+#include <atlbase.h>
 
 #include "Config/PersistentValues.h"
 
@@ -871,9 +873,9 @@ int joystick1Index = -1;
 int joystick_index2 = -1;
 int joystick_index3 = -1;
 
-LPCSTR CustomPersistentAlternativeMaxForceLeft;
-LPCSTR CustomPersistentAlternativeMaxForceRight;
-LPCSTR CustomPersistentMaxForce;
+LPCSTR CustomAlternativeMaxForceLeft;
+LPCSTR CustomAlternativeMaxForceRight;
+LPCSTR CustomMaxForce;
 
 // settings
 wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -927,15 +929,17 @@ int IncreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseF
 int DecreaseFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DecreaseFFBStrength"), NULL, settingsFilename);
 int ResetFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFFBStrength"), NULL, settingsFilename);
 int StepFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("StepFFBStrength"), 5, settingsFilename);
-int EnablePersistentMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnablePersistentMaxForce"), 0, settingsFilename);
-int PersistentMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentMaxForce"), -1, settingsFilename);
-int PersistentAlternativeMaxForceLeft = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceLeft"), 1, settingsFilename);
-int PersistentAlternativeMaxForceRight = GetPrivateProfileInt(TEXT("Settings"), TEXT("PersistentAlternativeMaxForceRight"), -1, settingsFilename);
+int EnableFFBStrengthTextToSpeech = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthTextToSpeech"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
-extern void LoadPersistentSetup();
+extern void CustomFFBStrengthSetup();
 
 char chainedDLL[256];
+static char FFBStrength1[256];
+static wchar_t FFBStrength2[256];
+
+HRESULT hr;
+CComPtr<ISpVoice> cpVoice;
 
 const int TEST_GAME_CONST = -1;
 const int TEST_GAME_SINE = -2;
@@ -1944,24 +1948,21 @@ int WorkaroundToFixRumble(void* ptr)
 
 void WritePersistentMaxForce()
 {
-	if (EnablePersistentMaxForce == 1)
+	if (AlternativeFFB == 1)
 	{
-		if (AlternativeFFB == 1)
-		{
-			WritePrivateProfileStringA("Settings", CustomPersistentAlternativeMaxForceLeft, (char*)(std::to_string(configAlternativeMaxForceLeft)).c_str(), ".\\FFBPlugin.ini");
-			WritePrivateProfileStringA("Settings", CustomPersistentAlternativeMaxForceRight, (char*)(std::to_string(configAlternativeMaxForceRight)).c_str(), ".\\FFBPlugin.ini");
-		}
-		else
-		{
-			WritePrivateProfileStringA("Settings", CustomPersistentMaxForce, (char*)(std::to_string(configMaxForce)).c_str(), ".\\FFBPlugin.ini");
-		}
+		WritePrivateProfileStringA("Settings", CustomAlternativeMaxForceLeft, (char*)(std::to_string(configAlternativeMaxForceLeft)).c_str(), ".\\FFBPlugin.ini");
+		WritePrivateProfileStringA("Settings", CustomAlternativeMaxForceRight, (char*)(std::to_string(configAlternativeMaxForceRight)).c_str(), ".\\FFBPlugin.ini");
+	}
+	else
+	{
+		WritePrivateProfileStringA("Settings", CustomMaxForce, (char*)(std::to_string(configMaxForce)).c_str(), ".\\FFBPlugin.ini");
 	}
 }
 
 DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 {
 	SDL_Event e;
-
+	
 	while (true)
 	{
 		while (SDL_WaitEvent(&e) != 0)
@@ -1993,7 +1994,6 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 								configMaxForce = max(0, min(100, configMaxForce));								
 							}
 						}
-
 						WritePersistentMaxForce();
 					}
 
@@ -2020,7 +2020,6 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 								configMaxForce = max(0, min(100, configMaxForce));
 							}
 						}
-
 						WritePersistentMaxForce();
 					}
 
@@ -2029,10 +2028,33 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 						DefaultConfigValues();
 						WritePersistentMaxForce();
 					}
+
+					if (EnableFFBStrengthTextToSpeech == 1)
+					{
+						if (AlternativeFFB == 1)
+						{
+							sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
+						}
+						else
+						{
+							sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
+						}
+
+						hr = ::CoInitialize(nullptr);
+						hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
+						mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
+						LPWSTR ptr = FFBStrength2;
+
+						if (SUCCEEDED(hr))
+						{
+							hr = cpVoice->SetOutput(NULL, TRUE);
+							hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
+							::CoUninitialize();
+						}
+					}
 				}
 			}
 		}
-
 		Sleep(16);
 	}
 }
@@ -2267,18 +2289,13 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	}
 	Initialize(0);
 	hlp.log("Initialize() complete");
+
 	if (EnableFFBStrengthDynamicAdjustment == 1)
 	{
-		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
-	}
-	
-	// Load persistent max force if previously set.
-	if (EnablePersistentMaxForce == 1)
-	{
 		Sleep(4000);
-		LoadPersistentSetup();
+		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
+		CustomFFBStrengthSetup();
 	}
-
 	return 0;
 }
 
