@@ -12,6 +12,11 @@ extern char* romname;
 extern LPCSTR CustomAlternativeMaxForceLeft;
 extern LPCSTR CustomAlternativeMaxForceRight;
 extern LPCSTR CustomMaxForce;
+extern int EnableFFBStrengthPersistence;
+
+int defaultMaxForce;
+int defaultAlternativeMaxForceLeft;
+int defaultAlternativeMaxForceRight;
 
 //Supermodel Emulator Games
 static std::string dayto2pe("dayto2pe");
@@ -204,34 +209,46 @@ static std::string victlapw("victlapw");
 
 void DefaultConfigValues()
 {
-	if (configGameId == 1)
+	if (EnableFFBStrengthPersistence == 1)
 	{
-		configMinForce = 0;
-		configMaxForce = 90;
-		configAlternativeMinForceLeft = 0;
-		configAlternativeMaxForceLeft = -90;
-		configAlternativeMinForceRight = 0;
-		configAlternativeMaxForceRight = 90;
-	}
-	else if ((configGameId == 2) || (configGameId == 3) || (configGameId == 29))
-	{
-		configMinForce = 0;
-		configMaxForce = 75;
-		configAlternativeMinForceLeft = 0;
-		configAlternativeMaxForceLeft = -75;
-		configAlternativeMinForceRight = 0;
-		configAlternativeMaxForceRight = 75;
-	}
-	else if (configGameId == 22)
-	{
-		if (romname == superchs || romname == superchsj || romname == superchsp || romname == superchsu)
+		if (configGameId == 1)
 		{
 			configMinForce = 0;
-			configMaxForce = 80;
+			configMaxForce = 90;
 			configAlternativeMinForceLeft = 0;
-			configAlternativeMaxForceLeft = -80;
+			configAlternativeMaxForceLeft = -90;
 			configAlternativeMinForceRight = 0;
-			configAlternativeMaxForceRight = 80;
+			configAlternativeMaxForceRight = 90;
+		}
+		else if ((configGameId == 2) || (configGameId == 3) || (configGameId == 29))
+		{
+			configMinForce = 0;
+			configMaxForce = 75;
+			configAlternativeMinForceLeft = 0;
+			configAlternativeMaxForceLeft = -75;
+			configAlternativeMinForceRight = 0;
+			configAlternativeMaxForceRight = 75;
+		}
+		else if (configGameId == 22)
+		{
+			if (romname == superchs || romname == superchsj || romname == superchsp || romname == superchsu)
+			{
+				configMinForce = 0;
+				configMaxForce = 80;
+				configAlternativeMinForceLeft = 0;
+				configAlternativeMaxForceLeft = -80;
+				configAlternativeMinForceRight = 0;
+				configAlternativeMaxForceRight = 80;
+			}
+			else
+			{
+				configMinForce = 0;
+				configMaxForce = 100;
+				configAlternativeMinForceLeft = 0;
+				configAlternativeMaxForceLeft = -100;
+				configAlternativeMinForceRight = 0;
+				configAlternativeMaxForceRight = 100;
+			}
 		}
 		else
 		{
@@ -245,17 +262,18 @@ void DefaultConfigValues()
 	}
 	else
 	{
-		configMinForce = 0;
-		configMaxForce = 100;
-		configAlternativeMinForceLeft = 0;
-		configAlternativeMaxForceLeft = -100;
-		configAlternativeMinForceRight = 0;
-		configAlternativeMaxForceRight = 100;
+		configMaxForce = defaultMaxForce;
+		configAlternativeMaxForceLeft = defaultAlternativeMaxForceLeft;
+		configAlternativeMaxForceRight = defaultAlternativeMaxForceRight;
 	}
 }
 
 void CustomFFBStrengthSetup()
 {
+	defaultMaxForce = configMaxForce;
+	defaultAlternativeMaxForceLeft = configAlternativeMaxForceLeft;
+	defaultAlternativeMaxForceRight = configAlternativeMaxForceRight;
+
 	if (configGameId == 34)
 	{
 		if (romname == dayto2pe || romname == daytona2)
