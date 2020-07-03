@@ -22,6 +22,14 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "../Common Files/CRCCheck.h"
 #include "../Common Files/SignatureScanning.h"
 
+//Demul Emulator Games
+std::string Nascar("Nascar");
+std::string InitialDArcadeStage("Initial D Arcade Stage");
+std::string SmashingDrive("Smashing Drive");
+std::string MaximumSpeed("Maximum Speed");
+std::string FasterThanSpeed("Faster Than Speed");
+std::string ATVTrack("ATV Track");
+
 extern void NascarInputsEnabled(Helpers* helpers);
 extern void InitialDInputsEnabled(Helpers* helpers);
 extern void SmashingDriveInputsEnabled(Helpers* helpers);
@@ -688,6 +696,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				NascarRunning = true;
 				WindowSearch = true;
+
+				sprintf(romnameDemul, "%s", Nascar);
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring2))
@@ -705,6 +715,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				InitialDRunning = true;
 				WindowSearch = true;
+
+				sprintf(romnameDemul, "%s", InitialDArcadeStage);
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring3))
@@ -722,6 +734,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				SmashingDriveRunning = true;
 				WindowSearch = true;
+
+				sprintf(romnameDemul, "%s", SmashingDrive);
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring4))
@@ -739,6 +753,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				MaximumSpeedRunning = true;
 				WindowSearch = true;
+
+				sprintf(romnameDemul, "%s", MaximumSpeed);
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring5))
@@ -756,6 +772,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				FasterThanSpeedRunning = true;
 				WindowSearch = true;
+
+				sprintf(romnameDemul, "%s", FasterThanSpeed);
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring6))
@@ -773,6 +791,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				ATVTrackRunning = true;
 				WindowSearch = true;
+
+				sprintf(romnameDemul, "%s", ATVTrack);
 			}
 		}
 	}
