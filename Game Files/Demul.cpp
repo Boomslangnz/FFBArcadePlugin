@@ -164,6 +164,8 @@ static INT_PTR FFBAddress;
 static int ffnascar = 0;
 static int fffaster = 0;
 
+char* romnameDemul;
+
 int nascar(int ffnas) {
 	switch (ffnas) {
 

@@ -17,6 +17,28 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "math.h"
 #include "SDL.h"
 
+//M2 Emulator Games
+std::string SegaRallyChampionship("Sega Rally Championship");
+std::string SegaRallyChampionshipRevB("Sega Rally Championship (Rev B)");
+std::string SegaRallyProDrivin("Sega Rally Pro Drivin'");
+std::string DaytonaUSA("Daytona USA");
+std::string DaytonaUSA93Edition("Daytona USA '93 Edition");
+std::string DaytonaUSASaturnAds("Daytona USA (Saturn Ads)");
+std::string DaytonaUSASpecialEdition("Daytona USA Special Edition");
+std::string DaytonaUSATurbo("Daytona USA Turbo");
+std::string DaytonaUSATurboRevA("Daytona USA Turbo (Rev A)");
+std::string DaytonaUSAGTX2004("Daytona USA: GTX 2004");
+std::string DaytonaUSAToTheMaxx("Daytona USA: To The Maxx");
+std::string Indianapolis500RevADeluxe("Indianapolis 500 (Rev A, Deluxe)");
+std::string Indianapolis500RevATwinNewerrev("Indianapolis 500 (Rev A, Twin, Newer rev)");
+std::string Indianapolis500RevATwinOlderrev("Indianapolis 500 (Rev A, Twin, Older rev)");
+std::string OverRev("Over Rev");
+std::string OverRevModel2B("Over Rev (Model 2B)");
+std::string SuperGT24h("Super GT 24h");
+std::string SegaTouringCarChampionship("Sega Touring Car Championship");
+std::string SegaTouringCarChampionshipRevA("Sega Touring Car Championship (Rev A)");
+std::string SegaTouringCarChampionshipRevB("Sega Touring Car Championship (Rev B)");
+
 //Config Settings
 extern wchar_t* settingsFilename;
 extern int DeviceGUID;
@@ -140,28 +162,114 @@ static bool Hook(void * toHook, void * ourFunct, int len) {
 
 static DWORD jmpBackAddy;
 
+char* romnameM2;
+
 void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
 
-	HWND hWnd1 = FindWindowA(0, ("Sega Rally Championship"));
-	HWND hWnd2 = FindWindowA(0, ("Daytona USA"));
-	HWND hWnd3 = FindWindowA(0, ("Indianapolis 500 (Rev A, Deluxe)"));
-	HWND hWnd4 = FindWindowA(0, ("Sega Touring Car Championship (Rev A)"));
-	HWND hWnd5 = FindWindowA(0, ("Over Rev"));
-	HWND hWnd6 = FindWindowA(0, ("Super GT 24h"));
-	HWND hWnd7 = FindWindowA(0, ("Daytona USA '93 Edition"));
-	HWND hWnd8 = FindWindowA(0, ("Daytona USA (Saturn Ads)"));
-	HWND hWnd9 = FindWindowA(0, ("Daytona USA Special Edition"));
-	HWND hWnd10 = FindWindowA(0, ("Daytona USA Turbo"));
-	HWND hWnd11 = FindWindowA(0, ("Daytona USA Turbo (Rev A)"));
-	HWND hWnd12 = FindWindowA(0, ("Daytona USA: GTX 2004"));
-	HWND hWnd13 = FindWindowA(0, ("Daytona USA: To The Maxx"));
-	HWND hWnd14 = FindWindowA(0, ("Sega Rally Championship (Rev B)"));
-	HWND hWnd15 = FindWindowA(0, ("Sega Rally Pro Drivin'"));
-	HWND hWnd16 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Newer rev)"));
-	HWND hWnd17 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Older rev)"));
-	HWND hWnd18 = FindWindowA(0, ("Sega Touring Car Championship"));
-	HWND hWnd19 = FindWindowA(0, ("Sega Touring Car Championship (Rev B)"));
-	HWND hWnd20 = FindWindowA(0, ("Over Rev (Model 2B)"));
+	HWND hWnd1 = FindWindowA(0, SegaRallyChampionship.c_str());
+	HWND hWnd2 = FindWindowA(0, DaytonaUSA.c_str());
+	HWND hWnd3 = FindWindowA(0, Indianapolis500RevADeluxe.c_str());
+	HWND hWnd4 = FindWindowA(0, SegaTouringCarChampionshipRevA.c_str());
+	HWND hWnd5 = FindWindowA(0, OverRev.c_str());
+	HWND hWnd6 = FindWindowA(0, SuperGT24h.c_str());
+	HWND hWnd7 = FindWindowA(0, DaytonaUSA93Edition.c_str());
+	HWND hWnd8 = FindWindowA(0, DaytonaUSASaturnAds.c_str());
+	HWND hWnd9 = FindWindowA(0, DaytonaUSASpecialEdition.c_str());
+	HWND hWnd10 = FindWindowA(0, DaytonaUSATurbo.c_str());
+	HWND hWnd11 = FindWindowA(0, DaytonaUSATurboRevA.c_str());
+	HWND hWnd12 = FindWindowA(0, DaytonaUSAGTX2004.c_str());
+	HWND hWnd13 = FindWindowA(0, DaytonaUSAToTheMaxx.c_str());
+	HWND hWnd14 = FindWindowA(0, SegaRallyChampionshipRevB.c_str());
+	HWND hWnd15 = FindWindowA(0, SegaRallyProDrivin.c_str());
+	HWND hWnd16 = FindWindowA(0, Indianapolis500RevATwinNewerrev.c_str());
+	HWND hWnd17 = FindWindowA(0, Indianapolis500RevATwinOlderrev.c_str());
+	HWND hWnd18 = FindWindowA(0, SegaTouringCarChampionship.c_str());
+	HWND hWnd19 = FindWindowA(0, SegaTouringCarChampionshipRevB.c_str());
+	HWND hWnd20 = FindWindowA(0, OverRevModel2B.c_str());
+
+	romnameM2 = new char[256];
+
+	// TODO: would be better to dump all the game names in an array and loop instead with a single hWnd
+	if (hWnd1 > NULL)
+	{
+		sprintf(romnameM2, "%s", SegaRallyChampionship);
+	}
+	else if(hWnd2 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSA);
+	}
+	else if (hWnd3 > NULL)
+	{
+		sprintf(romnameM2, "%s", Indianapolis500RevADeluxe);
+	}
+	else if (hWnd4 > NULL)
+	{
+		sprintf(romnameM2, "%s", SegaTouringCarChampionshipRevA);
+	}
+	else if (hWnd5 > NULL)
+	{
+		sprintf(romnameM2, "%s", OverRev);
+	}
+	else if (hWnd6 > NULL)
+	{
+		sprintf(romnameM2, "%s", SuperGT24h);
+	}
+	else if (hWnd7 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSA93Edition);
+	}
+	else if (hWnd8 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSASaturnAds);
+	}
+	else if (hWnd9 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSASpecialEdition);
+	}
+	else if (hWnd10 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSATurbo);
+	}
+	else if (hWnd11 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSATurboRevA);
+	}
+	else if (hWnd12 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSAGTX2004);
+	}
+	else if (hWnd13 > NULL)
+	{
+		sprintf(romnameM2, "%s", DaytonaUSAToTheMaxx);
+	}
+	else if (hWnd14 > NULL)
+	{
+		sprintf(romnameM2, "%s", SegaRallyChampionshipRevB);
+	}
+	else if (hWnd15 > NULL)
+	{
+		sprintf(romnameM2, "%s", SegaRallyProDrivin);
+	}
+	else if (hWnd16 > NULL)
+	{
+		sprintf(romnameM2, "%s", Indianapolis500RevATwinNewerrev);
+	}
+	else if (hWnd17 > NULL)
+	{
+		sprintf(romnameM2, "%s", Indianapolis500RevATwinOlderrev);
+	}
+	else if (hWnd18 > NULL)
+	{
+		sprintf(romnameM2, "%s", SegaTouringCarChampionship);
+	}
+	else if (hWnd19 > NULL)
+	{
+		sprintf(romnameM2, "%s", SegaTouringCarChampionshipRevB);
+	}
+	else if (hWnd20 > NULL)
+	{
+		sprintf(romnameM2, "%s", OverRevModel2B);
+	}
 
 	if (EnableForceSpringEffect == 1)
 	{
