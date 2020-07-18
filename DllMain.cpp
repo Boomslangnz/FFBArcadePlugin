@@ -2059,8 +2059,17 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 	}
 }
 
-DWORD WINAPI FFBLoop2(LPVOID lpParam)
+DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
+	hlp.log("In FFBLoop");
+
+	SDL_HapticStopAll(haptic);
+	if (configGameId != 29) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	{
+		Sleep(2500);
+	}
+	Initialize(0);
+	hlp.log("Initialize() complete");
 	if (EnableRumble == 1)
 	{
 		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
@@ -2262,7 +2271,13 @@ DWORD WINAPI FFBLoop2(LPVOID lpParam)
 	if (configDefaultFriction >= 0 && configDefaultFriction <= 100) {
 		TriggerFrictionEffectWithDefaultOption(configDefaultFriction / 100.0, true);
 	}
-	
+
+	if (EnableFFBStrengthDynamicAdjustment == 1)
+	{
+		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
+		CustomFFBStrengthSetup();
+	}
+
 	hlp.log("Entering Game's FFBLoop loop");
 	bool* kr = (bool*)lpParam;
 	while (*kr)
@@ -2274,28 +2289,6 @@ DWORD WINAPI FFBLoop2(LPVOID lpParam)
 		}
 	}
 	hlp.log("about to exit FFBLoop");
-	return 0;
-}
-
-DWORD WINAPI FFBLoop(LPVOID lpParam)
-{
-	hlp.log("In FFBLoop");
-
-	SDL_HapticStopAll(haptic);
-	CreateThread(NULL, 0, FFBLoop2, (LPVOID)&keepRunning, 0, NULL);
-	if (configGameId != 29) //For games which need code to run quicker etc. Some games will crash if no sleep added
-	{
-		Sleep(2500);
-	}
-	Initialize(0);
-	hlp.log("Initialize() complete");
-
-	if (EnableFFBStrengthDynamicAdjustment == 1)
-	{
-		Sleep(4000);
-		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
-		CustomFFBStrengthSetup();
-	}
 	return 0;
 }
 
