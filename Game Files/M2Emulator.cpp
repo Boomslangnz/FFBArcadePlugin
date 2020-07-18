@@ -166,109 +166,108 @@ char* romnameM2;
 
 void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
 
-	HWND hWnd1 = FindWindowA(0, SegaRallyChampionship.c_str());
-	HWND hWnd2 = FindWindowA(0, DaytonaUSA.c_str());
-	HWND hWnd3 = FindWindowA(0, Indianapolis500RevADeluxe.c_str());
-	HWND hWnd4 = FindWindowA(0, SegaTouringCarChampionshipRevA.c_str());
-	HWND hWnd5 = FindWindowA(0, OverRev.c_str());
-	HWND hWnd6 = FindWindowA(0, SuperGT24h.c_str());
-	HWND hWnd7 = FindWindowA(0, DaytonaUSA93Edition.c_str());
-	HWND hWnd8 = FindWindowA(0, DaytonaUSASaturnAds.c_str());
-	HWND hWnd9 = FindWindowA(0, DaytonaUSASpecialEdition.c_str());
-	HWND hWnd10 = FindWindowA(0, DaytonaUSATurbo.c_str());
-	HWND hWnd11 = FindWindowA(0, DaytonaUSATurboRevA.c_str());
-	HWND hWnd12 = FindWindowA(0, DaytonaUSAGTX2004.c_str());
-	HWND hWnd13 = FindWindowA(0, DaytonaUSAToTheMaxx.c_str());
-	HWND hWnd14 = FindWindowA(0, SegaRallyChampionshipRevB.c_str());
-	HWND hWnd15 = FindWindowA(0, SegaRallyProDrivin.c_str());
-	HWND hWnd16 = FindWindowA(0, Indianapolis500RevATwinNewerrev.c_str());
-	HWND hWnd17 = FindWindowA(0, Indianapolis500RevATwinOlderrev.c_str());
-	HWND hWnd18 = FindWindowA(0, SegaTouringCarChampionship.c_str());
-	HWND hWnd19 = FindWindowA(0, SegaTouringCarChampionshipRevB.c_str());
-	HWND hWnd20 = FindWindowA(0, OverRevModel2B.c_str());
+	HWND hWnd1 = FindWindowA(0, ("Sega Rally Championship"));
+	HWND hWnd2 = FindWindowA(0, ("Daytona USA"));
+	HWND hWnd3 = FindWindowA(0, ("Indianapolis 500 (Rev A, Deluxe)"));
+	HWND hWnd4 = FindWindowA(0, ("Sega Touring Car Championship (Rev A)"));
+	HWND hWnd5 = FindWindowA(0, ("Over Rev"));
+	HWND hWnd6 = FindWindowA(0, ("Super GT 24h"));
+	HWND hWnd7 = FindWindowA(0, ("Daytona USA '93 Edition"));
+	HWND hWnd8 = FindWindowA(0, ("Daytona USA (Saturn Ads)"));
+	HWND hWnd9 = FindWindowA(0, ("Daytona USA Special Edition"));
+	HWND hWnd10 = FindWindowA(0, ("Daytona USA Turbo"));
+	HWND hWnd11 = FindWindowA(0, ("Daytona USA Turbo (Rev A)"));
+	HWND hWnd12 = FindWindowA(0, ("Daytona USA: GTX 2004"));
+	HWND hWnd13 = FindWindowA(0, ("Daytona USA: To The Maxx"));
+	HWND hWnd14 = FindWindowA(0, ("Sega Rally Championship (Rev B)"));
+	HWND hWnd15 = FindWindowA(0, ("Sega Rally Pro Drivin'"));
+	HWND hWnd16 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Newer rev)"));
+	HWND hWnd17 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Older rev)"));
+	HWND hWnd18 = FindWindowA(0, ("Sega Touring Car Championship"));
+	HWND hWnd19 = FindWindowA(0, ("Sega Touring Car Championship (Rev B)"));
+	HWND hWnd20 = FindWindowA(0, ("Over Rev (Model 2B)"));
 
 	romnameM2 = new char[256];
 
-	// TODO: would be better to dump all the game names in an array and loop instead with a single hWnd
 	if (hWnd1 > NULL)
 	{
-		sprintf(romnameM2, "%s", SegaRallyChampionship);
+		sprintf(romnameM2, "%s", "Sega Rally Championship");
 	}
 	else if(hWnd2 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSA);
+		sprintf(romnameM2, "%s", "Daytona USA");
 	}
 	else if (hWnd3 > NULL)
 	{
-		sprintf(romnameM2, "%s", Indianapolis500RevADeluxe);
+		sprintf(romnameM2, "%s", "Indianapolis 500 (Rev A, Deluxe)");
 	}
 	else if (hWnd4 > NULL)
 	{
-		sprintf(romnameM2, "%s", SegaTouringCarChampionshipRevA);
+		sprintf(romnameM2, "%s", "Sega Touring Car Championship (Rev A)");
 	}
 	else if (hWnd5 > NULL)
 	{
-		sprintf(romnameM2, "%s", OverRev);
+		sprintf(romnameM2, "%s", "Over Rev");
 	}
 	else if (hWnd6 > NULL)
 	{
-		sprintf(romnameM2, "%s", SuperGT24h);
+		sprintf(romnameM2, "%s", "Super GT 24h");
 	}
 	else if (hWnd7 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSA93Edition);
+		sprintf(romnameM2, "%s", "Daytona USA '93 Edition");
 	}
 	else if (hWnd8 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSASaturnAds);
+		sprintf(romnameM2, "%s", "Daytona USA (Saturn Ads)");
 	}
 	else if (hWnd9 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSASpecialEdition);
+		sprintf(romnameM2, "%s", "Daytona USA Special Edition");
 	}
 	else if (hWnd10 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSATurbo);
+		sprintf(romnameM2, "%s", "Daytona USA Turbo");
 	}
 	else if (hWnd11 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSATurboRevA);
+		sprintf(romnameM2, "%s", "Daytona USA Turbo (Rev A)");
 	}
 	else if (hWnd12 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSAGTX2004);
+		sprintf(romnameM2, "%s", "Daytona USA: GTX 2004");
 	}
 	else if (hWnd13 > NULL)
 	{
-		sprintf(romnameM2, "%s", DaytonaUSAToTheMaxx);
+		sprintf(romnameM2, "%s", "Daytona USA: To The Maxx");
 	}
 	else if (hWnd14 > NULL)
 	{
-		sprintf(romnameM2, "%s", SegaRallyChampionshipRevB);
+		sprintf(romnameM2, "%s", "Sega Rally Championship (Rev B)");
 	}
 	else if (hWnd15 > NULL)
 	{
-		sprintf(romnameM2, "%s", SegaRallyProDrivin);
+		sprintf(romnameM2, "%s", "Sega Rally Pro Drivin'");
 	}
 	else if (hWnd16 > NULL)
 	{
-		sprintf(romnameM2, "%s", Indianapolis500RevATwinNewerrev);
+		sprintf(romnameM2, "%s", "Indianapolis 500 (Rev A, Twin, Newer rev)");
 	}
 	else if (hWnd17 > NULL)
 	{
-		sprintf(romnameM2, "%s", Indianapolis500RevATwinOlderrev);
+		sprintf(romnameM2, "%s", "Indianapolis 500 (Rev A, Twin, Older rev)");
 	}
 	else if (hWnd18 > NULL)
 	{
-		sprintf(romnameM2, "%s", SegaTouringCarChampionship);
+		sprintf(romnameM2, "%s", "Sega Touring Car Championship");
 	}
 	else if (hWnd19 > NULL)
 	{
-		sprintf(romnameM2, "%s", SegaTouringCarChampionshipRevB);
+		sprintf(romnameM2, "%s", "Sega Touring Car Championship (Rev B)");
 	}
 	else if (hWnd20 > NULL)
 	{
-		sprintf(romnameM2, "%s", OverRevModel2B);
+		sprintf(romnameM2, "%s", "Over Rev (Model 2B)");
 	}
 
 	if (EnableForceSpringEffect == 1)

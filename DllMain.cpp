@@ -1965,6 +1965,9 @@ void WritePersistentMaxForce()
 
 DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 {
+	Sleep(3000);
+	CustomFFBStrengthSetup();
+
 	SDL_Event e;
 	
 	while (true)
@@ -2279,7 +2282,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	if (EnableFFBStrengthDynamicAdjustment == 1)
 	{
 		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
-		CustomFFBStrengthSetup();
 	}
 
 	hlp.log("Entering Game's FFBLoop loop");
