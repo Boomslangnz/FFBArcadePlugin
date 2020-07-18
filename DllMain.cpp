@@ -2038,26 +2038,29 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 
 					if (EnableFFBStrengthTextToSpeech == 1)
 					{
-						if (AlternativeFFB == 1)
+						if ((e.jbutton.button == IncreaseFFBStrength) || (e.jbutton.button == DecreaseFFBStrength) || (e.jbutton.button == ResetFFBStrength))
 						{
-							sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
-						}
-						else
-						{
-							sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
-						}
+							if (AlternativeFFB == 1)
+							{
+								sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
+							}
+							else
+							{
+								sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
+							}
 
-						hr = ::CoInitialize(nullptr);
-						hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
-						mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
-						LPWSTR ptr = FFBStrength2;
+							hr = ::CoInitialize(nullptr);
+							hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
+							mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
+							LPWSTR ptr = FFBStrength2;
 
-						if (SUCCEEDED(hr))
-						{
-							hr = cpVoice->SetRate(3);
-							hr = cpVoice->SetOutput(NULL, TRUE);
-							hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
-							::CoUninitialize();
+							if (SUCCEEDED(hr))
+							{
+								hr = cpVoice->SetRate(3);
+								hr = cpVoice->SetOutput(NULL, TRUE);
+								hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
+								::CoUninitialize();
+							}
 						}
 					}
 				}
