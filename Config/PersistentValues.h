@@ -9,9 +9,46 @@ extern int configAlternativeMaxForceLeft;
 extern int configAlternativeMinForceRight;
 extern int configAlternativeMaxForceRight;
 extern char* romname;
+extern char* romnameM2;
+extern char* romnameDemul;
 extern LPCSTR CustomAlternativeMaxForceLeft;
 extern LPCSTR CustomAlternativeMaxForceRight;
 extern LPCSTR CustomMaxForce;
+extern int EnableFFBStrengthPersistence;
+
+int defaultMaxForce;
+int defaultAlternativeMaxForceLeft;
+int defaultAlternativeMaxForceRight;
+
+//Demul Emulator Games
+static std::string Nascar("Nascar");
+static std::string InitialDArcadeStage("Initial D Arcade Stage");
+static std::string SmashingDrive("Smashing Drive");
+static std::string MaximumSpeed("Maximum Speed");
+static std::string FasterThanSpeed("Faster Than Speed");
+static std::string ATVTrack("ATV Track");
+
+//M2 Emulator Games
+static std::string SegaRallyChampionship("Sega Rally Championship");
+static std::string SegaRallyChampionshipRevB("Sega Rally Championship (Rev B)");
+static std::string SegaRallyProDrivin("Sega Rally Pro Drivin'");
+static std::string DaytonaUSA("Daytona USA");
+static std::string DaytonaUSA93Edition("Daytona USA '93 Edition");
+static std::string DaytonaUSASaturnAds("Daytona USA (Saturn Ads)");
+static std::string DaytonaUSASpecialEdition("Daytona USA Special Edition");
+static std::string DaytonaUSATurbo("Daytona USA Turbo");
+static std::string DaytonaUSATurboRevA("Daytona USA Turbo (Rev A)");
+static std::string DaytonaUSAGTX2004("Daytona USA: GTX 2004");
+static std::string DaytonaUSAToTheMaxx("Daytona USA: To The Maxx");
+static std::string Indianapolis500RevADeluxe("Indianapolis 500 (Rev A, Deluxe)");
+static std::string Indianapolis500RevATwinNewerrev("Indianapolis 500 (Rev A, Twin, Newer rev)");
+static std::string Indianapolis500RevATwinOlderrev("Indianapolis 500 (Rev A, Twin, Older rev)");
+static std::string OverRev("Over Rev");
+static std::string OverRevModel2B("Over Rev (Model 2B)");
+static std::string SuperGT24h("Super GT 24h");
+static std::string SegaTouringCarChampionship("Sega Touring Car Championship");
+static std::string SegaTouringCarChampionshipRevA("Sega Touring Car Championship (Rev A)");
+static std::string SegaTouringCarChampionshipRevB("Sega Touring Car Championship (Rev B)");
 
 //Supermodel Emulator Games
 static std::string dayto2pe("dayto2pe");
@@ -204,34 +241,46 @@ static std::string victlapw("victlapw");
 
 void DefaultConfigValues()
 {
-	if (configGameId == 1)
+	if (EnableFFBStrengthPersistence == 1)
 	{
-		configMinForce = 0;
-		configMaxForce = 90;
-		configAlternativeMinForceLeft = 0;
-		configAlternativeMaxForceLeft = -90;
-		configAlternativeMinForceRight = 0;
-		configAlternativeMaxForceRight = 90;
-	}
-	else if ((configGameId == 2) || (configGameId == 3) || (configGameId == 29))
-	{
-		configMinForce = 0;
-		configMaxForce = 75;
-		configAlternativeMinForceLeft = 0;
-		configAlternativeMaxForceLeft = -75;
-		configAlternativeMinForceRight = 0;
-		configAlternativeMaxForceRight = 75;
-	}
-	else if (configGameId == 22)
-	{
-		if (romname == superchs || romname == superchsj || romname == superchsp || romname == superchsu)
+		if (configGameId == 1)
 		{
 			configMinForce = 0;
-			configMaxForce = 80;
+			configMaxForce = 90;
 			configAlternativeMinForceLeft = 0;
-			configAlternativeMaxForceLeft = -80;
+			configAlternativeMaxForceLeft = -90;
 			configAlternativeMinForceRight = 0;
-			configAlternativeMaxForceRight = 80;
+			configAlternativeMaxForceRight = 90;
+		}
+		else if ((configGameId == 2) || (configGameId == 3) || (configGameId == 29))
+		{
+			configMinForce = 0;
+			configMaxForce = 75;
+			configAlternativeMinForceLeft = 0;
+			configAlternativeMaxForceLeft = -75;
+			configAlternativeMinForceRight = 0;
+			configAlternativeMaxForceRight = 75;
+		}
+		else if (configGameId == 22)
+		{
+			if (romname == superchs || romname == superchsj || romname == superchsp || romname == superchsu)
+			{
+				configMinForce = 0;
+				configMaxForce = 80;
+				configAlternativeMinForceLeft = 0;
+				configAlternativeMaxForceLeft = -80;
+				configAlternativeMinForceRight = 0;
+				configAlternativeMaxForceRight = 80;
+			}
+			else
+			{
+				configMinForce = 0;
+				configMaxForce = 100;
+				configAlternativeMinForceLeft = 0;
+				configAlternativeMaxForceLeft = -100;
+				configAlternativeMinForceRight = 0;
+				configAlternativeMaxForceRight = 100;
+			}
 		}
 		else
 		{
@@ -245,17 +294,18 @@ void DefaultConfigValues()
 	}
 	else
 	{
-		configMinForce = 0;
-		configMaxForce = 100;
-		configAlternativeMinForceLeft = 0;
-		configAlternativeMaxForceLeft = -100;
-		configAlternativeMinForceRight = 0;
-		configAlternativeMaxForceRight = 100;
+		configMaxForce = defaultMaxForce;
+		configAlternativeMaxForceLeft = defaultAlternativeMaxForceLeft;
+		configAlternativeMaxForceRight = defaultAlternativeMaxForceRight;
 	}
 }
 
 void CustomFFBStrengthSetup()
 {
+	defaultMaxForce = configMaxForce;
+	defaultAlternativeMaxForceLeft = configAlternativeMaxForceLeft;
+	defaultAlternativeMaxForceRight = configAlternativeMaxForceRight;
+
 	if (configGameId == 34)
 	{
 		if (romname == dayto2pe || romname == daytona2)
@@ -703,6 +753,166 @@ void CustomFFBStrengthSetup()
 			else
 			{
 				CustomMaxForce = "MaxForceAceDriver";
+			}
+		}
+	}
+	else if (configGameId == 25)
+	{
+		if (romnameM2 == DaytonaUSA || romnameM2 == DaytonaUSA93Edition || romnameM2 == DaytonaUSASaturnAds || romnameM2 == DaytonaUSASpecialEdition || romnameM2 == DaytonaUSATurbo || romnameM2 == DaytonaUSATurboRevA || romnameM2 == DaytonaUSAGTX2004 || romnameM2 == DaytonaUSAToTheMaxx)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftDaytona";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightDaytona";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceDaytona";
+			}
+		}
+
+		if (romnameM2 == SegaRallyChampionship || romnameM2 == SegaRallyChampionshipRevB || romnameM2 == SegaRallyProDrivin)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSRally";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSRally";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceSRally";
+			}
+		}
+
+		if (romnameM2 == Indianapolis500RevADeluxe || romnameM2 == Indianapolis500RevATwinNewerrev || romnameM2 == Indianapolis500RevATwinOlderrev)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftIndy500";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightIndy500";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceIndy500";
+			}
+		}
+
+		if (romnameM2 == SegaTouringCarChampionship || romnameM2 == SegaTouringCarChampionshipRevA || romnameM2 == SegaTouringCarChampionshipRevB)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSTCC";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSTCC";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceSTCC";
+			}
+		}
+
+		if (romnameM2 == OverRev || romnameM2 == OverRevModel2B)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftOverRev";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightOverRev";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceOverRev";
+			}
+		}
+
+		if (romnameM2 == SuperGT24h)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSuperGT";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSuperGT";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceSuperGT";
+			}
+		}
+	}
+	else if (configGameId == 26)
+	{
+		if (romnameDemul == Nascar)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftNascarRacing";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightNascarRacing";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceNascarRacing";
+			}
+		}
+
+		if (romnameDemul == InitialDArcadeStage)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftInitialDDemul";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightInitialDDemul";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceInitialDDemul";
+			}
+		}
+
+		if (romnameDemul == SmashingDrive)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftSmashingDrive";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightSmashingDrive";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceSmashingDrive";
+			}
+		}
+
+		if (romnameDemul == MaximumSpeed)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftMaximumSpeed";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightMaximumSpeed";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceMaximumSpeed";
+			}
+		}
+
+		if (romnameDemul == FasterThanSpeed)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftFasterSpeed";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightFasterSpeed";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceFasterSpeed";
+			}
+		}
+
+		if (romnameDemul == ATVTrack)
+		{
+			if (AlternativeFFB == 1)
+			{
+				CustomAlternativeMaxForceLeft = "AlternativeMaxForceLeftATVTrack";
+				CustomAlternativeMaxForceRight = "AlternativeMaxForceRightATVTrack";
+			}
+			else
+			{
+				CustomMaxForce = "MaxForceATVTrack";
 			}
 		}
 	}
