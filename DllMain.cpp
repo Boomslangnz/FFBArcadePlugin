@@ -2054,6 +2054,7 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 
 						if (SUCCEEDED(hr))
 						{
+							hr = cpVoice->SetRate(3);
 							hr = cpVoice->SetOutput(NULL, TRUE);
 							hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
 							::CoUninitialize();
@@ -2079,10 +2080,13 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	hlp.log("Initialize() complete");
 	if (EnableRumble == 1)
 	{
-		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
+		if (EnableFFBStrengthDynamicAdjustment != 1)
 		{
-			// Workaround for SDL_JoystickRumble rumble not stopping issue
-			SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
+			if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
+			{
+				// Workaround for SDL_JoystickRumble rumble not stopping issue
+				SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
+			}
 		}
 
 		//SPECIAL K DISABLES RUMBLE BY DEFAULT. WRITE IT TO FALSE
