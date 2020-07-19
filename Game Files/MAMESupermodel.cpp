@@ -3521,8 +3521,9 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				{
 					if (name == cpuled6)
 					{
-						if (newstateFFB == 0)
+						if (newstateFFB == 1)
 						{
+							Sleep(2000);
 							PatternLaunch = true;
 						}
 					}
