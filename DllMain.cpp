@@ -26,7 +26,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "IDirectInputDevice.h"
 #include <d3d11.h>
 #include <sapi.h>
-#include <atlbase.h>
+#include <atlcomcli.h>
 
 #include "Config/PersistentValues.h"
 
@@ -2075,7 +2075,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	hlp.log("In FFBLoop");
 
 	SDL_HapticStopAll(haptic);
-	if (configGameId != 29) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	if ((configGameId != 22) && (configGameId != 29) && (configGameId != 34)) //For games which need code to run quicker etc. Some games will crash if no sleep added
 	{
 		Sleep(2500);
 	}
