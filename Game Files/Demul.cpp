@@ -45,6 +45,7 @@ static HINSTANCE gl_padDemul;
 extern int joystick_index1;
 extern int joystick_index2;
 extern SDL_Joystick* GameController2;
+extern bool WaitForGame;
 static bool testbuttonA;
 static bool servicebuttonA;
 static bool startbuttonA;
@@ -693,6 +694,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				romnameDemul = "Nascar";
 
+				WaitForGame = true;
 				NascarRunning = true;
 				WindowSearch = true;	
 			}
@@ -712,6 +714,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				romnameDemul = "Initial D Arcade Stage";
 
+				WaitForGame = true;
 				InitialDRunning = true;
 				WindowSearch = true;	
 			}
@@ -731,6 +734,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				romnameDemul = "Smashing Drive";
 
+				WaitForGame = true;
 				SmashingDriveRunning = true;
 				WindowSearch = true;	
 			}
@@ -750,6 +754,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				romnameDemul = "Maximum Speed";
 
+				WaitForGame = true;
 				MaximumSpeedRunning = true;
 				WindowSearch = true;
 			}
@@ -769,6 +774,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				romnameDemul = "Faster Than Speed";
 
+				WaitForGame = true;
 				FasterThanSpeedRunning = true;
 				WindowSearch = true;
 			}
@@ -788,6 +794,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 				romnameDemul = "ATV Track";
 
+				WaitForGame = true;
 				ATVTrackRunning = true;
 				WindowSearch = true;
 			}
@@ -798,6 +805,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!FFBGameInit)
 		{
+			Sleep(5000);
 			aAddy2 = PatternScan("\x13\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x50\x72\x6F\x64\x75\x63\x65\x64\x20\x42\x79\x20", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 			FFBAddress = (int)aAddy2 - 0x2F0;
 			CreateThread(NULL, 0, NascarRunningLoop, NULL, 0, NULL);
@@ -853,7 +861,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			{
 				if (!InputFind)
 				{
-					aAddy = PatternScan("\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\xFF\xFF\x00\x00\x00\x00\x00\x00\x00\x00", "xxxxxxxxxxxxxxxxxxxxxxxxxxxx");
+					aAddy = PatternScan("\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\xFF\xFF\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x20", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 					UINT8 CheckaAddy = helpers->ReadByte((int)aAddy - 0x2A0, false);
 					if (CheckaAddy == 0x01)
 					{
@@ -876,6 +884,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!FFBGameInit)
 		{	
+			Sleep(5000);
 			aAddy2 = PatternScan("\xC0\xF3\x51\x00\x60\x9A\x2C\x01", "xxxxxxxx");
 			
 			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 - 0x0E, false);
@@ -911,6 +920,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!FFBGameInit)
 		{
+			Sleep(10000);
 			aAddy2 = PatternScan("\x48\x03\x00\x00\xE0\x01\x00\x00\x2C\x01\x00\x00\xB4\x00\x00\x00\x00\x00\x00\x00\x20\xFE\xFF\xFF", "xxxxxxxxxxxxxxxxxxxxxxxx");
 
 			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 + 0x21, false);
@@ -949,6 +959,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!FFBGameInit)
 		{
+			Sleep(10000);
 			aAddy2 = PatternScan("\x01\x00\x10\x00\x00\x00\x00\x00\x00\x2F\x76", "xxxxxxxxxxx");
 
 			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 + 0x0E, false);
@@ -987,6 +998,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	{
 		if (!FFBGameInit)
 		{
+			Sleep(15000);
 			aAddy2 = PatternScan("\x49\x55\x4C\x00\x00\x00\x05", "xxxxxxx");
 			UINT8 CheckAddy = helpers->ReadByte((int)aAddy2 - 0x04, false);
 			if (CheckAddy == 0x1E)

@@ -854,6 +854,8 @@ EffectConstants effectConst;
 Helpers hlp;
 EffectTriggers t;
 
+bool CustomStrength = false;
+bool WaitForGame = false;
 bool keepRunning = true;
 float wheel = 0.0f;
 
@@ -1955,201 +1957,249 @@ void WritePersistentMaxForce()
 	}
 }
 
-DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
+static int StrengthLoopWaitEvent()
 {
-	Sleep(3000);
-	CustomFFBStrengthSetup();
+	if (!WaitForGame)
+	{
+		if (configGameId != 26)
+		{
+			Sleep(4000);
+			WaitForGame = true;
+		}
+	}
+	else
+	{
+		if (!CustomStrength)
+		{
+			CustomFFBStrengthSetup();
+			CustomStrength = true;
+		}
 
+		while (SDL_WaitEvent(&e) != 0)
+		{
+			if (e.type == SDL_JOYBUTTONDOWN)
+			{
+				if (e.jbutton.which == joystick_index1)
+				{
+					if (e.jbutton.button == IncreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
+							{
+								configAlternativeMaxForceRight += StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
+							{
+								configAlternativeMaxForceLeft -= StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce >= 0) && (configMaxForce < 100))
+							{
+								configMaxForce += StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+						WritePersistentMaxForce();
+					}
+
+					if (e.jbutton.button == DecreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
+							{
+								configAlternativeMaxForceRight -= StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
+							{
+								configAlternativeMaxForceLeft += StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce > 0) && (configMaxForce <= 100))
+							{
+								configMaxForce -= StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+						WritePersistentMaxForce();
+					}
+
+					if (e.jbutton.button == ResetFFBStrength)
+					{
+						DefaultConfigValues();
+						WritePersistentMaxForce();
+					}
+
+					if (EnableFFBStrengthTextToSpeech == 1)
+					{
+						if ((e.jbutton.button == IncreaseFFBStrength) || (e.jbutton.button == DecreaseFFBStrength) || (e.jbutton.button == ResetFFBStrength))
+						{
+							if (AlternativeFFB == 1)
+							{
+								sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
+							}
+							else
+							{
+								sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
+							}
+
+							hr = ::CoInitialize(nullptr);
+							hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
+							mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
+							LPWSTR ptr = FFBStrength2;
+
+							if (SUCCEEDED(hr))
+							{
+								hr = cpVoice->SetRate(3);
+								hr = cpVoice->SetOutput(NULL, TRUE);
+								hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
+								::CoUninitialize();
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	return 0;
+}
+
+static int StrengthLoopNoWaitEvent()
+{
+	if (!WaitForGame)
+	{
+		if (configGameId != 26)
+		{
+			Sleep(4000);
+			WaitForGame = true;
+		}
+	}
+	else
+	{
+		if (!CustomStrength)
+		{
+			CustomFFBStrengthSetup();
+			CustomStrength = true;
+		}
+
+		if (e.type == SDL_JOYBUTTONDOWN)
+		{
+			if (e.jbutton.which == joystick_index1)
+			{
+				if (e.jbutton.button == IncreaseFFBStrength)
+				{
+					if (AlternativeFFB == 1)
+					{
+						if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
+						{
+							configAlternativeMaxForceRight += StepFFBStrength;
+							configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+						}
+						if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
+						{
+							configAlternativeMaxForceLeft -= StepFFBStrength;
+							configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+						}
+					}
+					else
+					{
+						if ((configMaxForce >= 0) && (configMaxForce < 100))
+						{
+							configMaxForce += StepFFBStrength;
+							configMaxForce = max(0, min(100, configMaxForce));
+						}
+					}
+					WritePersistentMaxForce();
+				}
+
+				if (e.jbutton.button == DecreaseFFBStrength)
+				{
+					if (AlternativeFFB == 1)
+					{
+						if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
+						{
+							configAlternativeMaxForceRight -= StepFFBStrength;
+							configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+						}
+						if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
+						{
+							configAlternativeMaxForceLeft += StepFFBStrength;
+							configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+						}
+					}
+					else
+					{
+						if ((configMaxForce > 0) && (configMaxForce <= 100))
+						{
+							configMaxForce -= StepFFBStrength;
+							configMaxForce = max(0, min(100, configMaxForce));
+						}
+					}
+					WritePersistentMaxForce();
+				}
+
+				if (e.jbutton.button == ResetFFBStrength)
+				{
+					DefaultConfigValues();
+					WritePersistentMaxForce();
+				}
+
+				if (EnableFFBStrengthTextToSpeech == 1)
+				{
+					if ((e.jbutton.button == IncreaseFFBStrength) || (e.jbutton.button == DecreaseFFBStrength) || (e.jbutton.button == ResetFFBStrength))
+					{
+						if (AlternativeFFB == 1)
+						{
+							sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
+						}
+						else
+						{
+							sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
+						}
+
+						hr = ::CoInitialize(nullptr);
+						hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
+						mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
+						LPWSTR ptr = FFBStrength2;
+
+						if (SUCCEEDED(hr))
+						{
+							hr = cpVoice->SetRate(3);
+							hr = cpVoice->SetOutput(NULL, TRUE);
+							hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
+							::CoUninitialize();
+						}
+					}
+				}
+			}
+		}
+	}	
+	return 0;
+}
+
+DWORD WINAPI AdjustFFBStrengthLoopWaitEvent(LPVOID lpParam)
+{
 	while (true)
 	{
-		if ((InputDeviceWheelEnable != 1) && (configGameId == 1) || (configGameId == 9) || (configGameId == 12) || (configGameId == 28) || (configGameId == 29) || (configGameId == 35)) while (SDL_WaitEvent(&e) != 0)
-		{
-			if (e.type == SDL_JOYBUTTONDOWN)
-			{
-				if (e.jbutton.which == joystick_index1)
-				{
-					if (e.jbutton.button == IncreaseFFBStrength)
-					{
-						if (AlternativeFFB == 1)
-						{
-							if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
-							{
-								configAlternativeMaxForceRight += StepFFBStrength;
-								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
-							}
-							if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
-							{
-								configAlternativeMaxForceLeft -= StepFFBStrength;
-								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
-							}
-						}
-						else
-						{
-							if ((configMaxForce >= 0) && (configMaxForce < 100))
-							{
-								configMaxForce += StepFFBStrength;
-								configMaxForce = max(0, min(100, configMaxForce));								
-							}
-						}
-						WritePersistentMaxForce();
-					}
+		StrengthLoopWaitEvent();
+		Sleep(16);
+	}
+}
 
-					if (e.jbutton.button == DecreaseFFBStrength)
-					{
-						if (AlternativeFFB == 1)
-						{
-							if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
-							{
-								configAlternativeMaxForceRight -= StepFFBStrength;
-								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
-							}
-							if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
-							{
-								configAlternativeMaxForceLeft += StepFFBStrength;
-								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
-							}
-						}
-						else
-						{
-							if ((configMaxForce > 0) && (configMaxForce <= 100))
-							{
-								configMaxForce -= StepFFBStrength;
-								configMaxForce = max(0, min(100, configMaxForce));
-							}
-						}
-						WritePersistentMaxForce();
-					}
-
-					if (e.jbutton.button == ResetFFBStrength)
-					{
-						DefaultConfigValues();
-						WritePersistentMaxForce();
-					}
-
-					if (EnableFFBStrengthTextToSpeech == 1)
-					{
-						if ((e.jbutton.button == IncreaseFFBStrength) || (e.jbutton.button == DecreaseFFBStrength) || (e.jbutton.button == ResetFFBStrength))
-						{
-							if (AlternativeFFB == 1)
-							{
-								sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
-							}
-							else
-							{
-								sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
-							}
-
-							hr = ::CoInitialize(nullptr);
-							hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
-							mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
-							LPWSTR ptr = FFBStrength2;
-
-							if (SUCCEEDED(hr))
-							{
-								hr = cpVoice->SetRate(3);
-								hr = cpVoice->SetOutput(NULL, TRUE);
-								hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
-								::CoUninitialize();
-							}
-						}
-					}
-				}
-			}
-		}
-		else
-		{
-			if (e.type == SDL_JOYBUTTONDOWN)
-			{
-				if (e.jbutton.which == joystick_index1)
-				{
-					if (e.jbutton.button == IncreaseFFBStrength)
-					{
-						if (AlternativeFFB == 1)
-						{
-							if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
-							{
-								configAlternativeMaxForceRight += StepFFBStrength;
-								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
-							}
-							if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
-							{
-								configAlternativeMaxForceLeft -= StepFFBStrength;
-								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
-							}
-						}
-						else
-						{
-							if ((configMaxForce >= 0) && (configMaxForce < 100))
-							{
-								configMaxForce += StepFFBStrength;
-								configMaxForce = max(0, min(100, configMaxForce));
-							}
-						}
-						WritePersistentMaxForce();
-					}
-
-					if (e.jbutton.button == DecreaseFFBStrength)
-					{
-						if (AlternativeFFB == 1)
-						{
-							if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
-							{
-								configAlternativeMaxForceRight -= StepFFBStrength;
-								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
-							}
-							if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
-							{
-								configAlternativeMaxForceLeft += StepFFBStrength;
-								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
-							}
-						}
-						else
-						{
-							if ((configMaxForce > 0) && (configMaxForce <= 100))
-							{
-								configMaxForce -= StepFFBStrength;
-								configMaxForce = max(0, min(100, configMaxForce));
-							}
-						}
-						WritePersistentMaxForce();
-					}
-
-					if (e.jbutton.button == ResetFFBStrength)
-					{
-						DefaultConfigValues();
-						WritePersistentMaxForce();
-					}
-
-					if (EnableFFBStrengthTextToSpeech == 1)
-					{
-						if ((e.jbutton.button == IncreaseFFBStrength) || (e.jbutton.button == DecreaseFFBStrength) || (e.jbutton.button == ResetFFBStrength))
-						{
-							if (AlternativeFFB == 1)
-							{
-								sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
-							}
-							else
-							{
-								sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
-							}
-
-							hr = ::CoInitialize(nullptr);
-							hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
-							mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
-							LPWSTR ptr = FFBStrength2;
-
-							if (SUCCEEDED(hr))
-							{
-								hr = cpVoice->SetRate(3);
-								hr = cpVoice->SetOutput(NULL, TRUE);
-								hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
-								::CoUninitialize();
-							}
-						}
-					}
-				}
-			}
-		}
+DWORD WINAPI AdjustFFBStrengthLoopNoWaitEvent(LPVOID lpParam)
+{
+	while (true)
+	{
+		StrengthLoopNoWaitEvent();
 		Sleep(16);
 	}
 }
@@ -2169,7 +2219,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	{
 		if ((EnableFFBStrengthDynamicAdjustment != 1) && (InputDeviceWheelEnable != 1))
 		{
-			if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
+			if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 28) && (configGameId != 29) && (configGameId != 35))
 			{
 				// Workaround for SDL_JoystickRumble rumble not stopping issue
 				SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
@@ -2372,7 +2422,21 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 
 	if (EnableFFBStrengthDynamicAdjustment == 1)
 	{
-		CreateThread(NULL, 0, AdjustFFBStrengthLoop, NULL, 0, NULL);
+		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 28) && (configGameId != 29) && (configGameId != 35))
+		{
+			CreateThread(NULL, 0, AdjustFFBStrengthLoopWaitEvent, NULL, 0, NULL);	
+		}
+		else
+		{
+			if ((configGameId == 26) && (InputDeviceWheelEnable != 1))
+			{
+				CreateThread(NULL, 0, AdjustFFBStrengthLoopWaitEvent, NULL, 0, NULL);
+			}
+			else
+			{
+				CreateThread(NULL, 0, AdjustFFBStrengthLoopNoWaitEvent, NULL, 0, NULL);
+			}	
+		}	
 	}
 
 	hlp.log("Entering Game's FFBLoop loop");
