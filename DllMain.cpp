@@ -1934,7 +1934,6 @@ void TriggerSpringEffect(double strength)
 
 int WorkaroundToFixRumble(void* ptr)
 {
-	SDL_Event e;
 	while (SDL_WaitEvent(&e) != 0)
 	{
 	}
