@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Version 2.2a
+Version 2.2b
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy , Adam_ & pinkimo.
 
