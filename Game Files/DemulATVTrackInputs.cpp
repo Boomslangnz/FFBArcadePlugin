@@ -17,7 +17,7 @@ static bool brakepressed;
 static bool emergencystopA;
 static bool Inputsinit = false;
 static bool InputFind = false;
-static SDL_Event e;
+extern SDL_Event e;
 
 static int SteeringValue;
 static int BrakeValue;

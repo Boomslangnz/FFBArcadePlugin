@@ -14,7 +14,7 @@ static bool shiftdownA;
 static bool coinA;
 static bool Inputsinit = false;
 static bool InputFind = false;
-static SDL_Event e;
+extern SDL_Event e;
 
 extern INT_PTR SteeringAddress;
 extern INT_PTR AcclAddress;

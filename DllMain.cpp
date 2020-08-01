@@ -931,6 +931,7 @@ int ResetFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ResetFFBStre
 int StepFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("StepFFBStrength"), 5, settingsFilename);
 int EnableFFBStrengthPersistence = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthPersistence"), 0, settingsFilename);
 int EnableFFBStrengthTextToSpeech = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthTextToSpeech"), 0, settingsFilename);
+int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
 extern void CustomFFBStrengthSetup();
@@ -939,6 +940,7 @@ char chainedDLL[256];
 static char FFBStrength1[256];
 static wchar_t FFBStrength2[256];
 
+SDL_Event e;
 HRESULT hr;
 CComPtr<ISpVoice> cpVoice;
 
@@ -1928,16 +1930,6 @@ void TriggerSpringEffect(double strength)
 	TriggerSpringEffectWithDefaultOption(strength, false);
 }
 
-void changeVolume()
-{
-	INPUT ip = { 0 };
-	ip.type = INPUT_KEYBOARD;
-	ip.ki.wVk = VK_VOLUME_MUTE;
-	SendInput(1, &ip, sizeof(INPUT));
-	ip.ki.dwFlags = KEYEVENTF_KEYUP;
-	SendInput(1, &ip, sizeof(INPUT));
-}
-
 int WorkaroundToFixRumble(void* ptr)
 {
 	SDL_Event e;
@@ -1968,11 +1960,9 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 	Sleep(3000);
 	CustomFFBStrengthSetup();
 
-	SDL_Event e;
-	
 	while (true)
 	{
-		while (SDL_WaitEvent(&e) != 0)
+		if ((InputDeviceWheelEnable != 1) && (configGameId == 1) || (configGameId == 9) || (configGameId == 12) || (configGameId == 28) || (configGameId == 29) || (configGameId == 35)) while (SDL_WaitEvent(&e) != 0)
 		{
 			if (e.type == SDL_JOYBUTTONDOWN)
 			{
@@ -2066,6 +2056,100 @@ DWORD WINAPI AdjustFFBStrengthLoop(LPVOID lpParam)
 				}
 			}
 		}
+		else
+		{
+			if (e.type == SDL_JOYBUTTONDOWN)
+			{
+				if (e.jbutton.which == joystick_index1)
+				{
+					if (e.jbutton.button == IncreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight >= 0) && (configAlternativeMaxForceRight < 100))
+							{
+								configAlternativeMaxForceRight += StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft <= 0) && (configAlternativeMaxForceLeft > -100))
+							{
+								configAlternativeMaxForceLeft -= StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce >= 0) && (configMaxForce < 100))
+							{
+								configMaxForce += StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+						WritePersistentMaxForce();
+					}
+
+					if (e.jbutton.button == DecreaseFFBStrength)
+					{
+						if (AlternativeFFB == 1)
+						{
+							if ((configAlternativeMaxForceRight > 0) && (configAlternativeMaxForceRight <= 100))
+							{
+								configAlternativeMaxForceRight -= StepFFBStrength;
+								configAlternativeMaxForceRight = max(0, min(100, configAlternativeMaxForceRight));
+							}
+							if ((configAlternativeMaxForceLeft < 0) && (configAlternativeMaxForceLeft >= -100))
+							{
+								configAlternativeMaxForceLeft += StepFFBStrength;
+								configAlternativeMaxForceLeft = max(-100, min(0, configAlternativeMaxForceLeft));
+							}
+						}
+						else
+						{
+							if ((configMaxForce > 0) && (configMaxForce <= 100))
+							{
+								configMaxForce -= StepFFBStrength;
+								configMaxForce = max(0, min(100, configMaxForce));
+							}
+						}
+						WritePersistentMaxForce();
+					}
+
+					if (e.jbutton.button == ResetFFBStrength)
+					{
+						DefaultConfigValues();
+						WritePersistentMaxForce();
+					}
+
+					if (EnableFFBStrengthTextToSpeech == 1)
+					{
+						if ((e.jbutton.button == IncreaseFFBStrength) || (e.jbutton.button == DecreaseFFBStrength) || (e.jbutton.button == ResetFFBStrength))
+						{
+							if (AlternativeFFB == 1)
+							{
+								sprintf(FFBStrength1, "Max Force: %d", configAlternativeMaxForceRight);
+							}
+							else
+							{
+								sprintf(FFBStrength1, "Max Force: %d", configMaxForce);
+							}
+
+							hr = ::CoInitialize(nullptr);
+							hr = cpVoice.CoCreateInstance(CLSID_SpVoice);
+							mbstowcs(FFBStrength2, FFBStrength1, strlen(FFBStrength1) + 1);
+							LPWSTR ptr = FFBStrength2;
+
+							if (SUCCEEDED(hr))
+							{
+								hr = cpVoice->SetRate(3);
+								hr = cpVoice->SetOutput(NULL, TRUE);
+								hr = cpVoice->Speak(ptr, SPF_PURGEBEFORESPEAK, NULL);
+								::CoUninitialize();
+							}
+						}
+					}
+				}
+			}
+		}
 		Sleep(16);
 	}
 }
@@ -2083,7 +2167,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	hlp.log("Initialize() complete");
 	if (EnableRumble == 1)
 	{
-		if (EnableFFBStrengthDynamicAdjustment != 1)
+		if ((EnableFFBStrengthDynamicAdjustment != 1) && (InputDeviceWheelEnable != 1))
 		{
 			if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 26) && (configGameId != 28) && (configGameId != 29) && (configGameId != 30) && (configGameId != 31) && (configGameId != 35))
 			{
@@ -2396,13 +2480,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			if ((configGameId == 4) || (configGameId == 37))
 			{
 				gl_cgGLDll = LoadLibraryA("cgGL.dll");
-			}
-			if (configGameId == 26)
-			{
-				if (AutoCloseWindowError == 1)
-				{
-					changeVolume();
-				}
 			}
 		}
 		else

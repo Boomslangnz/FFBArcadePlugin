@@ -28,7 +28,6 @@ extern HINSTANCE gl_cgGLDll;
 static bool HealthA = false;
 static bool HealthB = false;
 static bool init = false;
-SDL_Event e;
 
 static int ThreadLoop()
 {

@@ -34,7 +34,7 @@ static bool leverleftA;
 static bool leverrightA;
 static bool stophack;
 static bool init = false;
-static SDL_Event e;
+extern SDL_Event e;
 
 static void MEMwrite(void *adr, void *ptr, int size)
 {

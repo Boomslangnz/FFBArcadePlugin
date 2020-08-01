@@ -36,7 +36,6 @@ extern void SmashingDriveInputsEnabled(Helpers* helpers);
 extern void ATVTrackInputsEnabled(Helpers* helpers);
 extern void FasterThanSpeedInputsEnabled(Helpers* helpers);
 extern void MaximumSpeedInputsEnabled(Helpers* helpers);
-extern void changeVolume();
 
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
@@ -507,11 +506,9 @@ static DWORD WINAPI MaximumSpeedRunningLoop(LPVOID lpParam)
 	}
 }
 
-static DWORD WINAPI VolumeMuteThread(LPVOID lpParam)
+static DWORD WINAPI CloseErrorThread(LPVOID lpParam)
 {
 	SendMessage(hWnd, WM_CLOSE, NULL, NULL);
-	Sleep(1500);
-	changeVolume();
 	VolumeMute = true;
 	return 0;
 }
@@ -554,7 +551,7 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			hWnd = FindWindowA(0, ("padDemul"));
 			if (hWnd > NULL)
 			{
-				CreateThread(NULL, 0, VolumeMuteThread, NULL, 0, NULL);
+				CreateThread(NULL, 0, CloseErrorThread, NULL, 0, NULL);
 			}
 		}
 	}
@@ -694,10 +691,10 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				EnableForceSpringEffect = EnableForceSpringEffectNascarRacing;
 				ForceSpringStrength = ForceSpringStrengthNascarRacing;
 
-				NascarRunning = true;
-				WindowSearch = true;
+				romnameDemul = "Nascar";
 
-				sprintf(romnameDemul, "%s", Nascar);
+				NascarRunning = true;
+				WindowSearch = true;	
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring2))
@@ -713,10 +710,10 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				EnableForceSpringEffect = EnableForceSpringEffectInitialDDemul;
 				ForceSpringStrength = ForceSpringStrengthInitialDDemul;
 
-				InitialDRunning = true;
-				WindowSearch = true;
+				romnameDemul = "Initial D Arcade Stage";
 
-				sprintf(romnameDemul, "%s", InitialDArcadeStage);
+				InitialDRunning = true;
+				WindowSearch = true;	
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring3))
@@ -732,10 +729,10 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				EnableForceSpringEffect = EnableForceSpringEffectSmashingDrive;
 				ForceSpringStrength = ForceSpringStrengthSmashingDrive;
 
-				SmashingDriveRunning = true;
-				WindowSearch = true;
+				romnameDemul = "Smashing Drive";
 
-				sprintf(romnameDemul, "%s", SmashingDrive);
+				SmashingDriveRunning = true;
+				WindowSearch = true;	
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring4))
@@ -751,10 +748,10 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				EnableForceSpringEffect = EnableForceSpringEffectMaximumSpeed;
 				ForceSpringStrength = ForceSpringStrengthMaximumSpeed;
 
+				romnameDemul = "Maximum Speed";
+
 				MaximumSpeedRunning = true;
 				WindowSearch = true;
-
-				sprintf(romnameDemul, "%s", MaximumSpeed);
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring5))
@@ -770,10 +767,10 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				EnableForceSpringEffect = EnableForceSpringEffectFasterSpeed;
 				ForceSpringStrength = ForceSpringStrengthFasterSpeed;
 
+				romnameDemul = "Faster Than Speed";
+
 				FasterThanSpeedRunning = true;
 				WindowSearch = true;
-
-				sprintf(romnameDemul, "%s", FasterThanSpeed);
 			}
 
 			if (!EnumWindows(FindWindowBySubstr, (LPARAM)substring6))
@@ -789,10 +786,10 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				EnableForceSpringEffect = EnableForceSpringEffectATVTrack;
 				ForceSpringStrength = ForceSpringStrengthATVTrack;
 
+				romnameDemul = "ATV Track";
+
 				ATVTrackRunning = true;
 				WindowSearch = true;
-
-				sprintf(romnameDemul, "%s", ATVTrack);
 			}
 		}
 	}

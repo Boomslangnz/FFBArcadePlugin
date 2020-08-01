@@ -18,7 +18,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
-static SDL_Event e;
+extern SDL_Event e;
 static UINT8 oldgear = 0;
 static bool init = false;
 static bool gameFfbStarted = false;

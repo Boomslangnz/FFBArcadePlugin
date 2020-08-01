@@ -21,7 +21,7 @@ extern int joystick_index2;
 extern SDL_Joystick* GameController2;
 extern SDL_Haptic* ControllerHaptic2;
 extern SDL_Haptic* haptic2;
-static SDL_Event e;
+extern SDL_Event e;
 
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);

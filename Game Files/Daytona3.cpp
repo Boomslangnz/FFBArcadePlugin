@@ -22,7 +22,7 @@ static bool init = false;
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
-static SDL_Event e;
+extern SDL_Event e;
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
 static int ChangeGearsViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("ChangeGearsViaPlugin"), 0, settingsFilename);
