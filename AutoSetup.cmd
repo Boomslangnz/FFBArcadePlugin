@@ -99,5 +99,9 @@ del SDL2.dll
 move ".\Supermodel 32bit Outputs\SDL2.dll" ".\Supermodel 32bit Outputs\ONLY COPY FILE INSIDE THIS FOLDER IF OLDER SUPERMODEL VERSION BEFORE r791"
 move ".\Supermodel 64bit Outputs\SDL2.dll" ".\Supermodel 64bit Outputs\ONLY COPY FILE INSIDE THIS FOLDER IF OLDER SUPERMODEL VERSION BEFORE r791"
 rd /s /q ".\DInput8Wrapper\"
+"C:\Program Files\7-Zip\7z.exe" a ".\FFB Arcade Plugin.zip" ".\*"
+move ".\FFB Arcade Plugin.zip" "..\"
+"C:\Program Files\7-Zip\7z.exe" a ".\FFB Arcade Plugin.7z" ".\*"
+move ".\FFB Arcade Plugin.7z" "..\"
 EXIT
 
