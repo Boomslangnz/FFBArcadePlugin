@@ -276,6 +276,7 @@ extern SDL_Haptic* haptic3;
 //Config Settings
 extern wchar_t* settingsFilename;
 extern int DeviceGUID;
+extern int enableLogging;
 extern int configFeedbackLength;
 extern int configGameId;
 extern int AlternativeFFB;
@@ -2406,13 +2407,16 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "NamcoFFBActive";
 			}
 
-			char romnametext[256];
-			sprintf(romnametext, "romname = %s", romname);
-			helpers->log(romnametext);
+			if (enableLogging == 1)
+			{
+				char romnametext[256];
+				sprintf(romnametext, "romname = %s", romname);
+				helpers->log(romnametext);
 
-			char RunningFFBtext[256];
-			sprintf(RunningFFBtext, "RunningFFB = %s", RunningFFB);
-			helpers->log(RunningFFBtext);
+				char RunningFFBtext[256];
+				sprintf(RunningFFBtext, "RunningFFB = %s", RunningFFB);
+				helpers->log(RunningFFBtext);
+			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
 			{
