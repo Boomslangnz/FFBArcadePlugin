@@ -27,7 +27,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <d3d11.h>
 #include <sapi.h>
 #include <atlcomcli.h>
-
 #include "Config/PersistentValues.h"
 
 // include all game header files here.

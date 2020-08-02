@@ -2406,6 +2406,14 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "NamcoFFBActive";
 			}
 
+			char romnametext[256];
+			sprintf(romnametext, "romname = %s", romname);
+			helpers->log(romnametext);
+
+			char RunningFFBtext[256];
+			sprintf(RunningFFBtext, "RunningFFB = %s", RunningFFB);
+			helpers->log(RunningFFBtext);
+
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
 			{
 				RomGameName = true;
