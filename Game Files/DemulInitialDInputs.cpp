@@ -13,6 +13,8 @@ static bool viewbuttonA;
 static bool shiftupA;
 static bool shiftdownA;
 static bool coinA;
+static bool cardA;
+static bool cardB;
 static bool Inputsinit = false;
 static bool InputFind = false;
 extern SDL_Event e;
@@ -24,6 +26,8 @@ extern INT_PTR StartViewAddress;
 extern INT_PTR ShiftUpDownAddress;
 extern INT_PTR ServiceTestAddress;
 extern INT_PTR CoinAddress;
+extern INT_PTR CardAddress;
+extern INT_PTR CardAddress2;
 
 extern wchar_t* settingsFilename;
 static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
@@ -44,6 +48,7 @@ static int ViewButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViewButton"
 static int StartButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("StartButton"), 0, settingsFilename);
 static int ShiftUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftUp"), 0, settingsFilename);
 static int ShiftDown = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftDown"), 0, settingsFilename);
+static int InsertRemoveCard = GetPrivateProfileInt(TEXT("Settings"), TEXT("InsertRemoveCard"), 0, settingsFilename);
 static int ExitButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ExitButtonDevice2"), 0, settingsFilename);
 static int TestButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("TestButtonDevice2"), 0, settingsFilename);
 static int ServiceButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ServiceButtonDevice2"), 0, settingsFilename);
@@ -52,6 +57,7 @@ static int ViewButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("View
 static int StartButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("StartButtonDevice2"), 0, settingsFilename);
 static int ShiftUpDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftUpDevice2"), 0, settingsFilename);
 static int ShiftDownDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShiftDownDevice2"), 0, settingsFilename);
+static int InsertRemoveCardDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("InsertRemoveCardDevice2"), 0, settingsFilename);
 
 void InitialDInputsEnabled(Helpers* helpers)
 {
@@ -113,6 +119,7 @@ void InitialDInputsEnabled(Helpers* helpers)
 	std::string start("StartButton");
 	std::string sftup("ShiftUp");
 	std::string sftdown("ShiftDown");
+	std::string card("InsertRemoveCard");
 	std::string exit2("ExitButtonDevice2");
 	std::string test2("TestButtonDevice2");
 	std::string service2("ServiceButtonDevice2");
@@ -121,6 +128,7 @@ void InitialDInputsEnabled(Helpers* helpers)
 	std::string start2("StartButtonDevice2");
 	std::string sftup2("ShiftUpDevice2");
 	std::string sftdown2("ShiftDownDevice2");
+	std::string card2("InsertRemoveCardDevice2");
 	std::string dpdup(DpadUpChar);
 	std::string dpddown(DpadDownChar);
 	std::string dpdleft(DpadLeftChar);
@@ -138,6 +146,8 @@ void InitialDInputsEnabled(Helpers* helpers)
 	UINT8 startviewread = helpers->ReadByte(StartViewAddress, false);
 	UINT8 shiftupdownread = helpers->ReadByte(ShiftUpDownAddress, false);
 	UINT8 coinread = helpers->ReadByte(CoinAddress, false);
+	UINT8 cardread = helpers->ReadByte(CardAddress, false);
+	UINT8 cardread2 = helpers->ReadByte(CardAddress2, false);
 	UINT8 servicetestread = helpers->ReadByte(ServiceTestAddress, false);
 
 	while (SDL_WaitEvent(&e) != 0)
@@ -352,6 +362,10 @@ void InitialDInputsEnabled(Helpers* helpers)
 						helpers->WriteByte(ShiftUpDownAddress, shiftupdownread -= 0x10, false);
 						shiftdownA = false;
 					}
+					if (coinA)
+					{
+						coinA = false;
+					}
 				}
 				else if (e.jhat.which == joystick_index2)
 				{
@@ -385,6 +399,10 @@ void InitialDInputsEnabled(Helpers* helpers)
 						helpers->WriteByte(ShiftUpDownAddress, shiftupdownread -= 0x10, false);
 						shiftdownA = false;
 					}
+					if (coinA)
+					{
+						coinA = false;
+					}
 				}
 			}
 			if (e.jhat.value == SDL_HAT_UP)
@@ -408,6 +426,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					if (dpdup.compare(coin) == 0)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
+					}
+					if (dpdup.compare(card) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
 					}
 					if (dpdup.compare(view) == 0)
 					{
@@ -449,6 +484,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					if (dpdup2.compare(coin2) == 0)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
+					}
+					if (dpdup2.compare(card2) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
 					}
 					if (dpdup2.compare(view2) == 0)
 					{
@@ -494,6 +546,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
 					}
+					if (dpddown.compare(card) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
+					}
 					if (dpddown.compare(view) == 0)
 					{
 						helpers->WriteByte(StartViewAddress, startviewread += 0x10, false);
@@ -534,6 +603,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					if (dpddown2.compare(coin2) == 0)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
+					}
+					if (dpddown2.compare(card2) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
 					}
 					if (dpddown2.compare(view2) == 0)
 					{
@@ -579,6 +665,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
 					}
+					if (dpdleft.compare(card) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
+					}
 					if (dpdleft.compare(view) == 0)
 					{
 						helpers->WriteByte(StartViewAddress, startviewread += 0x10, false);
@@ -619,6 +722,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					if (dpdleft2.compare(coin2) == 0)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
+					}
+					if (dpdleft2.compare(card2) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
 					}
 					if (dpdleft2.compare(view2) == 0)
 					{
@@ -664,6 +784,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
 					}
+					if (dpdright.compare(card) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
+					}
 					if (dpdright.compare(view) == 0)
 					{
 						helpers->WriteByte(StartViewAddress, startviewread += 0x10, false);
@@ -704,6 +841,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 					if (dpdright2.compare(coin2) == 0)
 					{
 						helpers->WriteByte(CoinAddress, ++coinread, false);
+					}
+					if (dpdright2.compare(card2) == 0)
+					{
+						if (!cardA)
+						{
+							if (cardread == 0x00)
+							{
+								helpers->WriteByte(CardAddress, cardread += 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+							}
+							else
+							{
+								helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+								helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+							}
+							cardA = true;
+						}
 					}
 					if (dpdright2.compare(view2) == 0)
 					{
@@ -749,6 +903,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 				{
 					helpers->WriteByte(CoinAddress, ++coinread, false);
 				}
+				if (e.jbutton.button == InsertRemoveCard)
+				{
+					if (!cardB)
+					{
+						if (cardread == 0x00)
+						{
+							helpers->WriteByte(CardAddress, cardread += 0x03, false);
+							helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+						}
+						else
+						{
+							helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+							helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+						}
+						cardB = true;
+					}
+				}
 				if (e.jbutton.button == ViewButton)
 				{
 					helpers->WriteByte(StartViewAddress, startviewread += 0x10, false);
@@ -784,6 +955,23 @@ void InitialDInputsEnabled(Helpers* helpers)
 				{
 					helpers->WriteByte(CoinAddress, ++coinread, false);
 				}
+				if (e.jbutton.button == InsertRemoveCardDevice2)
+				{
+					if (!cardB)
+					{
+						if (cardread == 0x00)
+						{
+							helpers->WriteByte(CardAddress, cardread += 0x03, false);
+							helpers->WriteByte(CardAddress2, cardread2 += 0x01, false);
+						}
+						else
+						{
+							helpers->WriteByte(CardAddress, cardread -= 0x03, false);
+							helpers->WriteByte(CardAddress2, cardread2 -= 0x01, false);
+						}
+						cardB = true;
+					}
+				}
 				if (e.jbutton.button == ViewButtonDevice2)
 				{
 					helpers->WriteByte(StartViewAddress, startviewread += 0x10, false);
@@ -818,6 +1006,13 @@ void InitialDInputsEnabled(Helpers* helpers)
 				{
 					helpers->WriteByte(StartViewAddress, startviewread -= 0x10, false);
 				}
+				if (e.jbutton.button == InsertRemoveCard)
+				{
+					if (cardB)
+					{
+						cardB = false;
+					}
+				}
 				if (e.jbutton.button == StartButton)
 				{
 					helpers->WriteByte(StartViewAddress, startviewread -= 0x80, false);
@@ -844,6 +1039,13 @@ void InitialDInputsEnabled(Helpers* helpers)
 				if (e.jbutton.button == ViewButtonDevice2)
 				{
 					helpers->WriteByte(StartViewAddress, startviewread -= 0x10, false);
+				}
+				if (e.jbutton.button == InsertRemoveCardDevice2)
+				{
+					if (cardB)
+					{
+						cardB = false;
+					}
 				}
 				if (e.jbutton.button == StartButtonDevice2)
 				{

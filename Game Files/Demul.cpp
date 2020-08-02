@@ -66,6 +66,8 @@ INT_PTR StartViewAddress;
 INT_PTR ShiftUpDownAddress;
 INT_PTR ServiceTestAddress;
 INT_PTR CoinAddress;
+INT_PTR CardAddress;
+INT_PTR CardAddress2;
 
 static HWND hWnd;
 
@@ -608,6 +610,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26FEC, 3, false);
 			helpers->WriteNop((INT_PTR)gl_padDemul + 0x270A3, 3, false);
 			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26FE1, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x27048, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x2703A, 4, false);
 		}
 
 		if (Demul111117)
@@ -621,6 +625,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26BC2, 3, false);
 			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26BBA, 3, false);
 			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26BE3, 3, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26C1E, 4, false);
+			helpers->WriteNop((INT_PTR)gl_padDemul + 0x26C10, 4, false);
 		}
 
 		if (NascarRunning)
@@ -872,6 +878,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 						ShiftUpDownAddress = (int)aAddy - 0xDA;
 						ServiceTestAddress = (int)aAddy - 0x246;
 						CoinAddress = (int)aAddy - 0x19E;
+						CardAddress = (int)aAddy + 0x3E;
+						CardAddress2 = (int)aAddy + 0x22;
 						NOPinit = true;
 						InputFind = true;
 					}
