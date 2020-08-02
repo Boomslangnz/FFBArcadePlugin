@@ -2422,19 +2422,19 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	{
 		if ((configGameId != 1) && (configGameId != 9) && (configGameId != 12) && (configGameId != 28) && (configGameId != 29) && (configGameId != 35))
 		{
-			CreateThread(NULL, 0, AdjustFFBStrengthLoopWaitEvent, NULL, 0, NULL);	
-		}
-		else
-		{
-			if ((configGameId == 26) && (InputDeviceWheelEnable != 1))
+			if ((configGameId == 26) && (InputDeviceWheelEnable == 1))
 			{
-				CreateThread(NULL, 0, AdjustFFBStrengthLoopWaitEvent, NULL, 0, NULL);
+				CreateThread(NULL, 0, AdjustFFBStrengthLoopNoWaitEvent, NULL, 0, NULL);
 			}
 			else
 			{
-				CreateThread(NULL, 0, AdjustFFBStrengthLoopNoWaitEvent, NULL, 0, NULL);
+				CreateThread(NULL, 0, AdjustFFBStrengthLoopWaitEvent, NULL, 0, NULL);
 			}	
-		}	
+		}
+		else
+		{
+			CreateThread(NULL, 0, AdjustFFBStrengthLoopNoWaitEvent, NULL, 0, NULL);
+		}
 	}
 
 	hlp.log("Entering Game's FFBLoop loop");
