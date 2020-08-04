@@ -1,7 +1,5 @@
 ***FFB Arcade Plugin***
 
-Version 2.2d
-
 Brought to you by Boomslangnz, Ducon2016, Spazzy , Adam_ & pinkimo.
 
 This is a plugin to provide Force Feedback and Rumble to various arcade games.
