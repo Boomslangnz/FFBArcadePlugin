@@ -47,6 +47,7 @@
     <ClInclude Include="Game Files\RoadFighters3D.h" />
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
+    <ClInclude Include="resource.h" />
     <None Include="Config\FFBPlugin.ini">
       <FileType>Document</FileType>
     </None>
@@ -145,6 +146,9 @@
   </ItemGroup>
   <ItemGroup>
     <MASM Include="DLLWrapper.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DInput8Wrapper.rc" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{023441F6-2554-440F-9FFB-7E185AB7CF41}</ProjectGuid>
