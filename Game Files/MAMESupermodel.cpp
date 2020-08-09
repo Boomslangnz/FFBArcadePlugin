@@ -205,6 +205,8 @@ std::string hyprdriv("hyprdriv");
 std::string vaportrx("vaportrx");
 std::string vaportrp("vaportrp");
 std::string victlapw("victlapw");
+std::string dblaxle("dblaxle");
+std::string dblaxleu("dblaxleu");
 
 //Our string to load game from
 std::string M2Active("M2Active");
@@ -238,6 +240,7 @@ std::string cpuled6("cpuled6");
 std::string Vibration_motor("Vibration_motor");
 std::string vibration_motor("vibration_motor");
 std::string Wheel_vibration("Wheel_vibration");
+std::string Wheel_Vibration("Wheel_Vibration");
 std::string upright_wheel_motor("upright_wheel_motor");
 std::string MA_Steering_Wheel_motor("MA_Steering_Wheel_motor");
 std::string MB_Steering_Wheel_motor("MB_Steering_Wheel_motor");
@@ -675,6 +678,21 @@ static int SineFadePeriodPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("S
 static int SineStrengthPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthPDrift"), 0, settingsFilename);
 static int RumbleStrengthLeftMotorPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorPDrift"), 0, settingsFilename);
 static int RumbleStrengthRightMotorPDrift = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorPDrift"), 0, settingsFilename);
+
+static int configMinForceDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDAxle"), 0, settingsFilename);
+static int configMaxForceDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDAxle"), 100, settingsFilename);
+static int configAlternativeMinForceLeftDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftDAxle"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftDAxle"), 100, settingsFilename);
+static int configAlternativeMinForceRightDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightDAxle"), 0, settingsFilename);
+static int configAlternativeMaxForceRightDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDAxle"), 100, settingsFilename);
+static int configFeedbackLengthDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDAxle"), 120, settingsFilename);
+static int EnableForceSpringEffectDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDAxle"), 0, settingsFilename);
+static int ForceSpringStrengthDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDAxle"), 0, settingsFilename);
+static int SinePeriodDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("SinePeriodDAxle"), 0, settingsFilename);
+static int SineFadePeriodDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineFadePeriodDAxle"), 0, settingsFilename);
+static int SineStrengthDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("SineStrengthDAxle"), 0, settingsFilename);
+static int RumbleStrengthLeftMotorDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthLeftMotorDAxle"), 0, settingsFilename);
+static int RumbleStrengthRightMotorDAxle = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrengthRightMotorDAxle"), 0, settingsFilename);
 
 static int configMinForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceAfterBurner2"), 0, settingsFilename);
 static int configMaxForceAfterBurner2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceAfterBurner2"), 100, settingsFilename);
@@ -2176,6 +2194,26 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "PDriftActive";
 			}
 
+			if (romname == dblaxle || romname == dblaxleu)
+			{
+				configMinForce = configMinForceDAxle;
+				configMaxForce = configMaxForceDAxle;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftDAxle;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftDAxle;
+				configAlternativeMinForceRight = configAlternativeMinForceRightDAxle;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightDAxle;
+				configFeedbackLength = configFeedbackLengthDAxle;
+				EnableForceSpringEffect = EnableForceSpringEffectDAxle;
+				ForceSpringStrength = ForceSpringStrengthDAxle;
+				SinePeriod = SinePeriodDAxle;
+				SineFadePeriod = SineFadePeriodDAxle;
+				SineStrength = SineStrengthDAxle;
+				RumbleStrengthLeftMotor = RumbleStrengthLeftMotorDAxle;
+				RumbleStrengthRightMotor = RumbleStrengthRightMotorDAxle;
+
+				RunningFFB = "RacingActive1";
+			}
+
 			if (romname == aburner2 || romname == aburner2g)
 			{
 				configMinForce = configMinForceAfterBurner2;
@@ -2876,9 +2914,9 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			}
 		}
 
-		if (RunningFFB == RacingActive1) //Outrunners,Turbo Outrun,CBombers
+		if (RunningFFB == RacingActive1) //Outrunners,Turbo Outrun,CBombers,DAxle
 		{
-			if (name == MA_Steering_Wheel_motor || name == upright_wheel_motor || name == Vibration_motor || name == Wheel_vibration)
+			if (name == MA_Steering_Wheel_motor || name == upright_wheel_motor || name == Vibration_motor || name == Wheel_vibration || name == Wheel_Vibration)
 			{
 				helpers->log("P1 value: ");
 				std::string ffs = std::to_string(newstateFFB);
