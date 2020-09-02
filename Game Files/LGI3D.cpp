@@ -230,7 +230,6 @@ void LGI3D::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 			triggers->RumbleDevice2(percentForce, 0, percentLength);
 		}
 	}
-	
 	oldFloat1 = newFloat1;
 	oldFloat2 = newFloat2;
 }
