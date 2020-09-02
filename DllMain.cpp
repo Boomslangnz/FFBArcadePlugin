@@ -3294,20 +3294,12 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 
 		if (haptic)
 		{
-			SDL_HapticClose(haptic); // release the haptic device / clean-up.
-			static char test[256];
-			memset(test, 0, 256);
-			sprintf(test, "haptic clean up", "");
-			OutputDebugStringA(test);
+			SDL_HapticClose(haptic);
 		}
 
 		if (haptic2)
 		{
 			SDL_HapticClose(haptic2);
-			static char test[256];
-			memset(test, 0, 256);
-			sprintf(test, "haptic2 clean up", "");
-			OutputDebugStringA(test);
 		}
 
 		if (haptic3)
