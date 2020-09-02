@@ -3268,49 +3268,6 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		hlp.log((char*)processName.c_str());
 		keepRunning = false;
 
-		if (haptic > 0)
-		{
-			SDL_HapticStopAll(haptic);
-			SDL_HapticClose(haptic); // release the haptic device / clean-up.
-		}
-
-		if (haptic2 > 0)
-		{
-			SDL_HapticStopAll(haptic2);
-			SDL_HapticClose(haptic2);
-		}
-
-		if (haptic3 > 0)
-		{
-			SDL_HapticStopAll(haptic3);
-			SDL_HapticClose(haptic3);
-		}
-
-		if (gl_hOriginalDll)
-		{
-			FreeLibrary(gl_hOriginalDll);
-		}
-
-		if (gl_hjgtDll)
-		{
-			FreeLibrary(gl_hjgtDll);
-		}
-
-		if (gl_hlibavs)
-		{
-			FreeLibrary(gl_hlibavs);
-		}
-
-		if (gl_cgGLDll)
-		{
-			FreeLibrary(gl_cgGLDll);
-		}
-
-		if (ProcDLL)
-		{
-			FreeLibrary(ProcDLL);
-		}
-
 		if (GameController)
 		{
 			if (EnableRumble == 1)
@@ -3326,6 +3283,38 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 				SDL_JoystickRumble(GameController2, 0, 0, 0);
 			}
 		}
+
+		if (GameController3)
+		{
+			if (EnableRumbleDevice3 == 1)
+			{
+				SDL_JoystickRumble(GameController3, 0, 0, 0);
+			}
+		}
+
+		if (haptic)
+		{
+			SDL_HapticClose(haptic); // release the haptic device / clean-up.
+			static char test[256];
+			memset(test, 0, 256);
+			sprintf(test, "haptic clean up", "");
+			OutputDebugStringA(test);
+		}
+
+		if (haptic2)
+		{
+			SDL_HapticClose(haptic2);
+			static char test[256];
+			memset(test, 0, 256);
+			sprintf(test, "haptic2 clean up", "");
+			OutputDebugStringA(test);
+		}
+
+		if (haptic3)
+		{
+			SDL_HapticClose(haptic3);
+		}
+
 		break;
 	}
 
