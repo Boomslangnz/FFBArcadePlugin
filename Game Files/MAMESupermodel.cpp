@@ -2448,7 +2448,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			if (enableLogging == 1)
 			{
 				char romnametext[256];
-				sprintf(romnametext, "romname = %s", romname);
+				sprintf(romnametext, "RomName = %s", romname);
 				helpers->log(romnametext);
 
 				char RunningFFBtext[256];
