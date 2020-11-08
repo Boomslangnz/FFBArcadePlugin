@@ -276,6 +276,10 @@ extern SDL_Joystick* GameController3;
 extern SDL_Haptic* ControllerHaptic3;
 extern SDL_Haptic* haptic3;
 
+
+Helpers* hlp;
+
+
 //Config Settings
 extern wchar_t* settingsFilename;
 extern int DeviceGUID;
@@ -897,7 +901,12 @@ char* name;
 char* romname;
 char* RunningFFB;
 char* Emulator;
-int vals[8] = { 0 };
+int vals[5] = { 0 };
+int state4 = 0;
+int state3 = 0;
+int state2 = 0;
+int state1 = 0;
+int state0 = 0;
 int frame = 0;
 int HardDrivinFFB;
 int StopConstant;
@@ -1154,10 +1163,35 @@ int __stdcall mame_updatestate(const char* id, int state)
 	{
 		if (name == wheelA)
 		{
-			//if (!(((state == 0xE0) || (state == 0)) && ((frame == 0) || (frame == 4))))
-			if ((state != 0xE0) && (state != 0x00))
+			state3 = state2;
+			state2 = state1;
+			state1 = state0;
+			state0 = state;
+
+			//detect 0xE0 and 0x00 
+			boolean stop = false;
+			if ((state == 0xE0 && state1 == 0x00 && state2 == 0xE0 && state3 == 0x00) || 
+				(state == 0x00 && state1 == 0xE0 && state2 == 0x00 && state3 == 0xE0)) 
 			{
-				vals[frame & 0x7] = state;
+				stop = true;
+				frame = 0;
+			}
+			if (frame > 4) {
+				frame = 0;
+			}
+			//vals[0] should always be < 200. vals[1] should always be > 200. If not, the state is invalid, start over. 
+			if (frame > 2 && (vals[0] > 200 || (vals[1] < 200 && vals[1] != 0))) {
+				frame = 0;
+				vals[1] = 0;
+				vals[2] = 0;
+				vals[3] = 0;
+			}
+
+			//if (!(((state == 0xE0) || (state == 0)) && ((frame == 0) || (frame == 4))))
+			//if ((state != 0xE0) && (state != 0x00))
+			if(!stop)
+			{
+				vals[frame] = state;
 				frame++;
 			}
 		}
@@ -1516,6 +1550,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 	if (!init)
 	{
+		hlp = helpers;
+		
 		CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
 
 		wchar_t* deviceGUIDString2 = new wchar_t[256];
@@ -3670,8 +3706,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				HardDrivinFrame = true;
 			}
 
-			if ((frame & 7) == 4)
+			//if ((frame & 7) == 4)
+			if(frame==4)
 			{
+				
 				HardDrivinFFB = (vals[0] & 15) + ((vals[3] & 7) << 5);
 
 				if ((vals[1] & 0xF0) == 0xF0)
@@ -3683,32 +3721,44 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				{
 					HardDrivinFFB = -HardDrivinFFB;
 				}
+				
 
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(HardDrivinFFB);
-				helpers->log((char*)ffs.c_str());
+				//helpers->log("got value: ");
+				//helpers->log((char*)ffs.c_str());
 
 				static char test[256];
 				memset(test, 0, 256);
 				sprintf(test, "hex print: %d", HardDrivinFFB);
 				OutputDebugStringA(test);
 
-				/*				if (HardDrivinFFB > 0)
-								{
-								double percentForce = HardDrivinFFB / 100.0;
-								double percentLength = 100;
-								triggers->Rumble(percentForce, 0, percentLength);
-								triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-							}
+				std::string ffs = std::to_string(HardDrivinFFB);
+				std::string val0 = std::to_string(vals[0]);
+				std::string val1 = std::to_string(vals[1]);
+				std::string val2 = std::to_string(vals[2]);
+				std::string val3 = std::to_string(vals[3]);
+				std::string val4 = std::to_string(vals[4]);
+				static char moreTest[256];
+				memset(moreTest, 0, 256);
+				sprintf(moreTest, "vals=%s %s %s %s FFS=%s", val0.c_str(), val1.c_str(), val2.c_str(), val3.c_str(), ffs.c_str());
+				helpers->log((char*)moreTest);
 
-							if (HardDrivinFFB < 0)
-							{
-								HardDrivinFFB = -HardDrivinFFB;
-								double percentForce = HardDrivinFFB / 100.0;
-								double percentLength = 100;
-								triggers->Rumble(0, percentForce, percentLength);
-								triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-							}	*/
+				if (HardDrivinFFB > 100 || HardDrivinFFB < -100) {
+					HardDrivinFFB = 0;
+				}
+				if (HardDrivinFFB >= 0)
+					{
+					double percentForce = HardDrivinFFB / 100.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				} else if (HardDrivinFFB < 0)
+				{
+					HardDrivinFFB = -HardDrivinFFB;
+					double percentForce = HardDrivinFFB / 100.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				} 
 
 			}
 		}
