@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Brought to you by Boomslangnz, Ducon2016, Spazzy , Adam_ & pinkimo.
+Brought to you by Boomslangnz, Ducon2016, Spazzy, Adam_, jpb & pinkimo.
 
 This is a plugin to provide Force Feedback and Rumble to various arcade games.
 
@@ -115,6 +115,7 @@ extremely generous.
 -GRID
 -GTI Club Supermini Festa
 -Gun Buster
+-Hard Drivin'
 -House of the dead 4
 -Hyperdrive
 -Indy 500
@@ -148,6 +149,7 @@ extremely generous.
 -Point Blank 2
 -Pokken Tournament
 -Power Drift
+-Race Drivin'
 -Rail Chase
 -Rambo
 -Rave Racer (TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK)
