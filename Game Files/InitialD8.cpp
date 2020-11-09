@@ -152,14 +152,14 @@ void InitialD8::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 			triggers->Friction(percentForce);
 			triggers->Rumble(percentForce, percentForce, percentLength);
 		}
-		if ((ff > 0x40037)& (ff < 0x40080))
+		if ((ff > 0x40037) && (ff < 0x40080))
 		{
 			double percentForce = (262272 - ff) / 72.0;
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
-		else if ((ff > 0x40100)& (ff < 0x40149))
+		else if ((ff > 0x40100) && (ff < 0x40149))
 		{
 			double percentForce = (ff - 262400) / 72.0;
 			double percentLength = 100;
