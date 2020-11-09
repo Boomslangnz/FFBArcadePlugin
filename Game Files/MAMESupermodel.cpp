@@ -277,9 +277,6 @@ extern SDL_Haptic* ControllerHaptic3;
 extern SDL_Haptic* haptic3;
 
 
-Helpers* hlp;
-
-
 //Config Settings
 extern wchar_t* settingsFilename;
 extern int DeviceGUID;
@@ -1550,8 +1547,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 	if (!init)
 	{
-		hlp = helpers;
-		
 		CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
 
 		wchar_t* deviceGUIDString2 = new wchar_t[256];
@@ -3731,19 +3726,22 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				sprintf(test, "hex print: %d", HardDrivinFFB);
 				OutputDebugStringA(test);
 
-				std::string ffs = std::to_string(HardDrivinFFB);
-				std::string val0 = std::to_string(vals[0]);
-				std::string val1 = std::to_string(vals[1]);
-				std::string val2 = std::to_string(vals[2]);
-				std::string val3 = std::to_string(vals[3]);
-				std::string val4 = std::to_string(vals[4]);
-				static char moreTest[256];
-				memset(moreTest, 0, 256);
-				sprintf(moreTest, "vals=%s %s %s %s FFS=%s", val0.c_str(), val1.c_str(), val2.c_str(), val3.c_str(), ffs.c_str());
-				helpers->log((char*)moreTest);
+				//std::string ffs = std::to_string(HardDrivinFFB);
+				//std::string val0 = std::to_string(vals[0]);
+				//std::string val1 = std::to_string(vals[1]);
+				//std::string val2 = std::to_string(vals[2]);
+				//std::string val3 = std::to_string(vals[3]);
+				//std::string val4 = std::to_string(vals[4]);
+				//static char moreTest[256];
+				//memset(moreTest, 0, 256);
+				//sprintf(moreTest, "vals=%s %s %s %s FFS=%s", val0.c_str(), val1.c_str(), val2.c_str(), val3.c_str(), ffs.c_str());
+				//helpers->log((char*)moreTest);
 
-				if (HardDrivinFFB > 100 || HardDrivinFFB < -100) {
-					HardDrivinFFB = 0;
+				if (HardDrivinFFB > 100) {
+					HardDrivinFFB = 100;
+				}
+				if (HardDrivinFFB < -100) {
+					HardDrivinFFB = -100;
 				}
 				if (HardDrivinFFB >= 0)
 					{
