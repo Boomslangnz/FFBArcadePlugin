@@ -9,6 +9,6 @@
   "author": "spazzy",
   "license": "ISC",
   "dependencies": {
-    "ini": "^1.3.5"
+    "ini": "^1.3.6"
   }
 }
