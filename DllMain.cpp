@@ -42,6 +42,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/GRID.h"
 #include "Game Files/GoldenGun.h"
 #include "Game Files/InitialD0.h"
+#include "Game Files/InitialD0v211.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"
 #include "Game Files/InitialD5.h"
@@ -63,6 +64,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/PokkenTournament.h"
 #include "Game Files/MarioKartGPDX1.10.h"
 #include "Game Files/SonicSegaAllStarsRacing.h"
+#include "Game Files/StormRacerG.h"
 #include "Game Files/M2Emulator.h"
 #include "Game Files/GTIClub3.h"
 #include "Game Files/Demul.h"
@@ -999,6 +1001,8 @@ const int Sno_Cross = 44;
 const int Bat_man = 45;
 const int R_Tuned = 46;
 const int SEGA_RALLY_3_Other = 47;
+const int Storm_Racer_G = 48;
+const int INITIAL_D_0_211 = 49;
 
 HINSTANCE Get_hInstance()
 {
@@ -2293,6 +2297,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case INITIAL_D_0:
 		game = new InitialD0;
 		break;
+	case INITIAL_D_0_211:
+		game = new InitialD0v211;
+		break;
 	case INITIAL_D_4:
 		game = new InitialD4;
 		break;
@@ -2319,6 +2326,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SEGA_RALLY_3_Other:
 		game = new SegaRally3Other;
+		break;
+	case Storm_Racer_G:
+		game = new StormRacerG;
 		break;
 	case WACKY_RACES:
 		game = new WackyRaces;

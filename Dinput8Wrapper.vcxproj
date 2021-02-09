@@ -31,6 +31,7 @@
     <ClInclude Include="Game Files\H2Overdrive.h" />
     <ClInclude Include="Game Files\HOTD4.h" />
     <ClInclude Include="Game Files\InitialD0.h" />
+    <ClInclude Include="Game Files\InitialD0v211.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\MAMESupermodel.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
@@ -47,6 +48,7 @@
     <ClInclude Include="Game Files\RoadFighters3D.h" />
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
+    <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="resource.h" />
     <None Include="Config\FFBPlugin.ini">
       <FileType>Document</FileType>
@@ -71,6 +73,7 @@
     <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\InitialD0.cpp" />
     <ClCompile Include="Game Files\DemulInitialDInputs.cpp" />
+    <ClCompile Include="Game Files\InitialD0v211.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\MAMESupermodel.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
@@ -99,6 +102,7 @@
     <ClCompile Include="Game Files\SegaRally3Other.cpp" />
     <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
+    <ClCompile Include="Game Files\StormRacerG.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
     <ClCompile Include="Game Files\WackyRaces.cpp" />

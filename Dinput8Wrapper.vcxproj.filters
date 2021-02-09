@@ -131,6 +131,8 @@
     <ClCompile Include="Game Files\DemulFasterThanSpeedInputs.cpp" />
     <ClCompile Include="Game Files\DemulMaximumSpeedInputs.cpp" />
     <ClCompile Include="Game Files\DemulNascarInputs.cpp" />
+    <ClCompile Include="Game Files\StormRacerG.cpp" />
+    <ClCompile Include="Game Files\InitialD0v211.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -291,6 +293,12 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\StormRacerG.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\InitialD0v211.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>
