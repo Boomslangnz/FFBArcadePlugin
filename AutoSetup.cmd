@@ -4,10 +4,10 @@ mkdir ".\Release.Win32\Supermodel 32bit Outputs\ONLY COPY FILE INSIDE THIS FOLDE
 mkdir ".\Release.Win32\Supermodel 64bit Outputs\ONLY COPY FILE INSIDE THIS FOLDER IF OLDER SUPERMODEL VERSION BEFORE r791"
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Button Rumble 64bit" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Button Rumble 64bit" /Y
-xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\InitialD Zero v131" /Y
-xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\InitialD Zero v131" /Y
-xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\InitialD Zero v211" /Y
-xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\InitialD Zero v211" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v131" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D Zero v131" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v211" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D Zero v211" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Sega World Drivers Championship 2018" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Sega World Drivers Championship 2018" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\MAME 64bit Outputs" /Y
@@ -50,13 +50,13 @@ cd..
 cd HOTD4
 rename dinput8.dll opengl32.dll
 cd..
-cd InitialD 4
+cd Initial D 4
 rename dinput8.dll opengl32.dll
 cd..
-cd InitialD 4 Japan
+cd Initial D 4 Japan
 rename dinput8.dll opengl32.dll
 cd..
-cd InitialD 5
+cd Initial D 5
 rename dinput8.dll opengl32.dll
 cd..
 cd KODrive
