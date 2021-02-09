@@ -34,6 +34,7 @@
     <ClInclude Include="Game Files\InitialD0v211.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\MAMESupermodel.h" />
+    <ClInclude Include="Game Files\MarioKartGPDXUSA.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
     <ClInclude Include="Game Files\ButtonRumble.h" />
     <ClInclude Include="Game Files\Demul.h" />
@@ -49,6 +50,7 @@
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
     <ClInclude Include="Game Files\StormRacerG.h" />
+    <ClInclude Include="Game Files\SWDC2018.h" />
     <ClInclude Include="resource.h" />
     <None Include="Config\FFBPlugin.ini">
       <FileType>Document</FileType>
@@ -76,6 +78,7 @@
     <ClCompile Include="Game Files\InitialD0v211.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\MAMESupermodel.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDXUSA.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\ButtonRumble.cpp" />
     <ClCompile Include="Common Files\TeknoParrotGame.cpp" />
@@ -103,6 +106,7 @@
     <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
     <ClCompile Include="Game Files\StormRacerG.cpp" />
+    <ClCompile Include="Game Files\SWDC2018.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
     <ClCompile Include="Game Files\WackyRaces.cpp" />

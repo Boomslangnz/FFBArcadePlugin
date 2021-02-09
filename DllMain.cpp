@@ -50,6 +50,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/InitialD7.h"
 #include "Game Files/InitialD8.h"
 #include "Game Files/MarioKartGPDX.h"
+#include "Game Files/MarioKartGPDX1.10.h"
+#include "Game Files/MarioKartGPDXUSA.h"
 #include "Game Files/MAMESupermodel.h"
 #include "Game Files/OutRun2Fake.h"
 #include "Game Files/OutRun2Real.h"
@@ -62,7 +64,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Machstorm.h"
 #include "Game Files/AfterburnerClimax.h"
 #include "Game Files/PokkenTournament.h"
-#include "Game Files/MarioKartGPDX1.10.h"
 #include "Game Files/SonicSegaAllStarsRacing.h"
 #include "Game Files/StormRacerG.h"
 #include "Game Files/M2Emulator.h"
@@ -76,6 +77,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/HOTD4.h"
 #include "Game Files/Rambo.h"
 #include "Game Files/R-Tuned.h"
+#include "Game Files/SWDC2018.h"
 #include "Game Files/Transformers.h"
 #include "Game Files/H2Overdrive.h"
 
@@ -1003,6 +1005,8 @@ const int R_Tuned = 46;
 const int SEGA_RALLY_3_Other = 47;
 const int Storm_Racer_G = 48;
 const int INITIAL_D_0_211 = 49;
+const int SWDC_2018 = 50;
+const int MARIO_KART_GPDX_USA = 51;
 
 HINSTANCE Get_hInstance()
 {
@@ -2360,6 +2364,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case MARIO_KART_GPDX_110:
 		game = new MarioKartGPDX110;
 		break;
+	case MARIO_KART_GPDX_USA:
+		game = new MarioKartGPDXUSA;
+		break;
 	case Sonic_Sega_AllStars_Racing:
 		game = new SonicSegaAllStarsRacing;
 		break;
@@ -2407,6 +2414,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case R_Tuned:
 		game = new RTuned;
+		break;
+	case SWDC_2018:
+		game = new SWDC;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
