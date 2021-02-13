@@ -889,6 +889,7 @@ int configMaxForce = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForce"), 10
 int enableLogging = GetPrivateProfileInt(TEXT("Settings"), TEXT("Logging"), 0, settingsFilename);
 int PowerMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerMode"), 0, settingsFilename);
 int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 0, settingsFilename);
+int EnableRumbleTriggers = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumbleTriggers"), 0, settingsFilename);
 int ReverseRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumble"), 0, settingsFilename);
 wchar_t* deviceGUIDString = new wchar_t[256];
 int DeviceGUID = GetPrivateProfileString(TEXT("Settings"), TEXT("DeviceGUID"), NULL, deviceGUIDString, 256, settingsFilename);
@@ -1017,8 +1018,9 @@ HINSTANCE Get_hInstance()
 
 void Initialize(int device_index)
 {
-	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC);
 	hlp.log("in initialize");
+	SDL_SetHint(SDL_HINT_JOYSTICK_RAWINPUT, "0");
+	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC);
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_JoystickUpdate();
 	char joystick_guid[256];
@@ -1934,6 +1936,26 @@ void TriggerRumbleEffectDevice3(double highfrequency, double lowfrequency, doubl
 	}
 }
 
+void TriggerRumbleTriggerEffect(double lefttrigger, double righttrigger, double length)
+{
+	if (EnableRumbleTriggers == 1)
+	{
+		DWORD minForceLow = (DWORD)(lefttrigger > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD minForceHigh = (DWORD)(righttrigger > 0.001 ? (configMinForce / 100.0 * 65535.0) : 0);
+		DWORD maxForce = (DWORD)(configMaxForce / 100.0 * 65535.0);
+		DWORD rangeLow = maxForce - minForceLow;
+		DWORD rangeHigh = maxForce - minForceHigh;
+		DWORD LeftMotor = (DWORD)(lefttrigger * rangeLow + minForceLow);
+		DWORD RightMotor = (DWORD)(righttrigger * rangeHigh + minForceHigh);
+
+		int RumbleTriggers = SDL_JoystickRumbleTriggers(GameController, LeftMotor, RightMotor, length);
+		if (RumbleTriggers == -1)
+		{
+			EnableRumbleTriggers = 0;
+		}			
+	}
+}
+
 void TriggerSpringEffect(double strength)
 {
 	TriggerSpringEffectWithDefaultOption(strength, false);
@@ -2256,6 +2278,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	t.Rumble = &TriggerRumbleEffect;
 	t.RumbleDevice2 = &TriggerRumbleEffectDevice2;
 	t.RumbleDevice3 = &TriggerRumbleEffectDevice3;
+	t.RumbleTriggers = &TriggerRumbleTriggerEffect;
 	t.LeftRight = &TriggerLeftRightEffect;
 	t.LeftRightDevice2 = &TriggerLeftRightDevice2Effect;
 	t.Springi = &TriggerSpringEffectInfinite;
@@ -3293,6 +3316,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			if (EnableRumble == 1)
 			{
 				SDL_JoystickRumble(GameController, 0, 0, 0);
+			}
+
+			if (EnableRumbleTriggers == 1)
+			{
+				SDL_JoystickRumbleTriggers(GameController, 0, 0, 0);
 			}
 		}
 

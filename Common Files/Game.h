@@ -11,6 +11,7 @@ struct EffectTriggers {
 	void(*Rumble)(double lowfrequency, double highfrequency, double length);
 	void(*RumbleDevice2)(double lowfrequency, double highfrequency, double length);
 	void(*RumbleDevice3)(double lowfrequency, double highfrequency, double length);
+	void(*RumbleTriggers)(double lefttrigger, double righttrigger, double length);
 	void(*LeftRight)(double smallstrength, double largestrength, double length);
 	void(*LeftRightDevice2)(double smallstrength, double largestrength, double length);
 	void(*Springi)(double strength);
