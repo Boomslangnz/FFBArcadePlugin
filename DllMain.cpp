@@ -1020,7 +1020,7 @@ void Initialize(int device_index)
 {
 	hlp.log("in initialize");
 	SDL_SetHint(SDL_HINT_JOYSTICK_RAWINPUT, "0");
-	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC);
+	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC | SDL_INIT_SENSOR);
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_JoystickUpdate();
 	char joystick_guid[256];
@@ -2236,7 +2236,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	SDL_HapticStopAll(haptic);
 	if ((configGameId != 22) && (configGameId != 29) && (configGameId != 34)) //For games which need code to run quicker etc. Some games will crash if no sleep added
 	{
 		Sleep(2500);
