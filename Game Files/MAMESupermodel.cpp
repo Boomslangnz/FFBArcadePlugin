@@ -1565,7 +1565,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				continue;
 			}
 			SDL_Joystick* js2 = SDL_JoystickOpen(i);
-			joystick_index2 = SDL_JoystickInstanceID(js2);
 			SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
 			char guid_str[1024];
 			SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
@@ -1577,6 +1576,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
 			{
 				GameController2 = SDL_JoystickOpen(i);
+				joystick_index2 = SDL_JoystickInstanceID(GameController2);
 				ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
 				break;
 			}
@@ -1603,7 +1603,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				continue;
 			}
 			SDL_Joystick* js3 = SDL_JoystickOpen(i);
-			joystick_index3 = SDL_JoystickInstanceID(js3);
 			SDL_JoystickGUID guid2 = SDL_JoystickGetGUID(js3);
 			char guid_str2[1024];
 			SDL_JoystickGetGUIDString(guid2, guid_str2, sizeof(guid_str2));
@@ -1615,6 +1614,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			if (!memcmp(&guid2, &dev_guid2, sizeof(SDL_JoystickGUID)))
 			{
 				GameController3 = SDL_JoystickOpen(i);
+				joystick_index3 = SDL_JoystickInstanceID(GameController3);
 				ControllerHaptic3 = SDL_HapticOpenFromJoystick(GameController3);
 				break;
 			}

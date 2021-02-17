@@ -13,7 +13,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "AfterburnerClimax.h"
-#include "SDL.h"
+
 void AfterburnerClimax::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 	UINT8 ff = helpers->ReadByte(0x08347A5E, /* isRelativeOffset */ false);
 		

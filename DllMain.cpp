@@ -1036,7 +1036,6 @@ void Initialize(int device_index)
 	{
 		SDL_Joystick* js = SDL_JoystickOpen(i);
 		const char* name = SDL_JoystickName(js);
-		joystick_index1 = SDL_JoystickInstanceID(js);
 		guid = SDL_JoystickGetGUID(js);
 		if (ForceShowDeviceGUIDMessageBox == 1)
 		{
@@ -1055,8 +1054,9 @@ void Initialize(int device_index)
 		SDL_JoystickClose(js);
 		if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
 		{
-			joystick1Index = i;
+			joystick1Index = i;	
 			GameController = SDL_JoystickOpen(i);
+			joystick_index1 = SDL_JoystickInstanceID(GameController);
 			ControllerHaptic = SDL_HapticOpenFromJoystick(GameController);
 			// We save the first controller matching the guid to select this one if no haptic controller with the same guid is found.
 			if (FirstGameController == NULL)

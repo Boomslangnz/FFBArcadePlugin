@@ -69,17 +69,17 @@ void StormRacerG::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 		if (FFB & 0x01)
 		{
-			myTriggers->Rumble(percentForce, percentForce, 150);
+			triggers->Rumble(percentForce, percentForce, 150);
 		}
 
 		if (FFB & 0x02)
 		{
-			myTriggers->Rumble(percentForce, percentForce, 150);
+			triggers->Rumble(percentForce, percentForce, 150);
 		}
 
 		if (FFB & 0x08)
 		{
-			myTriggers->Rumble(percentForce, percentForce, 150);
+			triggers->Rumble(percentForce, percentForce, 150);
 		}
 	}
 

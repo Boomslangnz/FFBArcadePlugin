@@ -73,7 +73,6 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 					continue;
 				}
 				SDL_Joystick* js2 = SDL_JoystickOpen(i);
-				joystick_index2 = SDL_JoystickInstanceID(js2);
 				SDL_JoystickGUID guid = SDL_JoystickGetGUID(js2);
 				char guid_str[1024];
 				SDL_JoystickGetGUIDString(guid, guid_str, sizeof(guid_str));
@@ -85,6 +84,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 				if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
 				{
 					GameController2 = SDL_JoystickOpen(i);
+					joystick_index2 = SDL_JoystickInstanceID(GameController2);
 					ControllerHaptic2 = SDL_HapticOpenFromJoystick(GameController2);
 					break;
 				}
