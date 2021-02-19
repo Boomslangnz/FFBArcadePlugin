@@ -295,10 +295,8 @@ void WMMT6::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 
 	if (0 < GearChangeStrength)
 	{
-		INT_PTR ptrtime = helpers->ReadIntPtr(0x1E3CB18, true);
-		INT_PTR ptrtimeA = helpers->ReadIntPtr(ptrtime + 0x08, false);
-		INT_PTR ptrtimeB = helpers->ReadIntPtr(ptrtimeA + 0x00, false);
-		float time = helpers->ReadFloat32(ptrtimeB + 0x730, false);
+		INT_PTR ptrtime = helpers->ReadIntPtr(0x1E5B5C8, true);
+		float time = helpers->ReadFloat32(ptrtime + 0x18, false);
 
 		if (oldgear != gear && 0 < gear && 0 < time)
 		{
