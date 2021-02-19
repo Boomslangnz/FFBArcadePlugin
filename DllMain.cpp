@@ -61,6 +61,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/SnoCross.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
+#include "Game Files/WMMT6.h"
+#include "Game Files/WMMT6R.h"
 #include "Game Files/Machstorm.h"
 #include "Game Files/AfterburnerClimax.h"
 #include "Game Files/PokkenTournament.h"
@@ -1008,6 +1010,8 @@ const int Storm_Racer_G = 48;
 const int INITIAL_D_0_211 = 49;
 const int SWDC_2018 = 50;
 const int MARIO_KART_GPDX_USA = 51;
+const int WMMT_6 = 52;
+const int WMMT_6_R = 53;
 
 HINSTANCE Get_hInstance()
 {
@@ -2439,6 +2443,12 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SWDC_2018:
 		game = new SWDC;
+		break;
+	case WMMT_6:
+		game = new WMMT6;
+		break;
+	case WMMT_6_R:
+		game = new WMMT6R;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

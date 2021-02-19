@@ -135,6 +135,8 @@
     <ClCompile Include="Game Files\InitialD0v211.cpp" />
     <ClCompile Include="Game Files\SWDC2018.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDXUSA.cpp" />
+    <ClCompile Include="Game Files\WMMT6.cpp" />
+    <ClCompile Include="Game Files\WMMT6R.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -307,6 +309,12 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\MarioKartGPDXUSA.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\WMMT6.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\WMMT6R.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>
