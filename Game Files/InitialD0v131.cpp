@@ -12,7 +12,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "InitialD0.h"
+#include "InitialD0v131.h"
 #include "math.h"
 
 static UINT8 ff;

@@ -30,7 +30,7 @@
     <ClInclude Include="Game Files\GRID.h" />
     <ClInclude Include="Game Files\H2Overdrive.h" />
     <ClInclude Include="Game Files\HOTD4.h" />
-    <ClInclude Include="Game Files\InitialD0.h" />
+    <ClInclude Include="Game Files\InitialD0v131.h" />
     <ClInclude Include="Game Files\InitialD0v211.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\MAMESupermodel.h" />
@@ -75,7 +75,7 @@
     <ClCompile Include="Game Files\GRID.cpp" />
     <ClCompile Include="Game Files\H2Overdrive.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
-    <ClCompile Include="Game Files\InitialD0.cpp" />
+    <ClCompile Include="Game Files\InitialD0v131.cpp" />
     <ClCompile Include="Game Files\DemulInitialDInputs.cpp" />
     <ClCompile Include="Game Files\InitialD0v211.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />

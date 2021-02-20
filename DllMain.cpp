@@ -41,7 +41,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/GRID.h"
 #include "Game Files/GoldenGun.h"
-#include "Game Files/InitialD0.h"
+#include "Game Files/InitialD0v131.h"
 #include "Game Files/InitialD0v211.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"

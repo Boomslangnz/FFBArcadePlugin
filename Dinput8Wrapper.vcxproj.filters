@@ -113,7 +113,6 @@
     </ClCompile>
     <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
-    <ClCompile Include="Game Files\InitialD0.cpp" />
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
     <ClCompile Include="Game Files\Rambo.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
@@ -137,6 +136,7 @@
     <ClCompile Include="Game Files\MarioKartGPDXUSA.cpp" />
     <ClCompile Include="Game Files\WMMT6.cpp" />
     <ClCompile Include="Game Files\WMMT6R.cpp" />
+    <ClCompile Include="Game Files\InitialD0v131.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -251,9 +251,6 @@
     <ClInclude Include="Game Files\GRID.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game Files\InitialD0.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Game Files\AliensExtermination.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
@@ -315,6 +312,9 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\WMMT6R.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\InitialD0v131.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>
