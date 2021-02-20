@@ -18,6 +18,8 @@ static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
 static bool gearshift = false;
+extern int EnableDamper;
+extern int DamperStrength;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 0, settingsFilename);
@@ -51,6 +53,11 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 
 	{
 		triggers->Springi(SpringStrength / 100.0);
+	}
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
 	}
 
 	if ((oldgear != newgear) && (speedo > 0))

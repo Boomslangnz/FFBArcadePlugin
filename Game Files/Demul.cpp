@@ -91,6 +91,8 @@ extern int configAlternativeMaxForceRight;
 extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
 extern int AutoCloseWindowError;
+extern int EnableDamper;
+extern int DamperStrength;
 
 static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 
@@ -104,6 +106,8 @@ static int PowerModeInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 static int configFeedbackLengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthInitialDDemul"), 120, settingsFilename);
 static int EnableForceSpringEffectInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectInitialDDemul"), 0, settingsFilename);
 static int ForceSpringStrengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthInitialDDemul"), 0, settingsFilename);
+static int EnableDamperInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperInitialDDemul"), 0, settingsFilename);
+static int DamperStrengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthInitialDDemul"), 100, settingsFilename);
 
 static int configMinForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceNascarRacing"), 0, settingsFilename);
 static int configMaxForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceNascarRacing"), 100, settingsFilename);
@@ -115,6 +119,8 @@ static int PowerModeNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("
 static int configFeedbackLengthNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthNascarRacing"), 120, settingsFilename);
 static int EnableForceSpringEffectNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectNascarRacing"), 0, settingsFilename);
 static int ForceSpringStrengthNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthNascarRacing"), 0, settingsFilename);
+static int EnableDamperNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperNascarRacing"), 0, settingsFilename);
+static int DamperStrengthNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthNascarRacing"), 100, settingsFilename);
 
 static int configMinForceSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSmashingDrive"), 0, settingsFilename);
 static int configMaxForceSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSmashingDrive"), 100, settingsFilename);
@@ -126,6 +132,8 @@ static int PowerModeSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 static int configFeedbackLengthSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSmashingDrive"), 120, settingsFilename);
 static int EnableForceSpringEffectSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSmashingDrive"), 0, settingsFilename);
 static int ForceSpringStrengthSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSmashingDrive"), 0, settingsFilename);
+static int EnableDamperSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperSmashingDrive"), 0, settingsFilename);
+static int DamperStrengthSmashingDrive = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthSmashingDrive"), 100, settingsFilename);
 
 static int configMinForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceMaximumSpeed"), 0, settingsFilename);
 static int configMaxForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceMaximumSpeed"), 100, settingsFilename);
@@ -137,6 +145,8 @@ static int PowerModeMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("
 static int configFeedbackLengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthMaximumSpeed"), 120, settingsFilename);
 static int EnableForceSpringEffectMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectMaximumSpeed"), 0, settingsFilename);
 static int ForceSpringStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthMaximumSpeed"), 0, settingsFilename);
+static int EnableDamperMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperMaximumSpeed"), 0, settingsFilename);
+static int DamperStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthMaximumSpeed"), 100, settingsFilename);
 
 static int configMinForceFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceFasterSpeed"), 0, settingsFilename);
 static int configMaxForceFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceFasterSpeed"), 100, settingsFilename);
@@ -148,6 +158,8 @@ static int PowerModeFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("P
 static int configFeedbackLengthFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthFasterSpeed"), 120, settingsFilename);
 static int EnableForceSpringEffectFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectFasterSpeed"), 0, settingsFilename);
 static int ForceSpringStrengthFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthFasterSpeed"), 0, settingsFilename);
+static int EnableDamperFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperFasterSpeed"), 0, settingsFilename);
+static int DamperStrengthFasterSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthFasterSpeed"), 100, settingsFilename);
 
 static int configMinForceATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceATVTrack"), 0, settingsFilename);
 static int configMaxForceATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceATVTrack"), 100, settingsFilename);
@@ -159,6 +171,8 @@ static int PowerModeATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("Powe
 static int configFeedbackLengthATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthATVTrack"), 120, settingsFilename);
 static int EnableForceSpringEffectATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectATVTrack"), 0, settingsFilename);
 static int ForceSpringStrengthATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthATVTrack"), 0, settingsFilename);
+static int EnableDamperATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperATVTrack"), 0, settingsFilename);
+static int DamperStrengthATVTrack = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthATVTrack"), 100, settingsFilename);
 
 static bool NascarRunning = false;
 static bool InitialDRunning = false;
@@ -697,6 +711,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				PowerMode = PowerModeNascarRacing;
 				EnableForceSpringEffect = EnableForceSpringEffectNascarRacing;
 				ForceSpringStrength = ForceSpringStrengthNascarRacing;
+				EnableDamper = EnableDamperNascarRacing;
+				DamperStrength = DamperStrengthNascarRacing;
 
 				romnameDemul = "Nascar";
 
@@ -717,6 +733,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				PowerMode = PowerModeInitialDDemul;
 				EnableForceSpringEffect = EnableForceSpringEffectInitialDDemul;
 				ForceSpringStrength = ForceSpringStrengthInitialDDemul;
+				EnableDamper = EnableDamperInitialDDemul;
+				DamperStrength = DamperStrengthInitialDDemul;
 
 				romnameDemul = "Initial D Arcade Stage";
 
@@ -737,6 +755,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				PowerMode = PowerModeSmashingDrive;
 				EnableForceSpringEffect = EnableForceSpringEffectSmashingDrive;
 				ForceSpringStrength = ForceSpringStrengthSmashingDrive;
+				EnableDamper = EnableDamperSmashingDrive;
+				DamperStrength = DamperStrengthSmashingDrive;
 
 				romnameDemul = "Smashing Drive";
 
@@ -757,6 +777,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				PowerMode = PowerModeMaximumSpeed;
 				EnableForceSpringEffect = EnableForceSpringEffectMaximumSpeed;
 				ForceSpringStrength = ForceSpringStrengthMaximumSpeed;
+				EnableDamper = EnableDamperMaximumSpeed;
+				DamperStrength = DamperStrengthMaximumSpeed;
 
 				romnameDemul = "Maximum Speed";
 
@@ -777,6 +799,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				PowerMode = PowerModeFasterSpeed;
 				EnableForceSpringEffect = EnableForceSpringEffectFasterSpeed;
 				ForceSpringStrength = ForceSpringStrengthFasterSpeed;
+				EnableDamper = EnableDamperFasterSpeed;
+				DamperStrength = DamperStrengthFasterSpeed;
 
 				romnameDemul = "Faster Than Speed";
 
@@ -797,6 +821,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				PowerMode = PowerModeATVTrack;
 				EnableForceSpringEffect = EnableForceSpringEffectATVTrack;
 				ForceSpringStrength = ForceSpringStrengthATVTrack;
+				EnableDamper = EnableDamperATVTrack;
+				DamperStrength = DamperStrengthATVTrack;
 
 				romnameDemul = "ATV Track";
 

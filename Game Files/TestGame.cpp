@@ -17,13 +17,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 wchar_t *settingsFN = TEXT(".\\FFBPlugin.ini");
 
-//GameId test values:
-//const int TEST_GAME_CONST = -1;
-//const int TEST_GAME_SINE = -2;
-//const int TEST_GAME_FRICTION = -3;
-//const int TEST_GAME_SPRING = -4;
-//const int TEST_GAME_HEAVY = -5;
-//const int TEST_GAME_LOOSE = -6;
 int configGameIdEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"), 1, settingsFN);
 
 void TestGame::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
@@ -51,6 +44,9 @@ void TestGame::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		break;
 	case -7:
 		triggers->Rumble(1.0, 1.0, SDL_HAPTIC_INFINITY);
+		break;
+	case -8:
+		triggers->RumbleTriggers(1.0, 1.0, SDL_HAPTIC_INFINITY);
 		break;
 	}
 }

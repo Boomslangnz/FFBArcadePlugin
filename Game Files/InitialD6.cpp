@@ -14,6 +14,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "InitialD6.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 static int carscollide(int ffcollide) {
 	switch (ffcollide) {
 	case 0x50F05:
@@ -133,6 +136,11 @@ void InitialD6::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 		helpers->log((char*)ffs.c_str());
 		ffcarcollision = carscollide(ff);
 		ffrubbingwalls = rubbingwalls(ff);
+
+		if (EnableDamper == 1)
+		{
+			triggers->Damper(DamperStrength / 100.0);
+		}
 
 		if (ff == 0x60000)
 		{

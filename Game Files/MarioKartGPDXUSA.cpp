@@ -14,6 +14,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "MarioKartGPDXUSA.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 void MarioKartGPDXUSA::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
 	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -76,6 +79,11 @@ void MarioKartGPDXUSA::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	int newweapon = ff14;
 	int static oldhitground = 0;
 	int newhitground = ff5;
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	if ((ConstantEffectForSteering == 1) && (ff11 == 1))
 	{

@@ -23,6 +23,8 @@ extern HINSTANCE gl_hlibavs;
 extern int joystick_index1;
 extern int joystick_index2;
 extern SDL_Joystick* GameController2;
+extern int EnableDamper;
+extern int DamperStrength;
 static bool avoiderror = true;
 static bool testbuttonA;
 static bool servicebuttonA;
@@ -211,6 +213,12 @@ static int ThreadLoop()
 		{
 			myHelpers->WriteFloat32((INT_PTR)gl_hjgtDll + 0x954394, 0, false);
 		}
+
+		if (EnableDamper == 1)
+		{
+			myTriggers->Damper(DamperStrength / 100.0);
+		}
+
 		if ((ff3 != 0x00) && (ff4 != 0x00))
 		{
 			if ((ff2 > 0x00)& (ff2 < 0x40))

@@ -19,6 +19,8 @@ static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
 extern SDL_Event e;
+extern int EnableDamper;
+extern int DamperStrength;
 static bool init = false;
 static int SpeedStrength;
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
@@ -136,6 +138,11 @@ static int ThreadLoop()
 	else
 	{
 		SpeedStrength = 0;
+	}
+
+	if (EnableDamper == 1)
+	{
+		myTriggers->Damper(DamperStrength / 100.0);
 	}
 
 	if ((oldgear != newgear) && (ff8 == 1) && (ffspeed >= 0.1))

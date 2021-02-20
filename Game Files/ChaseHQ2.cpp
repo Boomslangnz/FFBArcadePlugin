@@ -13,7 +13,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "ChaseHQ2.h"
-
+extern int EnableDamper;
+extern int DamperStrength;
 static bool removecel = false;
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int RemoveCelShadedFilter = GetPrivateProfileInt(TEXT("Settings"), TEXT("RemoveCelShadedFilter"), 0, settingsFilename);
@@ -113,6 +114,11 @@ void ChaseHQ2::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 			removecel = true;
 		}
 		helpers->WriteByte(0x130CB30, 0x00, true); // Remove Cel Shaded Filter
+	}
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
 	}
 
 	helpers->log("got value: ");

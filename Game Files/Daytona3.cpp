@@ -19,6 +19,8 @@ static bool keybdleft = false;
 static bool keybdright = false;
 static bool keybdup = false;
 static bool init = false;
+extern int EnableDamper;
+extern int DamperStrength;
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
@@ -188,6 +190,11 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 				SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
 			}
 		}
+	}
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
 	}
 
 	if (ff > 15)

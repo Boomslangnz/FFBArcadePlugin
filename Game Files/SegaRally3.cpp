@@ -14,11 +14,19 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "SegaRally3.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 void SegaRally3::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	helpers->log("in SR3 Ffbloop");
 	const int ff = GetTeknoParrotFFB();
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	if (ff > 15)
 	{

@@ -56,6 +56,8 @@ extern int configAlternativeMinForceRight;
 extern int configAlternativeMaxForceRight;
 extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
+extern int EnableDamper;
+extern int DamperStrength;
 
 static int DaytonaAIMultiplayerHack = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaAIMultiplayerHack"), 0, settingsFilename);
 static int DaytonaForcePanoramicAttract = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaForcePanoramicAttract"), 0, settingsFilename);
@@ -71,6 +73,8 @@ static int configFeedbackLengthDaytona = GetPrivateProfileInt(TEXT("Settings"), 
 static int PowerModeDaytona = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDaytona"), 0, settingsFilename);
 static int EnableForceSpringEffectDaytona = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytona"), 0, settingsFilename);
 static int ForceSpringStrengthDaytona = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytona"), 0, settingsFilename);
+static int EnableDamperDaytona = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperDaytona"), 0, settingsFilename);
+static int DamperStrengthDaytona = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthDaytona"), 100, settingsFilename);
 
 static int configMinForceSRally = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSRally"), 0, settingsFilename);
 static int configMaxForceSRally = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSRally"), 100, settingsFilename);
@@ -82,6 +86,8 @@ static int configFeedbackLengthSRally = GetPrivateProfileInt(TEXT("Settings"), T
 static int PowerModeSRally = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSRally"), 0, settingsFilename);
 static int EnableForceSpringEffectSRally = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSRally"), 0, settingsFilename);
 static int ForceSpringStrengthSRally = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSRally"), 0, settingsFilename);
+static int EnableDamperSRally = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperSRally"), 0, settingsFilename);
+static int DamperStrengthSRally = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthSRally"), 100, settingsFilename);
 
 static int configMinForceIndy500 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceIndy500"), 0, settingsFilename);
 static int configMaxForceIndy500 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceIndy500"), 100, settingsFilename);
@@ -93,6 +99,8 @@ static int configFeedbackLengthIndy500 = GetPrivateProfileInt(TEXT("Settings"), 
 static int PowerModeIndy500 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeIndy500"), 0, settingsFilename);
 static int EnableForceSpringEffectIndy500 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectIndy500"), 0, settingsFilename);
 static int ForceSpringStrengthIndy500 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthIndy500"), 0, settingsFilename);
+static int EnableDamperIndy500 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperIndy500"), 0, settingsFilename);
+static int DamperStrengthIndy500 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthIndy500"), 100, settingsFilename);
 
 static int configMinForceSTCC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSTCC"), 0, settingsFilename);
 static int configMaxForceSTCC = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSTCC"), 100, settingsFilename);
@@ -104,6 +112,8 @@ static int configFeedbackLengthSTCC = GetPrivateProfileInt(TEXT("Settings"), TEX
 static int PowerModeSTCC = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSTCC"), 0, settingsFilename);
 static int EnableForceSpringEffectSTCC = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSTCC"), 0, settingsFilename);
 static int ForceSpringStrengthSTCC = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSTCC"), 0, settingsFilename);
+static int EnableDamperSTCC = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperSTCC"), 0, settingsFilename);
+static int DamperStrengthSTCC = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthSTCC"), 100, settingsFilename);
 
 static int configMinForceOverRev = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceOverRev"), 0, settingsFilename);
 static int configMaxForceOverRev = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceOverRev"), 100, settingsFilename);
@@ -115,6 +125,8 @@ static int configFeedbackLengthOverRev = GetPrivateProfileInt(TEXT("Settings"), 
 static int PowerModeOverRev = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeOverRev"), 0, settingsFilename);
 static int EnableForceSpringEffectOverRev = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectOverRev"), 0, settingsFilename);
 static int ForceSpringStrengthOverRev = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthOverRev"), 0, settingsFilename);
+static int EnableDamperOverRev = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperOverRev"), 0, settingsFilename);
+static int DamperStrengthOverRev = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthOverRev"), 100, settingsFilename);
 
 static int configMinForceSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSuperGT"), 0, settingsFilename);
 static int configMaxForceSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSuperGT"), 100, settingsFilename);
@@ -126,6 +138,8 @@ static int configFeedbackLengthSuperGT = GetPrivateProfileInt(TEXT("Settings"), 
 static int PowerModeSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSuperGT"), 0, settingsFilename);
 static int EnableForceSpringEffectSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSuperGT"), 0, settingsFilename);
 static int ForceSpringStrengthSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSuperGT"), 0, settingsFilename);
+static int EnableDamperSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperSuperGT"), 0, settingsFilename);
+static int DamperStrengthSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthSuperGT"), 100, settingsFilename);
 
 static bool init = false;
 static bool CustomStrengthInit = false;
@@ -275,6 +289,11 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 		triggers->Springi(ForceSpringStrength / 100.0);
 	}
 
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
+
 	if (!outputinit)
 	{
 		if (EnableOutputs == 1)
@@ -372,6 +391,8 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 			PowerMode = PowerModeSRally;
 			EnableForceSpringEffect = EnableForceSpringEffectSRally;
 			ForceSpringStrength = ForceSpringStrengthSRally;
+			EnableDamper = EnableDamperSRally;
+			DamperStrength = DamperStrengthSRally;
 		}
 
 		UINT8 ff1 = helpers->ReadByte(0x174CF4, /* isRelativeOffset*/ true); //SegaRallyChampionship
@@ -412,6 +433,8 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 			PowerMode = PowerModeDaytona;
 			EnableForceSpringEffect = EnableForceSpringEffectDaytona;
 			ForceSpringStrength = ForceSpringStrengthDaytona;
+			EnableDamper = EnableDamperDaytona;
+			DamperStrength = DamperStrengthDaytona;
 		}
 
 		if (DaytonaForcePanoramicAttract == 1)
@@ -997,6 +1020,8 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 			PowerMode = PowerModeIndy500;
 			EnableForceSpringEffect = EnableForceSpringEffectIndy500;
 			ForceSpringStrength = ForceSpringStrengthIndy500;
+			EnableDamper = EnableDamperIndy500;
+			DamperStrength = DamperStrengthIndy500;
 		}
 
 		ff = helpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Indy500
@@ -1017,6 +1042,8 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 			PowerMode = PowerModeSTCC;
 			EnableForceSpringEffect = EnableForceSpringEffectSTCC;
 			ForceSpringStrength = ForceSpringStrengthSTCC;
+			EnableDamper = EnableDamperSTCC;
+			DamperStrength = DamperStrengthSTCC;
 		}
 
 		ff = helpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Sega Touring Car Championship
@@ -1037,6 +1064,8 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 			PowerMode = PowerModeOverRev;
 			EnableForceSpringEffect = EnableForceSpringEffectOverRev;
 			ForceSpringStrength = ForceSpringStrengthOverRev;
+			EnableDamper = EnableDamperOverRev;
+			DamperStrength = DamperStrengthOverRev;
 		}
 
 		ff = helpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //OverRev
@@ -1057,6 +1086,8 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 			PowerMode = PowerModeSuperGT;
 			EnableForceSpringEffect = EnableForceSpringEffectSuperGT;
 			ForceSpringStrength = ForceSpringStrengthSuperGT;
+			EnableDamper = EnableDamperSuperGT;
+			DamperStrength = DamperStrengthSuperGT;
 		}
 
 		ff = helpers->ReadByte(0x17285B, /* isRelativeOffset*/ true); //Super GT 24h

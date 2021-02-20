@@ -15,6 +15,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "InitialD4Japan.h"
 #include "math.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 void InitialD4Japan::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	UINT8 ff = helpers->ReadByte(0x0898985A, /* isRelativeOffset */ false);
@@ -23,6 +26,11 @@ void InitialD4Japan::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	if (ff2 == 0x86)
 	{

@@ -22,6 +22,9 @@ static UINT8 ff1;
 static UINT8 ff2;
 static UINT8 ff3;
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
 static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
@@ -33,6 +36,11 @@ void InitialD0v211::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
 	{
 		ExitProcess(0);
+	}
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
 	}
 
 	if (IDZMode == 0)

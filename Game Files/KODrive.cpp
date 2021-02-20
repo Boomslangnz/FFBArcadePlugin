@@ -14,12 +14,20 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "KODrive.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 void KODrive::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	UINT8 ff = helpers->ReadByte(0x00B261F6, /* isRelativeOffset */ false);
 	UINT8 ff1 = helpers->ReadByte(0x00B261F5, /* isRelativeOffset */ false);
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	if ((ff == 10) & (ff1 == 30))
 	{

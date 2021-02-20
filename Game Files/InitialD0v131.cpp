@@ -15,6 +15,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "InitialD0v131.h"
 #include "math.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 static UINT8 ff;
 static UINT8 oldff;
 static UINT8 newff;
@@ -33,6 +36,11 @@ void InitialD0::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
 	{
 		ExitProcess(0);
+	}
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
 	}
 
 	if (IDZMode == 0)

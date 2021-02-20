@@ -14,6 +14,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "BG4JP.h"
 static int SpeedStrength;
+extern int EnableDamper;
+extern int DamperStrength;
 void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
 	int ff = helpers->ReadInt32(0x42EBB0, /* isRelativeOffset */ true);
@@ -63,6 +65,11 @@ void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char *)ffs.c_str());
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 		
 	if ((2000000 < ff) && (ff < 4000000))
 	{

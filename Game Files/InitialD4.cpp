@@ -15,6 +15,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "InitialD4.h"
 #include "math.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 void InitialD4::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	UINT8 ff = helpers->ReadByte(0x089AE89A, /* isRelativeOffset */ false);
@@ -23,6 +26,11 @@ void InitialD4::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	if (ff2 == 0x86)
 	{

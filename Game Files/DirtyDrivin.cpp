@@ -13,6 +13,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "DirtyDrivin.h"
+extern int EnableDamper;
+extern int DamperStrength;
 
 void DirtyDrivin::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -28,6 +30,11 @@ void DirtyDrivin::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 		//double percentForce = ffstiffness / 1.25;
 		//triggers->Spring(percentForce);
 	//}
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	if (ff > 0)
 	{

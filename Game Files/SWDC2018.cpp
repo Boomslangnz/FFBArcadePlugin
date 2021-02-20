@@ -14,6 +14,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "SWDC2018.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
 
@@ -27,6 +30,11 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	UINT8 ff1 = helpers->ReadByte(0x8E5CCF4, true);
 	UINT8 ff2 = helpers->ReadByte(0x8E5CCF5, true);
 	UINT8 ff3 = helpers->ReadByte(0x8E5CCF6, true);
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	if (ff1 == 80)
 	{

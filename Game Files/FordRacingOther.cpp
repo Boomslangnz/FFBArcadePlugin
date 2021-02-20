@@ -16,6 +16,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 static EffectTriggers *myTriggers;
 static EffectConstants *myConstants;
 static Helpers *myHelpers;
+extern int EnableDamper;
+extern int DamperStrength;
 
 static bool init = false;
 
@@ -80,6 +82,11 @@ void FordRacingOther::FFBLoop(EffectConstants *constants, Helpers *helpers, Effe
 				init = true;
 			}
 		}
+	}
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
 	}
 		
 	myTriggers = triggers;

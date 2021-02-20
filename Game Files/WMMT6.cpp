@@ -15,6 +15,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "WMMT6.h"
 #include "SDL.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
@@ -157,6 +159,11 @@ void WMMT6::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		+ " | collisions: " + std::to_string(collisions) + " | tires slip: " + std::to_string(tiresSlip)
 		+ " | speed: " + std::to_string(speed);
 	helpers->log((char*)msg.c_str());
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 
 	double percentForce;
 	if (0.001 > spring && !gameFfbStarted)

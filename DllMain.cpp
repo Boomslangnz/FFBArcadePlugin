@@ -893,6 +893,8 @@ int PowerMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerMode"), 0, set
 int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 0, settingsFilename);
 int EnableRumbleTriggers = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumbleTriggers"), 0, settingsFilename);
 int ReverseRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumble"), 0, settingsFilename);
+int EnableDamper = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamper"), 0, settingsFilename);
+int DamperStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrength"), 100, settingsFilename);
 wchar_t* deviceGUIDString = new wchar_t[256];
 int DeviceGUID = GetPrivateProfileString(TEXT("Settings"), TEXT("DeviceGUID"), NULL, deviceGUIDString, 256, settingsFilename);
 int configFeedbackLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength"), 120, settingsFilename);
@@ -959,6 +961,7 @@ const int TEST_GAME_SPRING = -4;
 const int TEST_GAME_HEAVY = -5;
 const int TEST_GAME_LOOSE = -6;
 const int TEST_GAME_RUMBLE = -7;
+const int TEST_GAME_RUMBLE_TRIGGER = -8;
 
 const int DAYTONA_3 = 1;
 const int WACKY_RACES = 2;
@@ -1254,6 +1257,7 @@ void TriggerConstantEffect(int direction, double strength)
 	}
 
 	tempEffect.constant.level = level;
+
 	//hlp.log((char*)(std::to_string(level)).c_str());
 	SDL_HapticUpdateEffect(haptic, effects.effect_constant_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_constant_id, 1);
@@ -1384,6 +1388,7 @@ void TriggerDamperEffect(double strength)
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;
 	SHORT coeff = (SHORT)(strength * range + minForce);
+
 	if (coeff < 0)
 	{
 		coeff = 32767;
@@ -1391,8 +1396,8 @@ void TriggerDamperEffect(double strength)
 
 	tempEffect.condition.left_coeff[0] = (short)(coeff);
 	tempEffect.condition.right_coeff[0] = (short)(coeff);
-	tempEffect.condition.left_sat[0] = (short)(coeff) * 10;
-	tempEffect.condition.right_sat[0] = (short)(coeff) * 10;
+	tempEffect.condition.left_sat[0] = (DWORD)(coeff) * 2;
+	tempEffect.condition.right_sat[0] = (DWORD)(coeff) * 2;
 
 	SDL_HapticUpdateEffect(haptic, effects.effect_damper_id, &tempEffect);
 	SDL_HapticRunEffect(haptic, effects.effect_damper_id, 1);

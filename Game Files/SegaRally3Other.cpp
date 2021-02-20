@@ -1,13 +1,21 @@
 #include <string>
 #include "SegaRally3Other.h"
+
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
+extern int EnableDamper;
+extern int DamperStrength;
 
 static bool init = false;
 
 static int __stdcall Out32(DWORD device, DWORD data)
 {
+	if (EnableDamper == 1)
+	{
+		myTriggers->Damper(DamperStrength / 100.0);
+	}
+
 	if (data > 15)
 	{
 		double percentForce = (31 - data) / 15.0;

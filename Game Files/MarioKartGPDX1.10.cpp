@@ -14,6 +14,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "MarioKartGPDX1.10.h"
 
+extern int EnableDamper;
+extern int DamperStrength;
+
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ConstantEffectForSteering = GetPrivateProfileInt(TEXT("Settings"), TEXT("ConstantEffectForSteering"), 0, settingsFilename);
 static int ConstantEffectForSteeringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ConstantEffectForSteeringStrength"), 0, settingsFilename);
@@ -78,6 +81,11 @@ void MarioKartGPDX110::FFBLoop(EffectConstants *constants, Helpers *helpers, Eff
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff1);
 	helpers->log((char *)ffs.c_str()); helpers->log("got value: ");
+
+	if (EnableDamper == 1)
+	{
+		triggers->Damper(DamperStrength / 100.0);
+	}
 	
 	if ((ConstantEffectForSteering == 1) && (ff11 == 1))
 	{
