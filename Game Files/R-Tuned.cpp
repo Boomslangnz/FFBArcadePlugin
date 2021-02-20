@@ -13,7 +13,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "R-Tuned.h"
-static bool EnableFFB = false;
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 0, settingsFilename);
 
@@ -27,15 +26,11 @@ void RTuned::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigger
 	std::string ffs = std::to_string(BoostEffect);
 	helpers->log((char*)ffs.c_str());
 
-	if (!EnableFFB)
-	{
-		UINT8 LetsEnableFFB = helpers->ReadByte(0x8519C58, /* isRelativeOffset */ false);
+	UINT8 LetsEnableFFB = helpers->ReadByte(0x8519C58, /* isRelativeOffset */ false);
 
-		if (LetsEnableFFB == 0x03)
-		{
-			helpers->WriteByte(0x8519C58, 0x07, false);	
-			EnableFFB = true;
-		}
+	if (LetsEnableFFB == 0x01)
+	{
+		helpers->WriteByte(0x8519C58, 0x09, false);	
 	}
 
 	if (SpringCrash == 0xFF)
