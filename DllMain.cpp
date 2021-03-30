@@ -67,7 +67,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/AfterburnerClimax.h"
 #include "Game Files/PokkenTournament.h"
 #include "Game Files/SonicSegaAllStarsRacing.h"
-#include "Game Files/StormRacerG.h"
 #include "Game Files/M2Emulator.h"
 #include "Game Files/GTIClub3.h"
 #include "Game Files/Demul.h"
@@ -1009,7 +1008,6 @@ const int Sno_Cross = 44;
 const int Bat_man = 45;
 const int R_Tuned = 46;
 const int SEGA_RALLY_3_Other = 47;
-const int Storm_Racer_G = 48;
 const int INITIAL_D_0_211 = 49;
 const int SWDC_2018 = 50;
 const int MARIO_KART_GPDX_USA = 51;
@@ -2361,9 +2359,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SEGA_RALLY_3_Other:
 		game = new SegaRally3Other;
-		break;
-	case Storm_Racer_G:
-		game = new StormRacerG;
 		break;
 	case WACKY_RACES:
 		game = new WackyRaces;
