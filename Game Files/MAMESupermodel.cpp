@@ -3832,11 +3832,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				//helpers->log("got value: ");
 				//helpers->log((char*)ffs.c_str());
 
-				static char test[256];
-				memset(test, 0, 256);
-				sprintf(test, "hex print: %d", HardDrivinFFB);
-				OutputDebugStringA(test);
-
 				//std::string ffs = std::to_string(HardDrivinFFB);
 				//std::string val0 = std::to_string(vals[0]);
 				//std::string val1 = std::to_string(vals[1]);
@@ -3851,16 +3846,19 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				if (HardDrivinFFB > 100) {
 					HardDrivinFFB = 100;
 				}
+
 				if (HardDrivinFFB < -100) {
 					HardDrivinFFB = -100;
 				}
+
 				if (HardDrivinFFB >= 0)
 					{
 					double percentForce = HardDrivinFFB / 100.0;
 					double percentLength = 100;
 					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				} else if (HardDrivinFFB < 0)
+				} 
+				else if (HardDrivinFFB < 0)
 				{
 					HardDrivinFFB = -HardDrivinFFB;
 					double percentForce = HardDrivinFFB / 100.0;
@@ -3868,7 +3866,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				} 
-
 			}
 		}
 	}

@@ -6,3 +6,5 @@ packages/
 Release.Win32/
 Release.x64/
 Debug.x64/
+*.7z
+*.zip
