@@ -2805,16 +2805,16 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				stateFFB = newstateFFB;
 			}
 
-			if ((stateFFB > 0x00) && (stateFFB < 0x26))
+			if ((stateFFB > 0x00) && (stateFFB < 0x30))
 			{
-				double percentForce = (stateFFB) / 37.0;
+				double percentForce = (stateFFB) / 41.0;
 				double percentLength = 100;
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
-			else if ((stateFFB > 0x3F) && (stateFFB < 0x66))
+			else if ((stateFFB > 0x3F) && (stateFFB < 0x70))
 			{
-				double percentForce = (stateFFB - 64) / 37.0;
+				double percentForce = (stateFFB - 64) / 41.0;
 				double percentLength = 100;
 				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
