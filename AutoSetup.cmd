@@ -1,7 +1,5 @@
 @echo off
 set /p Build=<Version.txt
-mkdir ".\Release.Win32\Supermodel 32bit Outputs\ONLY COPY FILE INSIDE THIS FOLDER IF OLDER SUPERMODEL VERSION BEFORE r791"
-mkdir ".\Release.Win32\Supermodel 64bit Outputs\ONLY COPY FILE INSIDE THIS FOLDER IF OLDER SUPERMODEL VERSION BEFORE r791"
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Button Rumble 64bit" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Button Rumble 64bit" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v131" /Y
@@ -111,8 +109,6 @@ cd..
 del dinput8.exp
 del dinput8.lib
 del SDL2.dll
-move ".\Supermodel 32bit Outputs\SDL2.dll" ".\Supermodel 32bit Outputs\ONLY COPY FILE INSIDE THIS FOLDER IF OLDER SUPERMODEL VERSION BEFORE r791"
-move ".\Supermodel 64bit Outputs\SDL2.dll" ".\Supermodel 64bit Outputs\ONLY COPY FILE INSIDE THIS FOLDER IF OLDER SUPERMODEL VERSION BEFORE r791"
 rd /s /q ".\DInput8Wrapper\"
 "C:\Program Files\7-Zip\7z.exe" a ".\FFB Arcade Plugin %Build%.zip" ".\*"
 move ".\FFB Arcade Plugin %Build%.zip" "..\"
