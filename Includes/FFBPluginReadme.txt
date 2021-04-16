@@ -166,11 +166,13 @@ extremely generous.
 -Sega Rally Championship (M2 Emulator & MAME)
 -Sega Rally 2
 -Sega Rally 3
+-Sega World Drivers Championship 2018
 -Super Chase - Criminal Termination
 -Super GT 24h (M2 Emulator & MAME)
 -Smashing Drive
 -SnoCross
 -Sonic & Sega All Stars Racing
+-Storm Racer G
 -Space gun
 -Terminator 2
 -Transformers: Human Alliance
@@ -181,3 +183,5 @@ extremely generous.
 -Virtua Racing (CHANGE TO UPRIGHT CABINET)
 -Wacky Races
 -Wangan Midnight Maximum Tune 5
+-Wangan Midnight Maximum Tune 6
+-Wangan Midnight Maximum Tune 6R

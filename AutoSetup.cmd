@@ -88,6 +88,9 @@ cd..
 cd "Sonic & Sega All Stars Racing"
 rename dinput8.dll d3d9.dll
 cd..
+cd "Storm Racer G"
+rename dinput8.dll xinput1_3.dll
+cd..
 cd Supermodel 32bit Outputs
 rename dinput8.dll opengl32.dll
 cd..

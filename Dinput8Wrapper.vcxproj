@@ -49,6 +49,7 @@
     <ClInclude Include="Game Files\RoadFighters3D.h" />
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
+    <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
     <ClInclude Include="Game Files\WMMT6.h" />
     <ClInclude Include="Game Files\WMMT6R.h" />
@@ -106,6 +107,7 @@
     <ClCompile Include="Game Files\SegaRally3Other.cpp" />
     <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
+    <ClCompile Include="Game Files\StormRacerG.cpp" />
     <ClCompile Include="Game Files\SWDC2018.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />

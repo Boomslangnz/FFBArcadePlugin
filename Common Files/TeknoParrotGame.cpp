@@ -4,23 +4,54 @@ static int configGameId = GetPrivateProfileInt(TEXT("Settings"), TEXT("GameId"),
 
 TeknoParrotGame::TeknoParrotGame()
 {
+	secData = 0;
 	hSection = CreateFileMapping(INVALID_HANDLE_VALUE, nullptr, PAGE_READWRITE, 0, 64, L"TeknoParrot_JvsState");
+	if (hSection)
 	secData = MapViewOfFile(hSection, FILE_MAP_ALL_ACCESS, 0, 0, 64);
 
-	if (configGameId == 19)
+	if (secData)
 	{
-		ffbOffset = *((int*)secData + 6);
-		ffbOffset2 = *((int*)secData + 7);
+		if (*((int*)secData + 2) > 0)
+		{
+			*((int*)secData + 2) = 0;
+		}
+
+		if (*((int*)secData + 6) > 0)
+		{
+			*((int*)secData + 6) = 0;
+		}
+
+		if (*((int*)secData + 7) > 0)
+		{
+			*((int*)secData + 7) = 0;
+		}
+
+		if (*((int*)secData + 8) > 0)
+		{
+			*((int*)secData + 8) = 0;
+		}
+
+		if (configGameId == 54)
+		{
+			ffbOffset = *((int*)secData + 6);
+			ffbOffset2 = *((int*)secData + 7);
+			ffbOffset3 = *((int*)secData + 8);
+		}
+		else if (configGameId == 19)
+		{
+			ffbOffset = *((int*)secData + 6);
+			ffbOffset2 = *((int*)secData + 7);
+		}
+		else
+		{
+			ffbOffset = *((int*)secData + 2);
+		}
 	}
-	else
-	{
-		ffbOffset = *((int*)secData + 2);
-	}	
 }
 
 int TeknoParrotGame::GetTeknoParrotFFB()
 {
-	if (configGameId == 19)
+	if (configGameId == 19 || configGameId == 54)
 	{
 		ffbOffset = *((int*)secData + 6);
 	}
@@ -36,6 +67,12 @@ int TeknoParrotGame::GetTeknoParrotFFB2()
 {
 	ffbOffset2 = *((int*)secData + 7);
 	return ffbOffset2;
+}
+
+int TeknoParrotGame::GetTeknoParrotFFB3()
+{
+	ffbOffset3 = *((int*)secData + 8);
+	return ffbOffset3;
 }
 
 void TeknoParrotGame::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {

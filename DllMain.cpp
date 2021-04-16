@@ -81,6 +81,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/SWDC2018.h"
 #include "Game Files/Transformers.h"
 #include "Game Files/H2Overdrive.h"
+#include "Game Files/StormRacerG.h"
 
 // typedefs 
 typedef unsigned char U8;
@@ -1013,6 +1014,7 @@ const int SWDC_2018 = 50;
 const int MARIO_KART_GPDX_USA = 51;
 const int WMMT_6 = 52;
 const int WMMT_6_R = 53;
+const int SRG = 54;
 
 HINSTANCE Get_hInstance()
 {
@@ -2243,7 +2245,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if ((configGameId != 22) && (configGameId != 29) && (configGameId != 34)) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	if (configGameId != 22 && configGameId != 29 && configGameId != 34) //For games which need code to run quicker etc. Some games will crash if no sleep added
 	{
 		Sleep(2500);
 	}
@@ -2449,6 +2451,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case WMMT_6_R:
 		game = new WMMT6R;
+		break;
+	case SRG:
+		game = new StormRacerG;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
