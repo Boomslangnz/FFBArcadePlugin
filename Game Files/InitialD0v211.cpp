@@ -25,13 +25,25 @@ static UINT8 ff3;
 extern int EnableDamper;
 extern int DamperStrength;
 
+static bool outputinit = false;
+
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect"), 0, settingsFilename);
 static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
 static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
 static int IDZMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("IDZMode"), 0, settingsFilename);
+static int EnableOutputs = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableOutputs"), 0, settingsFilename);
 
 void InitialD0v211::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	if (!outputinit)
+	{
+		if (EnableOutputs == 1)
+		{
+			outputinit = true;
+			LoadLibraryA("OutputBlaster.dll");
+		}
+	}
 
 	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
 	{

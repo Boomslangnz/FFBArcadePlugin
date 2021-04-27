@@ -18,6 +18,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 extern int EnableDamper;
 extern int DamperStrength;
 
+static bool outputinit = false;
+
 static UINT8 ff;
 static UINT8 oldff;
 static UINT8 newff;
@@ -30,8 +32,18 @@ static int EnableForceSpringEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT
 static int ForceSpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength"), 0, settingsFilename);
 static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
 static int IDZMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("IDZMode"), 0, settingsFilename);
+static int EnableOutputs = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableOutputs"), 0, settingsFilename);
 
 void InitialD0::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	if (!outputinit)
+	{
+		if (EnableOutputs == 1)
+		{
+			outputinit = true;
+			LoadLibraryA("OutputBlaster.dll");
+		}
+	}
 
 	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
 	{
