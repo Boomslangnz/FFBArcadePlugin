@@ -13,90 +13,87 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "BG4JP.h"
-static int SpeedStrength;
+
 extern int EnableDamper;
 extern int DamperStrength;
+static bool GearShift;
+static bool WeAreRacing;
+static UINT8 oldgear;
+static UINT8 newgear;
+
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 100, settingsFilename);
+static int GearChangeStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearChangeStrength"), 100, settingsFilename);
+static int GearChangeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearSinePeriod"), 100, settingsFilename);
+static int EnableBoostEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableBoostEffect"), 0, settingsFilename);
+static int EnableGearShiftEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableGearShiftEffect"), 0, settingsFilename);
+static int BoostSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("BoostSinePeriod"), 0, settingsFilename);
+static int BoostFadeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("BoostFadeSinePeriod"), 0, settingsFilename);
+
 void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-	int ff = helpers->ReadInt32(0x42EBB0, /* isRelativeOffset */ true);
-	float ffspeed = helpers->ReadFloat32(0x3F3000, /* isRelativeOffset */ true);
-	float ff2 = helpers->ReadFloat32(0x42EAB4, /* isRelativeOffset */ true);
-	if ((ffspeed >= 0.1) & (ffspeed <= 15))
-	{
-		SpeedStrength = 10;
-	}
-	else if ((ffspeed >= 15.01) & (ffspeed <= 35))
-	{
-		SpeedStrength = 20;
-	}
-	else if ((ffspeed >= 35.01) & (ffspeed <= 55))
-	{
-		SpeedStrength = 30;
-	}
-	else if ((ffspeed >= 55.01) & (ffspeed <= 75))
-	{
-		SpeedStrength = 40;
-	}
-	else if ((ffspeed >= 75.01) & (ffspeed <= 90))
-	{
-		SpeedStrength = 51;
-	}
-	else if ((ffspeed >= 90.01) & (ffspeed <= 110))
-	{
-		SpeedStrength = 62;
-	}
-	else if ((ffspeed >= 110.01) & (ffspeed <= 130))
-	{
-		SpeedStrength = 75;
-	}
-	else if ((ffspeed >= 130.01) & (ffspeed <= 150))
-	{
-		SpeedStrength = 90;
-	}
-	else if (ffspeed > 150.01)
-	{
-		SpeedStrength = 100;
-	}
-	else
-	{
-		SpeedStrength = 0;
-	}
-	
+	UINT8 InRace = helpers->ReadInt32(0x4A9508, true);
+	UINT8 GoundContact = helpers->ReadInt32(0x42EBB1, true);
+	UINT8 WallContact = helpers->ReadInt32(0x42EBB2, true);
+	UINT8 CarContact = helpers->ReadInt32(0x42EBB3, true);
+	UINT8 ShiftEffect = helpers->ReadInt32(0x42ECF0, true);
+	float ffspeed = helpers->ReadFloat32(0x3F3000, true);
+	newgear = ShiftEffect;
+
 	helpers->log("got value: ");
-	std::string ffs = std::to_string(ff);
+	std::string ffs = std::to_string(WallContact);
 	helpers->log((char *)ffs.c_str());
 
 	if (EnableDamper == 1)
 	{
 		triggers->Damper(DamperStrength / 100.0);
 	}
-		
-	if ((2000000 < ff) && (ff < 4000000))
+
+	double percentForce = ffspeed / 180.00;
+	double percentLength = 100.0;
+
+	if (percentForce > 1.0)
+		percentForce = 1.0;
+
+	if (InRace)
 	{
-		double percentForce = SpeedStrength / 100.0;
-		double percentLength = 150;
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		triggers->Spring(SpringStrength / 100.0);
+
+		if (EnableGearShiftEffect)
+		{
+			if (oldgear != newgear && ShiftEffect != 0x00)
+			{
+				double percentForceShift = GearChangeStrength / 100.0;
+				triggers->Sine(GearChangeSinePeriod, 0, percentForceShift);
+				triggers->Rumble(0, percentForceShift, 100.0);
+			}
+		}
+
+		if (EnableBoostEffect)
+		{
+			if (WallContact & 0x02)
+			{
+				triggers->Sine(BoostSinePeriod, BoostFadeSinePeriod, percentForce);
+				triggers->Rumble(percentForce, percentForce, percentLength);
+			}
+		}
+
+		if (CarContact & 0x01)
+		{
+			triggers->Sine(120, 0, percentForce);
+			triggers->Rumble(percentForce, percentForce, percentLength);
+		}
+
+		if (WallContact & 0x10 || CarContact & 0x08)
+		{
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if (WallContact & 0x20 || CarContact & 0x02)
+		{
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
 	}
-	else if ((1000000 < ff) && (ff < 1600000))
-	{
-		double percentForce = SpeedStrength / 100.0;
-		double percentLength = 150;
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-	}
-	else if ((0.00000000000000000001 < ff2) && (ffspeed > 0.01))
-	{
-		double percentForce = (0.1);
-		double percentLength = (50);
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-	}
-	else if ((0.00000000000000000001 > ff2) && (ffspeed > 0.01))
-	{
-		double percentForce = (0.1);
-		double percentLength = (50);
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-	}
+	oldgear = newgear;
 }
