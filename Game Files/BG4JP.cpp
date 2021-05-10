@@ -38,6 +38,7 @@ void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	UINT8 CarContact = helpers->ReadInt32(0x42EBB3, true);
 	UINT8 ShiftEffect = helpers->ReadInt32(0x42ECF0, true);
 	float ffspeed = helpers->ReadFloat32(0x3F3000, true);
+	float DriftEffect = helpers->ReadFloat32(0x4305E8, true);
 	newgear = ShiftEffect;
 
 	helpers->log("got value: ");
@@ -93,6 +94,26 @@ void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		{
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+		else if (DriftEffect > 0)
+		{
+			double percentForce = DriftEffect * 2.0;
+
+			if (percentForce > 1.0)
+				percentForce = 1.0;
+
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+		else if (DriftEffect < 0)
+		{
+			double percentForce = -DriftEffect * 2.0;
+
+			if (percentForce > 1.0)
+				percentForce = 1.0;
+
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
 	}
 	oldgear = newgear;
