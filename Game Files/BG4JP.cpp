@@ -27,7 +27,6 @@ static int GearChangeStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gea
 static int GearChangeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearSinePeriod"), 100, settingsFilename);
 static int EnableBoostEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableBoostEffect"), 0, settingsFilename);
 static int EnableGearShiftEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableGearShiftEffect"), 0, settingsFilename);
-static int EnableDriftEffect = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDriftEffect"), 0, settingsFilename);
 static int BoostSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("BoostSinePeriod"), 0, settingsFilename);
 static int BoostFadeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("BoostFadeSinePeriod"), 0, settingsFilename);
 
@@ -38,8 +37,8 @@ void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	UINT8 WallContact = helpers->ReadInt32(0x42EBB2, true);
 	UINT8 CarContact = helpers->ReadInt32(0x42EBB3, true);
 	UINT8 ShiftEffect = helpers->ReadInt32(0x42ECF0, true);
+	UINT8 CurrentView = helpers->ReadInt32(0x3F2654, true);
 	float ffspeed = helpers->ReadFloat32(0x3F3000, true);
-	float DriftEffect = helpers->ReadFloat32(0x4305E8, true);
 	newgear = ShiftEffect;
 
 	helpers->log("got value: ");
@@ -95,33 +94,6 @@ void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 		{
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-		}
-		else if (DriftEffect > 0)
-		{
-			if (EnableDriftEffect)
-			{
-				double percentForce = DriftEffect * 2.0;
-
-				if (percentForce > 1.0)
-					percentForce = 1.0;
-
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-		}
-		else if (DriftEffect < 0)
-		{
-			if (EnableDriftEffect)
-			{
-
-				double percentForce = -DriftEffect * 2.0;
-
-				if (percentForce > 1.0)
-					percentForce = 1.0;
-
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
 		}
 	}
 	oldgear = newgear;
