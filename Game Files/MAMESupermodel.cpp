@@ -21,7 +21,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 std::string dayto2pe("dayto2pe");
 std::string daytona2("daytona2");
 std::string dirtdvlsa("dirtdvlsa");
+std::string dirtdvlsau("dirtdvlsau");
 std::string dirtdvls("dirtdvls");
+std::string dirtdvlsu("dirtdvlsu");
 std::string dirtdvlsj("dirtdvlsj");
 std::string dirtdvlsg("dirtdvlsg");
 std::string ecau("ecau");
@@ -31,6 +33,7 @@ std::string ecaj("ecaj");
 std::string lemans24("lemans24");
 std::string scud("scud");
 std::string scuda("scuda");
+std::string scuddx("scuddx");
 std::string scudau("scudau");
 std::string scudj("scudj");
 std::string scudplus("scudplus");
@@ -1730,7 +1733,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "Daytona2Active";
 			}
 
-			if (romname == scud || romname == scuda || romname == scudau || romname == scudj || romname == scudplus || romname == scudplusa)
+			if (romname == scud || romname == scuda || romname == scudau || romname == scuddx|| romname == scudj || romname == scudplus || romname == scudplusa)
 			{
 				configMinForce = configMinForceScud;
 				configMaxForce = configMaxForceScud;
@@ -1762,7 +1765,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "Daytona2Active";
 			}
 
-			if (romname == dirtdvlsa || romname == dirtdvls || romname == dirtdvlsj || romname == dirtdvlsg)
+			if (romname == dirtdvlsa || romname == dirtdvls || romname == dirtdvlsj || romname == dirtdvlsg || romname == dirtdvlsu || romname == dirtdvlsau)
 			{
 				configMinForce = configMinForceDirtDevils;
 				configMaxForce = configMaxForceDirtDevils;
