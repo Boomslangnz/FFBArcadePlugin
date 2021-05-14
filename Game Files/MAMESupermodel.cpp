@@ -31,11 +31,13 @@ std::string ecaj("ecaj");
 std::string lemans24("lemans24");
 std::string scud("scud");
 std::string scuda("scuda");
+std::string scudau("scudau");
 std::string scudj("scudj");
 std::string scudplus("scudplus");
 std::string scudplusa("scudplusa");
 std::string srally2("srally2");
 std::string srally2x("srally2x");
+std::string srally2dx("srally2dx");
 std::string srally2p("srally2p");
 std::string srally2pa("srally2pa");
 
@@ -1728,7 +1730,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "Daytona2Active";
 			}
 
-			if (romname == scud || romname == scuda || romname == scudj || romname == scudplus || romname == scudplusa)
+			if (romname == scud || romname == scuda || romname == scudau || romname == scudj || romname == scudplus || romname == scudplusa)
 			{
 				configMinForce = configMinForceScud;
 				configMaxForce = configMaxForceScud;
@@ -1778,7 +1780,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "DirtDevilsActive";
 			}
 
-			if (romname == srally2 || romname == srally2x || romname == srally2p || romname == srally2pa)
+			if (romname == srally2 || romname == srally2x || romname == srally2dx || romname == srally2p || romname == srally2pa)
 			{
 				configMinForce = configMinForceSRally2;
 				configMaxForce = configMaxForceSRally2;
