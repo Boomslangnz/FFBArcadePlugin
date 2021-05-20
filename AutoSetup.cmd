@@ -40,6 +40,9 @@ cd..
 cd Chase HQ 2
 rename dinput8.dll d3d9.dll
 cd..
+cd D1GP Arcade
+rename dinput8.dll winmm.dll
+cd..
 cd Demul
 rename dinput8.dll winmm.dll
 cd..

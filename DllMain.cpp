@@ -35,6 +35,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Batman.h"
 #include "Game Files/BG4JP.h"
 #include "Game Files/ChaseHQ2.h"
+#include "Game Files/D1GP.h"
 #include "Game Files/Daytona3.h"
 #include "Game Files/DirtyDrivin.h"
 #include "Game Files/FordRacing.h"
@@ -1015,6 +1016,7 @@ const int MARIO_KART_GPDX_USA = 51;
 const int WMMT_6 = 52;
 const int WMMT_6_R = 53;
 const int SRG = 54;
+const int D1_GP = 55;
 
 HINSTANCE Get_hInstance()
 {
@@ -2454,6 +2456,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SRG:
 		game = new StormRacerG;
+		break;
+	case D1_GP:
+		game = new D1GP;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

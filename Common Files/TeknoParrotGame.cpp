@@ -31,7 +31,7 @@ TeknoParrotGame::TeknoParrotGame()
 			*((int*)secData + 8) = 0;
 		}
 
-		if (configGameId == 54)
+		if (configGameId == 54 || configGameId == 55)
 		{
 			ffbOffset = *((int*)secData + 6);
 			ffbOffset2 = *((int*)secData + 7);
@@ -51,7 +51,7 @@ TeknoParrotGame::TeknoParrotGame()
 
 int TeknoParrotGame::GetTeknoParrotFFB()
 {
-	if (configGameId == 19 || configGameId == 54)
+	if (configGameId == 19 || configGameId == 54 || configGameId == 55)
 	{
 		ffbOffset = *((int*)secData + 6);
 	}

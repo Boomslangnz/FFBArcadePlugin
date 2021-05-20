@@ -24,6 +24,7 @@
     <ClInclude Include="Config\PersistentValues.h" />
     <ClInclude Include="Game Files\AliensExtermination.h" />
     <ClInclude Include="Game Files\Batman.h" />
+    <ClInclude Include="Game Files\D1GP.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GoldenGun.h" />
@@ -64,6 +65,7 @@
   <ItemGroup>
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
     <ClCompile Include="Game Files\Batman.cpp" />
+    <ClCompile Include="Game Files\D1GP.cpp" />
     <ClCompile Include="Game Files\DemulATVTrackInputs.cpp" />
     <ClCompile Include="Game Files\DemulFasterThanSpeedInputs.cpp" />
     <ClCompile Include="Game Files\DemulMaximumSpeedInputs.cpp" />
