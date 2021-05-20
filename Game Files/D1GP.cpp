@@ -23,9 +23,7 @@ static UINT8 oldEffect;
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EnableGroundEffects = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableGroundEffects"), 0, settingsFilename);
 static int FFBGrassSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBGrassSinePeriod"), 0, settingsFilename);
-static int FFBGrassSineStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBGrassSineStrength"), 0, settingsFilename);
 static int FFBGrassFadeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBGrassFadeSinePeriod"), 0, settingsFilename);
-static int FFBRumbleStripSineStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBRumbleStripSineStrength"), 0, settingsFilename);
 static int FFBRumbleStripSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBRumbleStripSinePeriod"), 0, settingsFilename);
 static int FFBRumbleStripFadeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBRumbleStripFadeSinePeriod"), 0, settingsFilename);
 
