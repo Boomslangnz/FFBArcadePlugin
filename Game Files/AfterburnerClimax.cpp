@@ -13,32 +13,47 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "AfterburnerClimax.h"
+static bool Version;
+static bool NewVersion;
+static bool OldVersion;
+UINT8 Vibration;
+
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int RumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("RumbleStrength"), 0, settingsFilename);
 
 void AfterburnerClimax::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
-	UINT8 ff = helpers->ReadByte(0x08347A5E, /* isRelativeOffset */ false);
+
+	if (!Version)
+	{
+		DWORD VersionOrig = helpers->ReadInt32(0x8347A5A, false);
+		DWORD VersionNew = helpers->ReadInt32(0x834A51A, false);
+
+		if (VersionOrig == 0x1320221)
+		{
+			OldVersion = true;
+			Version = true;
+		}
+
+		if (VersionNew == 0x1320221)
+		{
+			NewVersion = true;
+			Version = true;
+		}		
+	}
+
+	if (NewVersion)
+		Vibration = helpers->ReadByte(0x834A51E, false);
+	if (OldVersion)
+		Vibration = helpers->ReadByte(0x8347A5E, false);
 		
 	helpers->log("got value: ");
-	std::string ffs = std::to_string(ff);
+	std::string ffs = std::to_string(Vibration);
 	helpers->log((char *)ffs.c_str());
 
-	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-	int Rumble1Strength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumble1Strength"), 0, settingsFilename);
-	int Rumble2Strength = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumble2Strength"), 0, settingsFilename);
-	int Rumble1Length = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumble1Length"), 0, settingsFilename);
-	int Rumble2Length = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rumble2Length"), 0, settingsFilename);
-	
-	if (ff == 0x40)
+	if (Vibration & 0x40)
 	{
-		double percentForce = ((Rumble1Strength) / 100.0);
-		double percentLength = (Rumble1Length);
+		double percentForce = RumbleStrength / 100.0;
+		double percentLength = 100.0;
 		triggers->Rumble(percentForce, percentForce, percentLength);
 	}
-		
-	if (ff == 0x50)
-	{
-		double percentForce = ((Rumble2Strength) / 100.0);
-		double percentLength = (Rumble2Length);
-		triggers->Rumble(percentForce, percentForce, percentLength);
-	}
-		
 }
