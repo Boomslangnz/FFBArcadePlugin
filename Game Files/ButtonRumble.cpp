@@ -102,7 +102,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 	
 	while (SDL_WaitEvent(&e) != 0)
 	{
-		if (ShowButtonNumbersForSetup == 1)
+		if (ShowButtonNumbersForSetup)
 		{
 			if (e.type == SDL_JOYBUTTONDOWN)
 			{
@@ -122,73 +122,61 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 		{
 			if (e.jaxis.which == joystick_index1)
 			{
-				if ((BothRumbleMotor == 1) & (LeftRumbleMotor == 0) & (RightRumbleMotor == 0))
+				if (BothRumbleMotor && !LeftRumbleMotor && !RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Rumble || e.jbutton.button == Button2Rumble || e.jbutton.button == Button3Rumble || e.jbutton.button == Button4Rumble || e.jbutton.button == Button5Rumble || e.jbutton.button == Button6Rumble || e.jbutton.button == Button7Rumble || e.jbutton.button == Button8Rumble || e.jbutton.button == Button9Rumble || e.jbutton.button == Button10Rumble)
 					{
-						{
-							double percentForce = ((RumbleStrength) / 100.0);
-							double percentLength = (RumbleLength);
-							triggers->Rumble(percentForce, percentForce, percentLength);
-						}
+						double percentForce = RumbleStrength / 100.0;
+						double percentLength = RumbleLength * 1.0;
+						triggers->Rumble(percentForce, percentForce, percentLength);
 					}
 				}
-				if ((BothRumbleMotor == 0) & (LeftRumbleMotor == 1) & (RightRumbleMotor == 0))
+				if (!BothRumbleMotor && LeftRumbleMotor && !RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Rumble || e.jbutton.button == Button2Rumble || e.jbutton.button == Button3Rumble || e.jbutton.button == Button4Rumble || e.jbutton.button == Button5Rumble || e.jbutton.button == Button6Rumble || e.jbutton.button == Button7Rumble || e.jbutton.button == Button8Rumble || e.jbutton.button == Button9Rumble || e.jbutton.button == Button10Rumble)
 					{
-						{
-							double percentForce = ((RumbleStrength) / 100.0);
-							double percentLength = (RumbleLength);
+							double percentForce = RumbleStrength / 100.0;
+							double percentLength = RumbleLength * 1.0;
 							triggers->Rumble(0, percentForce, percentLength);
-						}
 					}
 				}
-				if ((BothRumbleMotor == 0) & (LeftRumbleMotor == 0) & (RightRumbleMotor == 1))
+				if (!BothRumbleMotor && !LeftRumbleMotor && RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Rumble || e.jbutton.button == Button2Rumble || e.jbutton.button == Button3Rumble || e.jbutton.button == Button4Rumble || e.jbutton.button == Button5Rumble || e.jbutton.button == Button6Rumble || e.jbutton.button == Button7Rumble || e.jbutton.button == Button8Rumble || e.jbutton.button == Button9Rumble || e.jbutton.button == Button10Rumble)
 					{
-						{
-							double percentForce = ((RumbleStrength) / 100.0);
-							double percentLength = (RumbleLength);
-							triggers->Rumble(percentForce, 0, percentLength);
-						}
+						double percentForce = RumbleStrength / 100.0;
+						double percentLength = RumbleLength * 1.0;
+						triggers->Rumble(percentForce, 0, percentLength);
 					}
 				}
 			}
 			if (e.jaxis.which == joystick_index2)
 			{
-				if ((BothRumbleMotor == 1) & (LeftRumbleMotor == 0) & (RightRumbleMotor == 0))
+				if (BothRumbleMotor && !LeftRumbleMotor && !RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Device2Rumble || e.jbutton.button == Button2Device2Rumble || e.jbutton.button == Button3Device2Rumble || e.jbutton.button == Button4Device2Rumble || e.jbutton.button == Button5Device2Rumble || e.jbutton.button == Button6Device2Rumble || e.jbutton.button == Button7Device2Rumble || e.jbutton.button == Button8Device2Rumble || e.jbutton.button == Button9Device2Rumble || e.jbutton.button == Button10Device2Rumble)
 					{
-						{
-							double percentForce = ((RumbleStrength) / 100.0);
-							double percentLength = (RumbleLength);
-							triggers->RumbleDevice2(percentForce, percentForce, percentLength);
-						}
+						double percentForce = RumbleStrength / 100.0;
+						double percentLength = RumbleLength * 1.0;
+						triggers->RumbleDevice2(percentForce, percentForce, percentLength);
 					}
 				}
-				if ((BothRumbleMotor == 0) & (LeftRumbleMotor == 1) & (RightRumbleMotor == 0))
+				if (!BothRumbleMotor && LeftRumbleMotor && !RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Device2Rumble || e.jbutton.button == Button2Device2Rumble || e.jbutton.button == Button3Device2Rumble || e.jbutton.button == Button4Device2Rumble || e.jbutton.button == Button5Device2Rumble || e.jbutton.button == Button6Device2Rumble || e.jbutton.button == Button7Device2Rumble || e.jbutton.button == Button8Device2Rumble || e.jbutton.button == Button9Device2Rumble || e.jbutton.button == Button10Device2Rumble)
 					{
-						{
-							double percentForce = ((RumbleStrength) / 100.0);
-							double percentLength = (RumbleLength);
-							triggers->RumbleDevice2(0, percentForce, percentLength);
-						}
+						double percentForce = RumbleStrength / 100.0;
+						double percentLength = RumbleLength * 1.0;
+						triggers->RumbleDevice2(0, percentForce, percentLength);
 					}
 				}
-				if ((BothRumbleMotor == 0) & (LeftRumbleMotor == 0) & (RightRumbleMotor == 1))
+				if (!BothRumbleMotor && !LeftRumbleMotor && RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Device2Rumble || e.jbutton.button == Button2Device2Rumble || e.jbutton.button == Button3Device2Rumble || e.jbutton.button == Button4Device2Rumble || e.jbutton.button == Button5Device2Rumble || e.jbutton.button == Button6Device2Rumble || e.jbutton.button == Button7Device2Rumble || e.jbutton.button == Button8Device2Rumble || e.jbutton.button == Button9Device2Rumble || e.jbutton.button == Button10Device2Rumble)
 					{
-						{
-							double percentForce = ((RumbleStrength) / 100.0);
-							double percentLength = (RumbleLength);
-							triggers->RumbleDevice2(percentForce, 0, percentLength);
-						}
+						double percentForce = RumbleStrength / 100.0;
+						double percentLength = RumbleLength * 1.0;
+						triggers->RumbleDevice2(percentForce, 0, percentLength);
 					}
 				}
 			}
@@ -199,22 +187,18 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 			{
 				if (e.jbutton.button == Button1Rumble || e.jbutton.button == Button2Rumble || e.jbutton.button == Button3Rumble || e.jbutton.button == Button4Rumble || e.jbutton.button == Button5Rumble || e.jbutton.button == Button6Rumble || e.jbutton.button == Button7Rumble || e.jbutton.button == Button8Rumble || e.jbutton.button == Button9Rumble || e.jbutton.button == Button10Rumble)
 				{
-					{
-						double percentForce = ((RumbleStrength) / 100.0);
-						double percentLength = (RumbleLength);
-						triggers->Rumble(0, 0, percentLength);
-					}
+					double percentForce = ((RumbleStrength) / 100.0);
+					double percentLength = RumbleLength * 1.0;
+					triggers->Rumble(0, 0, percentLength);
 				}
 			}
 			if (e.jaxis.which == joystick_index2)
 			{
 				if (e.jbutton.button == Button1Device2Rumble || e.jbutton.button == Button2Device2Rumble || e.jbutton.button == Button3Device2Rumble || e.jbutton.button == Button4Device2Rumble || e.jbutton.button == Button5Device2Rumble || e.jbutton.button == Button6Device2Rumble || e.jbutton.button == Button7Device2Rumble || e.jbutton.button == Button8Device2Rumble || e.jbutton.button == Button9Device2Rumble || e.jbutton.button == Button10Device2Rumble)
 				{
-					{
-						double percentForce = ((RumbleStrength) / 100.0);
-						double percentLength = (RumbleLength);
-						triggers->RumbleDevice2(0, 0, percentLength);
-					}
+					double percentForce = ((RumbleStrength) / 100.0);
+					double percentLength = RumbleLength * 1.0;
+					triggers->RumbleDevice2(0, 0, percentLength);
 				}
 			}
 		}

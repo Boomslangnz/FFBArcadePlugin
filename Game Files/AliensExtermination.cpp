@@ -65,6 +65,7 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 			ExitProcess(0);
 		}
 	}
+
 	if (!init)
 	{
 		for (int i = 0; i < SDL_NumJoysticks(); i++)
@@ -109,6 +110,7 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 				SDL_HapticRumbleInit(ControllerHaptic2);
 			}
 		}
+		init = true;
 	}
 	
 	static UINT8 oldAmmo = 0;
