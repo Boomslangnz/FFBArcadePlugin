@@ -138,6 +138,9 @@
     <ClCompile Include="Game Files\InitialD0v131.cpp" />
     <ClCompile Include="Game Files\StormRacerG.cpp" />
     <ClCompile Include="Game Files\D1GP.cpp" />
+    <ClCompile Include="Game Files\M2EmulatorDaytonaInputs.cpp" />
+    <ClCompile Include="Game Files\M2EmulatorSegaRallyInputs.cpp" />
+    <ClCompile Include="Game Files\M2EmulatorIndy500Inputs.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">

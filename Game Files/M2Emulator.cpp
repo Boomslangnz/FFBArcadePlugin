@@ -17,6 +17,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "math.h"
 #include "SDL.h"
 
+extern void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers);
+extern void M2EmulatorSegaRallyInputsEnabled(Helpers* helpers);
+extern void M2EmulatorIndy500InputsEnabled(Helpers* helpers);
+
 //M2 Emulator Games
 std::string SegaRallyChampionship("Sega Rally Championship");
 std::string SegaRallyChampionshipRevB("Sega Rally Championship (Rev B)");
@@ -58,7 +62,11 @@ extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
 extern int EnableDamper;
 extern int DamperStrength;
+static DWORD hookAddressM2A;
+static DWORD hookAddressM2B;
+static DWORD hookAddressM2C;
 
+static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 static int DaytonaAIMultiplayerHack = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaAIMultiplayerHack"), 0, settingsFilename);
 static int DaytonaForcePanoramicAttract = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaForcePanoramicAttract"), 0, settingsFilename);
 static int EnableOutputs = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableOutputs"), 0, settingsFilename);
@@ -141,11 +149,36 @@ static int ForceSpringStrengthSuperGT = GetPrivateProfileInt(TEXT("Settings"), T
 static int EnableDamperSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperSuperGT"), 0, settingsFilename);
 static int DamperStrengthSuperGT = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthSuperGT"), 100, settingsFilename);
 
+static HWND hWnd1;
+static HWND hWnd2;
+static HWND hWnd3;
+static HWND hWnd4;
+static HWND hWnd5;
+static HWND hWnd6;
+static HWND hWnd7;
+static HWND hWnd8;
+static HWND hWnd9;
+static HWND hWnd10;
+static HWND hWnd11;
+static HWND hWnd12;
+static HWND hWnd13;
+static HWND hWnd14;
+static HWND hWnd15;
+static HWND hWnd16;
+static HWND hWnd17;
+static HWND hWnd18;
+static HWND hWnd19;
+static HWND hWnd20;
+HWND hWndM2;
+
 static bool init = false;
+static bool inputinit = false;
 static bool CustomStrengthInit = false;
 static bool outputinit = false;
 
 static UINT8 ff;
+
+static void OldInputs(){}
 
 static bool __stdcall ExitHook(UINT uExitCode)
 {
@@ -178,110 +211,193 @@ static DWORD jmpBackAddy;
 
 char* romnameM2;
 
+static int ThreadLoop()
+{
+	if (hWnd1 > NULL || hWnd14 > NULL || hWnd15 > NULL)
+	{
+		if (InputDeviceWheelEnable)
+			M2EmulatorSegaRallyInputsEnabled(0);
+	}
+	
+	if (hWnd2 > NULL || hWnd7 > NULL || hWnd8 > NULL || hWnd9 > NULL || hWnd10 > NULL || hWnd11 > NULL || hWnd12 > NULL || hWnd13 > NULL)
+	{
+		if (InputDeviceWheelEnable)
+			M2EmulatorDaytonaUSAInputsEnabled(0);
+	}
+
+	if (hWnd3 > NULL || hWnd4 > NULL || hWnd5 > NULL || hWnd6 > NULL || hWnd16 > NULL || hWnd17 > NULL || hWnd18 > NULL || hWnd19 > NULL || hWnd20 > NULL)
+	{
+		if (InputDeviceWheelEnable)
+			M2EmulatorIndy500InputsEnabled(0);
+	}
+	return 0;
+}
+
+static DWORD WINAPI InputLoop(LPVOID lpParam)
+{
+	while (true)
+	{
+		ThreadLoop();
+		Sleep(16);
+	}
+}
+
 void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectTriggers * triggers) {
 
-	HWND hWnd1 = FindWindowA(0, ("Sega Rally Championship"));
-	HWND hWnd2 = FindWindowA(0, ("Daytona USA"));
-	HWND hWnd3 = FindWindowA(0, ("Indianapolis 500 (Rev A, Deluxe)"));
-	HWND hWnd4 = FindWindowA(0, ("Sega Touring Car Championship (Rev A)"));
-	HWND hWnd5 = FindWindowA(0, ("Over Rev"));
-	HWND hWnd6 = FindWindowA(0, ("Super GT 24h"));
-	HWND hWnd7 = FindWindowA(0, ("Daytona USA '93 Edition"));
-	HWND hWnd8 = FindWindowA(0, ("Daytona USA (Saturn Ads)"));
-	HWND hWnd9 = FindWindowA(0, ("Daytona USA Special Edition"));
-	HWND hWnd10 = FindWindowA(0, ("Daytona USA Turbo"));
-	HWND hWnd11 = FindWindowA(0, ("Daytona USA Turbo (Rev A)"));
-	HWND hWnd12 = FindWindowA(0, ("Daytona USA: GTX 2004"));
-	HWND hWnd13 = FindWindowA(0, ("Daytona USA: To The Maxx"));
-	HWND hWnd14 = FindWindowA(0, ("Sega Rally Championship (Rev B)"));
-	HWND hWnd15 = FindWindowA(0, ("Sega Rally Pro Drivin'"));
-	HWND hWnd16 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Newer rev)"));
-	HWND hWnd17 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Older rev)"));
-	HWND hWnd18 = FindWindowA(0, ("Sega Touring Car Championship"));
-	HWND hWnd19 = FindWindowA(0, ("Sega Touring Car Championship (Rev B)"));
-	HWND hWnd20 = FindWindowA(0, ("Over Rev (Model 2B)"));
+	hWnd1 = FindWindowA(0, ("Sega Rally Championship"));
+	hWnd2 = FindWindowA(0, ("Daytona USA"));
+	hWnd3 = FindWindowA(0, ("Indianapolis 500 (Rev A, Deluxe)"));
+	hWnd4 = FindWindowA(0, ("Sega Touring Car Championship (Rev A)"));
+	hWnd5 = FindWindowA(0, ("Over Rev"));
+	hWnd6 = FindWindowA(0, ("Super GT 24h"));
+	hWnd7 = FindWindowA(0, ("Daytona USA '93 Edition"));
+	hWnd8 = FindWindowA(0, ("Daytona USA (Saturn Ads)"));
+	hWnd9 = FindWindowA(0, ("Daytona USA Special Edition"));
+	hWnd10 = FindWindowA(0, ("Daytona USA Turbo"));
+	hWnd11 = FindWindowA(0, ("Daytona USA Turbo (Rev A)"));
+	hWnd12 = FindWindowA(0, ("Daytona USA: GTX 2004"));
+	hWnd13 = FindWindowA(0, ("Daytona USA: To The Maxx"));
+	hWnd14 = FindWindowA(0, ("Sega Rally Championship (Rev B)"));
+	hWnd15 = FindWindowA(0, ("Sega Rally Pro Drivin'"));
+	hWnd16 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Newer rev)"));
+	hWnd17 = FindWindowA(0, ("Indianapolis 500 (Rev A, Twin, Older rev)"));
+	hWnd18 = FindWindowA(0, ("Sega Touring Car Championship"));
+	hWnd19 = FindWindowA(0, ("Sega Touring Car Championship (Rev B)"));
+	hWnd20 = FindWindowA(0, ("Over Rev (Model 2B)"));
 
 	romnameM2 = new char[256];
+
+	if (hWnd1 > NULL || hWnd2 > NULL || hWnd3 > NULL || hWnd4 > NULL || hWnd5 > NULL || hWnd6 > NULL || hWnd7 > NULL || hWnd8 > NULL || hWnd9 > NULL || hWnd10 > NULL ||
+		hWnd11 > NULL || hWnd12 > NULL || hWnd13 > NULL || hWnd14 > NULL || hWnd15 > NULL || hWnd16 > NULL || hWnd17 > NULL || hWnd18 > NULL || hWnd19 > NULL || hWnd20 > NULL)
+	{
+		if (InputDeviceWheelEnable)
+		{
+			hookAddressM2A = 0x4CA450;
+			hookAddressM2B = 0x4CB870;
+			hookAddressM2C = 0x4C9080;
+			helpers->WriteNop(0xCCA6B, 6, true);
+
+			int hookLength = 6;
+
+			if (hookAddressM2A)
+			{
+				jmpBackAddy = hookAddressM2A + hookLength;
+				Hook((void*)hookAddressM2A, OldInputs, hookLength);
+			}
+
+			if (hookAddressM2B)
+			{
+				jmpBackAddy = hookAddressM2B + hookLength;
+				Hook((void*)hookAddressM2B, OldInputs, hookLength);
+			}
+
+			if (hookAddressM2C)
+			{
+				jmpBackAddy = hookAddressM2C + hookLength;
+				Hook((void*)hookAddressM2C, OldInputs, hookLength);
+			}
+		}
+	}
 
 	if (hWnd1 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Sega Rally Championship");
+		hWndM2 = hWnd1;
 	}
 	else if(hWnd2 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA");
+		hWndM2 = hWnd2;
 	}
 	else if (hWnd3 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Indianapolis 500 (Rev A, Deluxe)");
+		hWndM2 = hWnd3;
 	}
 	else if (hWnd4 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Sega Touring Car Championship (Rev A)");
+		hWndM2 = hWnd4;
 	}
 	else if (hWnd5 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Over Rev");
+		hWndM2 = hWnd5;
 	}
 	else if (hWnd6 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Super GT 24h");
+		hWndM2 = hWnd6;
 	}
 	else if (hWnd7 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA '93 Edition");
+		hWndM2 = hWnd7;
 	}
 	else if (hWnd8 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA (Saturn Ads)");
+		hWndM2 = hWnd8;
 	}
 	else if (hWnd9 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA Special Edition");
+		hWndM2 = hWnd9;
 	}
 	else if (hWnd10 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA Turbo");
+		hWndM2 = hWnd10;
 	}
 	else if (hWnd11 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA Turbo (Rev A)");
+		hWndM2 = hWnd11;
 	}
 	else if (hWnd12 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA: GTX 2004");
+		hWndM2 = hWnd12;
 	}
 	else if (hWnd13 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Daytona USA: To The Maxx");
+		hWndM2 = hWnd13;
 	}
 	else if (hWnd14 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Sega Rally Championship (Rev B)");
+		hWndM2 = hWnd14;
 	}
 	else if (hWnd15 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Sega Rally Pro Drivin'");
+		hWndM2 = hWnd15;
 	}
 	else if (hWnd16 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Indianapolis 500 (Rev A, Twin, Newer rev)");
+		hWndM2 = hWnd16;
 	}
 	else if (hWnd17 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Indianapolis 500 (Rev A, Twin, Older rev)");
+		hWndM2 = hWnd17;
 	}
 	else if (hWnd18 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Sega Touring Car Championship");
+		hWndM2 = hWnd18;
 	}
 	else if (hWnd19 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Sega Touring Car Championship (Rev B)");
+		hWndM2 = hWnd19;
 	}
 	else if (hWnd20 > NULL)
 	{
 		sprintf(romnameM2, "%s", "Over Rev (Model 2B)");
+		hWndM2 = hWnd20;
 	}
 
 	if (EnableForceSpringEffect == 1)
@@ -296,11 +412,18 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 
 	if (!outputinit)
 	{
-		if (EnableOutputs == 1)
+		if (EnableOutputs)
 		{
 			HMODULE lib = LoadLibraryA("OutputBlaster.dll");
 			outputinit = true;
 		}		
+	}
+
+	if (!inputinit)
+	{
+		if (InputDeviceWheelEnable)
+			CreateThread(NULL, 0, InputLoop, NULL, 0, NULL);
+		inputinit = true;
 	}
 
 	HMODULE hMod = GetModuleHandleA("KERNEL32.dll");

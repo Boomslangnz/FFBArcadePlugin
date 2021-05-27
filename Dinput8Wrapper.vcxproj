@@ -81,6 +81,9 @@
     <ClCompile Include="Game Files\DemulInitialDInputs.cpp" />
     <ClCompile Include="Game Files\InitialD0v211.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
+    <ClCompile Include="Game Files\M2EmulatorDaytonaInputs.cpp" />
+    <ClCompile Include="Game Files\M2EmulatorIndy500Inputs.cpp" />
+    <ClCompile Include="Game Files\M2EmulatorSegaRallyInputs.cpp" />
     <ClCompile Include="Game Files\MAMESupermodel.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDXUSA.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />

@@ -517,41 +517,41 @@ void ATVTrackInputsEnabled(Helpers* helpers)
 				}
 				else if (e.jhat.which == joystick_index2)
 				{
-					if (dpdup.compare(exit2) == 0)
+					if (dpdup2.compare(exit2) == 0)
 					{
 						system("taskkill /f /im demul.exe");
 					}
-					if (dpdup.compare(test2) == 0)
+					if (dpdup2.compare(test2) == 0)
 					{
 						helpers->WriteByte(ServiceTestAddress, servicetestread -= 0x08, false);
 						testbuttonA = true;
 					}
-					if (dpdup.compare(service2) == 0)
+					if (dpdup2.compare(service2) == 0)
 					{
 						helpers->WriteByte(ServiceTestAddress, servicetestread -= 0x02, false);
 						servicebuttonA = true;
 					}
-					if (dpdup.compare(coin2) == 0)
+					if (dpdup2.compare(coin2) == 0)
 					{
 						helpers->WriteByte(ServiceTestAddress, servicetestread -= 0x20, false);
 						coinA = true;
 					}
-					if (dpdup.compare(emergency2) == 0)
+					if (dpdup2.compare(emergency2) == 0)
 					{
 						helpers->WriteByte(BrakeAddress, brakeread += 0x40, false);
 						emergencystopA = true;
 					}
-					if (dpdup.compare(start2) == 0)
+					if (dpdup2.compare(start2) == 0)
 					{
 						helpers->WriteByte(BrakeAddress, brakeread -= 0x80, false);
 						startbuttonA = true;
 					}
-					if (dpdup.compare(volup2) == 0)
+					if (dpdup2.compare(volup2) == 0)
 					{
 						helpers->WriteByte(ServiceTestAddress, servicetestread -= 0x01, false);
 						volumeupA = true;
 					}
-					if (dpdup.compare(voldown2) == 0)
+					if (dpdup2.compare(voldown2) == 0)
 					{
 						helpers->WriteByte(ServiceTestAddress, servicetestread -= 0x04, false);
 						volumedownA = true;
