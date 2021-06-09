@@ -24,6 +24,7 @@ extern SDL_Event e;
 static UINT8 oldgear = 0;
 static bool init = false;
 static bool gameFfbStarted = false;
+static UINT8 TotalCP;
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 100, settingsFilename);
 static int FrictionStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FrictionStrength"), 0, settingsFilename);
@@ -38,47 +39,48 @@ static int GearChangeLength = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearC
 static int WheelSpinStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("WheelSpinStrength"), 100, settingsFilename);
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
 //static int ForceFullTune = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceFullTune"), 0, settingsFilename);
-//static int DisableRaceTimer = GetPrivateProfileInt(TEXT("Settings"), TEXT("DisableRaceTimer"), 0, settingsFilename);
-//static int EnableForceFinish = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceFinish"), 0, settingsFilename);
-//static int EnableForceTimeUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceTimeUp"), 0, settingsFilename);
-//static int ForceFinishButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceFinishButton"), 99, settingsFilename);
-//static int ForceTimeUpButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceTimeUpButton"), 99, settingsFilename);
+static int DisableRaceTimer = GetPrivateProfileInt(TEXT("Settings"), TEXT("DisableRaceTimer"), 0, settingsFilename);
+static int EnableForceFinish = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceFinish"), 0, settingsFilename);
+static int EnableForceTimeUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceTimeUp"), 0, settingsFilename);
+static int ForceFinishButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceFinishButton"), 99, settingsFilename);
+static int ForceTimeUpButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceTimeUpButton"), 99, settingsFilename);
 
-//static int InputThread(void* ptr)
-//{
-//	if (1 != EnableForceFinish && 1 != EnableForceTimeUp)
-//	{
-//		return 0;
-//	}
-//
-//	myHelpers->log("starting input thread");
-//	while (SDL_WaitEvent(&e) != 0)
-//	{
-//		if (e.type == SDL_JOYBUTTONDOWN)
-//		{
-//			myHelpers->log("button pressed");
-//			if (1 == EnableForceFinish && e.jbutton.button == ForceFinishButton)
-//			{
-//				INT_PTR ptr1 = myHelpers->ReadIntPtr(0x199A468, true);
-//				myHelpers->WriteByte(ptr1 + 0x28, 8, false);
-//			}
-//			else if (1 == EnableForceTimeUp && e.jbutton.button == ForceTimeUpButton)
-//			{
-//				int tempDisableRaceTimer = DisableRaceTimer;
-//				DisableRaceTimer = 0;
-//				myHelpers->WriteFloat32(0x199AE18, 0, true);
-//				if (1 == tempDisableRaceTimer)
-//				{
-//					Sleep(10000);
-//					DisableRaceTimer = tempDisableRaceTimer;
-//				}
-//			}
-//		}
-//	}
-//	myHelpers->log("input thread stopped");
-//	return 0;
-//}
-//
+static int InputThread(void* ptr)
+{
+	if (1 != EnableForceFinish && 1 != EnableForceTimeUp)
+	{
+		return 0;
+	}
+
+	myHelpers->log("starting input thread");
+	while (SDL_WaitEvent(&e) != 0)
+	{
+		if (e.type == SDL_JOYBUTTONDOWN)
+		{
+			myHelpers->log("button pressed");
+			if (1 == EnableForceFinish && e.jbutton.button == ForceFinishButton)
+			{
+				INT_PTR ptr1 = myHelpers->ReadIntPtr(0x1E5B5C8, true);
+				TotalCP = myHelpers->ReadByte(ptr1 + 0x00, false);
+				myHelpers->WriteByte(ptr1 + 0x28, TotalCP, false);
+			}
+			else if (1 == EnableForceTimeUp && e.jbutton.button == ForceTimeUpButton)
+			{
+				int tempDisableRaceTimer = DisableRaceTimer;
+				DisableRaceTimer = 0;
+				myHelpers->WriteFloat32(0x1E5B894, 0, true);
+				if (1 == tempDisableRaceTimer)
+				{
+					Sleep(10000);
+					DisableRaceTimer = tempDisableRaceTimer;
+				}
+			}
+		}
+	}
+	myHelpers->log("input thread stopped");
+	return 0;
+}
+
 //static int SpamThread(void* ptr)
 //{
 //	if (1 != ForceFullTune && 1 != DisableRaceTimer)
@@ -146,7 +148,7 @@ void WMMT6::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		myTriggers = triggers;
 		myConstants = constants;
 		myHelpers = helpers;
-		//SDL_CreateThread(InputThread, "InputThread", (void*)NULL);
+		SDL_CreateThread(InputThread, "InputThread", (void*)NULL);
 		//SDL_CreateThread(SpamThread, "SpamThread", (void*)NULL);
 	}
 
