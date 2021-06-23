@@ -108,6 +108,7 @@ public:
 	INT_PTR WriteIntPtr(INT_PTR offset, INT_PTR val, bool isRelativeOffset);
 	UINT8 WriteNop(INT_PTR offset, int countBytes, bool isRelativeOffset);
 	INT_PTR ReadIntPtr(INT_PTR offset, bool isRelativeOffset);
+	long long ReadLong(INT_PTR offset, bool isRelativeOffset);
 	float ReadFloat32(INT_PTR offset, bool isRelativeOffset);
 };
 

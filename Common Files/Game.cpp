@@ -108,6 +108,15 @@ INT_PTR Helpers::ReadIntPtr(INT_PTR offset, bool isRelativeOffset)
 	return val;
 };
 
+long long Helpers::ReadLong(INT_PTR offset, bool isRelativeOffset)
+{
+	SIZE_T read;
+	LPVOID trueOffset = (isRelativeOffset ? GetTranslatedOffset(offset) : (LPVOID)offset);
+	long long val;
+	ReadProcessMemory(GetCurrentProcess(), trueOffset, &val, sizeof(long long), &read);
+	return val;
+};
+
 float Helpers::ReadFloat32(INT_PTR offset, bool isRelativeOffset)
 {
 		
