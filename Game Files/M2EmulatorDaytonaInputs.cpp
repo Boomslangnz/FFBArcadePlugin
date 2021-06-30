@@ -43,11 +43,15 @@ static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 static int InputDeviceWheelSteeringAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelSteeringAxis"), 0, settingsFilename);
 static int InputDeviceWheelAcclAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelAcclAxis"), 0, settingsFilename);
 static int InputDeviceWheelBrakeAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelBrakeAxis"), 0, settingsFilename);
+static int InputDeviceWheelSteeringAxisDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelSteeringAxisDevice2 "), 0, settingsFilename);
+static int InputDeviceWheelAcclAxisDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelAcclAxisDevice2 "), 0, settingsFilename);
+static int InputDeviceWheelBrakeAxisDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelBrakeAxisDevice2 "), 0, settingsFilename);
 static int InputDeviceWheelReverseAxis = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelReverseAxis"), 0, settingsFilename);
 static int InputDeviceCombinedPedals = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceCombinedPedals"), 0, settingsFilename);
 static int SteeringDeadzone = GetPrivateProfileInt(TEXT("Settings"), TEXT("SteeringDeadzone"), 0, settingsFilename);
 static int PedalDeadzone = GetPrivateProfileInt(TEXT("Settings"), TEXT("PedalDeadzone"), 0, settingsFilename);
 static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
+static int ShowKeyBoardNameForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowKeyBoardNameForSetup"), 0, settingsFilename);
 static int ShowAxisForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowAxisForSetup"), 0, settingsFilename);
 static int ExitButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("ExitButton"), 0, settingsFilename);
 static int TestButton = GetPrivateProfileInt(TEXT("Settings"), TEXT("TestButton"), 0, settingsFilename);
@@ -139,6 +143,22 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 	char DpadDownCharDevice2[256];
 	char DpadLeftCharDevice2[256];
 	char DpadRightCharDevice2[256];
+	char KeyBrdExitChar[256];
+	char KeyBrdTestChar[256];
+	char KeyBrdServiceChar[256];
+	char KeyBrdCoin1Char[256];
+	char KeyBrdCoin2Char[256];
+	char KeyBrdVR1Char[256];
+	char KeyBrdVR2Char[256];
+	char KeyBrdVR3Char[256];
+	char KeyBrdVR4Char[256];
+	char KeyBrdStartChar[256];
+	char KeyBrdShift1Char[256];
+	char KeyBrdShift2Char[256];
+	char KeyBrdShift3Char[256];
+	char KeyBrdShift4Char[256];
+	char KeyBrdShiftUpChar[256];
+	char KeyBrdShiftDownChar[256];
 	GetPrivateProfileStringA("Settings", "DpadUp", "", DpadUpChar, 256, ".\\FFBplugin.ini");
 	GetPrivateProfileStringA("Settings", "DpadDown", "", DpadDownChar, 256, ".\\FFBplugin.ini");
 	GetPrivateProfileStringA("Settings", "DpadLeft", "", DpadLeftChar, 256, ".\\FFBplugin.ini");
@@ -147,6 +167,22 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 	GetPrivateProfileStringA("Settings", "DpadDownDevice2", "", DpadDownCharDevice2, 256, ".\\FFBplugin.ini");
 	GetPrivateProfileStringA("Settings", "DpadLeftDevice2", "", DpadLeftCharDevice2, 256, ".\\FFBplugin.ini");
 	GetPrivateProfileStringA("Settings", "DpadRightDevice2", "", DpadRightCharDevice2, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "ExitButtonKeyBrd", "", KeyBrdExitChar, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "TestButtonKeyBrd", "", KeyBrdTestChar, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "ServiceButtonKeyBrd", "", KeyBrdServiceChar, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "Coin1ButtonKeyBrd", "", KeyBrdCoin1Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "Coin2ButtonKeyBrd", "", KeyBrdCoin2Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "VR1ButtonKeyBrd", "", KeyBrdVR1Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "VR2ButtonKeyBrd", "", KeyBrdVR2Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "VR3ButtonKeyBrd", "", KeyBrdVR3Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "VR4ButtonKeyBrd", "", KeyBrdVR4Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "StartButtonKeyBrd", "", KeyBrdStartChar, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "Shift1ButtonKeyBrd", "", KeyBrdShift1Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "Shift2ButtonKeyBrd", "", KeyBrdShift2Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "Shift3ButtonKeyBrd", "", KeyBrdShift3Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "Shift4ButtonKeyBrd", "", KeyBrdShift4Char, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "ShiftUpButtonKeyBrd", "", KeyBrdShiftUpChar, 256, ".\\FFBplugin.ini");
+	GetPrivateProfileStringA("Settings", "ShiftDownButtonKeyBrd", "", KeyBrdShiftDownChar, 256, ".\\FFBplugin.ini");
 	std::string exit("ExitButton");
 	std::string test("TestButton");
 	std::string service("ServiceButton");
@@ -187,11 +223,31 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 	std::string dpddown2(DpadDownCharDevice2);
 	std::string dpdleft2(DpadLeftCharDevice2);
 	std::string dpdright2(DpadRightCharDevice2);
+	std::string KeyBrdExit(KeyBrdExitChar);
+	std::string KeyBrdTest(KeyBrdTestChar);
+	std::string KeyBrdService(KeyBrdServiceChar);
+	std::string KeyBrdCoin1(KeyBrdCoin1Char);
+	std::string KeyBrdCoin2(KeyBrdCoin2Char);
+	std::string KeyBrdVR1(KeyBrdVR1Char);
+	std::string KeyBrdVR2(KeyBrdVR2Char);
+	std::string KeyBrdVR3(KeyBrdVR3Char);
+	std::string KeyBrdVR4(KeyBrdVR4Char);
+	std::string KeyBrdStart(KeyBrdStartChar);
+	std::string KeyBrdShift1(KeyBrdShift1Char);
+	std::string KeyBrdShift2(KeyBrdShift2Char);
+	std::string KeyBrdShift3(KeyBrdShift3Char);
+	std::string KeyBrdShift4(KeyBrdShift4Char);
+	std::string KeyBrdShiftUp(KeyBrdShiftUpChar);
+	std::string KeyBrdShiftDown(KeyBrdShiftDownChar);
 
 	const int WHEEL_DEAD_ZONE = (SteeringDeadzone * 100.0);
 	const int ACCL_DEAD_ZONE = (1 + PedalDeadzone * 100.0);
 	const int BRAKE_DEAD_ZONE = (1 + PedalDeadzone * 100.0);
 	const int SETUP_DEAD_ZONE = 20000;
+
+	SDL_Window* w =  SDL_CreateWindowFrom(hWndM2);
+	SDL_MinimizeWindow(w);
+	SDL_RestoreWindow(w);
 
 	while (SDL_WaitEvent(&e) != 0)
 	{
@@ -333,9 +389,138 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 				helpers->WriteByte(AcclAddress, AcclValue, false);
 				helpers->WriteByte(BrakeAddress, BrakeValue, false);
 			}
+			if (e.jaxis.which == joystick_index2)
+			{
+				if (e.jaxis.axis == InputDeviceWheelSteeringAxisDevice2)
+				{
+					if (e.jaxis.value < -WHEEL_DEAD_ZONE)
+					{
+						e.jaxis.value = e.jaxis.value - WHEEL_DEAD_ZONE;
+						SteeringValue = 128 + (e.jaxis.value + WHEEL_DEAD_ZONE) / 255;
+					}
+					else if (e.jaxis.value > WHEEL_DEAD_ZONE)
+					{
+						e.jaxis.value = e.jaxis.value + WHEEL_DEAD_ZONE;
+						SteeringValue = 127 + (e.jaxis.value - WHEEL_DEAD_ZONE) / 255;
+					}
+					else
+					{
+						SteeringValue = 0x80;
+					}
+				}
+				if (InputDeviceWheelReverseAxis == 1)
+				{
+					if (InputDeviceCombinedPedals == 1)
+					{
+						if (e.jaxis.axis == InputDeviceWheelAcclAxisDevice2)
+						{
+							if (e.jaxis.value < -ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
+								AcclValue = (-e.jaxis.value + ACCL_DEAD_ZONE) / 128.5;
+							}
+							else if (e.jaxis.value > ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
+								BrakeValue = (e.jaxis.value + ACCL_DEAD_ZONE) / 128;
+							}
+							else
+							{
+								AcclValue = 0x00;
+								BrakeValue = 0x00;
+							}
+						}
+					}
+					else
+					{
+						if (e.jaxis.axis == InputDeviceWheelAcclAxisDevice2)
+						{
+							if (e.jaxis.value < -ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								AcclValue = 127 - e.jaxis.value;
+							}
+							else if (e.jaxis.value > ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								AcclValue = 128 - e.jaxis.value;
+							}
+						}
+						else if (e.jaxis.axis == InputDeviceWheelBrakeAxisDevice2)
+						{
+							if (e.jaxis.value < -BRAKE_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								BrakeValue = 127 - e.jaxis.value;
+							}
+							else if (e.jaxis.value > BRAKE_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								BrakeValue = 128 - e.jaxis.value;
+							}
+						}
+					}
+				}
+				else
+				{
+					if (InputDeviceCombinedPedals == 1)
+					{
+						if (e.jaxis.axis == InputDeviceWheelAcclAxisDevice2)
+						{
+							if (e.jaxis.value < -ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
+								AcclValue = (e.jaxis.value + ACCL_DEAD_ZONE) / 128;
+							}
+							else if (e.jaxis.value > ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
+								BrakeValue = (-e.jaxis.value + ACCL_DEAD_ZONE) / 128;
+							}
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							{
+								AcclValue = 0xFF;
+								BrakeValue = 0xFF;
+							}
+						}
+					}
+					else
+					{
+						if (e.jaxis.axis == InputDeviceWheelAcclAxisDevice2)
+						{
+							if (e.jaxis.value < -ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								AcclValue = 128 + e.jaxis.value;
+							}
+							else if (e.jaxis.value > ACCL_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								AcclValue = 127 + e.jaxis.value;
+							}
+						}
+						if (e.jaxis.axis == InputDeviceWheelBrakeAxisDevice2)
+						{
+							if (e.jaxis.value < -BRAKE_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								BrakeValue = 128 + e.jaxis.value;
+							}
+							else if (e.jaxis.value > BRAKE_DEAD_ZONE)
+							{
+								e.jaxis.value = (e.jaxis.value / 255);
+								BrakeValue = 127 + e.jaxis.value;
+							}
+						}
+					}
+				}
+				helpers->WriteByte(SteeringAddress, SteeringValue, false);
+				helpers->WriteByte(AcclAddress, AcclValue, false);
+				helpers->WriteByte(BrakeAddress, BrakeValue, false);
+			}
 		}
 
-		if (ShowAxisForSetup == 1)
+		if (ShowAxisForSetup)
 		{
 			if (e.type == SDL_JOYAXISMOTION)
 			{
@@ -361,7 +546,7 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 			}
 		}
 
-		if (ShowButtonNumbersForSetup == 1)
+		if (ShowButtonNumbersForSetup)
 		{
 			if (e.type == SDL_JOYBUTTONDOWN)
 			{
@@ -374,6 +559,18 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 						MessageBoxA(NULL, buff, "", NULL);
 					}
 				}
+			}
+		}
+
+		if (ShowKeyBoardNameForSetup)
+		{
+			if (e.type == SDL_KEYDOWN)
+			{
+				const char* KeyPressed = SDL_GetKeyName(e.key.keysym.sym);
+
+				char buff[100];
+				sprintf_s(buff, "Key %s Pressed", KeyPressed);
+				MessageBoxA(NULL, buff, "", NULL);
 			}
 		}
 
@@ -1576,6 +1773,266 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 					if (ShiftDownPressed)
 						ShiftDownPressed = false;
 				}
+			}
+		}
+		
+		if (e.type == SDL_KEYDOWN)
+		{
+			const char* KeyPressed = SDL_GetKeyName(e.key.keysym.sym);
+
+			if (KeyBrdExit.compare(KeyPressed) == 0)
+			{
+				SendMessage(hWndM2, WM_CLOSE, NULL, NULL);
+			}
+			if (KeyBrdTest.compare(KeyPressed) == 0)
+			{
+				if (!testA)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x04, false);
+					testA = true;
+				}
+			}
+			if (KeyBrdService.compare(KeyPressed) == 0)
+			{
+				if (!serviceA)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x08, false);
+					serviceA = true;
+				}
+			}
+			if (KeyBrdCoin1.compare(KeyPressed) == 0)
+			{
+				if (!coin1A)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x01, false);
+					coin1A = true;
+				}
+			}
+			if (KeyBrdCoin2.compare(KeyPressed) == 0)
+			{
+				if (!coin2A)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x02, false);
+					coin2A = true;
+				}
+			}
+			if (KeyBrdVR1.compare(KeyPressed) == 0)
+			{
+				if (!vr1A)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x20, false);
+					vr1A = true;
+				}
+			}
+			if (KeyBrdVR2.compare(KeyPressed) == 0)
+			{
+				if (!vr2A)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x40, false);
+					vr2A = true;
+				}
+			}
+			if (KeyBrdVR3.compare(KeyPressed) == 0)
+			{
+				if (!vr3A)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x80, false);
+					vr3A = true;
+				}
+			}
+			if (KeyBrdVR4.compare(KeyPressed) == 0)
+			{
+				if (!vr4A)
+				{
+					helpers->WriteByte(Button1Address, button1read -= 0x01, false);
+					vr4A = true;
+				}
+			}
+			if (KeyBrdStart.compare(KeyPressed) == 0)
+			{
+				if (!startA)
+				{
+					helpers->WriteByte(Button2Address, button2read -= 0x10, false);
+					startA = true;
+				}
+			}
+			if (KeyBrdShift1.compare(KeyPressed) == 0)
+			{
+				if (!shift1A)
+				{
+					helpers->WriteByte(Button1Address, 0xAF, false);
+					shift1A = true;
+				}
+			}
+			if (KeyBrdShift2.compare(KeyPressed) == 0)
+			{
+				if (!shift2A)
+				{
+					helpers->WriteByte(Button1Address, 0x9F, false);
+					shift2A = true;
+				}
+			}
+			if (KeyBrdShift3.compare(KeyPressed) == 0)
+			{
+				if (!shift3A)
+				{
+					helpers->WriteByte(Button1Address, 0xEF, false);
+					shift3A = true;
+				}
+			}
+			if (KeyBrdShift4.compare(KeyPressed) == 0)
+			{
+				if (!shift4A)
+				{
+					helpers->WriteByte(Button1Address, 0xDF, false);
+					shift4A = true;
+				}
+			}
+			if (KeyBrdShiftUp.compare(KeyPressed) == 0)
+			{
+				if (!shiftupA)
+				{
+					switch (GearValue)
+					{
+					case 0x00:
+						helpers->WriteByte(Button1Address, 0x9F, false);
+						break;
+					case 0x01:
+						helpers->WriteByte(Button1Address, 0xEF, false);
+						break;
+					case 0x02:
+						helpers->WriteByte(Button1Address, 0xDF, false);
+						break;
+					}
+					shiftupA = true;
+				}
+			}
+			if (KeyBrdShiftDown.compare(KeyPressed) == 0)
+			{
+				if (!shiftdwnA)
+				{
+					switch (GearValue)
+					{
+					case 0x01:
+						helpers->WriteByte(Button1Address, 0xAF, false);
+						break;
+					case 0x02:
+						helpers->WriteByte(Button1Address, 0x9F, false);
+						break;
+					case 0x03:
+						helpers->WriteByte(Button1Address, 0xEF, false);
+						break;
+					}
+					shiftdwnA = true;
+				}
+			}		
+		}
+
+		if (e.type == SDL_KEYUP)
+		{
+			const char* KeyPressed = SDL_GetKeyName(e.key.keysym.sym);
+
+			if (KeyBrdTest.compare(KeyPressed) == 0)
+			{
+				if (testA)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x04, false);
+					testA = false;
+				}
+			}
+			if (KeyBrdService.compare(KeyPressed) == 0)
+			{
+				if (serviceA)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x08, false);
+					serviceA = false;
+				}
+			}
+			if (KeyBrdCoin1.compare(KeyPressed) == 0)
+			{
+				if (coin1A)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x01, false);
+					coin1A = false;
+				}
+			}
+			if (KeyBrdCoin2.compare(KeyPressed) == 0)
+			{
+				if (coin2A)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x02, false);
+					coin2A = false;
+				}
+			}
+			if (KeyBrdVR1.compare(KeyPressed) == 0)
+			{
+				if (vr1A)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x20, false);
+					vr1A = false;
+				}
+			}
+			if (KeyBrdVR2.compare(KeyPressed) == 0)
+			{
+				if (vr2A)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x40, false);
+					vr2A = false;
+				}
+			}
+			if (KeyBrdVR3.compare(KeyPressed) == 0)
+			{
+				if (vr3A)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x80, false);
+					vr3A = false;
+				}
+			}
+			if (KeyBrdVR4.compare(KeyPressed) == 0)
+			{
+				if (vr4A)
+				{
+					helpers->WriteByte(Button1Address, button1read += 0x01, false);
+					vr4A = false;
+				}
+			}
+			if (KeyBrdStart.compare(KeyPressed) == 0)
+			{
+				if (startA)
+				{
+					helpers->WriteByte(Button2Address, button2read += 0x10, false);
+					startA = false;
+				}
+			}
+			if (KeyBrdShift1.compare(KeyPressed) == 0)
+			{
+				if (shift1A)
+					shift1A = false;
+			}
+			if (KeyBrdShift2.compare(KeyPressed) == 0)
+			{
+				if (shift2A)
+					shift2A = false;
+			}
+			if (KeyBrdShift3.compare(KeyPressed) == 0)
+			{
+				if (shift3A)
+					shift3A = false;
+			}
+			if (KeyBrdShift4.compare(KeyPressed) == 0)
+			{
+				if (shift4A)
+					shift4A = false;
+			}
+			if (KeyBrdShiftUp.compare(KeyPressed) == 0)
+			{
+				if (shiftupA)
+					shiftupA = false;
+			}
+			if (KeyBrdShiftDown.compare(KeyPressed) == 0)
+			{
+				if (shiftdwnA)
+					shiftdwnA = false;
 			}
 		}
 	}

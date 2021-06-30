@@ -1029,7 +1029,7 @@ void Initialize(int device_index)
 {
 	hlp.log("in initialize");
 	SDL_SetHint(SDL_HINT_JOYSTICK_RAWINPUT, "0");
-	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC | SDL_INIT_SENSOR);
+	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC | SDL_INIT_SENSOR | SDL_INIT_VIDEO);
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_JoystickUpdate();
 	char joystick_guid[256];
