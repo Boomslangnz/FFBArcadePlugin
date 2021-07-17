@@ -2633,7 +2633,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 	//	}
 	//}
 
-	if (RomGameName)
+	if (RomGameName && RunningFFB > 0)
 	{
 		if (RunningFFB > 0 && EnableDamper)
 		{
