@@ -62,6 +62,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/SnoCross.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
+#include "Game Files/WMMT5DX.h"
 #include "Game Files/WMMT6.h"
 #include "Game Files/WMMT6R.h"
 #include "Game Files/Machstorm.h"
@@ -1017,6 +1018,7 @@ const int WMMT_6 = 52;
 const int WMMT_6_R = 53;
 const int SRG = 54;
 const int D1_GP = 55;
+const int WMMT_5DX = 56;
 
 HINSTANCE Get_hInstance()
 {
@@ -2369,6 +2371,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case WMMT_5:
 		game = new WMMT5;
+		break;
+	case WMMT_5DX:
+		game = new WMMT5DX;
 		break;
 	case MARIO_KART_GPDX:
 		game = new MarioKartGPDX100;

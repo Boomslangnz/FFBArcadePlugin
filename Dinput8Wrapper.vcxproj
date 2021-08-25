@@ -52,6 +52,7 @@
     <ClInclude Include="Game Files\LGI3D.h" />
     <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
+    <ClInclude Include="Game Files\WMMT5DX.h" />
     <ClInclude Include="Game Files\WMMT6.h" />
     <ClInclude Include="Game Files\WMMT6R.h" />
     <ClInclude Include="resource.h" />
@@ -120,6 +121,7 @@
     <ClCompile Include="Game Files\WMMT5.cpp" />
     <ClCompile Include="Game Files\InitialD4Japan.cpp" />
     <ClCompile Include="Game Files\GTIClub3.cpp" />
+    <ClCompile Include="Game Files\WMMT5DX.cpp" />
     <ClCompile Include="Game Files\WMMT6.cpp" />
     <ClCompile Include="Game Files\WMMT6R.cpp" />
     <ClCompile Include="IDirectInputDevice.cpp" />
