@@ -70,7 +70,7 @@ void CrazyTaxi::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 
 		double percentForceGround = percentForce / 2.0;
 
-		helpers->WriteByte(0x1C363A, 0x00, true);
+		helpers->WriteByte(0x1C363A, 0x00, true); //Disable native rumble/ffb
 
 		triggers->Springi(SpringStrength / 100.0);
 
