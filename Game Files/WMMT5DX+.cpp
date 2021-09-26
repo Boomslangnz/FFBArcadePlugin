@@ -12,7 +12,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "WMMT5DX.h"
+#include "WMMT5DX+.h"
 #include "SDL.h"
 
 extern int EnableDamper;
@@ -138,7 +138,7 @@ static int GearChangeThread(void* ptr)
 	return 0;
 }
 
-void WMMT5DX::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
+void WMMT5DXPlus::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
 	if (!init)
 	{
@@ -150,11 +150,11 @@ void WMMT5DX::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 		//SDL_CreateThread(SpamThread, "SpamThread", (void*)NULL);
 	}
 
-	float spring = helpers->ReadFloat32(0x1C02754, true);
-	float friction = helpers->ReadFloat32(0x1C02758, true);
-	float collisions = helpers->ReadFloat32(0x1C0275C, true);
-	float tiresSlip = helpers->ReadFloat32(0x1C02750, true);
-	int speed = helpers->ReadInt32(0x1C0342C, true);
+	float spring = helpers->ReadFloat32(0x1FA6F44, true);
+	float friction = helpers->ReadFloat32(0x1FA6F48, true);
+	float collisions = helpers->ReadFloat32(0x1FA6F4C, true);
+	float tiresSlip = helpers->ReadFloat32(0x1FA6F40, true);
+	int speed = helpers->ReadInt32(0x1FA7C7C, true);
 
 	std::string msg = "spring: " + std::to_string(spring) + " | friction: " + std::to_string(friction)
 		+ " | collisions: " + std::to_string(collisions) + " | tires slip: " + std::to_string(tiresSlip)
@@ -253,15 +253,15 @@ void WMMT5DX::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 		}
 	}
 
-	INT_PTR ptr1 = helpers->ReadIntPtr(0x1C2C040, true);
+	INT_PTR ptr1 = helpers->ReadIntPtr(0x1FD11B0, true);
 	UINT8 gear = helpers->ReadByte(ptr1 + 0x398, false);
 
 	if (0 < WheelSpinStrength)
 	{
-		//INT_PTR ptr1 = myHelpers->ReadIntPtr(0x1F7D578, true);
-		//INT_PTR ptr2 = myHelpers->ReadIntPtr(ptr1 + 0x268, false);
-		UINT8 power = 16;
-		int rpm = helpers->ReadInt32(0x1C0359C, true);
+		INT_PTR ptr1 = myHelpers->ReadIntPtr(0x1F7D578, true);
+		INT_PTR ptr2 = myHelpers->ReadIntPtr(ptr1 + 0x268, false);
+		UINT8 power = myHelpers->ReadByte(ptr2 + 0xAC, false);
+		int rpm = helpers->ReadInt32(0x1FA7DEC, true);
 		int diff = 0x0A <= power ? 0 : 20;
 
 		if (
@@ -302,7 +302,7 @@ void WMMT5DX::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 
 	if (0 < GearChangeStrength)
 	{
-		ptr1 = helpers->ReadIntPtr(0x1C2C058, true);
+		ptr1 = helpers->ReadIntPtr(0x1FD11C8, true);
 		float time = helpers->ReadFloat32(ptr1 + 0x18, false);
 
 		if (oldgear != gear && 0 < gear && 0 < time)

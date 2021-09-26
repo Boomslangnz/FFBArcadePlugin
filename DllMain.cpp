@@ -35,6 +35,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Batman.h"
 #include "Game Files/BG4JP.h"
 #include "Game Files/ChaseHQ2.h"
+#include "Game Files/CrazyTaxi.h"
 #include "Game Files/D1GP.h"
 #include "Game Files/Daytona3.h"
 #include "Game Files/DirtyDrivin.h"
@@ -63,6 +64,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT5.h"
 #include "Game Files/WMMT5DX.h"
+#include "Game Files/WMMT5DX+.h"
 #include "Game Files/WMMT6.h"
 #include "Game Files/WMMT6R.h"
 #include "Game Files/Machstorm.h"
@@ -1018,7 +1020,9 @@ const int WMMT_6 = 52;
 const int WMMT_6_R = 53;
 const int SRG = 54;
 const int D1_GP = 55;
-const int WMMT_5DX = 56;
+const int WMMT_5DXPlus = 56;
+const int WMMT_5DX = 57;
+const int Crazy_Taxi = 58;
 
 HINSTANCE Get_hInstance()
 {
@@ -2375,6 +2379,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case WMMT_5DX:
 		game = new WMMT5DX;
 		break;
+	case WMMT_5DXPlus:
+		game = new WMMT5DXPlus;
+		break;
 	case MARIO_KART_GPDX:
 		game = new MarioKartGPDX100;
 		break;
@@ -2464,6 +2471,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case D1_GP:
 		game = new D1GP;
+		break;
+	case Crazy_Taxi:
+		game = new CrazyTaxi;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

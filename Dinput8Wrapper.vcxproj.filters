@@ -141,7 +141,9 @@
     <ClCompile Include="Game Files\M2EmulatorDaytonaInputs.cpp" />
     <ClCompile Include="Game Files\M2EmulatorSegaRallyInputs.cpp" />
     <ClCompile Include="Game Files\M2EmulatorIndy500Inputs.cpp" />
+    <ClCompile Include="Game Files\WMMT5DX+.cpp" />
     <ClCompile Include="Game Files\WMMT5DX.cpp" />
+    <ClCompile Include="Game Files\CrazyTaxi.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -325,7 +327,13 @@
     <ClInclude Include="Game Files\D1GP.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Game Files\WMMT5DX+.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="Game Files\WMMT5DX.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\CrazyTaxi.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

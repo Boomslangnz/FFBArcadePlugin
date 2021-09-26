@@ -24,6 +24,7 @@
     <ClInclude Include="Config\PersistentValues.h" />
     <ClInclude Include="Game Files\AliensExtermination.h" />
     <ClInclude Include="Game Files\Batman.h" />
+    <ClInclude Include="Game Files\CrazyTaxi.h" />
     <ClInclude Include="Game Files\D1GP.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
@@ -52,6 +53,7 @@
     <ClInclude Include="Game Files\LGI3D.h" />
     <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
+    <ClInclude Include="Game Files\WMMT5DX+.h" />
     <ClInclude Include="Game Files\WMMT5DX.h" />
     <ClInclude Include="Game Files\WMMT6.h" />
     <ClInclude Include="Game Files\WMMT6R.h" />
@@ -66,6 +68,7 @@
   <ItemGroup>
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
     <ClCompile Include="Game Files\Batman.cpp" />
+    <ClCompile Include="Game Files\CrazyTaxi.cpp" />
     <ClCompile Include="Game Files\D1GP.cpp" />
     <ClCompile Include="Game Files\DemulATVTrackInputs.cpp" />
     <ClCompile Include="Game Files\DemulFasterThanSpeedInputs.cpp" />
@@ -121,6 +124,7 @@
     <ClCompile Include="Game Files\WMMT5.cpp" />
     <ClCompile Include="Game Files\InitialD4Japan.cpp" />
     <ClCompile Include="Game Files\GTIClub3.cpp" />
+    <ClCompile Include="Game Files\WMMT5DX+.cpp" />
     <ClCompile Include="Game Files\WMMT5DX.cpp" />
     <ClCompile Include="Game Files\WMMT6.cpp" />
     <ClCompile Include="Game Files\WMMT6R.cpp" />
