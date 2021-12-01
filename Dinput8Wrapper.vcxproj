@@ -26,6 +26,7 @@
     <ClInclude Include="Game Files\Batman.h" />
     <ClInclude Include="Game Files\CrazyTaxi.h" />
     <ClInclude Include="Game Files\D1GP.h" />
+    <ClInclude Include="Game Files\Daytona3NSE.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GoldenGun.h" />
@@ -70,6 +71,7 @@
     <ClCompile Include="Game Files\Batman.cpp" />
     <ClCompile Include="Game Files\CrazyTaxi.cpp" />
     <ClCompile Include="Game Files\D1GP.cpp" />
+    <ClCompile Include="Game Files\Daytona3NSE.cpp" />
     <ClCompile Include="Game Files\DemulATVTrackInputs.cpp" />
     <ClCompile Include="Game Files\DemulFasterThanSpeedInputs.cpp" />
     <ClCompile Include="Game Files\DemulMaximumSpeedInputs.cpp" />

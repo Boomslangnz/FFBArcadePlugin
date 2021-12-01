@@ -38,6 +38,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/CrazyTaxi.h"
 #include "Game Files/D1GP.h"
 #include "Game Files/Daytona3.h"
+#include "Game Files/Daytona3NSE.h"
 #include "Game Files/DirtyDrivin.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
@@ -1023,6 +1024,7 @@ const int D1_GP = 55;
 const int WMMT_5DXPlus = 56;
 const int WMMT_5DX = 57;
 const int Crazy_Taxi = 58;
+const int DAYTONA_3_NSE = 59;
 
 HINSTANCE Get_hInstance()
 {
@@ -2315,6 +2317,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case DAYTONA_3:
 		game = new Daytona3;
+		break;
+	case DAYTONA_3_NSE:
+		game = new Daytona3NSE;
 		break;
 	case SUPERMODEL_:
 		game = new MAMESupermodel;
