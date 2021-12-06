@@ -41,6 +41,9 @@ cd..
 cd Battle Gear 4 Tuned
 rename dinput8.dll d3d9.dll
 cd..
+cd Crazy Taxi Steam
+rename dinput8.dll xinput1_3.dll
+cd..
 cd Chase HQ 2
 rename dinput8.dll d3d9.dll
 cd..
