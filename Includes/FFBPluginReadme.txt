@@ -97,12 +97,14 @@ extremely generous.
 -Chase Bombers
 -ChaseHQ 2
 -Cisco Heat
+-Crazy Taxi (Steam)
 -Crusn'USA
 -Crusn' World
 -Daytona USA (M2 Emulator & MAME)
 -Daytona USA 2 - Power Edition
 -Daytona USA 2 - Battle on the Edge
--Daytona Championship USA 
+-Daytona Championship USA
+-Daytona Championship USA New Season Edition
 -Dirt Devils
 -Dirty Drivin
 -Emergency Call Ambulance
@@ -183,5 +185,7 @@ extremely generous.
 -Virtua Racing (CHANGE TO UPRIGHT CABINET)
 -Wacky Races
 -Wangan Midnight Maximum Tune 5
+-Wangan Midnight Maximum Tune 5DX
+-Wangan Midnight Maximum Tune 5DX+
 -Wangan Midnight Maximum Tune 6
 -Wangan Midnight Maximum Tune 6R
