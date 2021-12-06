@@ -16,6 +16,10 @@ xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Supermodel 64bit Outputs" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Supermodel 64bit Outputs" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT5" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT5" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT5DX" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT5DX" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT5DX+" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT5DX+" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT6" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT6" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT6R" /Y
@@ -107,6 +111,12 @@ cd Wacky Races
 rename dinput8.dll d3d9.dll
 cd..
 cd WMMT5
+rename dinput8.dll d3d11.dll
+cd..
+cd WMMT5DX
+rename dinput8.dll d3d11.dll
+cd..
+cd WMMT5DX+
 rename dinput8.dll d3d11.dll
 cd..
 cd WMMT6
