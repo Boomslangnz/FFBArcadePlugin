@@ -947,6 +947,7 @@ int StepFFBStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("StepFFBStreng
 int EnableFFBStrengthPersistence = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthPersistence"), 0, settingsFilename);
 int EnableFFBStrengthTextToSpeech = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthTextToSpeech"), 0, settingsFilename);
 int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
+int IgnoreFirstMatchingGUID = GetPrivateProfileInt(TEXT("Settings"), TEXT("IgnoreFirstMatchingGUID"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
 extern void CustomFFBStrengthSetup();
@@ -1037,7 +1038,9 @@ void Initialize(int device_index)
 {
 	hlp.log("in initialize");
 	SDL_SetHint(SDL_HINT_JOYSTICK_RAWINPUT, "0");
-	SDL_Init(SDL_INIT_JOYSTICK | SDL_INIT_GAMECONTROLLER | SDL_INIT_HAPTIC | SDL_INIT_SENSOR);
+	SDL_Init(SDL_INIT_HAPTIC | SDL_INIT_SENSOR);
+	if (SDL_InitSubSystem(SDL_INIT_JOYSTICK) < 0);
+	if (SDL_InitSubSystem(SDL_INIT_GAMECONTROLLER) < 0);
 	SDL_JoystickEventState(SDL_ENABLE);
 	SDL_JoystickUpdate();
 	char joystick_guid[256];
@@ -1071,27 +1074,31 @@ void Initialize(int device_index)
 		SDL_JoystickClose(js);
 		if (!memcmp(&guid, &dev_guid, sizeof(SDL_JoystickGUID)))
 		{
-			joystick1Index = i;	
-			GameController = SDL_JoystickOpen(i);
-			joystick_index1 = SDL_JoystickInstanceID(GameController);
-			ControllerHaptic = SDL_HapticOpenFromJoystick(GameController);
-			// We save the first controller matching the guid to select this one if no haptic controller with the same guid is found.
-			if (FirstGameController == NULL)
+			if (!IgnoreFirstMatchingGUID)
 			{
-				sprintf(firstJoystickSelectedText, "No haptic joystick found, selecting first joystick matching the GUID: %d / Name: %s / GUID: %s\n", i, name, guid_str);
-				FirstGameController = GameController;
+				joystick1Index = i;
+				GameController = SDL_JoystickOpen(i);
+				joystick_index1 = SDL_JoystickInstanceID(GameController);
+				ControllerHaptic = SDL_HapticOpenFromJoystick(GameController);
+
+				if (FirstGameController == NULL)
+				{
+					sprintf(firstJoystickSelectedText, "No haptic joystick found, selecting first joystick matching the GUID: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+					FirstGameController = GameController;
+				}
+
+				if (ControllerHaptic != NULL)
+				{
+					sprintf(text, "Haptic joystick found: %d / Name: %s / GUID: %s\n", i, name, guid_str);
+					hlp.log(text);
+					break;
+				}
 			}
-			// We select the first haptic controller matching the guid.
-			if (ControllerHaptic != NULL)
-			{
-				sprintf(text, "Haptic joystick found: %d / Name: %s / GUID: %s\n", i, name, guid_str);
-				hlp.log(text);
-				break;
-			}
+			IgnoreFirstMatchingGUID = 0;
 		}
 	}
-	// If no haptic controller has been found, we select the first controller matching the guid.
-	if (ControllerHaptic == NULL && FirstGameController != NULL)
+
+	if (ControllerHaptic == NULL && FirstGameController != NULL) // If no haptic controller has been found, we select the first controller matching the guid.
 	{
 		GameController = FirstGameController;
 		hlp.log(firstJoystickSelectedText);
