@@ -2642,8 +2642,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 		if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race & LeMans
 		{
-			ForceSpringEffect = false;
-
 			if (name == RawDrive)
 			{
 				helpers->log("got value: ");
