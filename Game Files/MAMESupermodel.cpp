@@ -973,7 +973,7 @@ int stateFFB3;
 int stateFFBDevice2;
 int stateFFBDevice3;
 double Divide;
-static int FFBAddress;
+static INT_PTR FFBAddress;
 static UINT8 ff;
 
 std::string wheelA("wheel");
@@ -3431,10 +3431,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						Scan = true;
 					}
 
-					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0xDF, false);
+					UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 - 0xDF, false);
 					if (CheckAddy2 == 0xC2)
 					{
-						FFBAddress = (int)aAddy2 - 0x1C0;
+						FFBAddress = (INT_PTR)aAddy2 - 0x1C0;
 						PatternFind = true;
 					}
 				}
@@ -3523,10 +3523,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
 							Scan = true;
 						}
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x04, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 + 0x04, false);
 						if (CheckAddy2 == 0x01)
 						{
-							FFBAddress = (int)aAddy2 + 0x04;
+							FFBAddress = (INT_PTR)aAddy2 + 0x04;
 							PatternFind = true;
 						}
 					}
@@ -3539,10 +3539,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 							Scan = true;
 						}
 
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x14, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 - 0x14, false);
 						if (CheckAddy2 == 0x0C)
 						{
-							FFBAddress = (int)aAddy2 + 0x50;
+							FFBAddress = (INT_PTR)aAddy2 + 0x50;
 							PatternFind = true;
 						}
 					}
@@ -3627,10 +3627,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						Scan = true;
 					}
 
-					UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x35, false);
+					UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 + 0x35, false);
 					if (CheckAddy2 == 0xFF)
 					{
-						FFBAddress = (int)aAddy2 + 0x2B;
+						FFBAddress = (INT_PTR)aAddy2 + 0x2B;
 						PatternFind = true;
 					}
 				}
@@ -3676,10 +3676,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					Scan = true;
 				}
 
-				UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 + 0x12, false);
+				UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 + 0x12, false);
 				if (CheckAddy2 == 0x5A)
 				{
-					FFBAddress = (int)aAddy2 + 0x6C8;
+					FFBAddress = (INT_PTR)aAddy2 + 0x6C8;
 					PatternFind = true;
 				}
 			}
@@ -3734,10 +3734,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 							Scan = true;
 						}
 
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x3E6, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 - 0x3E6, false);
 						if (CheckAddy2 == 0x01)
 						{
-							FFBAddress = (int)aAddy2 - 0x2C6;
+							FFBAddress = (INT_PTR)aAddy2 - 0x2C6;
 							PatternFind = true;
 						}
 					}
@@ -3750,10 +3750,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 							Scan = true;
 						}
 
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x3E4, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 - 0x3E4, false);
 						if (CheckAddy2 == 0x38)
 						{
-							FFBAddress = (int)aAddy2 - 0x2C6;
+							FFBAddress = (INT_PTR)aAddy2 - 0x2C6;
 							PatternFind = true;
 						}
 					}
@@ -3766,10 +3766,10 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 							Scan = true;
 						}
 
-						UINT8 CheckAddy2 = helpers->ReadByte((int)aAddy2 - 0x3E3, false);
+						UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 - 0x3E3, false);
 						if (CheckAddy2 == 0x80)
 						{
-							FFBAddress = (int)aAddy2 - 0x2C6;
+							FFBAddress = (INT_PTR)aAddy2 - 0x2C6;
 							PatternFind = true;
 						}
 					}
