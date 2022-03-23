@@ -31,6 +31,21 @@ void Helpers::logInit(char *msg) {
 	ofs.close();
 }
 
+void Helpers::info(const char* format, ...)
+{
+	va_list args;
+	char buffer[1024];
+
+	va_start(args, format);
+	int len = _vsnprintf(buffer, sizeof(buffer), format, args);
+	va_end(args);
+
+	buffer[len] = '\n';
+	buffer[len + 1] = '\0';
+
+	OutputDebugStringA(buffer);
+}
+
 // reading memory
 LPVOID Helpers::GetTranslatedOffset(INT_PTR offset)
 {

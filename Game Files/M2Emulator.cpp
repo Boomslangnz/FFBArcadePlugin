@@ -65,6 +65,7 @@ extern int DamperStrength;
 static DWORD hookAddressM2A;
 static DWORD hookAddressM2B;
 static DWORD hookAddressM2C;
+static UINT8 OldFFB;
 
 static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 static int DaytonaAIMultiplayerHack = GetPrivateProfileInt(TEXT("Settings"), TEXT("DaytonaAIMultiplayerHack"), 0, settingsFilename);
@@ -523,22 +524,29 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 		helpers->log((char*)ffs.c_str());
 		helpers->log("got value: ");
 
-		if ((ff1 > 0xBF) && (ff1 < 0xDF))
+		if (OldFFB != ff1)
 		{
-			helpers->log("moving wheel left");
-			double percentForce = (ff1 - 191) / 31.0;
-			double percentLength = 100;
-			triggers->Rumble(0, percentForce, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			if (ff1 >= 0xC0 && ff1 <= 0xDF)
+			{
+				helpers->log("moving wheel left");
+				double percentForce = (ff1 - 191) / 32.0;
+				double percentLength = 100;
+
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			
+			if (ff1 >= 0x80 && ff1 <= 0x9F)
+			{
+				helpers->log("moving wheel right");
+				double percentForce = (ff1 - 127) / 32.0;
+				double percentLength = 100;
+
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
 		}
-		else if ((ff1 > 0x7F) && (ff1 < 0x9F))
-		{
-			helpers->log("moving wheel right");
-			double percentForce = (ff1 - 127) / 31.0;
-			double percentLength = 100;
-			triggers->Rumble(percentForce, 0, percentLength);
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-		}
+		OldFFB = ff1;
 	}
 
 	if ((hWnd2 > NULL) || (hWnd7 > NULL) || (hWnd8 > NULL) || (hWnd9 > NULL) || (hWnd10 > NULL) || (hWnd11 > NULL) || (hWnd12 > NULL) || (hWnd13 > NULL))

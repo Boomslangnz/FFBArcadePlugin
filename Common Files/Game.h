@@ -99,6 +99,7 @@ public:
 	void log(char *msg);
 	void logInt(int value);
 	void logInit(char *msg);
+	void info(const char* format, ...);
 	// reading memory
 	LPVOID GetTranslatedOffset(INT_PTR offset);
 	int ReadInt32(INT_PTR offset, bool isRelativeOffset);
