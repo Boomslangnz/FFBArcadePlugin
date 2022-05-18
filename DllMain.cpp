@@ -42,6 +42,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/DirtyDrivin.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
+#include "Game Files/Flycast.h"
 #include "Game Files/GRID.h"
 #include "Game Files/GoldenGun.h"
 #include "Game Files/InitialD0v131.h"
@@ -1026,6 +1027,7 @@ const int WMMT_5DXPlus = 56;
 const int WMMT_5DX = 57;
 const int Crazy_Taxi = 58;
 const int DAYTONA_3_NSE = 59;
+const int FLYCAST = 60;
 
 HINSTANCE Get_hInstance()
 {
@@ -2486,6 +2488,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case Crazy_Taxi:
 		game = new CrazyTaxi;
+		break;
+	case FLYCAST:
+		game = new Flycast;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

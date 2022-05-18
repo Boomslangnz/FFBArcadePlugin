@@ -28,6 +28,7 @@
     <ClInclude Include="Game Files\D1GP.h" />
     <ClInclude Include="Game Files\Daytona3NSE.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />
+    <ClInclude Include="Game Files\Flycast.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GoldenGun.h" />
     <ClInclude Include="Game Files\GRID.h" />
@@ -78,6 +79,7 @@
     <ClCompile Include="Game Files\DemulNascarInputs.cpp" />
     <ClCompile Include="Game Files\DemulSmashingDriveInputs.cpp" />
     <ClCompile Include="Game Files\DirtyDrivin.cpp" />
+    <ClCompile Include="Game Files\Flycast.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\GoldenGun.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
