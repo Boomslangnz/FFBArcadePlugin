@@ -15,11 +15,13 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "DirtyDrivin.h"
 extern int EnableDamper;
 extern int DamperStrength;
+static bool ReverseFFB;
 
 void DirtyDrivin::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	float ffstiffness = helpers->ReadFloat32(0x886EC0, false);
 	float ff = helpers->ReadFloat32(0x886EC4, false);
+	UINT8 TrackSelected = helpers->ReadByte(0x96F770, false);
 
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff);
@@ -31,23 +33,55 @@ void DirtyDrivin::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 		//triggers->Spring(percentForce);
 	//}
 
-	if (EnableDamper == 1)
+	switch (TrackSelected)
 	{
-		triggers->Damper(DamperStrength / 100.0);
+	case 8:
+	case 9:
+	case 10:
+	case 11:
+	case 12:
+	case 13:
+	case 14:
+		ReverseFFB = true;
+		break;
+	default:
+		ReverseFFB = false;
+		break;
 	}
+
+	if (EnableDamper == 1)
+		triggers->Damper(DamperStrength / 100.0);
 
 	if (ff > 0)
 	{
 		double percentForce = ff;
 		double percentLength = 100;
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+
+		if (ReverseFFB)
+		{
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+		else
+		{
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
 	}
 	else if (ff < 0)
 	{
 		double percentForce = -ff;
 		double percentLength = 100;
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+
+		if (ReverseFFB)
+		{
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else
+		{
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
 	}
 }
