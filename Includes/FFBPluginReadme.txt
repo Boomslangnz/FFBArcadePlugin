@@ -105,6 +105,7 @@ extremely generous.
 -Daytona USA 2 - Battle on the Edge
 -Daytona Championship USA
 -Daytona Championship USA New Season Edition
+-Dead Heat
 -Dirt Devils
 -Dirty Drivin
 -Emergency Call Ambulance
@@ -184,6 +185,7 @@ extremely generous.
 -Vapor TRX
 -Virtua Racing (CHANGE TO UPRIGHT CABINET)
 -Wacky Races
+-Wangan Midnight Maximum Tune 3
 -Wangan Midnight Maximum Tune 5
 -Wangan Midnight Maximum Tune 5DX
 -Wangan Midnight Maximum Tune 5DX+

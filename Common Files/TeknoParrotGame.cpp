@@ -12,26 +12,28 @@ TeknoParrotGame::TeknoParrotGame()
 	if (secData)
 	{
 		if (*((int*)secData + 2) > 0)
-		{
 			*((int*)secData + 2) = 0;
-		}
 
 		if (*((int*)secData + 6) > 0)
-		{
 			*((int*)secData + 6) = 0;
-		}
 
 		if (*((int*)secData + 7) > 0)
-		{
 			*((int*)secData + 7) = 0;
-		}
 
 		if (*((int*)secData + 8) > 0)
-		{
 			*((int*)secData + 8) = 0;
-		}
 
-		if (configGameId == 54 || configGameId == 55)
+		if (*((int*)secData + 9) > 0)
+			*((int*)secData + 9) = 0;
+
+		if (configGameId == 61)
+		{
+			ffbOffset = *((int*)secData + 6);
+			ffbOffset2 = *((int*)secData + 7);
+			ffbOffset3 = *((int*)secData + 8);
+			ffbOffset4 = *((int*)secData + 9);
+		}
+		else if (configGameId == 54 || configGameId == 55)
 		{
 			ffbOffset = *((int*)secData + 6);
 			ffbOffset2 = *((int*)secData + 7);
@@ -42,23 +44,19 @@ TeknoParrotGame::TeknoParrotGame()
 			ffbOffset = *((int*)secData + 6);
 			ffbOffset2 = *((int*)secData + 7);
 		}
+		else if (configGameId == 62)
+			ffbOffset = *((int*)secData + 6);
 		else
-		{
 			ffbOffset = *((int*)secData + 2);
-		}
 	}
 }
 
 int TeknoParrotGame::GetTeknoParrotFFB()
 {
-	if (configGameId == 19 || configGameId == 54 || configGameId == 55)
-	{
+	if (configGameId == 19 || configGameId == 54 || configGameId == 55 || configGameId == 61 || configGameId == 62)
 		ffbOffset = *((int*)secData + 6);
-	}
 	else
-	{
 		ffbOffset = *((int*)secData + 2);
-	}
 	
 	return ffbOffset;
 }
@@ -73,6 +71,12 @@ int TeknoParrotGame::GetTeknoParrotFFB3()
 {
 	ffbOffset3 = *((int*)secData + 8);
 	return ffbOffset3;
+}
+
+int TeknoParrotGame::GetTeknoParrotFFB4()
+{
+	ffbOffset4 = *((int*)secData + 9);
+	return ffbOffset4;
 }
 
 void TeknoParrotGame::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {

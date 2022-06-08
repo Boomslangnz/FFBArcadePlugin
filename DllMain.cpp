@@ -39,6 +39,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/D1GP.h"
 #include "Game Files/Daytona3.h"
 #include "Game Files/Daytona3NSE.h"
+#include "Game Files/DeadHeat.h"
 #include "Game Files/DirtyDrivin.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
@@ -64,6 +65,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/SegaRally3Other.h"
 #include "Game Files/SnoCross.h"
 #include "Game Files/WackyRaces.h"
+#include "Game Files/WMMT3.h"
 #include "Game Files/WMMT5.h"
 #include "Game Files/WMMT5DX.h"
 #include "Game Files/WMMT5DX+.h"
@@ -1028,6 +1030,8 @@ const int WMMT_5DX = 57;
 const int Crazy_Taxi = 58;
 const int DAYTONA_3_NSE = 59;
 const int FLYCAST = 60;
+const int WMMT_3 = 61;
+const int DEAD_HEAT = 62;
 
 HINSTANCE Get_hInstance()
 {
@@ -2491,6 +2495,12 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case FLYCAST:
 		game = new Flycast;
+		break;
+	case WMMT_3:
+		game = new WMMT3;
+		break;
+	case DEAD_HEAT:
+		game = new DeadHeat;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

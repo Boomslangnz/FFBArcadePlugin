@@ -27,6 +27,7 @@
     <ClInclude Include="Game Files\CrazyTaxi.h" />
     <ClInclude Include="Game Files\D1GP.h" />
     <ClInclude Include="Game Files\Daytona3NSE.h" />
+    <ClInclude Include="Game Files\DeadHeat.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />
     <ClInclude Include="Game Files\Flycast.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
@@ -55,6 +56,7 @@
     <ClInclude Include="Game Files\LGI3D.h" />
     <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
+    <ClInclude Include="Game Files\WMMT3.h" />
     <ClInclude Include="Game Files\WMMT5DX+.h" />
     <ClInclude Include="Game Files\WMMT5DX.h" />
     <ClInclude Include="Game Files\WMMT6.h" />
@@ -73,6 +75,7 @@
     <ClCompile Include="Game Files\CrazyTaxi.cpp" />
     <ClCompile Include="Game Files\D1GP.cpp" />
     <ClCompile Include="Game Files\Daytona3NSE.cpp" />
+    <ClCompile Include="Game Files\DeadHeat.cpp" />
     <ClCompile Include="Game Files\DemulATVTrackInputs.cpp" />
     <ClCompile Include="Game Files\DemulFasterThanSpeedInputs.cpp" />
     <ClCompile Include="Game Files\DemulMaximumSpeedInputs.cpp" />
@@ -125,6 +128,7 @@
     <ClCompile Include="Game Files\TestGame.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
     <ClCompile Include="Game Files\WackyRaces.cpp" />
+    <ClCompile Include="Game Files\WMMT3.cpp" />
     <ClCompile Include="Game Files\WMMT5.cpp" />
     <ClCompile Include="Game Files\InitialD4Japan.cpp" />
     <ClCompile Include="Game Files\GTIClub3.cpp" />
