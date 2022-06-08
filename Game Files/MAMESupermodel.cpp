@@ -47,6 +47,7 @@ std::string srally2pa("srally2pa");
 //MAME Games
 std::string aburner2("aburner2");
 std::string aburner2g("aburner2g");
+std::string acedrive("acedrive");
 std::string acedrvrw("acedrvrw");
 std::string vformula("vformula");
 std::string vr("vr");
@@ -131,6 +132,7 @@ std::string racedrivc2("racedrivc2");
 std::string racedrivc4("racedrivc4");
 std::string racedrivc("racedrivc");
 std::string racedrivpan("racedrivpan");
+std::string raverace("raverace");
 std::string raveracw("raveracw");
 std::string raveracj("raveracj");
 std::string raveracja("raveracja");
@@ -210,6 +212,7 @@ std::string hyprdriv("hyprdriv");
 std::string vaportrx("vaportrx");
 std::string vaportrp("vaportrp");
 std::string victlapw("victlapw");
+std::string victlap("victlap");
 std::string dblaxle("dblaxle");
 std::string dblaxleu("dblaxleu");
 
@@ -1283,7 +1286,7 @@ int __stdcall mame_output(const char* name, int value)
 
 static DWORD WINAPI ScanThread(LPVOID lpParam)
 {
-	if (romname == raveracw || romname == raveracj || romname == raveracja) //Rave Racer
+	if (romname == raveracw || romname == raveracj || romname == raveracja || romname == raverace) //Rave Racer
 	{
 		aAddy2 = PatternScan("\xF8\x89\xC2\x00\x9C\x0B\x40\x05\x64\x38\x05\x64\x39\x36\x14\x74\x07\x14\x73\x07", "xxxxxxxxxxxxxxxxxxxx");
 	}
@@ -1313,7 +1316,7 @@ static DWORD WINAPI ScanThread(LPVOID lpParam)
 		aAddy2 = PatternScan("\x80\x38\x00\x50\x49\x5A\x05\x70\x11\x01\x4B\x54\x4F", "xxxxxxxxxxxxx");
 	}
 
-	if ((romname == dirtdash) || (romname == acedrvrw) || (romname == victlapw)) //Dirt Dash, Ace Driver & Ace Driver Victory Lap
+	if (romname == dirtdash || romname == acedrvrw || romname == acedrive || romname == victlapw || romname == victlap) //Dirt Dash, Ace Driver & Ace Driver Victory Lap
 	{
 		aAddy2 = PatternScan("\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 	}
@@ -2440,7 +2443,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "RacingFullValueActive1";
 			}
 
-			if (romname == raveracw || romname == raveracj || romname == raveracja)
+			if (romname == raveracw || romname == raveracj || romname == raveracja || romname == raverace)
 			{
 				configMinForce = configMinForceRaveRacer;
 				configMaxForce = configMaxForceRaveRacer;
@@ -2549,7 +2552,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "NamcoFFBActive";
 			}
 
-			if (romname == victlapw)
+			if (romname == victlapw || romname == victlap)
 			{
 				configMinForce = configMinForceAceDriverVictory;
 				configMaxForce = configMaxForceAceDriverVictory;
@@ -2568,7 +2571,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "NamcoFFBActive";
 			}
 
-			if (romname == acedrvrw)
+			if (romname == acedrvrw || romname == acedrive)
 			{
 				configMinForce = configMinForceAceDriver;
 				configMaxForce = configMaxForceAceDriver;
@@ -3742,7 +3745,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						}
 					}
 
-					if (romname == victlapw)
+					if (romname == victlapw || romname == victlap)
 					{
 						if (!Scan)
 						{
@@ -3758,7 +3761,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						}
 					}
 
-					if (romname == acedrvrw)
+					if (romname == acedrvrw || romname == acedrive)
 					{
 						if (!Scan)
 						{

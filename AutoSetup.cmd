@@ -47,6 +47,9 @@ cd..
 cd Chase HQ 2
 rename dinput8.dll d3d9.dll
 cd..
+cd Dead Heat
+rename dinput8.dll opengl32.dll
+cd..
 cd D1GP Arcade
 rename dinput8.dll winmm.dll
 cd..
@@ -61,6 +64,9 @@ rename dinput8.dll d3d9.dll
 cd..
 cd HOTD4
 rename dinput8.dll opengl32.dll
+cd..
+cd Flycast
+rename dinput8.dll winmm.dll
 cd..
 cd Initial D 4
 rename dinput8.dll opengl32.dll
@@ -112,6 +118,9 @@ rename dinput8.dll opengl32.dll
 cd..
 cd Wacky Races
 rename dinput8.dll d3d9.dll
+cd..
+cd WMMT3
+rename dinput8.dll opengl32.dll
 cd..
 cd WMMT5
 rename dinput8.dll d3d11.dll
