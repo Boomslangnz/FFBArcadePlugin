@@ -42,13 +42,9 @@ void WMMT3::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 	if (EnableForceSpringEffect)
 		triggers->Springi(ForceSpringStrength / 100.0);
 
-	if (setSpring != OldsetSpring)
+	if (setSpring != OldsetSpring && setSpring)
 	{
 		double percentForce = setSpring / 63.0;
-
-		if (!setSpring)
-			percentForce = 0;
-
 		triggers->Spring(percentForce);
 	}
 
@@ -58,14 +54,8 @@ void WMMT3::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		triggers->Friction(percentForce);
 	}
 
-	if (setReflect != OldsetReflect)
+	if (setReflect != OldsetReflect && setReflect)
 	{
-		//if (setReflect == 0x00)
-		//{
-		//	triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-		//	triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-		//}
-		//else 
 		if (setReflect > 0x00 && setReflect <= 0x3F)
 		{
 			double percentForce = setReflect / 63.0;
@@ -82,15 +72,8 @@ void WMMT3::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 		}
 	}
 
-	if (setCenterOffset != OldsetCenterOffset)
+	if (setCenterOffset != OldsetCenterOffset && setCenterOffset)
 	{
-		//if (setCenterOffset == 0x00)
-		//{
-		//	triggers->Rumble(0, 0, 0);
-		//	triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-		//	triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-		//}
-		//else 
 		if (setCenterOffset > 0x00 && setCenterOffset <= 0x3F)
 		{
 			double percentForce = setCenterOffset / 63.0;
