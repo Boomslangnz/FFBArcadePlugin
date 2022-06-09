@@ -28,6 +28,7 @@
     <ClInclude Include="Game Files\D1GP.h" />
     <ClInclude Include="Game Files\Daytona3NSE.h" />
     <ClInclude Include="Game Files\DeadHeat.h" />
+    <ClInclude Include="Game Files\DeadHeatRiders.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />
     <ClInclude Include="Game Files\Flycast.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
@@ -76,6 +77,7 @@
     <ClCompile Include="Game Files\D1GP.cpp" />
     <ClCompile Include="Game Files\Daytona3NSE.cpp" />
     <ClCompile Include="Game Files\DeadHeat.cpp" />
+    <ClCompile Include="Game Files\DeadHeatRiders.cpp" />
     <ClCompile Include="Game Files\DemulATVTrackInputs.cpp" />
     <ClCompile Include="Game Files\DemulFasterThanSpeedInputs.cpp" />
     <ClCompile Include="Game Files\DemulMaximumSpeedInputs.cpp" />

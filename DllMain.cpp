@@ -40,6 +40,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Daytona3.h"
 #include "Game Files/Daytona3NSE.h"
 #include "Game Files/DeadHeat.h"
+#include "Game Files/DeadHeatRiders.h"
 #include "Game Files/DirtyDrivin.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
@@ -1032,6 +1033,7 @@ const int DAYTONA_3_NSE = 59;
 const int FLYCAST = 60;
 const int WMMT_3 = 61;
 const int DEAD_HEAT = 62;
+const int DEAD_HEAT_RIDERS = 63;
 
 HINSTANCE Get_hInstance()
 {
@@ -2501,6 +2503,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case DEAD_HEAT:
 		game = new DeadHeat;
+		break;
+	case DEAD_HEAT_RIDERS:
+		game = new DeadHeatRiders;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

@@ -12,7 +12,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "DeadHeat.h"
+#include "DeadHeatRiders.h"
 #include "../Common Files/Game.h"
 
 extern int EnableDamper;
@@ -23,7 +23,7 @@ static int OldsetViosity;
 static int OldsetCenterOffset;
 static int OldsetReflect;
 
-void DeadHeat::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
+void DeadHeatRiders::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
 	int setSpring = GetTeknoParrotFFB();
 	int setViosity = GetTeknoParrotFFB2();
@@ -33,10 +33,10 @@ void DeadHeat::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
 
-	if (setSpring != OldsetSpring && setSpring)
+	if (setSpring)
 	{
-		double percentForce = setSpring / 63.0;
-		triggers->Spring(percentForce);
+		double percentForce = setSpring / 500.0;
+		triggers->Springi(percentForce);
 	}
 
 	if (setViosity)
