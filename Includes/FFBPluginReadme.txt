@@ -85,46 +85,116 @@ extremely generous.
 
 ***SUPPORTED GAMES***
 
+MAME:
+
+-Ace Driver
+-Ace Driver: Victory Lap
 -Alien 3
--Alien Extermination
 -Afterburner II
--Afterburner Climax
--ATV Track
--Batman (2013)
 -Beast Busters
--Battle Gear 4 Tuned (Japan version v2.07)
 -California Speed
 -Chase Bombers
--ChaseHQ 2
 -Cisco Heat
--Crazy Taxi (Steam)
 -Crusn'USA
 -Crusn' World
--Daytona USA (M2 Emulator & MAME)
--Daytona USA 2 - Power Edition
--Daytona USA 2 - Battle on the Edge
--Daytona Championship USA
--Daytona Championship USA New Season Edition
--Dead Heat
--Dirt Devils
--Dirty Drivin
--Emergency Call Ambulance
--Faster Than Speed
+-Daytona USA
 -F-1 Grand Prix Star
 -F-1 Grand Prix Star II
--Ford Racing
 -Ghoul Panic
--Golden Gun
--GRID
--GTI Club Supermini Festa
 -Gun Buster
 -Hard Drivin'
--House of the dead 4
 -Hyperdrive
+-Laser Ghost
+-Outrun
+-Mechanized Attack
+-OffRoad Challenge
+-Operation Thunderbolt
+-Operation Wolf
+-Outrunners
+-Point Blank 2
+-Power Drift
+-Race Drivin'
+-Rail Chase
+-Rave Racer (TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK)
+-Revolution X
+-San Francisco Rush
+-San Francisco Rush The Rock
+-San Francisco Rush 2049
+-Sega Rally Championship
+-Sega Touring Car Championship
+-Super Chase - Criminal Termination
+-Super GT 24h
+-Space gun
+-Terminator 2
+-Turbo Outrun
+-Turkey Shoot
+-Under Fire
+-Vapor TRX
+-Virtua Racing (CHANGE TO UPRIGHT CABINET)
+
+
+MODEL 2 EMULATOR:
+
+-Daytona USA
 -Indy 500
+-Over Rev
+-Sega Rally Championship
+-Sega Touring Car Championship
+-Super GT 24h
+
+
+SUPERMODEL3:
+
+-Daytona USA 2 - Power Edition
+-Daytona USA 2 - Battle on the Edge
+-Dirt Devils
+-Emergency Call Ambulance
+-LeMans 24
+-Scud Race
+-Scud Race Plus
+-Sega Rally 2
+
+
+DEMUL:
+
+-ATV Track
 -Initial D Arcade Stage
 -Initial D Arcade Stage 2
 -Initial D Arcade Stage 3
+-Faster Than Speed
+-Maximum Speed
+-Smashing Drive
+
+
+FLYCAST:
+
+-Initial D Arcade Stage
+-Initial D Arcade Stage 2
+-Initial D Arcade Stage 3
+
+
+PC STEAM
+
+-Crazy Taxi (Steam)
+
+
+TEKNOPARROT:
+
+-Alien Extermination
+-Afterburner Climax
+-Batman (2013)
+-Battle Gear 4 Tuned (Japan version v2.07)
+-ChaseHQ 2
+-Daytona Championship USA
+-Daytona Championship USA New Season Edition
+-Dead Heat
+-Dead Heat Riders
+-Dirty Drivin
+-Ford Racing
+-Golden Gun
+-GRID
+-GTI Club Supermini Festa
+-House of the dead 4
 -Initial D Arcade Stage 4
 -Initial D Arcade Stage 4 Japan
 -Initial D Arcade Stage 5
@@ -133,57 +203,23 @@ extremely generous.
 -Initial D Arcade Stage 8
 -Initial D Arcade Stage Zero
 -KO Drive
--Laser Ghost
--LeMans 24
 -Let's Go Island
 -Let's Go Island 3D
 -Machstorm
 -Mario Kart GP DX
--Maximum Speed
--Mechanized Attack
 -Nascar Racing
--OffRoad Challenge
--Operation Thunderbolt
--Operation Wolf
--Outrun
 -Outrun 2 Special Tours Deluxe
--Outrunners
--Over Rev
--Point Blank 2
 -Pokken Tournament
--Power Drift
--Race Drivin'
--Rail Chase
 -Rambo
--Rave Racer (TURN ON FEEDBACK STEERING IN GAME SETTINGS OR YOU WILL NOT RECIEVE FORCE FEEDBACK)
--Revolution X
 -Road Fighters 3D
 -R-Tuned : Ultimate Street Racing
--San Francisco Rush
--San Francisco Rush The Rock
--San Francisco Rush 2049
--Scud Race
--Scud Race Plus
--Sega Touring Car Championship (M2 Emulator & MAME)
 -Sega Racing Classic
--Sega Rally Championship (M2 Emulator & MAME)
--Sega Rally 2
 -Sega Rally 3
 -Sega World Drivers Championship 2018
--Super Chase - Criminal Termination
--Super GT 24h (M2 Emulator & MAME)
--Smashing Drive
 -SnoCross
 -Sonic & Sega All Stars Racing
 -Storm Racer G
--Space gun
--Terminator 2
 -Transformers: Human Alliance
--Turbo Outrun
--Turkey Shoot
--Under Fire
--Vapor TRX
--Virtua Racing (CHANGE TO UPRIGHT CABINET)
 -Wacky Races
 -Wangan Midnight Maximum Tune 3
 -Wangan Midnight Maximum Tune 5
