@@ -14,6 +14,8 @@ xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\PokkenTournament" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\PokkenTournament" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Supermodel 64bit Outputs" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Supermodel 64bit Outputs" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Flycast" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Flycast" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT5" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT5" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT5DX" /Y
