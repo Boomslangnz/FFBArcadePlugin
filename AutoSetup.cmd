@@ -52,6 +52,18 @@ cd..
 cd Dead Heat
 rename dinput8.dll opengl32.dll
 cd..
+cd Dead Heat Riders
+rename dinput8.dll opengl32.dll
+cd..
+cd Gaelco Tuning Race
+rename dinput8.dll opengl32.dll
+cd..
+cd Tokyo Cop
+rename dinput8.dll opengl32.dll
+cd..
+cd Ring Riders
+rename dinput8.dll opengl32.dll
+cd..
 cd D1GP Arcade
 rename dinput8.dll winmm.dll
 cd..

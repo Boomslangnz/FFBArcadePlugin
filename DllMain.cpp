@@ -45,6 +45,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/Flycast.h"
+#include "Game Files/GaelcoTuningRace.h"
 #include "Game Files/GRID.h"
 #include "Game Files/GoldenGun.h"
 #include "Game Files/InitialD0v131.h"
@@ -80,6 +81,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/GTIClub3.h"
 #include "Game Files/Demul.h"
 #include "Game Files/ButtonRumble.h"
+#include "Game Files/RingRiders.h"
 #include "Game Files/RoadFighters3D.h"
 #include "Game Files/LGI3D.h"
 #include "Game Files/LGI.h"
@@ -88,6 +90,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Rambo.h"
 #include "Game Files/R-Tuned.h"
 #include "Game Files/SWDC2018.h"
+#include "Game Files/TokyoCop.h"
 #include "Game Files/Transformers.h"
 #include "Game Files/H2Overdrive.h"
 #include "Game Files/StormRacerG.h"
@@ -1034,6 +1037,9 @@ const int FLYCAST = 60;
 const int WMMT_3 = 61;
 const int DEAD_HEAT = 62;
 const int DEAD_HEAT_RIDERS = 63;
+const int GAELCO_TUNING_RACE = 64;
+const int TOKYO_COP = 65;
+const int RING_RIDERS = 66;
 
 HINSTANCE Get_hInstance()
 {
@@ -2506,6 +2512,15 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case DEAD_HEAT_RIDERS:
 		game = new DeadHeatRiders;
+		break;
+	case GAELCO_TUNING_RACE:
+		game = new GaelcoTuningRace;
+		break;
+	case TOKYO_COP:
+		game = new TokyoCop;
+		break;
+	case RING_RIDERS:
+		game = new RingRiders;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

@@ -149,6 +149,9 @@
     <ClCompile Include="Game Files\WMMT3.cpp" />
     <ClCompile Include="Game Files\DeadHeat.cpp" />
     <ClCompile Include="Game Files\DeadHeatRiders.cpp" />
+    <ClCompile Include="Game Files\GaelcoTuningRace.cpp" />
+    <ClCompile Include="Game Files\TokyoCop.cpp" />
+    <ClCompile Include="Game Files\RingRiders.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -354,6 +357,15 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\DeadHeatRiders.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\GaelcoTuningRace.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\TokyoCop.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\RingRiders.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

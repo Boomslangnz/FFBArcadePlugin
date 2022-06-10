@@ -32,6 +32,7 @@
     <ClInclude Include="Game Files\DirtyDrivin.h" />
     <ClInclude Include="Game Files\Flycast.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
+    <ClInclude Include="Game Files\GaelcoTuningRace.h" />
     <ClInclude Include="Game Files\GoldenGun.h" />
     <ClInclude Include="Game Files\GRID.h" />
     <ClInclude Include="Game Files\H2Overdrive.h" />
@@ -52,11 +53,13 @@
     <ClInclude Include="Game Files\M2Emulator.h" />
     <ClInclude Include="Game Files\R-Tuned.h" />
     <ClInclude Include="Game Files\Rambo.h" />
+    <ClInclude Include="Game Files\RingRiders.h" />
     <ClInclude Include="Game Files\RoadFighters3D.h" />
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
     <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
+    <ClInclude Include="Game Files\TokyoCop.h" />
     <ClInclude Include="Game Files\WMMT3.h" />
     <ClInclude Include="Game Files\WMMT5DX+.h" />
     <ClInclude Include="Game Files\WMMT5DX.h" />
@@ -86,6 +89,7 @@
     <ClCompile Include="Game Files\DirtyDrivin.cpp" />
     <ClCompile Include="Game Files\Flycast.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
+    <ClCompile Include="Game Files\GaelcoTuningRace.cpp" />
     <ClCompile Include="Game Files\GoldenGun.cpp" />
     <ClCompile Include="Game Files\GRID.cpp" />
     <ClCompile Include="Game Files\H2Overdrive.cpp" />
@@ -118,6 +122,7 @@
     <ClCompile Include="Game Files\PokkenTournament.cpp" />
     <ClCompile Include="Game Files\R-Tuned.cpp" />
     <ClCompile Include="Game Files\Rambo.cpp" />
+    <ClCompile Include="Game Files\RingRiders.cpp" />
     <ClCompile Include="Game Files\SegaRally3.cpp" />
     <ClCompile Include="Game Files\SegaRacingClassic.cpp" />
     <ClCompile Include="Game Files\FordRacing.cpp" />
@@ -128,6 +133,7 @@
     <ClCompile Include="Game Files\StormRacerG.cpp" />
     <ClCompile Include="Game Files\SWDC2018.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />
+    <ClCompile Include="Game Files\TokyoCop.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
     <ClCompile Include="Game Files\WackyRaces.cpp" />
     <ClCompile Include="Game Files\WMMT3.cpp" />
