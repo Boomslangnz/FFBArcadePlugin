@@ -943,7 +943,6 @@ static bool Effect1 = false;
 static bool Effect2 = false;
 static bool Effect3 = false;
 static bool DirtDevilSine = false;
-static bool ForceSpringEffect = false;
 static bool DontSineUntilRaceStart = false;
 static bool HardDrivinFrame = false;
 static bool Motion = false;
@@ -1598,12 +1597,6 @@ DWORD WINAPI ThreadForOutputs(LPVOID lpParam)
 	return 0;
 }
 
-DWORD WINAPI ThreadForForcedSpring(LPVOID lpParam)
-{
-	ForceSpringEffect = true;
-	return 0;
-}
-
 DWORD WINAPI ThreadForDaytonaStartEffect(LPVOID lpParam)
 {
 	Sleep(1300);
@@ -1698,21 +1691,9 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 		init = true;
 	}
 
-	if (EnableForceSpringEffect == 1)
+	if (EnableForceSpringEffect)
 	{
-		if (!initSpring)
-		{
-			CreateThread(NULL, 0, ThreadForForcedSpring, NULL, 0, NULL);
-			initSpring = true;
-		}	
-	}
-
-	if (EnableForceSpringEffect == 1)
-	{
-		if (ForceSpringEffect)
-		{
-			triggers->Springi(ForceSpringStrength / 100.0);
-		}
+		triggers->Springi(ForceSpringStrength / 100.0);
 	}
 
 	romname = new char[256]; //name of rom being played
