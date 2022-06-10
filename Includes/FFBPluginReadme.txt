@@ -191,6 +191,7 @@ TEKNOPARROT:
 -Dead Heat Riders
 -Dirty Drivin
 -Ford Racing
+-Gaelco Tuning Race
 -Golden Gun
 -GRID
 -GTI Club Supermini Festa
@@ -210,6 +211,7 @@ TEKNOPARROT:
 -Nascar Racing
 -Outrun 2 Special Tours Deluxe
 -Pokken Tournament
+-Ring Riders
 -Rambo
 -Road Fighters 3D
 -R-Tuned : Ultimate Street Racing
@@ -219,6 +221,7 @@ TEKNOPARROT:
 -SnoCross
 -Sonic & Sega All Stars Racing
 -Storm Racer G
+-Tokyo Cop
 -Transformers: Human Alliance
 -Wacky Races
 -Wangan Midnight Maximum Tune 3
