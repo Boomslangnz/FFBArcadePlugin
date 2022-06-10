@@ -336,6 +336,8 @@ static int configAlternativeMinForceRightDaytona2 = GetPrivateProfileInt(TEXT("S
 static int configAlternativeMaxForceRightDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightDaytona2"), 100, settingsFilename);
 static int configFeedbackLengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthDaytona2"), 120, settingsFilename);
 static int PowerModeDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeDaytona2"), 0, settingsFilename);
+static int EnableForceSpringEffectDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectDaytona2"), 0, settingsFilename);
+static int ForceSpringStrengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthDaytona2"), 0, settingsFilename);
 static int EnableDamperDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperDaytona2"), 0, settingsFilename);
 static int DamperStrengthDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthDaytona2"), 100, settingsFilename);
 
@@ -347,6 +349,8 @@ static int configAlternativeMinForceRightScud = GetPrivateProfileInt(TEXT("Setti
 static int configAlternativeMaxForceRightScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightScud"), 100, settingsFilename);
 static int configFeedbackLengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthScud"), 120, settingsFilename);
 static int PowerModeScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeScud"), 0, settingsFilename);
+static int EnableForceSpringEffectScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectScud"), 0, settingsFilename);
+static int ForceSpringStrengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthScud"), 0, settingsFilename);
 static int EnableDamperScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperScud"), 0, settingsFilename);
 static int DamperStrengthScud = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthScud"), 100, settingsFilename);
 
@@ -358,6 +362,8 @@ static int configAlternativeMinForceRightLeMans = GetPrivateProfileInt(TEXT("Set
 static int configAlternativeMaxForceRightLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightLeMans"), 100, settingsFilename);
 static int configFeedbackLengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthLeMans"), 120, settingsFilename);
 static int PowerModeLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeLeMans"), 0, settingsFilename);
+static int EnableForceSpringEffectLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectLeMans"), 0, settingsFilename);
+static int ForceSpringStrengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthLeMans"), 0, settingsFilename);
 static int EnableDamperLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperLeMans"), 0, settingsFilename);
 static int DamperStrengthLeMans = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthLeMans"), 100, settingsFilename);
 
@@ -1732,6 +1738,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				PowerMode = PowerModeDaytona2;
 				EnableDamper = EnableDamperDaytona2;
 				DamperStrength = DamperStrengthDaytona2;
+				EnableForceSpringEffect = EnableForceSpringEffectDaytona2;
+				ForceSpringStrength = ForceSpringStrengthDaytona2;
 
 				RunningFFB = "Daytona2Active";
 			}
@@ -1748,6 +1756,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				PowerMode = PowerModeScud;
 				EnableDamper = EnableDamperScud;
 				DamperStrength = DamperStrengthScud;
+				EnableForceSpringEffect = EnableForceSpringEffectScud;
+				ForceSpringStrength = ForceSpringStrengthScud;
 
 				RunningFFB = "Daytona2Active";
 			}
@@ -1764,6 +1774,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				PowerMode = PowerModeLeMans;
 				EnableDamper = EnableDamperLeMans;
 				DamperStrength = DamperStrengthLeMans;
+				EnableForceSpringEffect = EnableForceSpringEffectLeMans;
+				ForceSpringStrength = ForceSpringStrengthLeMans;
 
 				RunningFFB = "Daytona2Active";
 			}
