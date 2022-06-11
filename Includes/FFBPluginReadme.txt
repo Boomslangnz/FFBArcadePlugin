@@ -173,7 +173,7 @@ FLYCAST:
 -Initial D Arcade Stage 3
 
 
-PC STEAM
+PC STEAM:
 
 -Crazy Taxi (Steam)
 
