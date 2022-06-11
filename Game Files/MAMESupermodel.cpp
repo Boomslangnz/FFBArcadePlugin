@@ -66,6 +66,8 @@ std::string daytona("daytona");
 std::string daytonas("daytonas");
 std::string daytonase("daytonase");
 std::string dirtdash("dirtdash");
+std::string dirtdasha("dirtdasha");
+std::string dirtdashj("dirtdashj");
 std::string offroadc("offroadc");
 std::string offroadc4("offroadc4");
 std::string offroadc3("offroadc3");
@@ -1321,7 +1323,7 @@ static DWORD WINAPI ScanThread(LPVOID lpParam)
 		aAddy2 = PatternScan("\x80\x38\x00\x50\x49\x5A\x05\x70\x11\x01\x4B\x54\x4F", "xxxxxxxxxxxxx");
 	}
 
-	if (romname == dirtdash || romname == acedrvrw || romname == acedrive || romname == victlapw || romname == victlap) //Dirt Dash, Ace Driver & Ace Driver Victory Lap
+	if (romname == dirtdash || romname == dirtdasha || romname == dirtdashj || romname == acedrvrw || romname == acedrive || romname == victlapw || romname == victlap) //Dirt Dash, Ace Driver & Ace Driver Victory Lap
 	{
 		aAddy2 = PatternScan("\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\xC8\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14\x00\x14", "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx");
 	}
@@ -2526,7 +2528,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "SrallyActive";
 			}
 
-			if (romname == dirtdash)
+			if (romname == dirtdash || romname == dirtdasha || romname == dirtdashj)
 			{
 				configMinForce = configMinForceDirtDash;
 				configMaxForce = configMaxForceDirtDash;
@@ -3722,39 +3724,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				}
 				else
 				{
-					if (romname == dirtdash)
-					{
-						if (!Scan)
-						{
-							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
-							Scan = true;
-						}
-
-						UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 - 0x3E6, false);
-						if (CheckAddy2 == 0x01)
-						{
-							FFBAddress = (INT_PTR)aAddy2 - 0x2C6;
-							PatternFind = true;
-						}
-					}
-
-					if (romname == victlapw || romname == victlap)
-					{
-						if (!Scan)
-						{
-							CreateThread(NULL, 0, ScanThread, NULL, 0, NULL);
-							Scan = true;
-						}
-
-						UINT8 CheckAddy2 = helpers->ReadByte((INT_PTR)aAddy2 - 0x3E4, false);
-						if (CheckAddy2 == 0x38)
-						{
-							FFBAddress = (INT_PTR)aAddy2 - 0x2C6;
-							PatternFind = true;
-						}
-					}
-
-					if (romname == acedrvrw || romname == acedrive)
+					if (romname == acedrvrw || romname == acedrive || romname == victlapw || romname == victlap || romname == dirtdash || romname == dirtdasha || romname == dirtdashj)
 					{
 						if (!Scan)
 						{
