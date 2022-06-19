@@ -18,6 +18,12 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 extern int EnableDamper;
 extern int DamperStrength;
 
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int CenterOffsetStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("CenterOffsetStrength"), 100, settingsFilename);
+static int ReflectStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReflectStrength"), 100, settingsFilename);
+static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 100, settingsFilename);
+static int ViosityStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViosityStrength"), 100, settingsFilename);
+
 void DeadHeat::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
 	int setSpring = GetTeknoParrotFFB();
@@ -30,13 +36,13 @@ void DeadHeat::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 
 	if (setSpring)
 	{
-		double percentForce = setSpring / 63.0;
+		double percentForce = (setSpring / 63.0) * (SpringStrength / 100.0);
 		triggers->Spring(percentForce);
 	}
 
 	if (setViosity)
 	{
-		double percentForce = setViosity / 63.0;
+		double percentForce = (setViosity / 63.0) * (ViosityStrength / 100.0);
 		triggers->Friction(percentForce);
 	}
 
@@ -50,14 +56,14 @@ void DeadHeat::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 	{
 		if (setReflect > 0x00 && setReflect <= 0x3F)
 		{
-			double percentForce = setReflect / 63.0;
+			double percentForce = (setReflect / 63.0) * (ReflectStrength / 100.0);
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 		else if (setReflect > 0x3F)
 		{
-			double percentForce = (0xFF - setReflect) / 63.0;
+			double percentForce = ((0xFF - setReflect) / 63.0) * (ReflectStrength / 100.0);
 			double percentLength = 100;
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
@@ -65,14 +71,14 @@ void DeadHeat::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 
 		if (setCenterOffset > 0x00 && setCenterOffset <= 0x3F)
 		{
-			double percentForce = setCenterOffset / 63.0;
+			double percentForce = (setCenterOffset / 63.0) * (CenterOffsetStrength / 100.0);
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
 		else if (setCenterOffset < 0x00)
 		{
-			double percentForce = ((0xFFFFFFFF - setCenterOffset) + 1) / 63.0;
+			double percentForce = (((0xFFFFFFFF - setCenterOffset) + 1) / 63.0) * (CenterOffsetStrength / 100.0);
 			double percentLength = 100;
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
