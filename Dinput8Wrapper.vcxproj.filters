@@ -152,6 +152,7 @@
     <ClCompile Include="Game Files\GaelcoTuningRace.cpp" />
     <ClCompile Include="Game Files\TokyoCop.cpp" />
     <ClCompile Include="Game Files\RingRiders.cpp" />
+    <ClCompile Include="Game Files\InitialD0v230.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -366,6 +367,9 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\RingRiders.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\InitialD0v230.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

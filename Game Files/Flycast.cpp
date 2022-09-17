@@ -53,9 +53,13 @@ void Flycast::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 	if (!FFBGameInit)
 	{
 		HWND hwnd = FindWindowA(0, "Flycast");
+		HWND hwnddojo = FindWindowA(0, "Flycast Dojo");
 
-		if (pOrigProc == NULL)
+		if (pOrigProc == NULL && hwnd)
 			pOrigProc = (WNDPROC)::SetWindowLongPtr((HWND)hwnd, GWLP_WNDPROC, (LONG_PTR)HookWndProc);
+
+		if (pOrigProc == NULL && hwnddojo)
+			pOrigProc = (WNDPROC)::SetWindowLongPtr((HWND)hwnddojo, GWLP_WNDPROC, (LONG_PTR)HookWndProc);
 
 		if (LetsStartFFB)
 		{

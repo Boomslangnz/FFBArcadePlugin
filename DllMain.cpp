@@ -50,6 +50,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/GoldenGun.h"
 #include "Game Files/InitialD0v131.h"
 #include "Game Files/InitialD0v211.h"
+#include "Game Files/InitialD0v230.h"
 #include "Game Files/InitialD4.h"
 #include "Game Files/InitialD4Japan.h"
 #include "Game Files/InitialD5.h"
@@ -1040,6 +1041,7 @@ const int DEAD_HEAT_RIDERS = 63;
 const int GAELCO_TUNING_RACE = 64;
 const int TOKYO_COP = 65;
 const int RING_RIDERS = 66;
+const int INITIAL_D_0_230 = 67;
 
 HINSTANCE Get_hInstance()
 {
@@ -2368,6 +2370,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case INITIAL_D_0_211:
 		game = new InitialD0v211;
+		break;
+	case INITIAL_D_0_230:
+		game = new InitialD0v230;
 		break;
 	case INITIAL_D_4:
 		game = new InitialD4;

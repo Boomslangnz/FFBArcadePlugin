@@ -39,6 +39,7 @@
     <ClInclude Include="Game Files\HOTD4.h" />
     <ClInclude Include="Game Files\InitialD0v131.h" />
     <ClInclude Include="Game Files\InitialD0v211.h" />
+    <ClInclude Include="Game Files\InitialD0v230.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\MAMESupermodel.h" />
     <ClInclude Include="Game Files\MarioKartGPDXUSA.h" />
@@ -97,6 +98,7 @@
     <ClCompile Include="Game Files\InitialD0v131.cpp" />
     <ClCompile Include="Game Files\DemulInitialDInputs.cpp" />
     <ClCompile Include="Game Files\InitialD0v211.cpp" />
+    <ClCompile Include="Game Files\InitialD0v230.cpp" />
     <ClCompile Include="Game Files\KODrive.cpp" />
     <ClCompile Include="Game Files\M2EmulatorDaytonaInputs.cpp" />
     <ClCompile Include="Game Files\M2EmulatorIndy500Inputs.cpp" />
