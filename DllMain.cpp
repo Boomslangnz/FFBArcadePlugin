@@ -906,6 +906,7 @@ int PowerMode = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerMode"), 0, set
 int EnableRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumble"), 0, settingsFilename);
 int EnableRumbleTriggers = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableRumbleTriggers"), 0, settingsFilename);
 int ReverseRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("ReverseRumble"), 0, settingsFilename);
+int SingleRumbleMotor = GetPrivateProfileInt(TEXT("Settings"), TEXT("SingleRumbleMotor"), 0, settingsFilename);
 int EnableDamper = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamper"), 0, settingsFilename);
 int DamperStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrength"), 100, settingsFilename);
 wchar_t* deviceGUIDString = new wchar_t[256];
@@ -1896,6 +1897,15 @@ void TriggerRumbleEffect(double highfrequency, double lowfrequency, double lengt
 		DWORD rangeHigh = maxForce - minForceHigh;
 		DWORD LowMotor = (DWORD)(lowfrequency * rangeLow + minForceLow);
 		DWORD HighMotor = (DWORD)(highfrequency * rangeHigh + minForceHigh);
+
+		if (SingleRumbleMotor)
+		{
+			double LowPercent = (LowMotor / 65535.0) * 100.0;
+			double LowPercentRange = 100.0 - LowPercent;
+			double HighPercent = (HighMotor / 65535.0) * 100.0;
+			double Calculation = LowPercent + ((LowPercentRange * HighPercent) / 100.0);
+			LowMotor = 65535.0 * (Calculation / 100.0);
+		}
 
 		if (ReverseRumble == 1)
 		{
