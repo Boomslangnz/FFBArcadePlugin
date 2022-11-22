@@ -221,14 +221,15 @@ static int ThreadLoop()
 
 		if ((ff3 != 0x00) && (ff4 != 0x00))
 		{
-			if ((ff2 > 0x00)& (ff2 < 0x40))
+			if (ff2 > 0x00 && ff2 < 0x40)
 			{
 				double percentForce = (ff2) / 63.0;
 				double percentLength = 100;
 				myTriggers->Rumble(percentForce, percentForce, percentLength);
 				myTriggers->Sine(120, 120, percentForce);
 			}
-			if ((ff1 > 0x00)& (ff1 < 0x08))
+
+			if (ff1 > 0x00 && ff1 < 0x08)
 			{
 				//helpers->log("moving wheel left");
 				double percentForce = (ff1) / 7.0;
@@ -236,7 +237,7 @@ static int ThreadLoop()
 				myTriggers->Rumble(0, percentForce, percentLength);
 				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 			}
-			else if ((ff1 > 0x07)& (ff1 < 0x10))
+			else if (ff1 > 0x07 && ff1 < 0x10)
 			{
 				//helpers->log("moving wheel right");
 				double percentForce = (16 - ff1) / 8.0;
@@ -380,7 +381,7 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 		myTriggers = triggers;
 		myConstants = constants;
 		myHelpers = helpers;
-			if ((e.type == SDL_JOYAXISMOTION) & (ShowAxisForSetup == 0))
+			if (e.type == SDL_JOYAXISMOTION && ShowAxisForSetup == 0)
 			{
 				if (e.jaxis.which == joystick_index1)
 				{
@@ -398,7 +399,7 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 							e.jaxis.value = e.jaxis.value + WHEEL_DEAD_ZONE;
 							helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B39, (127 + (e.jaxis.value - WHEEL_DEAD_ZONE) / 255), false);
 						}
-						else if ((e.jaxis.value < WHEEL_DEAD_ZONE) & (e.jaxis.value > -WHEEL_DEAD_ZONE))
+						else if (e.jaxis.value < WHEEL_DEAD_ZONE && e.jaxis.value > -WHEEL_DEAD_ZONE)
 						{
 							helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B39, 0x7F, false);
 						}
@@ -419,7 +420,7 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 									e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
 									helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B41, ((e.jaxis.value + ACCL_DEAD_ZONE) / 128), false);
 								}
-								else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+								else if (e.jaxis.value < ACCL_DEAD_ZONE && e.jaxis.value > -ACCL_DEAD_ZONE)
 								{
 									helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B41, 0x00, false);
 									helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B3D, 0x00, false);
@@ -472,7 +473,7 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 									e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 									helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B41, ((-e.jaxis.value + ACCL_DEAD_ZONE) / 128), false);
 								}
-								else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+								else if (e.jaxis.value < ACCL_DEAD_ZONE && e.jaxis.value > -ACCL_DEAD_ZONE)
 								{
 									helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B41, 0xFF, false);
 									helpers->WriteByte((INT_PTR)gl_hjgtDll + 0x7D2B3D, 0xFF, false);
@@ -1185,15 +1186,15 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 						int Writegearnumber2 = helpers->ReadIntPtr((INT_PTR)Writegearnumber1 + 0x390, false);
 						helpers->WriteIntPtr((INT_PTR)Writegearnumber2 + 0x18, ++gearnumber3, false);
 					}
-					if ((e.jbutton.button == leverDownDevice2) & (SequentialGears == 0))
+					if (e.jbutton.button == leverDownDevice2 && SequentialGears == 0)
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
 					}
-					if ((e.jbutton.button == leverDownDevice2) & (SequentialGears == 1) && (menuvalue1 == 0x00))
+					if (e.jbutton.button == leverDownDevice2 && SequentialGears == 1 && menuvalue1 == 0x00)
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
 					}
-					if ((e.jbutton.button == leverDownDevice2) & (SequentialGears == 1) & (gearnumber3 > 0x01))
+					if (e.jbutton.button == leverDownDevice2 && SequentialGears == 1 && gearnumber3 > 0x01)
 					{
 						int Writegearnumber = helpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x00953F70, false);
 						int Writegearnumber1 = helpers->ReadIntPtr((INT_PTR)Writegearnumber + 0x5C, false);
@@ -1230,15 +1231,15 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x800, false);
 					}
-					if ((e.jbutton.button == leverUp) && (SequentialGears == 0))
+					if (e.jbutton.button == leverUp && SequentialGears == 0)
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
 					}
-					if ((e.jbutton.button == leverUp) && (SequentialGears == 1) && (menuvalue1 == 0x00))
+					if (e.jbutton.button == leverUp && SequentialGears == 1 && menuvalue1 == 0x00)
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
 					}
-					if ((e.jbutton.button == leverDown) && (SequentialGears == 0))
+					if (e.jbutton.button == leverDown && SequentialGears == 0)
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
 					}
