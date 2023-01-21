@@ -6,6 +6,8 @@ xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v131" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D Zero v131" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v211" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D Zero v211" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v230" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D Zero v230" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Sega World Drivers Championship 2018" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Sega World Drivers Championship 2018" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\MAME 64bit Outputs" /Y

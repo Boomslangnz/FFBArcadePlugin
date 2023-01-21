@@ -57,7 +57,7 @@ void InitialD0v230::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 
 	if (IDZMode == 0)
 	{
-		ff = helpers->ReadByte(0x18A720F, true);
+		ff = helpers->ReadByte(0x18B54DF, true);
 		oldff = 0;
 		newff = ff;
 
