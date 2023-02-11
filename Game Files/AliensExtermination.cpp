@@ -53,8 +53,8 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 	UINT8 Ammo2pB = helpers->ReadByte(0x4E7AEA3, true);
 	float Flame2p = helpers->ReadFloat32(0x556CEC4, true);
 	float Health2p = helpers->ReadFloat32(0x556CC18, true);
-	UINT8 Shoot1p = helpers->ReadByte(0x4E7AEC8, true);
-	UINT8 Shoot2p = helpers->ReadByte(0x4E7AF00, true);
+	UINT8 Shoot1p = helpers->ReadByte(0x556ACBC, true);
+	UINT8 Shoot2p = helpers->ReadByte(0x556AFD8, true);
 
 	HWND hWnd = FindWindowA(0, ("GLUT"));
 
@@ -178,7 +178,7 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 	{
 		if (((Ammo1pA == 0) && (Ammo1pB == 0)) || ((Ammo1pA == 10) && (Ammo1pB == 10)))
 		{ 
-			if (Shoot1p == 1)
+			if (Shoot1p & 0x10)
 			{
 				if (HowtoRumbleGunEffect == 0)
 				{
@@ -243,7 +243,7 @@ void AliensExtermination::FFBLoop(EffectConstants* constants, Helpers* helpers, 
 	{
 		if (((Ammo2pA == 0) && (Ammo2pB == 0)) || ((Ammo2pA == 10) && (Ammo2pB == 10)))
 		{ 
-			if (Shoot2p == 1)
+			if (Shoot2p & 0x10)
 			{
 				if (HowtoRumbleGunEffect == 0)
 				{
