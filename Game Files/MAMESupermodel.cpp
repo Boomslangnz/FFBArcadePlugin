@@ -14,8 +14,11 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "MAMESupermodel.h"
 #include <string>
 #include <tchar.h>
+#include <atlstr.h>
 #include "SDL.h"
 #include "../Common Files/SignatureScanning.h"
+
+static char GameName[256];
 
 //Supermodel Emulator Games
 std::string dayto2pe("dayto2pe");
@@ -217,6 +220,12 @@ std::string victlapw("victlapw");
 std::string victlap("victlap");
 std::string dblaxle("dblaxle");
 std::string dblaxleu("dblaxleu");
+//Flycast Below
+std::string INITIAL("INITIAL");
+std::string EIGHTEENWHEELER("18WHEELER\n");
+std::string MAXIMUM("MAXIMUM");
+std::string FASTER("FASTER");
+std::string F355("F355");
 
 //Our string to load game from
 std::string M2Active("M2Active");
@@ -238,6 +247,9 @@ std::string AfterburnerActive("AfterburnerActive");
 std::string OutrunActive("OutrunActive");
 std::string PDriftActive("PDriftActive");
 std::string SuperChaseActive("SuperChaseActive");
+std::string MaximumSpeedActive("MaximumSpeedActive");
+std::string InitialDActive("InitialDActive");
+std::string NaomiFFBActive("NaomiFFBActive");
 
 //Names of FFB Outputs
 std::string RawDrive("RawDrive");
@@ -270,10 +282,10 @@ std::string mcuout1("mcuout1");
 std::string Bank_Motor_Speed("Bank_Motor_Speed");
 std::string Bank_Motor_Direction("Bank_Motor_Direction");
 std::string bank_motor_position("bank_motor_position");
-
-//Emulator Name
-std::string MAME("MAME");
-std::string Supermodel("Supermodel");
+//Flycast
+std::string awffb("awffb");
+std::string midiffb("midiffb");
+std::string m3ffb("m3ffb");
 
 HINSTANCE ProcDLL = NULL;
 extern int joystick_index1;
@@ -285,7 +297,6 @@ extern SDL_Haptic* haptic2;
 extern SDL_Joystick* GameController3;
 extern SDL_Haptic* ControllerHaptic3;
 extern SDL_Haptic* haptic3;
-
 
 //Config Settings
 extern wchar_t* settingsFilename;
@@ -947,6 +958,7 @@ static bool Effect3 = false;
 static bool DirtDevilSine = false;
 static bool DontSineUntilRaceStart = false;
 static bool HardDrivinFrame = false;
+static bool NaomiFFBGo = false;
 static bool Motion = false;
 static bool MotionFalse = false;
 static bool StartEffectOnce = false;
@@ -960,8 +972,8 @@ HINSTANCE hPrevInstance;
 LPSTR lpCmdLine;
 int nCmdShow;
 
+static const char* FlycastnameFFB;
 const char* nameFFB;
-const char* romFFB;
 const char* EmulatorName;
 char* name;
 char* romname;
@@ -977,6 +989,8 @@ int frame = 0;
 int HardDrivinFFB;
 int StopConstant;
 int newstateFFB;
+int oldstateFFB;
+int EffectCount;
 int stateFFB;
 int stateFFB2;
 int stateFFB3;
@@ -1171,7 +1185,6 @@ void add_map_entry(id_map_entry* entry, int id, char* name)
 	}
 }
 
-
 int __stdcall mame_start(int hWnd)
 {
 	WCHAR buf[256];
@@ -1194,6 +1207,11 @@ int __stdcall mame_stop(void)
 	return 1;
 }
 
+static void CurrentGameName(Helpers* helpers)
+{
+	helpers->info("Game = %s", GameName);
+}
+
 int __stdcall mame_copydata(int id, const char* name)
 {
 	WCHAR buf[256];
@@ -1202,7 +1220,10 @@ int __stdcall mame_copydata(int id, const char* name)
 
 	if (id == 0)
 	{
-		romFFB = name;
+		//romFFB = name;
+		sprintf(GameName, "%s", name);
+
+		CurrentGameName(0);
 	}
 
 	AppendTextToEditCtrl(hEdit, buf);
@@ -1222,7 +1243,9 @@ int __stdcall mame_updatestate(const char* id, int state)
 	wsprintf(buf, L"updatestate: id=%d (%S) state=%d\r\n", id, name, state);
 	AppendTextToEditCtrl(hEdit, buf);
 
-	nameFFB = name;
+	CStringA stringName(name);
+	nameFFB = stringName;
+
 	newstateFFB = state;
 
 	if (HardDrivinFrame)
@@ -1276,21 +1299,6 @@ int __stdcall mame_output(const char* name, int value)
 	return 1;
 }
 
-//static BOOL CALLBACK FindWindowBySubstr(HWND hwnd, LPARAM substring)
-//{
-//	const DWORD TITLE_SIZE = 1024;
-//	TCHAR windowTitle[TITLE_SIZE];
-//
-//	if (GetWindowText(hwnd, windowTitle, TITLE_SIZE))
-//	{
-//		if (_tcsstr(windowTitle, LPCTSTR(substring)) != NULL)
-//		{
-//			return false;
-//		}
-//	}
-//	return true;
-//}
-
 static DWORD WINAPI ScanThread(LPVOID lpParam)
 {
 	if (romname == raveracw || romname == raveracj || romname == raveracja || romname == raverace) //Rave Racer
@@ -1329,6 +1337,74 @@ static DWORD WINAPI ScanThread(LPVOID lpParam)
 	}
 
 	return 0;
+}
+
+static int speedffb(int ffRaw) {
+	switch (ffRaw) {
+	case 0x1E:
+		return 31;
+	case 0x1C:
+		return 30;
+	case 0x1A:
+		return 29;
+	case 0x18:
+		return 28;
+	case 0x16:
+		return 27;
+	case 0x14:
+		return 26;
+	case 0x12:
+		return 25;
+	case 0x10:
+		return 24;
+	case 0x0E:
+		return 23;
+	case 0x0C:
+		return 22;
+	case 0x0A:
+		return 21;
+	case 0x08:
+		return 20;
+	case 0x06:
+		return 19;
+	case 0x04:
+		return 18;
+	case 0x02:
+		return 17;
+
+	case 0x1F:
+		return 16;
+	case 0x1D:
+		return 15;
+	case 0x1B:
+		return 14;
+	case 0x19:
+		return 13;
+	case 0x17:
+		return 12;
+	case 0x15:
+		return 11;
+	case 0x13:
+		return 10;
+	case 0x11:
+		return 9;
+	case 0x0F:
+		return 8;
+	case 0x0D:
+		return 7;
+	case 0x0B:
+		return 6;
+	case 0x09:
+		return 5;
+	case 0x07:
+		return 4;
+	case 0x05:
+		return 3;
+	case 0x03:
+		return 2;
+	case 0x01:
+		return 1;
+	}
 }
 
 static int raveracer(int ffRaw) {
@@ -1699,7 +1775,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 	}
 
 	romname = new char[256]; //name of rom being played
-	sprintf(romname, "%s", romFFB);
+	sprintf(romname, "%s", GameName);
 
 	name = new char[256]; //name of FFB currently
 	sprintf(name, "%s", nameFFB);
@@ -2585,6 +2661,22 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "NamcoFFBActive";
 			}
 
+			if (romname == INITIAL)
+			{
+				RunningFFB = "InitialDActive";
+			}
+
+			if (romname == MAXIMUM || romname == FASTER)
+			{
+				RunningFFB = "MaximumSpeedActive";
+			}
+
+			if (romname == F355 || romname == EIGHTEENWHEELER)
+			{
+				RunningFFB = "NaomiFFBActive";
+				NaomiFFBGo = true;
+			}
+
 			if (enableLogging == 1)
 			{
 				char romnametext[256];
@@ -2602,34 +2694,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			}
 		}
 	}
-
-	//if (!EmuName)
-	//{
-	//	//Select code to run via emulator name using partial window title to avoid issues with FPS showing etc
-	//	const TCHAR MAMEstring[] = TEXT("MAME");
-	//	EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring);
-
-	//	const TCHAR Supermodelstring[] = TEXT("Supermodel");
-	//	EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring);
-
-	//	if (!EnumWindows(FindWindowBySubstr, (LPARAM)MAMEstring))
-	//	{
-	//		EmulatorName = "MAME";
-	//	}
-
-	//	if (!EnumWindows(FindWindowBySubstr, (LPARAM)Supermodelstring))
-	//	{
-	//		EmulatorName = "Supermodel";
-	//	}
-
-	//	Emulator = new char[256]; // Emulator name
-	//	sprintf(Emulator, "%s", EmulatorName);
-
-	//	if ((EmulatorName != NULL) && (EmulatorName[0] != '\0'))
-	//	{
-	//		EmuName = true;
-	//	}
-	//}
 
 	if (RomGameName && RunningFFB > 0)
 	{
@@ -2759,7 +2823,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			}
 			oldff = newff;
 		}
-		
+
 		if (RunningFFB == DirtDevilsActive) //Dirt Devils
 		{
 			if (name == RawDrive)
@@ -3402,6 +3466,178 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				{
 					triggers->Sine(0, 0, 0);
 					triggers->Rumble(0, 0, 0);
+				}
+			}
+		}
+
+		if (RunningFFB == MaximumSpeedActive)
+		{
+			if (name == awffb)
+			{
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				stateFFB = newstateFFB;
+				UINT8 FFB = speedffb(stateFFB);
+
+				if (FFB > 0x00 && FFB < 0x11)
+				{
+					double percentForce = (FFB) / 16.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if (FFB > 0x10 && FFB < 0x20)
+				{
+					double percentForce = (FFB - 16) / 16.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
+		}
+		
+		if (RunningFFB == NaomiFFBActive)
+		{
+			if (name == m3ffb)
+			{
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				stateFFB = newstateFFB;
+
+				if (oldstateFFB != stateFFB)
+				{
+					if (stateFFB > 0xAF && stateFFB < 0xC0)
+					{
+						Effect1 = true;
+					}
+				}
+
+				if (stateFFB > 0x09 && stateFFB < 0x20)
+				{
+					double percentForce = (stateFFB - 9) / 16.0;
+					triggers->Springi(percentForce);
+				}
+
+				if (stateFFB > 0x1F && stateFFB < 0x30)
+				{
+					double percentForce = (stateFFB - 31) / 16.0;
+					triggers->Friction(percentForce);
+				}
+
+				if (stateFFB > 0x2F && stateFFB < 0x40)
+				{
+					double percentForce = (stateFFB - 47) / 16.0;
+					triggers->Rumble(percentForce, percentForce, 100);
+					triggers->Sine(40, 0, percentForce);
+				}
+
+				if (stateFFB > 0x3F && stateFFB < 0x50)
+				{
+					double percentForce = (stateFFB - 63) / 16.0;
+					triggers->Friction(percentForce);
+				}
+
+				if (stateFFB > 0x4F && stateFFB < 0x60)
+				{
+					double percentForce = (stateFFB - 79) / 16.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if (stateFFB > 0x5F && stateFFB < 0x70)
+				{
+					if (stateFFB != 0x6A && stateFFB != 0x6B) // Annoying turn of wheel start of races??
+					{
+						double percentForce = (stateFFB - 95) / 16.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+				}
+
+				if (stateFFB == 0x9F)
+				{
+					double percentForce = 0.4;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB == 0xBF)
+				{
+					double percentForce = 0.4;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				if (Effect1)
+				{
+					++EffectCount;
+
+					if (EffectCount >= 31)
+					{
+						Effect1 = false;
+						EffectCount = 0;
+					}
+
+					double percentForce = (stateFFB - 143) / 16.0;
+					triggers->Rumble(percentForce, percentForce, 100);
+					triggers->Sine(60, 0, percentForce);
+				}
+				oldstateFFB = stateFFB;
+			}
+		}
+
+		if (RunningFFB == InitialDActive)
+		{
+			if (name == midiffb)
+			{
+				helpers->log("got value: ");
+				std::string ffs = std::to_string(newstateFFB);
+				helpers->log((char*)ffs.c_str());
+
+				stateFFB = newstateFFB;
+
+				BYTE* ffb = reinterpret_cast<BYTE*>(&stateFFB);
+
+				if ((ffb[2] == 0x80) && (ffb[0] == 0x01))
+				{
+					triggers->Spring(1.0);
+				}
+
+				if ((ffb[2] == 0x85) && (ffb[1] == 0x3F) && (ffb[0] > 0x00) && (ffb[0] < 0x30))
+				{
+					double percentForce = ffb[0] / 47.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, percentForce, percentLength);
+					triggers->Sine(40, 0, percentForce);
+				}
+
+				if ((ffb[2] == 0x86) && (ffb[1] == 0x02) && (ffb[0] > 0x09) && (ffb[0] < 0x3C))
+				{
+					double percentForce = (60 - ffb[0]) / 43.0;
+					double percentLength = 100;
+					triggers->Spring(percentForce);
+				}
+
+				if ((ffb[2] == 0x84) && (ffb[1] == 0x00) && (ffb[0] > 0x37) && (ffb[0] < 0x80))
+				{
+					double percentForce = (128 - ffb[0]) / 72.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if ((ffb[2] == 0x84) && (ffb[1] == 0x01) && (ffb[0] > 0x00) && (ffb[0] < 0x49))
+				{
+					double percentForce = (ffb[0] / 72.0);
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 			}
 		}

@@ -30,7 +30,6 @@
     <ClInclude Include="Game Files\DeadHeat.h" />
     <ClInclude Include="Game Files\DeadHeatRiders.h" />
     <ClInclude Include="Game Files\DirtyDrivin.h" />
-    <ClInclude Include="Game Files\Flycast.h" />
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GaelcoTuningRace.h" />
     <ClInclude Include="Game Files\GoldenGun.h" />
@@ -88,7 +87,6 @@
     <ClCompile Include="Game Files\DemulNascarInputs.cpp" />
     <ClCompile Include="Game Files\DemulSmashingDriveInputs.cpp" />
     <ClCompile Include="Game Files\DirtyDrivin.cpp" />
-    <ClCompile Include="Game Files\Flycast.cpp" />
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\GaelcoTuningRace.cpp" />
     <ClCompile Include="Game Files\GoldenGun.cpp" />

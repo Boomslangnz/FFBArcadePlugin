@@ -145,7 +145,6 @@
     <ClCompile Include="Game Files\WMMT5DX.cpp" />
     <ClCompile Include="Game Files\CrazyTaxi.cpp" />
     <ClCompile Include="Game Files\Daytona3NSE.cpp" />
-    <ClCompile Include="Game Files\Flycast.cpp" />
     <ClCompile Include="Game Files\WMMT3.cpp" />
     <ClCompile Include="Game Files\DeadHeat.cpp" />
     <ClCompile Include="Game Files\DeadHeatRiders.cpp" />
@@ -346,9 +345,6 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\Daytona3NSE.h">
-      <Filter>Common Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Game Files\Flycast.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\WMMT3.h">

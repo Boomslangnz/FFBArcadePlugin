@@ -32,6 +32,7 @@ xcopy ".\MAME32.dll" ".\Release.Win32\MAME 32bit Outputs" /Y
 xcopy ".\MAME64.dll" ".\Release.Win32\MAME 64bit Outputs" /Y
 xcopy ".\MAME32.dll" ".\Release.Win32\Supermodel 32bit Outputs" /Y
 xcopy ".\MAME64.dll" ".\Release.Win32\Supermodel 64bit Outputs" /Y
+xcopy ".\MAME64.dll" ".\Release.Win32\Flycast" /Y
 cd Release.Win32
 cd Afterburner Climax
 rename dinput8.dll opengl32.dll

@@ -27,6 +27,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <d3d11.h>
 #include <sapi.h>
 #include <atlcomcli.h>
+#include <TlHelp32.h>
 #include "Config/PersistentValues.h"
 
 // include all game header files here.
@@ -44,7 +45,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/DirtyDrivin.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
-#include "Game Files/Flycast.h"
 #include "Game Files/GaelcoTuningRace.h"
 #include "Game Files/GRID.h"
 #include "Game Files/GoldenGun.h"
@@ -892,6 +892,7 @@ int joystick_index1;
 int joystick1Index = -1;
 int joystick_index2 = -1;
 int joystick_index3 = -1;
+static DWORD GameProcessID;
 
 LPCSTR CustomAlternativeMaxForceLeft;
 LPCSTR CustomAlternativeMaxForceRight;
@@ -2234,6 +2235,31 @@ DWORD WINAPI AdjustFFBStrengthLoopNoWaitEvent(LPVOID lpParam)
 	}
 }
 
+static DWORD MyGetProcessId(LPCTSTR ProcessName)
+{
+	PROCESSENTRY32 pt;
+	HANDLE hsnap = CreateToolhelp32Snapshot(TH32CS_SNAPPROCESS, 0);
+	pt.dwSize = sizeof(PROCESSENTRY32);
+	if (Process32First(hsnap, &pt)) {
+		do {
+			if (!lstrcmpi(pt.szExeFile, ProcessName)) {
+				CloseHandle(hsnap);
+				return pt.th32ProcessID;
+			}
+		} while (Process32Next(hsnap, &pt));
+	}
+	CloseHandle(hsnap);
+	return 0;
+}
+
+static BOOL IsProcessRunning(DWORD pid)
+{
+	HANDLE process = OpenProcess(SYNCHRONIZE, FALSE, pid);
+	DWORD ret = WaitForSingleObject(process, 0);
+	CloseHandle(process);
+	return ret == WAIT_TIMEOUT;
+}
+
 DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
@@ -2298,10 +2324,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case DAYTONA_3_NSE:
 		game = new Daytona3NSE;
 		break;
-	case SUPERMODEL_:
-		game = new MAMESupermodel;
-		break;
 	case MAME_:
+	case SUPERMODEL_:
+	case FLYCAST:
 		game = new MAMESupermodel;
 		break;
 	case FORD_RACING:
@@ -2459,9 +2484,6 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case Crazy_Taxi:
 		game = new CrazyTaxi;
-		break;
-	case FLYCAST:
-		game = new Flycast;
 		break;
 	case WMMT_3:
 		game = new WMMT3;
@@ -3316,6 +3338,19 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			originalmmsystemGetVersion = GetProcAddress(gl_hOriginalDll, "mmsystemGetVersion");
 		}
 
+		if (configGameId == 22)
+		{
+			DWORD ProcessID = GetPrivateProfileInt(TEXT("Settings"), TEXT("ProcessID"), 0, settingsFilename);
+
+			if (IsProcessRunning(ProcessID))
+				break;
+
+			GameProcessID = MyGetProcessId(L"flycast.exe");
+
+			if (GameProcessID)
+				WritePrivateProfileStringA("Settings", "ProcessID", (char*)(std::to_string(GameProcessID)).c_str(), ".\\FFBPlugin.ini");
+		}
+
 		if (processName.find("FFBPluginGUI.exe") != std::string::npos)
 		{
 			hlp.log("hooked FFBPluginGUI.exe, aborting");
@@ -3342,6 +3377,9 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		hlp.log("detaching from process:");
 		hlp.log((char*)processName.c_str());
 		keepRunning = false;
+
+		if (configGameId == 22)
+			WritePrivateProfileStringA("Settings", "ProcessID", 0, ".\\FFBPlugin.ini");
 
 		if (haptic)
 			SDL_HapticClose(haptic);
