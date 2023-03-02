@@ -3338,7 +3338,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			originalmmsystemGetVersion = GetProcAddress(gl_hOriginalDll, "mmsystemGetVersion");
 		}
 
-		if (configGameId == 22)
+		if (configGameId == 60)
 		{
 			DWORD ProcessID = GetPrivateProfileInt(TEXT("Settings"), TEXT("ProcessID"), 0, settingsFilename);
 
@@ -3378,7 +3378,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 		hlp.log((char*)processName.c_str());
 		keepRunning = false;
 
-		if (configGameId == 22)
+		if (configGameId == 60)
 			WritePrivateProfileStringA("Settings", "ProcessID", 0, ".\\FFBPlugin.ini");
 
 		if (haptic)
