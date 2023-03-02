@@ -168,9 +168,15 @@ DEMUL:
 
 FLYCAST:
 
+-18 Wheeler
+-F355 Challenge
+-F355 Challenge 2
+-Faster Than Speed
+-Maximum Speed
 -Initial D Arcade Stage
 -Initial D Arcade Stage 2
 -Initial D Arcade Stage 3
+
 
 
 PC STEAM:
