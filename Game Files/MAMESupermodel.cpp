@@ -996,6 +996,7 @@ int stateFFB2;
 int stateFFB3;
 int stateFFBDevice2;
 int stateFFBDevice3;
+int SineEffectState;
 double Divide;
 static INT_PTR FFBAddress;
 static UINT8 ff;
@@ -3512,6 +3513,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				{
 					if (stateFFB > 0xAF && stateFFB < 0xC0)
 					{
+						SineEffectState = stateFFB;
 						Effect1 = true;
 					}
 				}
@@ -3559,7 +3561,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					}
 				}
 
-				if (stateFFB == 0x9F)
+				if (stateFFB == 0x9F || stateFFB == 0xE2 || stateFFB == 0xE3)
 				{
 					double percentForce = 0.4;
 					double percentLength = 100;
@@ -3567,7 +3569,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 
-				if (stateFFB == 0xBF)
+				if (stateFFB == 0xBF || stateFFB == 0xEA || stateFFB == 0xEB)
 				{
 					double percentForce = 0.4;
 					double percentLength = 100;
@@ -3585,7 +3587,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						EffectCount = 0;
 					}
 
-					double percentForce = (stateFFB - 143) / 16.0;
+					double percentForce = (SineEffectState - 143) / 16.0;
 					triggers->Rumble(percentForce, percentForce, 100);
 					triggers->Sine(60, 0, percentForce);
 				}
