@@ -3648,61 +3648,88 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				std::string ffs = std::to_string(newstateFFB);
 				helpers->log((char*)ffs.c_str());
 
-				stateFFB = newstateFFB;
+				if (newstateFFB != 0xD0)
+					stateFFB = newstateFFB;
 
 				if (oldstateFFB != stateFFB)
 				{
-					if (stateFFB > 0xAF && stateFFB < 0xC0)
+					if ((stateFFB > 0xB0 && stateFFB < 0xC0) || stateFFB == 0x9F)
 					{
 						SineEffectState = stateFFB;
 						Effect1 = true;
 					}
 				}
 
-				if (stateFFB > 0x09 && stateFFB < 0x20)
+				if (stateFFB > 0x10 && stateFFB < 0x20)
 				{
-					double percentForce = (stateFFB - 9) / 16.0;
+					double percentForce = (stateFFB - 10) / 15.0;
 					triggers->Springi(percentForce);
 				}
 
-				if (stateFFB > 0x1F && stateFFB < 0x30)
+				if (stateFFB > 0x20 && stateFFB < 0x30)
 				{
-					double percentForce = (stateFFB - 31) / 16.0;
+					double percentForce = (stateFFB - 32) / 15.0;
 					triggers->Friction(percentForce);
 				}
 
-				if (stateFFB > 0x2F && stateFFB < 0x40)
+				if (stateFFB > 0x30 && stateFFB < 0x40)
 				{
-					double percentForce = (stateFFB - 47) / 16.0;
+					double percentForce = (stateFFB - 48) / 15.0;
 					triggers->Rumble(percentForce, percentForce, 100);
 					triggers->Sine(40, 0, percentForce);
 				}
 
-				if (stateFFB > 0x3F && stateFFB < 0x50)
+				if (stateFFB > 0x40 && stateFFB < 0x50)
 				{
-					double percentForce = (stateFFB - 63) / 16.0;
-					triggers->Friction(percentForce);
+					double percentForce = (stateFFB - 64) / 15.0;
+
+					percentForce = percentForce * 2.0;
+
+					if (percentForce > 1.0)
+						percentForce = 1.0;
+
+					triggers->Springi(percentForce);
 				}
 
-				if (stateFFB > 0x4F && stateFFB < 0x60)
+				if (stateFFB > 0x50 && stateFFB < 0x60)
 				{
-					double percentForce = (stateFFB - 79) / 16.0;
+					double percentForce = (stateFFB - 80) / 15.0;
 					double percentLength = 100;
 					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
-				else if (stateFFB > 0x5F && stateFFB < 0x70)
+
+				if (stateFFB > 0x60 && stateFFB < 0x70)
 				{
-					if (stateFFB != 0x6A && stateFFB != 0x6B) // Annoying turn of wheel start of races??
+					if (oldstateFFB != stateFFB)
 					{
-						double percentForce = (stateFFB - 95) / 16.0;
+						if (stateFFB != 0x6A)
+						{
+							double percentForce = (stateFFB - 96) / 15.0;
+							double percentLength = 100;
+							triggers->Rumble(0, percentForce, percentLength);
+							triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+						}
+					}
+
+					if (stateFFB != 0x6A)
+					{
+						double percentForce = (stateFFB - 96) / 15.0;
 						double percentLength = 100;
 						triggers->Rumble(0, percentForce, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 					}
 				}
 
-				if (stateFFB == 0x9F || stateFFB == 0xE2 || stateFFB == 0xE3)
+				if (stateFFB > 0x80 && stateFFB < 0x90)
+				{
+					double percentForce = (stateFFB - 128) / 15.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				if (stateFFB == 0x9F)
 				{
 					double percentForce = 0.4;
 					double percentLength = 100;
@@ -3710,11 +3737,43 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 
-				if (stateFFB == 0xBF || stateFFB == 0xEA || stateFFB == 0xEB)
+				if (stateFFB > 0xA0 && stateFFB < 0xB0)
+				{
+					double percentForce = (stateFFB - 160) / 15.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB == 0xBF)
 				{
 					double percentForce = 0.4;
 					double percentLength = 100;
 					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				if (stateFFB > 0xD0 && stateFFB < 0xE0)
+				{
+					double percentForce = (stateFFB - 208) / 15.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB > 0xE0 && stateFFB < 0xE9)
+				{
+					double percentForce = (stateFFB - 224) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB > 0xE8 && stateFFB < 0xD0)
+				{
+					double percentForce = (stateFFB - 232) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 
@@ -3728,9 +3787,18 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						EffectCount = 0;
 					}
 
-					double percentForce = (SineEffectState - 143) / 16.0;
+					double percentForce = (SineEffectState - 176) / 15.0;
 					triggers->Rumble(percentForce, percentForce, 100);
 					triggers->Sine(60, 0, percentForce);
+				}
+
+				if (stateFFB == 0xC0)
+				{
+					triggers->Rumble(0, 0, 100);
+					triggers->Sine(60, 0, 0);
+					triggers->Friction(0);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
 				}
 				oldstateFFB = stateFFB;
 			}
