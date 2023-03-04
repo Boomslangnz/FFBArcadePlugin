@@ -948,6 +948,71 @@ static int FFBDivideAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFB
 static int EnableDamperAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperAceDriver"), 0, settingsFilename);
 static int DamperStrengthAceDriver = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthAceDriver"), 100, settingsFilename);
 
+static int configMinForceInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceInitialD"), 0, settingsFilename);
+static int configMaxForceInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceInitialD"), 100, settingsFilename);
+static int configAlternativeMinForceLeftInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftInitialD"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftInitialD"), 100, settingsFilename);
+static int configAlternativeMinForceRightInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightInitialD"), 0, settingsFilename);
+static int configAlternativeMaxForceRightInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightInitialD"), 100, settingsFilename);
+static int configFeedbackLengthInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthInitialD"), 120, settingsFilename);
+static int PowerModeInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeInitialD"), 0, settingsFilename);
+static int EnableForceSpringEffectInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectInitialD"), 0, settingsFilename);
+static int ForceSpringStrengthInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthInitialD"), 0, settingsFilename);
+static int EnableDamperInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperInitialD"), 0, settingsFilename);
+static int DamperStrengthInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthInitialD"), 100, settingsFilename);
+
+static int configMinForceF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF355"), 0, settingsFilename);
+static int configMaxForceF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF355"), 100, settingsFilename);
+static int configAlternativeMinForceLeftF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftF355"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftF355"), 100, settingsFilename);
+static int configAlternativeMinForceRightF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightF355"), 0, settingsFilename);
+static int configAlternativeMaxForceRightF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightF355"), 100, settingsFilename);
+static int configFeedbackLengthF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthF355"), 120, settingsFilename);
+static int PowerModeF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeF355"), 0, settingsFilename);
+static int EnableForceSpringEffectF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectF355"), 0, settingsFilename);
+static int ForceSpringStrengthF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthF355"), 0, settingsFilename);
+static int EnableDamperF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperF355"), 0, settingsFilename);
+static int DamperStrengthF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthF355"), 100, settingsFilename);
+
+static int configMinForce18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForce18Wheeler"), 0, settingsFilename);
+static int configMaxForce18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForce18Wheeler"), 100, settingsFilename);
+static int configAlternativeMinForceLeft18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeft18Wheeler"), 0, settingsFilename);
+static int configAlternativeMaxForceLeft18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeft18Wheeler"), 100, settingsFilename);
+static int configAlternativeMinForceRight18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRight18Wheeler"), 0, settingsFilename);
+static int configAlternativeMaxForceRight18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRight18Wheeler"), 100, settingsFilename);
+static int configFeedbackLength18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLength18Wheeler"), 120, settingsFilename);
+static int PowerMode18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerMode18Wheeler"), 0, settingsFilename);
+static int EnableForceSpringEffect18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffect18Wheeler"), 0, settingsFilename);
+static int ForceSpringStrength18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrength18Wheeler"), 0, settingsFilename);
+static int EnableDamper18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamper18Wheeler"), 0, settingsFilename);
+static int DamperStrength18Wheeler = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrength18Wheeler"), 100, settingsFilename);
+
+static int configMinForceFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceFasterThanSpeed"), 0, settingsFilename);
+static int configMaxForceFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceFasterThanSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceLeftFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftFasterThanSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftFasterThanSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceRightFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightFasterThanSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceRightFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightFasterThanSpeed"), 100, settingsFilename);
+static int configFeedbackLengthFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthFasterThanSpeed"), 120, settingsFilename);
+static int PowerModeFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeFasterThanSpeed"), 0, settingsFilename);
+static int EnableForceSpringEffectFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectFasterThanSpeed"), 0, settingsFilename);
+static int ForceSpringStrengthFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthFasterThanSpeed"), 0, settingsFilename);
+static int EnableDamperFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperFasterThanSpeed"), 0, settingsFilename);
+static int DamperStrengthFasterThanSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthFasterThanSpeed"), 100, settingsFilename);
+
+static int configMinForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceMaximumSpeed"), 0, settingsFilename);
+static int configMaxForceMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceMaximumSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftMaximumSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftMaximumSpeed"), 100, settingsFilename);
+static int configAlternativeMinForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightMaximumSpeed"), 0, settingsFilename);
+static int configAlternativeMaxForceRightMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightMaximumSpeed"), 100, settingsFilename);
+static int configFeedbackLengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthMaximumSpeed"), 120, settingsFilename);
+static int PowerModeMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeMaximumSpeed"), 0, settingsFilename);
+static int EnableForceSpringEffectMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectMaximumSpeed"), 0, settingsFilename);
+static int ForceSpringStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthMaximumSpeed"), 0, settingsFilename);
+static int EnableDamperMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperMaximumSpeed"), 0, settingsFilename);
+static int DamperStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthMaximumSpeed"), 100, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -2664,16 +2729,92 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 			if (romname == INITIAL)
 			{
+				configMinForce = configMinForceInitialD;
+				configMaxForce = configMaxForceInitialD;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftInitialD;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftInitialD;
+				configAlternativeMinForceRight = configAlternativeMinForceRightInitialD;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightInitialD;
+				configFeedbackLength = configFeedbackLengthInitialD;
+				PowerMode = PowerModeInitialD;
+				EnableDamper = EnableDamperInitialD;
+				DamperStrength = DamperStrengthInitialD;
+				EnableForceSpringEffect = EnableForceSpringEffectInitialD;
+				ForceSpringStrength = ForceSpringStrengthInitialD;
+
 				RunningFFB = "InitialDActive";
 			}
 
-			if (romname == MAXIMUM || romname == FASTER)
+			if (romname == MAXIMUM)
 			{
+				configMinForce = configMinForceMaximumSpeed;
+				configMaxForce = configMaxForceMaximumSpeed;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftMaximumSpeed;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftMaximumSpeed;
+				configAlternativeMinForceRight = configAlternativeMinForceRightMaximumSpeed;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightMaximumSpeed;
+				configFeedbackLength = configFeedbackLengthMaximumSpeed;
+				PowerMode = PowerModeMaximumSpeed;
+				EnableDamper = EnableDamperMaximumSpeed;
+				DamperStrength = DamperStrengthMaximumSpeed;
+				EnableForceSpringEffect = EnableForceSpringEffectMaximumSpeed;
+				ForceSpringStrength = ForceSpringStrengthMaximumSpeed;
+
 				RunningFFB = "MaximumSpeedActive";
 			}
 
-			if (romname == F355 || romname == EIGHTEENWHEELER)
+			if (romname == FASTER)
 			{
+				configMinForce = configMinForceFasterThanSpeed;
+				configMaxForce = configMaxForceFasterThanSpeed;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftFasterThanSpeed;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftFasterThanSpeed;
+				configAlternativeMinForceRight = configAlternativeMinForceRightFasterThanSpeed;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightFasterThanSpeed;
+				configFeedbackLength = configFeedbackLengthFasterThanSpeed;
+				PowerMode = PowerModeFasterThanSpeed;
+				EnableDamper = EnableDamperFasterThanSpeed;
+				DamperStrength = DamperStrengthFasterThanSpeed;
+				EnableForceSpringEffect = EnableForceSpringEffectFasterThanSpeed;
+				ForceSpringStrength = ForceSpringStrengthFasterThanSpeed;
+
+				RunningFFB = "MaximumSpeedActive";
+			}
+
+			if (romname == F355)
+			{
+				configMinForce = configMinForceF355;
+				configMaxForce = configMaxForceF355;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftF355;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftF355;
+				configAlternativeMinForceRight = configAlternativeMinForceRightF355;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightF355;
+				configFeedbackLength = configFeedbackLengthF355;
+				PowerMode = PowerModeF355;
+				EnableDamper = EnableDamperF355;
+				DamperStrength = DamperStrengthF355;
+				EnableForceSpringEffect = EnableForceSpringEffectF355;
+				ForceSpringStrength = ForceSpringStrengthF355;
+
+				RunningFFB = "NaomiFFBActive";
+				NaomiFFBGo = true;
+			}
+
+			if (romname == EIGHTEENWHEELER)
+			{
+				configMinForce = configMinForce18Wheeler;
+				configMaxForce = configMaxForce18Wheeler;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeft18Wheeler;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeft18Wheeler;
+				configAlternativeMinForceRight = configAlternativeMinForceRight18Wheeler;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRight18Wheeler;
+				configFeedbackLength = configFeedbackLength18Wheeler;
+				PowerMode = PowerMode18Wheeler;
+				EnableDamper = EnableDamper18Wheeler;
+				DamperStrength = DamperStrength18Wheeler;
+				EnableForceSpringEffect = EnableForceSpringEffect18Wheeler;
+				ForceSpringStrength = ForceSpringStrength18Wheeler;
+
 				RunningFFB = "NaomiFFBActive";
 				NaomiFFBGo = true;
 			}
