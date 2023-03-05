@@ -35,6 +35,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants* constants, Helpers* helpers, Ef
 		double percentLength = 100;
 		triggers->Friction(percentForce);
 	}
+
 	if ((ff > 0xBF) && (ff < 0xC8))
 	{
 		//Centering
@@ -42,6 +43,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants* constants, Helpers* helpers, Ef
 		double percentLength = 100;
 		triggers->Spring(pow(percentForce, 0.1));
 	}
+
 	if ((ff > 0xB7) && (ff < 0xC0))
 	{
 		//Uncentering
@@ -50,6 +52,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants* constants, Helpers* helpers, Ef
 		triggers->Rumble(percentForce, percentForce, percentLength);
 		triggers->Sine(70, 80, percentForce);
 	}
+
 	if ((ff > 0xA7) && (ff < 0xB0))
 	{
 		//Roll Left
@@ -58,6 +61,7 @@ void SegaRacingClassic::FFBLoop(EffectConstants* constants, Helpers* helpers, Ef
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
+
 	if ((ff > 0x97) && (ff < 0xA0))
 	{
 		//Roll Right

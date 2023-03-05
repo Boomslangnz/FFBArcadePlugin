@@ -627,7 +627,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						Sleep(150);
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
@@ -637,7 +637,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02 || track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -649,19 +649,19 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 				}
 				else if (linkID == 0x01)
 				{
-					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					if ((gamestate == 0x1A) && (gamestatetimer < 100))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					else if ((gamestate == 0x1A) && (gamestatetimer > 100))
 					{
 						Sleep(100);
 						helpers->WriteNop(0xC2130, 3, true);
 					}
 
-					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					if ((gamestate > 0x1A) && (gamestate < 0x1A))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
@@ -681,11 +681,11 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -694,7 +694,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02 || track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -724,7 +724,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						Sleep(250);
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
@@ -734,7 +734,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02 || track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -744,26 +744,26 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 						helpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
 				}
 				else if (linkID == 0x02)
 				{
-					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					if ((gamestate == 0x1A) && (gamestatetimer < 100))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					else if ((gamestate == 0x1A) && (gamestatetimer > 100))
 					{
 						Sleep(100);
 						helpers->WriteNop(0xC2130, 3, true);
 					}
 
-					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					if ((gamestate > 0x1A) && (gamestate < 0x1A))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
@@ -782,7 +782,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						Sleep(150);
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
@@ -792,7 +792,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02 || track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -801,26 +801,26 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
 				}
 				else if (linkID == 0x01)
 				{
-					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					if ((gamestate == 0x1A) && (gamestatetimer < 100))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					else if ((gamestate == 0x1A) && (gamestatetimer > 100))
 					{
 						Sleep(100);
 						helpers->WriteNop(0xC2130, 3, true);
 					}
 
-					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					if ((gamestate > 0x1A) && (gamestate < 0x1A))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
@@ -840,11 +840,11 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -853,7 +853,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -864,7 +864,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -894,7 +894,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						Sleep(250);
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
@@ -904,7 +904,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -915,7 +915,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC302CAF4, /* isRelativeOffset */ false);
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -927,26 +927,26 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37C0001, /* isRelativeOffset */ false);
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
 				}
 				if (linkID == 0x03)
 				{
-					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					if ((gamestate == 0x1A) && (gamestatetimer < 100))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					else if ((gamestate == 0x1A) && (gamestatetimer > 100))
 					{
 						Sleep(100);
 						helpers->WriteNop(0xC2130, 3, true);
 					}
 
-					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					if ((gamestate > 0x1A) && (gamestate < 0x1A))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
@@ -966,7 +966,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						Sleep(350);
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
@@ -976,7 +976,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -988,7 +988,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						Sleep(50);
 						helpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC37CF3D0, /* isRelativeOffset */ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -998,26 +998,26 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 						helpers->WriteFloat32(Rambase1 + 0x519C, 450.0, /* isRelativeOffset */ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
 				}
 				else if (linkID == 0x02)
 				{
-					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					if ((gamestate == 0x1A) && (gamestatetimer < 100))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					else if ((gamestate == 0x1A) && (gamestatetimer > 100))
 					{
 						Sleep(100);
 						helpers->WriteNop(0xC2130, 3, true);
 					}
 
-					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					if ((gamestate > 0x1A) && (gamestate < 0x1A))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
@@ -1036,7 +1036,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						Sleep(150);
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
@@ -1046,7 +1046,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02 || track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02 || track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -1055,26 +1055,26 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
 				}
 				else if (linkID == 0x01)
 				{
-					if ((gamestate == 0x1A) & (gamestatetimer < 100))
+					if ((gamestate == 0x1A) && (gamestatetimer < 100))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2132, 0x01, /* isRelativeOffset*/ true);
 					}
-					else if ((gamestate == 0x1A) & (gamestatetimer > 100))
+					else if ((gamestate == 0x1A) && (gamestatetimer > 100))
 					{
 						Sleep(100);
 						helpers->WriteNop(0xC2130, 3, true);
 					}
 
-					if ((gamestate > 0x1A)& (gamestate < 0x1A))
+					if ((gamestate > 0x1A) && (gamestate < 0x1A))
 					{
 						helpers->WriteByte(0xC2130, 0x88, /* isRelativeOffset*/ true);
 						helpers->WriteByte(0xC2131, 0x14, /* isRelativeOffset*/ true);
@@ -1094,11 +1094,11 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x6384, 0x06, /* isRelativeOffset*/ false);
 						helpers->WriteByte(Rambase1 + 0x6684, 0x07, /* isRelativeOffset*/ false);
 					}
-					if ((gamestatetimer > 4294964133)& (gamestate == 0x12))
+					if ((gamestatetimer > 4294964133) && (gamestate == 0x12))
 					{
 						helpers->WriteIntPtr(Rambase1 + 0x10A8, 0x3B6, /* isRelativeOffset*/ false);
 					}
-					if ((gamestate == 0x16) & (countdown == 0x00) & (track == 0x00))
+					if ((gamestate == 0x16) && (countdown == 0x00) && (track == 0x00))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -1107,7 +1107,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteByte(Rambase1 + 0x40000, 0x01, /* isRelativeOffset*/ false); // change back to 1
 						helpers->WriteByte(Rambase1 + 0x1850, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x01))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x01))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);
@@ -1118,7 +1118,7 @@ void M2Emulator::FFBLoop(EffectConstants * constants, Helpers * helpers, EffectT
 						helpers->WriteIntPtr(Rambase1 + 0x51A4, 0xC2F195E8, /* isRelativeOffset */ false);
 						helpers->WriteByte(Rambase1 + 0x1468, 0x01, /* isRelativeOffset*/ false);
 					}
-					else if ((gamestate == 0x14) & (trackselect == 0x00) & (track == 0x02))
+					else if ((gamestate == 0x14) && (trackselect == 0x00) && (track == 0x02))
 					{
 						helpers->WriteByte(Rambase1 + 0x40000, 0x99, /* isRelativeOffset*/ false); // change to 99
 						Sleep(50);

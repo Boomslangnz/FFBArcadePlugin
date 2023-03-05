@@ -94,6 +94,9 @@ extern int AutoCloseWindowError;
 extern int EnableDamper;
 extern int DamperStrength;
 
+static bool IncreaseSine;
+
+
 static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 
 static int configMinForceInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceInitialDDemul"), 0, settingsFilename);
@@ -108,6 +111,7 @@ static int EnableForceSpringEffectInitialDDemul = GetPrivateProfileInt(TEXT("Set
 static int ForceSpringStrengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthInitialDDemul"), 0, settingsFilename);
 static int EnableDamperInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperInitialDDemul"), 0, settingsFilename);
 static int DamperStrengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthInitialDDemul"), 100, settingsFilename);
+static int IncreaseSineInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineInitialDDemul"), 0, settingsFilename);
 
 static int configMinForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceNascarRacing"), 0, settingsFilename);
 static int configMaxForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceNascarRacing"), 100, settingsFilename);
@@ -317,45 +321,58 @@ int fasterspeed(int ffspeed) {
 
 static int InitialDFFBLoop()
 {
-	UINT8 ff1 = myHelpers->ReadByte(FFBAddress, false);
-	UINT8 ff2 = myHelpers->ReadByte(FFBAddress + 0x01, false);
-	UINT8 ff3 = myHelpers->ReadByte(FFBAddress + 0x02, false);
+	DWORD FFB = myHelpers->ReadInt32(FFBAddress, false);
+
+	BYTE* ffb = reinterpret_cast<BYTE*>(&FFB);
 
 	if (KickStartWait)
 	{
-		if ((ff1 == 0x80) && (ff3 == 0x01))
+		if (ffb[0] == 0x80 && ffb[2] == 0x01)
 		{
 			myTriggers->Spring(1.0);
 		}
 
-		if ((ff1 == 0x85) && (ff2 == 0x3F) && (ff3 > 0x00) && (ff3 < 0x30))
+		if (ffb[0] == 0x85 && ffb[1] > 0x00 && ffb[2] > 0x00)
 		{
-			double percentForce = ff3 / 47.0;
+			double percentForce = ffb[2] / 127.0;
+
+			if (IncreaseSine)
+			{
+				percentForce = percentForce * 2.0;
+
+				if (percentForce > 1.0)
+					percentForce = 1.0;
+			}
+
+			double Period = ffb[1] / 127.0 * 120.0;
 			double percentLength = 100;
 			myTriggers->Rumble(percentForce, percentForce, percentLength);
-			myTriggers->Sine(40, 0, percentForce);
+			myTriggers->Sine(static_cast<int>(Period), 0, percentForce);
 		}
 
-		if ((ff1 == 0x86) && (ff2 == 0x02) && (ff3 > 0x09) && (ff3 < 0x3C))
+		if (ffb[0] == 0x86 && ffb[2] > 0x00)
 		{
-			double percentForce = (60 - ff3) / 43.0;
+			double percentForce = ffb[2] / 127.0;
 			double percentLength = 100;
 			myTriggers->Spring(percentForce);
 		}
 
-		if ((ff1 == 0x84) && (ff2 == 0x00) && (ff3 > 0x37) && (ff3 < 0x80))
+		if (ffb[0] == 0x84 && ffb[2] > 0x00)
 		{
-			double percentForce = (128 - ff3) / 72.0;
-			double percentLength = 100;
-			myTriggers->Rumble(percentForce, 0, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-		}
-		else if ((ff1 == 0x84) && (ff2 == 0x01) && (ff3 > 0x00) && (ff3 < 0x49))
-		{
-			double percentForce = (ff3 / 72.0);
-			double percentLength = 100;
-			myTriggers->Rumble(0, percentForce, percentLength);
-			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			if (ffb[1] == 0x00)
+			{
+				double percentForce = (128 - ffb[0]) / 127.0;
+				double percentLength = 100;
+				myTriggers->Rumble(percentForce, 0, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else
+			{
+				double percentForce = (ffb[0] / 127.0);
+				double percentLength = 100;
+				myTriggers->Rumble(0, percentForce, percentLength);
+				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
+			}
 		}
 	}
 	return 0;

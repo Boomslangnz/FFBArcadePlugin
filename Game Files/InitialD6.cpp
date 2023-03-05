@@ -17,6 +17,9 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 extern int EnableDamper;
 extern int DamperStrength;
 
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int IncreaseSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSine"), 0, settingsFilename);
+
 static int carscollide(int ffcollide) {
 	switch (ffcollide) {
 	case 0x50F05:
@@ -127,52 +130,58 @@ static int rubbingwalls(int ffwalls) {
 
 void InitialD6::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
-	int ffrubbingwalls = 0;
-	int ffcarcollision = 0;
+	DWORD FFB = GetTeknoParrotFFB();
+
+	BYTE* ffb = reinterpret_cast<BYTE*>(&FFB);
+
+	if (EnableDamper)
+		triggers->Damper(DamperStrength / 100.0);
+
+	if (ffb[2] == 0x00 && ffb[0] == 0x01)
 	{
-		helpers->log("in ID6 Ffbloop");
-		const int ff = GetTeknoParrotFFB();
-		std::string ffs = std::to_string(ff);
-		helpers->log((char*)ffs.c_str());
-		ffcarcollision = carscollide(ff);
-		ffrubbingwalls = rubbingwalls(ff);
+		triggers->Spring(1.0);
+	}
 
-		if (EnableDamper == 1)
+	if (ffb[2] == 0x05 && ffb[1] > 0x00 && ffb[0] > 0x00)
+	{
+		double percentForce = ffb[0] / 127.0;
+
+		if (IncreaseSine)
 		{
-			triggers->Damper(DamperStrength / 100.0);
+			percentForce = percentForce * 2.0;
+
+			if (percentForce > 1.0)
+				percentForce = 1.0;
 		}
 
-		if (ff == 0x60000)
+		double Period = ffb[1] / 127.0 * 120.0;
+		double percentLength = 100;
+		triggers->Rumble(percentForce, percentForce, percentLength);
+		triggers->Sine(static_cast<int>(Period), 0, percentForce);
+	}
+
+	if (ffb[2] == 0x06 && ffb[0] > 0x00 && ffb[0] < 0x80)
+	{
+		double percentForce = ffb[0] / 127.0;
+		double percentLength = 100;
+		triggers->Spring(percentForce);
+	}
+
+	if (ffb[2] == 0x04 && ffb[0] > 0x00 && ffb[0] < 0x80)
+	{
+		if (ffb[1] == 0x00)
 		{
-			triggers->Spring(0.8);
-		}
-		if (ffrubbingwalls > 0) // car rubbing against wall
-		{
-			double percentLength = 200;
-			double percentForce = (ffrubbingwalls / 31.0);
-			triggers->Friction(percentForce);
-			triggers->Rumble(percentForce, percentForce, percentLength);
-		}
-		if (ffcarcollision > 0) //cars colliding or rubbing with each other
-		{
-			double percentLength = 200;
-			double percentForce = (ffcarcollision / 16.0);
-			triggers->Friction(percentForce);
-			triggers->Rumble(percentForce, percentForce, percentLength);
-		}
-		if ((ff > 0x40037) && (ff < 0x40080))
-		{
-			double percentForce = (262272 - ff) / 72.0;
+			double percentForce = (128 - ffb[0]) / 127.0;
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
-		else if ((ff > 0x40100) && (ff < 0x40149))
+		else
 		{
-			double percentForce = (ff - 262400) / 72.0;
+			double percentForce = (ffb[0] / 127.0);
 			double percentLength = 100;
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 	}
-}	
+}

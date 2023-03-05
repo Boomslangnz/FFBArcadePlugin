@@ -258,7 +258,7 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 		INT_PTR Rambase1 = helpers->ReadIntPtr(Rambase + 0x100, false);
 		GearValue = helpers->ReadByte(Rambase1 + 0x52CC, false);
 
-		if ((e.type == SDL_JOYAXISMOTION) & (ShowAxisForSetup == 0))
+		if ((e.type == SDL_JOYAXISMOTION) && (ShowAxisForSetup == 0))
 		{
 			if (e.jaxis.which == joystick_index1)
 			{
@@ -348,7 +348,7 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 								BrakeValue = (-e.jaxis.value + ACCL_DEAD_ZONE) / 128;
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								AcclValue = 0xFF;
 								BrakeValue = 0xFF;
@@ -477,7 +477,7 @@ void M2EmulatorDaytonaUSAInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 								BrakeValue = (-e.jaxis.value + ACCL_DEAD_ZONE) / 128;
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								AcclValue = 0xFF;
 								BrakeValue = 0xFF;

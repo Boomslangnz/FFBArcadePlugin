@@ -221,11 +221,15 @@ std::string victlap("victlap");
 std::string dblaxle("dblaxle");
 std::string dblaxleu("dblaxleu");
 //Flycast Below
-std::string INITIAL("INITIAL");
-std::string EIGHTEENWHEELER("18WHEELER\n");
-std::string MAXIMUM("MAXIMUM");
-std::string FASTER("FASTER");
-std::string F355("F355");
+std::string InitialDVer1("INITIAL D\n");
+std::string InitialDVer2("INITIAL D Ver.2\n");
+std::string InitialDVer3("INITIAL D Ver.3\n");
+std::string EighteenWheeler("18WHEELER\n");
+std::string MaximumSPEED("MAXIMUM SPEED\n");
+std::string FasterThanSPEED("FASTER THAN SPEED\n");
+std::string F355ChallengeJapan("F355 CHALLENGE JAPAN\n");
+std::string ClubKartInJapan("CLUB KART IN JAPAN\n");
+std::string TheKingOfRoute66("THE KING OF ROUTE66\n");
 
 //Our string to load game from
 std::string M2Active("M2Active");
@@ -340,6 +344,8 @@ extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
 extern int EnableDamper;
 extern int DamperStrength;
+
+static bool IncreaseSine;
 
 static int configMinForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDaytona2"), 0, settingsFilename);
 static int configMaxForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDaytona2"), 100, settingsFilename);
@@ -960,6 +966,7 @@ static int EnableForceSpringEffectInitialD = GetPrivateProfileInt(TEXT("Settings
 static int ForceSpringStrengthInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthInitialD"), 0, settingsFilename);
 static int EnableDamperInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperInitialD"), 0, settingsFilename);
 static int DamperStrengthInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthInitialD"), 100, settingsFilename);
+static int IncreaseSineInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineInitialD"), 0, settingsFilename);
 
 static int configMinForceF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF355"), 0, settingsFilename);
 static int configMaxForceF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF355"), 100, settingsFilename);
@@ -1012,6 +1019,34 @@ static int EnableForceSpringEffectMaximumSpeed = GetPrivateProfileInt(TEXT("Sett
 static int ForceSpringStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthMaximumSpeed"), 0, settingsFilename);
 static int EnableDamperMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperMaximumSpeed"), 0, settingsFilename);
 static int DamperStrengthMaximumSpeed = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthMaximumSpeed"), 100, settingsFilename);
+
+static int configMinForceClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceClubKart"), 0, settingsFilename);
+static int configMaxForceClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceClubKart"), 100, settingsFilename);
+static int configAlternativeMinForceLeftClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftClubKart"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftClubKart"), 100, settingsFilename);
+static int configAlternativeMinForceRightClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightClubKart"), 0, settingsFilename);
+static int configAlternativeMaxForceRightClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightClubKart"), 100, settingsFilename);
+static int configFeedbackLengthClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthClubKart"), 120, settingsFilename);
+static int PowerModeClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeClubKart"), 0, settingsFilename);
+static int EnableForceSpringEffectClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectClubKart"), 0, settingsFilename);
+static int ForceSpringStrengthClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthClubKart"), 0, settingsFilename);
+static int EnableDamperClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperClubKart"), 0, settingsFilename);
+static int DamperStrengthClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthClubKart"), 100, settingsFilename);
+static int IncreaseSineClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineClubKart"), 0, settingsFilename);
+
+static int configMinForceKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceKingOfRoute66"), 0, settingsFilename);
+static int configMaxForceKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceKingOfRoute66"), 100, settingsFilename);
+static int configAlternativeMinForceLeftKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftKingOfRoute66"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftKingOfRoute66"), 100, settingsFilename);
+static int configAlternativeMinForceRightKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightKingOfRoute66"), 0, settingsFilename);
+static int configAlternativeMaxForceRightKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightKingOfRoute66"), 100, settingsFilename);
+static int configFeedbackLengthKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthKingOfRoute66"), 120, settingsFilename);
+static int PowerModeKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeKingOfRoute66"), 0, settingsFilename);
+static int EnableForceSpringEffectKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectKingOfRoute66"), 0, settingsFilename);
+static int ForceSpringStrengthKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthKingOfRoute66"), 0, settingsFilename);
+static int EnableDamperKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperKingOfRoute66"), 0, settingsFilename);
+static int DamperStrengthKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthKingOfRoute66"), 100, settingsFilename);
+static int IncreaseSineKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineKingOfRoute66"), 0, settingsFilename);
 
 static bool init = false;
 static bool initSpring = false;
@@ -1273,6 +1308,47 @@ int __stdcall mame_stop(void)
 	return 1;
 }
 
+static void removeWord(char* str, char* toRemove)
+{
+	int i, j, stringLen, toRemoveLen;
+	int found;
+
+	stringLen = strlen(str);
+	toRemoveLen = strlen(toRemove);
+
+
+	for (i = 0; i <= stringLen - toRemoveLen; i++)
+	{
+		found = 1;
+		for (j = 0; j < toRemoveLen; j++)
+		{
+			if (str[i + j] != toRemove[j])
+			{
+				found = 0;
+				break;
+			}
+		}
+
+		if (str[i + j] != ' ' && str[i + j] != '\t' && str[i + j] != '\n' && str[i + j] != '\0')
+		{
+			found = 0;
+		}
+
+
+		if (found == 1)
+		{
+			for (j = i; j <= stringLen - toRemoveLen; j++)
+			{
+				str[j] = str[j + toRemoveLen];
+			}
+
+			stringLen = stringLen - toRemoveLen;
+
+			i--;
+		}
+	}
+}
+
 static void CurrentGameName(Helpers* helpers)
 {
 	helpers->info("Game = %s", GameName);
@@ -1286,8 +1362,30 @@ int __stdcall mame_copydata(int id, const char* name)
 
 	if (id == 0)
 	{
-		//romFFB = name;
-		sprintf(GameName, "%s", name);
+		char RomName[256];
+		sprintf(RomName, "%s", name);
+
+		removeWord(RomName, "game =");
+
+		int whitespace = 0;
+
+		for (int i = 0; i < strlen(RomName); i++)
+		{
+			if (RomName[i] == ' ' || RomName[i] == '\t')
+				whitespace++;
+			else
+				break;
+		}
+
+		for (int i = 0; i < strlen(RomName); i++)
+		{
+			if (i + whitespace < strlen(RomName))
+				RomName[i] = RomName[i + whitespace];
+			else
+				RomName[i] = 0;
+		}
+
+		sprintf(GameName, "%s", RomName);
 
 		CurrentGameName(0);
 	}
@@ -2727,7 +2825,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "NamcoFFBActive";
 			}
 
-			if (romname == INITIAL)
+			if (romname == InitialDVer1 || romname == InitialDVer2 || romname == InitialDVer3)
 			{
 				configMinForce = configMinForceInitialD;
 				configMaxForce = configMaxForceInitialD;
@@ -2741,11 +2839,50 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				DamperStrength = DamperStrengthInitialD;
 				EnableForceSpringEffect = EnableForceSpringEffectInitialD;
 				ForceSpringStrength = ForceSpringStrengthInitialD;
+				IncreaseSine = IncreaseSineInitialD;
 
 				RunningFFB = "InitialDActive";
 			}
 
-			if (romname == MAXIMUM)
+			if (romname == TheKingOfRoute66)
+			{
+				configMinForce = configMinForceKingOfRoute66;
+				configMaxForce = configMaxForceKingOfRoute66;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftKingOfRoute66;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftKingOfRoute66;
+				configAlternativeMinForceRight = configAlternativeMinForceRightKingOfRoute66;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightKingOfRoute66;
+				configFeedbackLength = configFeedbackLengthKingOfRoute66;
+				PowerMode = PowerModeKingOfRoute66;
+				EnableDamper = EnableDamperKingOfRoute66;
+				DamperStrength = DamperStrengthKingOfRoute66;
+				EnableForceSpringEffect = EnableForceSpringEffectKingOfRoute66;
+				ForceSpringStrength = ForceSpringStrengthKingOfRoute66;
+				IncreaseSine = IncreaseSineKingOfRoute66;
+
+				RunningFFB = "InitialDActive";
+			}
+
+			if (romname == ClubKartInJapan)
+			{
+				configMinForce = configMinForceClubKart;
+				configMaxForce = configMaxForceClubKart;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftClubKart;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftClubKart;
+				configAlternativeMinForceRight = configAlternativeMinForceRightClubKart;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightClubKart;
+				configFeedbackLength = configFeedbackLengthClubKart;
+				PowerMode = PowerModeClubKart;
+				EnableDamper = EnableDamperClubKart;
+				DamperStrength = DamperStrengthClubKart;
+				EnableForceSpringEffect = EnableForceSpringEffectClubKart;
+				ForceSpringStrength = ForceSpringStrengthClubKart;
+				IncreaseSine = IncreaseSineClubKart;
+
+				RunningFFB = "InitialDActive";
+			}
+
+			if (romname == MaximumSPEED)
 			{
 				configMinForce = configMinForceMaximumSpeed;
 				configMaxForce = configMaxForceMaximumSpeed;
@@ -2763,7 +2900,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "MaximumSpeedActive";
 			}
 
-			if (romname == FASTER)
+			if (romname == FasterThanSPEED)
 			{
 				configMinForce = configMinForceFasterThanSpeed;
 				configMaxForce = configMaxForceFasterThanSpeed;
@@ -2781,7 +2918,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				RunningFFB = "MaximumSpeedActive";
 			}
 
-			if (romname == F355)
+			if (romname == F355ChallengeJapan)
 			{
 				configMinForce = configMinForceF355;
 				configMaxForce = configMaxForceF355;
@@ -2800,7 +2937,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				NaomiFFBGo = true;
 			}
 
-			if (romname == EIGHTEENWHEELER)
+			if (romname == EighteenWheeler)
 			{
 				configMinForce = configMinForce18Wheeler;
 				configMaxForce = configMaxForce18Wheeler;
@@ -3816,39 +3953,52 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 				BYTE* ffb = reinterpret_cast<BYTE*>(&stateFFB);
 
-				if ((ffb[2] == 0x80) && (ffb[0] == 0x01))
+				if (ffb[2] == 0x80 && ffb[0] == 0x01)
 				{
 					triggers->Spring(1.0);
 				}
 
-				if ((ffb[2] == 0x85) && (ffb[1] == 0x3F) && (ffb[0] > 0x00) && (ffb[0] < 0x30))
+				if (ffb[2] == 0x85 && ffb[1] > 0x00 && ffb[0] > 0x00)
 				{
-					double percentForce = ffb[0] / 47.0;
+					double percentForce = ffb[0] / 127.0;
+
+					if (IncreaseSine)
+					{
+						percentForce = percentForce * 2.0;
+
+						if (percentForce > 1.0)
+							percentForce = 1.0;
+					}
+
+					double Period = ffb[1] / 127.0 * 120.0;
 					double percentLength = 100;
 					triggers->Rumble(percentForce, percentForce, percentLength);
-					triggers->Sine(40, 0, percentForce);
-				}
+					triggers->Sine(static_cast<int>(Period), 0, percentForce);
+				}				
 
-				if ((ffb[2] == 0x86) && (ffb[1] == 0x02) && (ffb[0] > 0x09) && (ffb[0] < 0x3C))
+				if (ffb[2] == 0x86 && ffb[0] > 0x00 && ffb[0] < 0x80)
 				{
-					double percentForce = (60 - ffb[0]) / 43.0;
+					double percentForce = ffb[0] / 127.0;
 					double percentLength = 100;
 					triggers->Spring(percentForce);
 				}
 
-				if ((ffb[2] == 0x84) && (ffb[1] == 0x00) && (ffb[0] > 0x37) && (ffb[0] < 0x80))
+				if (ffb[2] == 0x84 && ffb[0] > 0x00 && ffb[0] < 0x80)
 				{
-					double percentForce = (128 - ffb[0]) / 72.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ffb[2] == 0x84) && (ffb[1] == 0x01) && (ffb[0] > 0x00) && (ffb[0] < 0x49))
-				{
-					double percentForce = (ffb[0] / 72.0);
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					if (ffb[1] == 0x00)
+					{
+						double percentForce = (128 - ffb[0]) / 127.0;
+						double percentLength = 100;
+						triggers->Rumble(percentForce, 0, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					}
+					else
+					{
+						double percentForce = (ffb[0] / 127.0);
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
 				}
 			}
 		}

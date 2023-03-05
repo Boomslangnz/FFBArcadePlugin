@@ -239,7 +239,7 @@ void M2EmulatorSegaRallyInputsEnabled(Helpers* helpers)
 		UINT8 button1read = helpers->ReadByte(Button1Address, false);
 		UINT8 button2read = helpers->ReadByte(Button2Address, false);
 
-		if ((e.type == SDL_JOYAXISMOTION) & (ShowAxisForSetup == 0))
+		if ((e.type == SDL_JOYAXISMOTION) && (ShowAxisForSetup == 0))
 		{
 			if (e.jaxis.which == joystick_index1)
 			{
@@ -329,7 +329,7 @@ void M2EmulatorSegaRallyInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 								BrakeValue = (-e.jaxis.value + ACCL_DEAD_ZONE) / 128;
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								AcclValue = 0xFF;
 								BrakeValue = 0xFF;
@@ -459,7 +459,7 @@ void M2EmulatorSegaRallyInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 								BrakeValue = (-e.jaxis.value + ACCL_DEAD_ZONE) / 128;
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								AcclValue = 0xFF;
 								BrakeValue = 0xFF;

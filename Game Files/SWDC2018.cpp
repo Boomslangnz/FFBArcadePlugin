@@ -21,12 +21,11 @@ static bool VersionFound;
 static bool Version103;
 static bool Version230;
 
+static DWORD FFB;
+
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
-
-static UINT8 ff1;
-static UINT8 ff2;
-static UINT8 ff3;
+static int IncreaseSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSine"), 0, settingsFilename);
 
 static const char* SDDS = "SDDS";
 
@@ -51,9 +50,7 @@ static void getSDDS230(char* Name)
 void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
-	{
 		ExitProcess(0);
-	}
 
 	if (!VersionFound)
 	{
@@ -74,80 +71,65 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	else
 	{
 		if (Version103)
-		{
-			ff1 = helpers->ReadByte(0x8E5CCF4, true);
-			ff2 = helpers->ReadByte(0x8E5CCF5, true);
-			ff3 = helpers->ReadByte(0x8E5CCF6, true);
-		}
-		
+			FFB = helpers->ReadInt32(0x8E5CCF4, true);
+
 		if (Version230)
-		{
-			ff1 = helpers->ReadByte(0x9BC7B18, true);
-			ff2 = helpers->ReadByte(0x9BC7B19, true);
-			ff3 = helpers->ReadByte(0x9BC7B1A, true);
-		}
+			FFB = helpers->ReadInt32(0x9BC7B18, true);
 
-		if (EnableDamper == 1)
-		{
+		if (EnableDamper)
 			triggers->Damper(DamperStrength / 100.0);
-		}
 
-		if (ff1 == 80)
+		BYTE* ffb = reinterpret_cast<BYTE*>(&FFB);
+
+		if (EnableDamper)
+			triggers->Damper(DamperStrength / 100.0);
+
+		if (ffb[0] == 0x80 && ffb[2] == 0x01)
 		{
 			triggers->Spring(1.0);
 		}
-		else if (ff1 == 0x85)
+
+		if (ffb[0] == 0x85 && ffb[1] > 0x00 && ffb[2] > 0x00)
 		{
-			if ((ff2 > 0x00) && (ff2 < 0x30))
+			double percentForce = ffb[2] / 127.0;
+
+			if (IncreaseSine)
 			{
-				double percentForce = ff2 / 47.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, percentForce, percentLength);
-				triggers->Sine(40, 0, percentForce);
+				percentForce = percentForce * 2.0;
+
+				if (percentForce > 1.0)
+					percentForce = 1.0;
 			}
+
+			double Period = ffb[1] / 127.0 * 120.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, percentForce, percentLength);
+			triggers->Sine(static_cast<int>(Period), 0, percentForce);
 		}
-		else if (ff1 == 0x86)
+
+		if (ffb[0] == 0x86 && ffb[2] > 0x00)
 		{
-			if ((ff3 > 0x00) && (ff3 < 0x4E))
-			{
-				double percentForce = ff3 / 77.0;
-				double percentLength = 100;
-				triggers->Spring(percentForce);
-			}
+			double percentForce = ffb[2] / 127.0;
+			double percentLength = 100;
+			triggers->Spring(percentForce);
 		}
-		else if (ff1 == 0x84)
+
+		if (ffb[0] == 0x84 && ffb[2] > 0x00)
 		{
-			if ((ff2 == 0x00) && (ff3 > 0x37) && (ff3 < 0x80))
+			if (ffb[1] == 0x00)
 			{
-				double percentForce = (128 - ff3) / 72.0;
+				double percentForce = (128 - ffb[0]) / 127.0;
 				double percentLength = 100;
 				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
-			else if ((ff2 == 0x01) && (ff3 > 0x00) && (ff3 < 0x49))
+			else
 			{
-				double percentForce = (ff3 / 72.0);
+				double percentForce = (ffb[0] / 127.0);
 				double percentLength = 100;
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 			}
-			else
-			{
-				if ((ff2 == 0x00) && (ff3 > 0x00) && (ff3 < 0x38))
-				{
-					double percentForce = 1.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if ((ff2 == 0x01) && (ff3 > 0x48))
-				{
-					double percentForce = 1.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
 		}
-	}	
+	}
 }
