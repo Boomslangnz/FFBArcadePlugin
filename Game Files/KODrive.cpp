@@ -17,9 +17,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 extern int EnableDamper;
 extern int DamperStrength;
 
-static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
-static int IncreaseSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSine"), 0, settingsFilename);
-
 void KODrive::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	if (EnableDamper)
@@ -37,15 +34,6 @@ void KODrive::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 	if (ffb[0] == 0x85 && ffb[1] > 0x00 && ffb[2] > 0x00)
 	{
 		double percentForce = ffb[2] / 24.0;
-
-		if (IncreaseSine)
-		{
-			percentForce = percentForce * 2.0;
-
-			if (percentForce > 1.0)
-				percentForce = 1.0;
-		}
-
 		double Period = ffb[1] / 128.0 * 120.0;
 		double percentLength = 100;
 		triggers->Rumble(percentForce, percentForce, percentLength);
@@ -68,7 +56,7 @@ void KODrive::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
-		else
+		else if (ffb[1] == 0x01)
 		{
 			double percentForce = (ffb[2] / 24.0);
 			double percentLength = 100;

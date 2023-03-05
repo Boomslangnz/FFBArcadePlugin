@@ -25,7 +25,6 @@ static DWORD FFB;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
-static int IncreaseSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSine"), 0, settingsFilename);
 
 static const char* SDDS = "SDDS";
 
@@ -92,15 +91,6 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		if (ffb[0] == 0x85 && ffb[1] > 0x00 && ffb[2] > 0x00)
 		{
 			double percentForce = ffb[2] / 127.0;
-
-			if (IncreaseSine)
-			{
-				percentForce = percentForce * 2.0;
-
-				if (percentForce > 1.0)
-					percentForce = 1.0;
-			}
-
 			double Period = ffb[1] / 127.0 * 120.0;
 			double percentLength = 100;
 			triggers->Rumble(percentForce, percentForce, percentLength);
@@ -118,14 +108,14 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		{
 			if (ffb[1] == 0x00)
 			{
-				double percentForce = (128 - ffb[0]) / 127.0;
+				double percentForce = (128 - ffb[2]) / 127.0;
 				double percentLength = 100;
 				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
-			else
+			else if(ffb[1] == 0x01)
 			{
-				double percentForce = (ffb[0] / 127.0);
+				double percentForce = (ffb[2] / 127.0);
 				double percentLength = 100;
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);

@@ -958,6 +958,8 @@ int EnableFFBStrengthPersistence = GetPrivateProfileInt(TEXT("Settings"), TEXT("
 int EnableFFBStrengthTextToSpeech = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableFFBStrengthTextToSpeech"), 0, settingsFilename);
 int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 int IgnoreFirstMatchingGUID = GetPrivateProfileInt(TEXT("Settings"), TEXT("IgnoreFirstMatchingGUID"), 0, settingsFilename);
+int DoubleSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSine"), 0, settingsFilename);
+int DoubleConstant = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstant"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
 extern void CustomFFBStrengthSetup();
@@ -1275,6 +1277,14 @@ void TriggerConstantEffect(int direction, double strength)
 	if (PowerMode)
 		strength = pow(strength, 0.5);
 
+	if (DoubleConstant)
+	{
+		strength = strength * 2.0;
+
+		if (strength > 1.0)
+			strength = 1.0;
+	}
+
 	SHORT MinForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0);
 	SHORT MaxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
 	SHORT range = MaxForce - MinForce;
@@ -1557,6 +1567,15 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 			confMaxForce = configAlternativeMaxForceRight;
 		}
 	}
+
+	if (DoubleSine)
+	{
+		strength = strength * 2.0;
+
+		if (strength > 1.0)
+			strength = 1.0;
+	}
+
 	SHORT minForce = (SHORT)(strength > 0.001 ? (confMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 	SHORT maxForce = (SHORT)(confMaxForce / 100.0 * 32767.0);
 	SHORT range = maxForce - minForce;

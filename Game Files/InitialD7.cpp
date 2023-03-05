@@ -17,9 +17,6 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 extern int EnableDamper;
 extern int DamperStrength;
 
-static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
-static int IncreaseSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSine"), 0, settingsFilename);
-
 void InitialD7::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
 	DWORD FFB = GetTeknoParrotFFB();
@@ -37,15 +34,6 @@ void InitialD7::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 	if (ffb[2] == 0x05 && ffb[1] > 0x00 && ffb[0] > 0x00)
 	{
 		double percentForce = ffb[0] / 127.0;
-
-		if (IncreaseSine)
-		{
-			percentForce = percentForce * 2.0;
-
-			if (percentForce > 1.0)
-				percentForce = 1.0;
-		}
-
 		double Period = ffb[1] / 127.0 * 120.0;
 		double percentLength = 100;
 		triggers->Rumble(percentForce, percentForce, percentLength);
@@ -68,7 +56,7 @@ void InitialD7::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
-		else
+		else if (ffb[1] == 0x01)
 		{
 			double percentForce = (ffb[0] / 127.0);
 			double percentLength = 100;

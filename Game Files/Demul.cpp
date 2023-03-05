@@ -93,9 +93,8 @@ extern int ForceSpringStrength;
 extern int AutoCloseWindowError;
 extern int EnableDamper;
 extern int DamperStrength;
-
-static bool IncreaseSine;
-
+extern int DoubleConstant;
+extern int DoubleSine;
 
 static int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputDeviceWheelEnable"), 0, settingsFilename);
 
@@ -111,7 +110,8 @@ static int EnableForceSpringEffectInitialDDemul = GetPrivateProfileInt(TEXT("Set
 static int ForceSpringStrengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthInitialDDemul"), 0, settingsFilename);
 static int EnableDamperInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperInitialDDemul"), 0, settingsFilename);
 static int DamperStrengthInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthInitialDDemul"), 100, settingsFilename);
-static int IncreaseSineInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineInitialDDemul"), 0, settingsFilename);
+static int DoubleSineInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSineInitialDDemul"), 0, settingsFilename);
+static int DoubleConstantInitialDDemul = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstantInitialDDemul"), 0, settingsFilename);
 
 static int configMinForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceNascarRacing"), 0, settingsFilename);
 static int configMaxForceNascarRacing = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceNascarRacing"), 100, settingsFilename);
@@ -335,15 +335,6 @@ static int InitialDFFBLoop()
 		if (ffb[0] == 0x85 && ffb[1] > 0x00 && ffb[2] > 0x00)
 		{
 			double percentForce = ffb[2] / 127.0;
-
-			if (IncreaseSine)
-			{
-				percentForce = percentForce * 2.0;
-
-				if (percentForce > 1.0)
-					percentForce = 1.0;
-			}
-
 			double Period = ffb[1] / 127.0 * 120.0;
 			double percentLength = 100;
 			myTriggers->Rumble(percentForce, percentForce, percentLength);
@@ -361,14 +352,14 @@ static int InitialDFFBLoop()
 		{
 			if (ffb[1] == 0x00)
 			{
-				double percentForce = (128 - ffb[0]) / 127.0;
+				double percentForce = (128 - ffb[2]) / 127.0;
 				double percentLength = 100;
 				myTriggers->Rumble(percentForce, 0, percentLength);
 				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 			}
-			else
+			else if (ffb[1] == 0x01)
 			{
-				double percentForce = (ffb[0] / 127.0);
+				double percentForce = (ffb[2] / 127.0);
 				double percentLength = 100;
 				myTriggers->Rumble(0, percentForce, percentLength);
 				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
@@ -752,6 +743,8 @@ void Demul::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers
 				ForceSpringStrength = ForceSpringStrengthInitialDDemul;
 				EnableDamper = EnableDamperInitialDDemul;
 				DamperStrength = DamperStrengthInitialDDemul;
+				DoubleSine = DoubleSineInitialDDemul;
+				DoubleConstant = DoubleConstantInitialDDemul;
 
 				romnameDemul = "Initial D Arcade Stage";
 

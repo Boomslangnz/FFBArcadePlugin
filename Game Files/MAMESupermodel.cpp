@@ -344,8 +344,8 @@ extern int EnableForceSpringEffect;
 extern int ForceSpringStrength;
 extern int EnableDamper;
 extern int DamperStrength;
-
-static bool IncreaseSine;
+extern int DoubleConstant;
+extern int DoubleSine;
 
 static int configMinForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceDaytona2"), 0, settingsFilename);
 static int configMaxForceDaytona2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceDaytona2"), 100, settingsFilename);
@@ -966,7 +966,8 @@ static int EnableForceSpringEffectInitialD = GetPrivateProfileInt(TEXT("Settings
 static int ForceSpringStrengthInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthInitialD"), 0, settingsFilename);
 static int EnableDamperInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperInitialD"), 0, settingsFilename);
 static int DamperStrengthInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthInitialD"), 100, settingsFilename);
-static int IncreaseSineInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineInitialD"), 0, settingsFilename);
+static int DoubleSineInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSineInitialD"), 0, settingsFilename);
+static int DoubleConstantInitialD = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstantInitialD"), 0, settingsFilename);
 
 static int configMinForceF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceF355"), 0, settingsFilename);
 static int configMaxForceF355 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceF355"), 100, settingsFilename);
@@ -1032,7 +1033,8 @@ static int EnableForceSpringEffectClubKart = GetPrivateProfileInt(TEXT("Settings
 static int ForceSpringStrengthClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthClubKart"), 0, settingsFilename);
 static int EnableDamperClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperClubKart"), 0, settingsFilename);
 static int DamperStrengthClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthClubKart"), 100, settingsFilename);
-static int IncreaseSineClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineClubKart"), 0, settingsFilename);
+static int DoubleSineClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSineClubKart"), 0, settingsFilename);
+static int DoubleConstantClubKart = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstantClubKart"), 0, settingsFilename);
 
 static int configMinForceKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceKingOfRoute66"), 0, settingsFilename);
 static int configMaxForceKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceKingOfRoute66"), 100, settingsFilename);
@@ -1046,7 +1048,8 @@ static int EnableForceSpringEffectKingOfRoute66 = GetPrivateProfileInt(TEXT("Set
 static int ForceSpringStrengthKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthKingOfRoute66"), 0, settingsFilename);
 static int EnableDamperKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperKingOfRoute66"), 0, settingsFilename);
 static int DamperStrengthKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthKingOfRoute66"), 100, settingsFilename);
-static int IncreaseSineKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("IncreaseSineKingOfRoute66"), 0, settingsFilename);
+static int DoubleSineKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSineKingOfRoute66"), 0, settingsFilename);
+static int DoubleConstantKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstantKingOfRoute66"), 0, settingsFilename);
 
 static bool init = false;
 static bool initSpring = false;
@@ -2839,7 +2842,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				DamperStrength = DamperStrengthInitialD;
 				EnableForceSpringEffect = EnableForceSpringEffectInitialD;
 				ForceSpringStrength = ForceSpringStrengthInitialD;
-				IncreaseSine = IncreaseSineInitialD;
+				DoubleSine = DoubleSineInitialD;
+				DoubleConstant = DoubleConstantInitialD;
 
 				RunningFFB = "InitialDActive";
 			}
@@ -2858,7 +2862,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				DamperStrength = DamperStrengthKingOfRoute66;
 				EnableForceSpringEffect = EnableForceSpringEffectKingOfRoute66;
 				ForceSpringStrength = ForceSpringStrengthKingOfRoute66;
-				IncreaseSine = IncreaseSineKingOfRoute66;
+				DoubleSine = DoubleSineKingOfRoute66;
+				DoubleConstant = DoubleConstantKingOfRoute66;
 
 				RunningFFB = "InitialDActive";
 			}
@@ -2877,7 +2882,8 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				DamperStrength = DamperStrengthClubKart;
 				EnableForceSpringEffect = EnableForceSpringEffectClubKart;
 				ForceSpringStrength = ForceSpringStrengthClubKart;
-				IncreaseSine = IncreaseSineClubKart;
+				DoubleSine = DoubleSineClubKart;
+				DoubleConstant = DoubleConstantClubKart;
 
 				RunningFFB = "InitialDActive";
 			}
@@ -3961,15 +3967,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				if (ffb[2] == 0x85 && ffb[1] > 0x00 && ffb[0] > 0x00)
 				{
 					double percentForce = ffb[0] / 127.0;
-
-					if (IncreaseSine)
-					{
-						percentForce = percentForce * 2.0;
-
-						if (percentForce > 1.0)
-							percentForce = 1.0;
-					}
-
 					double Period = ffb[1] / 127.0 * 120.0;
 					double percentLength = 100;
 					triggers->Rumble(percentForce, percentForce, percentLength);
@@ -3992,7 +3989,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 						triggers->Rumble(percentForce, 0, percentLength);
 						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 					}
-					else
+					else if (ffb[1] == 0x01)
 					{
 						double percentForce = (ffb[0] / 127.0);
 						double percentLength = 100;
