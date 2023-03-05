@@ -3912,7 +3912,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
 
-				if (stateFFB > 0xE8 && stateFFB < 0xD0)
+				if (stateFFB > 0xE8 && stateFFB < 0xF0)
 				{
 					double percentForce = (stateFFB - 232) / 8.0;
 					double percentLength = 100;
