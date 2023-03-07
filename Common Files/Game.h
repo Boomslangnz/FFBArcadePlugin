@@ -1,5 +1,21 @@
 #pragma once
 #include <Windows.h>
+#include "MinHook.h"
+
+#if defined _M_X64
+#ifdef _DEBUG
+#pragma comment(lib, "Common Files/MinHook/x64/Debug/MinHook.lib")
+#else
+#pragma comment(lib, "Common Files/MinHook/x64/Release/MinHook.lib")
+#endif
+#elif defined _M_IX86
+#ifdef _DEBUG
+#pragma comment(lib, "Common Files/MinHook/x86/Debug/MinHook.lib")
+#else
+#pragma comment(lib, "Common Files/MinHook/x86/Release/MinHook.lib")
+#endif
+#endif
+
 // struct
 struct EffectTriggers {
 	void(*Constant)(int direction, double strength);

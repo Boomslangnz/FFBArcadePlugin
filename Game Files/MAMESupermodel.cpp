@@ -1146,6 +1146,12 @@ void CallTheOutputs()
 #endif
 	}
 }
+static int(__stdcall* ExitOri)(UINT uExitCode);
+static int __stdcall ExitHook(UINT uExitCode)
+{
+	TerminateProcess(GetCurrentProcess(), 0);
+	return 0;
+}
 
 typedef struct _id_map_entry id_map_entry;
 struct _id_map_entry
@@ -1933,6 +1939,13 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			SDL_HapticRumbleInit(ControllerHaptic3);
 		}
 		SDL_HapticSetGain(haptic3, 100);
+
+		if (configGameId == 60)
+		{
+			MH_Initialize();
+			MH_CreateHookApi(L"KERNEL32.dll", "ExitProcess", ExitHook, (void**)&ExitOri);
+			MH_EnableHook(MH_ALL_HOOKS);
+		}
 		init = true;
 	}
 

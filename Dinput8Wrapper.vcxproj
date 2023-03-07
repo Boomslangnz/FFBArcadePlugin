@@ -20,6 +20,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Common Files\CRCCheck.h" />
+    <ClInclude Include="Common Files\MinHook.h" />
     <ClInclude Include="Common Files\SignatureScanning.h" />
     <ClInclude Include="Config\PersistentValues.h" />
     <ClInclude Include="Game Files\AliensExtermination.h" />

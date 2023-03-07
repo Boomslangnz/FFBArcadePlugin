@@ -368,6 +368,9 @@
     <ClInclude Include="Game Files\InitialD0v230.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Common Files\MinHook.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <MASM Include="DLLWrapper.asm" />
