@@ -3819,7 +3819,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				if (stateFFB > 0x10 && stateFFB < 0x20)
 				{
 					double percentForce = (stateFFB - 10) / 15.0;
-					triggers->Springi(percentForce);
+					triggers->Spring(percentForce);
 				}
 
 				if (stateFFB > 0x20 && stateFFB < 0x30)
@@ -3838,13 +3838,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				if (stateFFB > 0x40 && stateFFB < 0x50)
 				{
 					double percentForce = (stateFFB - 64) / 15.0;
-
-					percentForce = percentForce * 2.0;
-
-					if (percentForce > 1.0)
-						percentForce = 1.0;
-
-					triggers->Springi(percentForce);
+					triggers->Spring(percentForce);
 				}
 
 				if (stateFFB > 0x50 && stateFFB < 0x60)
