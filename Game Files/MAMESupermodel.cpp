@@ -1358,11 +1358,6 @@ static void removeWord(char* str, char* toRemove)
 	}
 }
 
-static void CurrentGameName(Helpers* helpers)
-{
-	helpers->info("Game = %s", GameName);
-}
-
 int __stdcall mame_copydata(int id, const char* name)
 {
 	WCHAR buf[256];
@@ -1371,32 +1366,27 @@ int __stdcall mame_copydata(int id, const char* name)
 
 	if (id == 0)
 	{
-		char RomName[256];
-		sprintf(RomName, "%s", name);
+		sprintf(GameName, "%s", name);
 
-		removeWord(RomName, "game =");
+		removeWord(GameName, "game =");
 
 		int whitespace = 0;
 
-		for (int i = 0; i < strlen(RomName); i++)
+		for (int i = 0; i < strlen(GameName); i++)
 		{
-			if (RomName[i] == ' ' || RomName[i] == '\t')
+			if (GameName[i] == ' ' || GameName[i] == '\t')
 				whitespace++;
 			else
 				break;
 		}
 
-		for (int i = 0; i < strlen(RomName); i++)
+		for (int i = 0; i < strlen(GameName); i++)
 		{
-			if (i + whitespace < strlen(RomName))
-				RomName[i] = RomName[i + whitespace];
+			if (i + whitespace < strlen(GameName))
+				GameName[i] = GameName[i + whitespace];
 			else
-				RomName[i] = 0;
+				GameName[i] = 0;
 		}
-
-		sprintf(GameName, "%s", RomName);
-
-		CurrentGameName(0);
 	}
 
 	AppendTextToEditCtrl(hEdit, buf);
@@ -3868,9 +3858,9 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 				}
 
-				if (stateFFB == 0x9F)
+				if (stateFFB > 0x90 && stateFFB < 0xA0)
 				{
-					double percentForce = 0.4;
+					double percentForce = (stateFFB - 144) / 15.0;
 					double percentLength = 100;
 					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
@@ -3886,7 +3876,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 				if (stateFFB == 0xBF)
 				{
-					double percentForce = 0.4;
+					double percentForce = 1.0;
 					double percentLength = 100;
 					triggers->Rumble(0, percentForce, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
@@ -3895,17 +3885,14 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				if (stateFFB > 0xC0 && stateFFB < 0xD0)
 				{
 					double percentForce = (stateFFB - 192) / 15.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					triggers->Spring(percentForce);
 				}
 
 				if (stateFFB > 0xD0 && stateFFB < 0xE0)
 				{
 					double percentForce = (stateFFB - 208) / 15.0;
 					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+					triggers->Friction(percentForce);
 				}
 
 				if (stateFFB > 0xE0 && stateFFB < 0xE9)
