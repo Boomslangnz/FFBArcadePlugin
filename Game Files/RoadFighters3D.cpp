@@ -72,6 +72,12 @@ static int leverUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverUp"), 0, 
 static int leverDown = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverDown"), 0, settingsFilename);
 static int leverLeft = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverLeft"), 0, settingsFilename);
 static int leverRight = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverRight"), 0, settingsFilename);
+static int Gear1Button = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear1Button"), 0, settingsFilename);
+static int Gear2Button = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear2Button"), 0, settingsFilename);
+static int Gear3Button = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear3Button"), 0, settingsFilename);
+static int Gear4Button = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear4Button"), 0, settingsFilename);
+static int Gear5Button = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear5Button"), 0, settingsFilename);
+static int Gear6Button = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear6Button"), 0, settingsFilename);
 static int ExitButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ExitButtonDevice2"), 0, settingsFilename);
 static int TestButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("TestButtonDevice2"), 0, settingsFilename);
 static int ServiceButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("ServiceButtonDevice2"), 0, settingsFilename);
@@ -82,6 +88,12 @@ static int leverUpDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverUp
 static int leverDownDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverDownDevice2"), 0, settingsFilename);
 static int leverLeftDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverLeftDevice2"), 0, settingsFilename);
 static int leverRightDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("leverRightDevice2"), 0, settingsFilename);
+static int Gear1ButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear1ButtonDevice2"), 0, settingsFilename);
+static int Gear2ButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear2ButtonDevice2"), 0, settingsFilename);
+static int Gear3ButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear3ButtonDevice2"), 0, settingsFilename);
+static int Gear4ButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear4ButtonDevice2"), 0, settingsFilename);
+static int Gear5ButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear5ButtonDevice2"), 0, settingsFilename);
+static int Gear6ButtonDevice2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear6ButtonDevice2"), 0, settingsFilename);
 
 static int ThreadLoop()
 {
@@ -378,6 +390,7 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 		{
 		int menuvalue = myHelpers->ReadIntPtr((INT_PTR)gl_hjgtDll + 0x0094BFFC, false);
 		int menuvalue1 = myHelpers->ReadIntPtr((INT_PTR)menuvalue + 0x46C, false);
+
 		myTriggers = triggers;
 		myConstants = constants;
 		myHelpers = helpers;
@@ -1143,6 +1156,34 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x8000, false);
 					}
+					if (e.jbutton.button == Gear1Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x4000, false);
+					}
+					if (e.jbutton.button == Gear2Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x4000, false);
+					}
+					if (e.jbutton.button == Gear3Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x1040, false);
+					}
+					if (e.jbutton.button == Gear4Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
+					}
+					if (e.jbutton.button == Gear5Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x8000, false);
+					}
+					if (e.jbutton.button == Gear6Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x8000, false);
+					}
 				}
 				else if (e.jbutton.which == joystick_index2)
 				{
@@ -1209,6 +1250,34 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x8000, false);
 					}
+					if (e.jbutton.button == Gear1ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x4000, false);
+					}
+					if (e.jbutton.button == Gear2ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x4000, false);
+					}
+					if (e.jbutton.button == Gear3ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x1040, false);
+					}
+					if (e.jbutton.button == Gear4ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
+					}
+					if (e.jbutton.button == Gear5ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x8000, false);
+					}
+					if (e.jbutton.button == Gear6ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x2080, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread += 0x8000, false);
+					}
 				}
 			}
 			if (e.type == SDL_JOYBUTTONUP)
@@ -1255,6 +1324,34 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 					{
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x8000, false);
 					}
+					if (e.jbutton.button == Gear1Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x4000, false);
+					}
+					if (e.jbutton.button == Gear2Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x4000, false);
+					}
+					if (e.jbutton.button == Gear3Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
+					}
+					if (e.jbutton.button == Gear4Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
+					}
+					if (e.jbutton.button == Gear5Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x8000, false);
+					}
+					if (e.jbutton.button == Gear6Button)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x8000, false);
+					}
 				}
 				else if (e.jbutton.which == joystick_index2)
 				{
@@ -1296,6 +1393,34 @@ void RoadFighters3D::FFBLoop(EffectConstants *constants, Helpers *helpers, Effec
 					}
 					if (e.jbutton.button == leverRightDevice2)
 					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x8000, false);
+					}
+					if (e.jbutton.button == Gear1ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x4000, false);
+					}
+					if (e.jbutton.button == Gear2ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x4000, false);
+					}
+					if (e.jbutton.button == Gear3ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
+					}
+					if (e.jbutton.button == Gear4ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
+					}
+					if (e.jbutton.button == Gear5ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x1040, false);
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x8000, false);
+					}
+					if (e.jbutton.button == Gear6ButtonDevice2)
+					{
+						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x2080, false);
 						helpers->WriteIntPtr((INT_PTR)gl_hjgtDll + 0x7D2B24, serviceread -= 0x8000, false);
 					}
 				}
