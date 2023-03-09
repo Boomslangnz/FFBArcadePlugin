@@ -146,7 +146,7 @@ void ATVTrackInputsEnabled(Helpers* helpers)
 
 	while (SDL_WaitEvent(&e) != 0)
 	{
-		if ((e.type == SDL_JOYAXISMOTION) & (ShowAxisForSetup == 0))
+		if ((e.type == SDL_JOYAXISMOTION) && (ShowAxisForSetup == 0))
 		{
 			if (e.jaxis.which == joystick_index1)
 			{
@@ -164,7 +164,7 @@ void ATVTrackInputsEnabled(Helpers* helpers)
 						e.jaxis.value = e.jaxis.value + WHEEL_DEAD_ZONE;
 						SteeringValue = (127 + (e.jaxis.value - WHEEL_DEAD_ZONE) / 255);
 					}
-					else if ((e.jaxis.value < WHEEL_DEAD_ZONE) & (e.jaxis.value > -WHEEL_DEAD_ZONE))
+					else if ((e.jaxis.value < WHEEL_DEAD_ZONE) && (e.jaxis.value > -WHEEL_DEAD_ZONE))
 					{
 						SteeringValue = 0x7F;
 					}
@@ -187,7 +187,7 @@ void ATVTrackInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
 								BrakeValue = ((e.jaxis.value + ACCL_DEAD_ZONE) / 128);
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								helpers->WriteByte(AcclAddress, 0x00, false);
 								BrakeValue = 0x00;
@@ -274,7 +274,7 @@ void ATVTrackInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 								BrakeValue = ((-e.jaxis.value + ACCL_DEAD_ZONE) / 128);
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								helpers->WriteByte(AcclAddress, 0xFF, false);
 								BrakeValue = 0x00;

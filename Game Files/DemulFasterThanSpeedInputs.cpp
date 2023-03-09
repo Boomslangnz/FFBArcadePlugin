@@ -140,7 +140,7 @@ void FasterThanSpeedInputsEnabled(Helpers* helpers)
 
 	while (SDL_WaitEvent(&e) != 0)
 	{
-		if ((e.type == SDL_JOYAXISMOTION) & (ShowAxisForSetup == 0))
+		if ((e.type == SDL_JOYAXISMOTION) && (ShowAxisForSetup == 0))
 		{
 			if (e.jaxis.which == joystick_index1)
 			{
@@ -158,7 +158,7 @@ void FasterThanSpeedInputsEnabled(Helpers* helpers)
 						e.jaxis.value = e.jaxis.value + WHEEL_DEAD_ZONE;
 						helpers->WriteByte(SteeringAddress, (127 + (e.jaxis.value - WHEEL_DEAD_ZONE) / 255), false);
 					}
-					else if ((e.jaxis.value < WHEEL_DEAD_ZONE) & (e.jaxis.value > -WHEEL_DEAD_ZONE))
+					else if ((e.jaxis.value < WHEEL_DEAD_ZONE) && (e.jaxis.value > -WHEEL_DEAD_ZONE))
 					{
 						helpers->WriteByte(SteeringAddress, 0x7F, false);
 					}
@@ -179,7 +179,7 @@ void FasterThanSpeedInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value - ACCL_DEAD_ZONE;
 								helpers->WriteByte(BrakeAddress, ((e.jaxis.value + ACCL_DEAD_ZONE) / 128), false);
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								helpers->WriteByte(AcclAddress, 0x00, false);
 								helpers->WriteByte(BrakeAddress, 0x00, false);
@@ -232,7 +232,7 @@ void FasterThanSpeedInputsEnabled(Helpers* helpers)
 								e.jaxis.value = e.jaxis.value + ACCL_DEAD_ZONE;
 								helpers->WriteByte(BrakeAddress, ((-e.jaxis.value + ACCL_DEAD_ZONE) / 128), false);
 							}
-							else if ((e.jaxis.value < ACCL_DEAD_ZONE) & (e.jaxis.value > -ACCL_DEAD_ZONE))
+							else if ((e.jaxis.value < ACCL_DEAD_ZONE) && (e.jaxis.value > -ACCL_DEAD_ZONE))
 							{
 								helpers->WriteByte(AcclAddress, 0xFF, false);
 								helpers->WriteByte(BrakeAddress, 0xFF, false);
