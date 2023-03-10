@@ -178,6 +178,7 @@ FLYCAST:
 -Initial D Arcade Stage 3
 -King Of Route 66
 -Maximum Speed
+-Sega Driving Simulator
 
 
 

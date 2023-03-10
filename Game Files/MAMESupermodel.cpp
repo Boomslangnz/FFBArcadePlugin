@@ -230,6 +230,8 @@ std::string FasterThanSPEED("FASTER THAN SPEED\n");
 std::string F355ChallengeJapan("F355 CHALLENGE JAPAN\n");
 std::string ClubKartInJapan("CLUB KART IN JAPAN\n");
 std::string TheKingOfRoute66("THE KING OF ROUTE66\n");
+std::string SegaDrivingSimulator("SAMPLE GAME MAX LONG NAME-\n");
+
 
 //Our string to load game from
 std::string M2Active("M2Active");
@@ -1051,6 +1053,21 @@ static int DamperStrengthKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), 
 static int DoubleSineKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSineKingOfRoute66"), 0, settingsFilename);
 static int DoubleConstantKingOfRoute66 = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstantKingOfRoute66"), 0, settingsFilename);
 
+static int configMinForceSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("MinForceSegaDrivingSimulator"), 0, settingsFilename);
+static int configMaxForceSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("MaxForceSegaDrivingSimulator"), 100, settingsFilename);
+static int configAlternativeMinForceLeftSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceLeftSegaDrivingSimulator"), 0, settingsFilename);
+static int configAlternativeMaxForceLeftSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceLeftSegaDrivingSimulator"), 100, settingsFilename);
+static int configAlternativeMinForceRightSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMinForceRightSegaDrivingSimulator"), 0, settingsFilename);
+static int configAlternativeMaxForceRightSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("AlternativeMaxForceRightSegaDrivingSimulator"), 100, settingsFilename);
+static int configFeedbackLengthSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("FeedbackLengthSegaDrivingSimulator"), 120, settingsFilename);
+static int PowerModeSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("PowerModeSegaDrivingSimulator"), 0, settingsFilename);
+static int EnableForceSpringEffectSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableForceSpringEffectSegaDrivingSimulator"), 0, settingsFilename);
+static int ForceSpringStrengthSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("ForceSpringStrengthSegaDrivingSimulator"), 0, settingsFilename);
+static int EnableDamperSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("EnableDamperSegaDrivingSimulator"), 0, settingsFilename);
+static int DamperStrengthSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("DamperStrengthSegaDrivingSimulator"), 100, settingsFilename);
+static int DoubleSineSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSineSegaDrivingSimulator"), 0, settingsFilename);
+static int DoubleConstantSegaDrivingSimulator = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstantSegaDrivingSimulator"), 0, settingsFilename);
+
 static bool init = false;
 static bool initSpring = false;
 static bool EmuName = false;
@@ -1858,7 +1875,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 		SDL_JoystickGUID guid, dev_guid;
 		int numJoysticks = SDL_NumJoysticks();
 		std::string njs = std::to_string(numJoysticks);
-		((char)njs.c_str());
 		for (int i = 0; i < SDL_NumJoysticks(); i++)
 		{
 			extern int joystick1Index;
@@ -2887,6 +2903,26 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				ForceSpringStrength = ForceSpringStrengthClubKart;
 				DoubleSine = DoubleSineClubKart;
 				DoubleConstant = DoubleConstantClubKart;
+
+				RunningFFB = "InitialDActive";
+			}
+
+			if (romname == SegaDrivingSimulator)
+			{
+				configMinForce = configMinForceSegaDrivingSimulator;
+				configMaxForce = configMaxForceSegaDrivingSimulator;
+				configAlternativeMinForceLeft = configAlternativeMinForceLeftSegaDrivingSimulator;
+				configAlternativeMaxForceLeft = configAlternativeMaxForceLeftSegaDrivingSimulator;
+				configAlternativeMinForceRight = configAlternativeMinForceRightSegaDrivingSimulator;
+				configAlternativeMaxForceRight = configAlternativeMaxForceRightSegaDrivingSimulator;
+				configFeedbackLength = configFeedbackLengthSegaDrivingSimulator;
+				PowerMode = PowerModeSegaDrivingSimulator;
+				EnableDamper = EnableDamperSegaDrivingSimulator;
+				DamperStrength = DamperStrengthSegaDrivingSimulator;
+				EnableForceSpringEffect = EnableForceSpringEffectSegaDrivingSimulator;
+				ForceSpringStrength = ForceSpringStrengthSegaDrivingSimulator;
+				DoubleSine = DoubleSineSegaDrivingSimulator;
+				DoubleConstant = DoubleConstantSegaDrivingSimulator;
 
 				RunningFFB = "InitialDActive";
 			}
