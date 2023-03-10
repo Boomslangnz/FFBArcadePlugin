@@ -17,6 +17,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 extern int EnableDamper;
 extern int DamperStrength;
+static int ShakeCount;
 static bool LetsShake;
 static UINT8 oldEffect;
 
@@ -27,23 +28,14 @@ static int FFBGrassFadeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT(
 static int FFBRumbleStripSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBRumbleStripSinePeriod"), 0, settingsFilename);
 static int FFBRumbleStripFadeSinePeriod = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBRumbleStripFadeSinePeriod"), 0, settingsFilename);
 
-static int ShakeThread(void* ptr)
-{
-	Sleep(500);
-	LetsShake = false;
-	return 0;
-}
-
 void D1GP::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers)
 {
 	float FFBConstant = GetTeknoParrotFFB() / 1000.0;
 	int Effect = GetTeknoParrotFFB2();
 	float Speedo = helpers->ReadFloat32(0x2150F4, true);
 
-	if (EnableDamper == 1)
-	{
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	}
 
 	if (FFBConstant > 0)
 	{
@@ -86,7 +78,6 @@ void D1GP::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 			break;
 		case 0x04:
 			LetsShake = true;
-			SDL_CreateThread(ShakeThread, "ShakeThread", (void*)NULL);
 			break;
 		}	
 	}
@@ -114,6 +105,14 @@ void D1GP::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 
 	if (LetsShake)
 	{
+		++ShakeCount;
+
+		if (ShakeCount >= 32)
+		{
+			ShakeCount = 0;
+			LetsShake = false;
+		}
+
 		triggers->Rumble(0.6, 0.6, 100);
 		triggers->Sine(70, 60, 0.4);
 	}

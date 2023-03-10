@@ -84,10 +84,8 @@ void FordRacingOther::FFBLoop(EffectConstants *constants, Helpers *helpers, Effe
 		}
 	}
 
-	if (EnableDamper == 1)
-	{
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	}
 		
 	myTriggers = triggers;
 	myConstants = constants;

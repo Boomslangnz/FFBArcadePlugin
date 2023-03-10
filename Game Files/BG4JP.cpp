@@ -45,10 +45,8 @@ void BG4JP::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers
 	std::string ffs = std::to_string(WallContact);
 	helpers->log((char *)ffs.c_str());
 
-	if (EnableDamper == 1)
-	{
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	}
 
 	double percentForce = ffspeed / 180.00;
 	double percentLength = 100.0;

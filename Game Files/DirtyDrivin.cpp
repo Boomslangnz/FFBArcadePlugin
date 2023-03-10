@@ -49,7 +49,7 @@ void DirtyDrivin::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 		break;
 	}
 
-	if (EnableDamper == 1)
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
 
 	if (ff > 0)

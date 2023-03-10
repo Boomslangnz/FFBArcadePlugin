@@ -64,7 +64,6 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 			SDL_JoystickGUID guid, dev_guid;
 			int numJoysticks = SDL_NumJoysticks();
 			std::string njs = std::to_string(numJoysticks);
-			((char)njs.c_str());
 			for (int i = 0; i < SDL_NumJoysticks(); i++)
 			{
 				extern int joystick1Index;
@@ -131,6 +130,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						triggers->Rumble(percentForce, percentForce, percentLength);
 					}
 				}
+
 				if (!BothRumbleMotor && LeftRumbleMotor && !RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Rumble || e.jbutton.button == Button2Rumble || e.jbutton.button == Button3Rumble || e.jbutton.button == Button4Rumble || e.jbutton.button == Button5Rumble || e.jbutton.button == Button6Rumble || e.jbutton.button == Button7Rumble || e.jbutton.button == Button8Rumble || e.jbutton.button == Button9Rumble || e.jbutton.button == Button10Rumble)
@@ -140,6 +140,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 							triggers->Rumble(0, percentForce, percentLength);
 					}
 				}
+
 				if (!BothRumbleMotor && !LeftRumbleMotor && RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Rumble || e.jbutton.button == Button2Rumble || e.jbutton.button == Button3Rumble || e.jbutton.button == Button4Rumble || e.jbutton.button == Button5Rumble || e.jbutton.button == Button6Rumble || e.jbutton.button == Button7Rumble || e.jbutton.button == Button8Rumble || e.jbutton.button == Button9Rumble || e.jbutton.button == Button10Rumble)
@@ -150,6 +151,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 					}
 				}
 			}
+
 			if (e.jaxis.which == joystick_index2)
 			{
 				if (BothRumbleMotor && !LeftRumbleMotor && !RightRumbleMotor)
@@ -161,6 +163,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						triggers->RumbleDevice2(percentForce, percentForce, percentLength);
 					}
 				}
+
 				if (!BothRumbleMotor && LeftRumbleMotor && !RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Device2Rumble || e.jbutton.button == Button2Device2Rumble || e.jbutton.button == Button3Device2Rumble || e.jbutton.button == Button4Device2Rumble || e.jbutton.button == Button5Device2Rumble || e.jbutton.button == Button6Device2Rumble || e.jbutton.button == Button7Device2Rumble || e.jbutton.button == Button8Device2Rumble || e.jbutton.button == Button9Device2Rumble || e.jbutton.button == Button10Device2Rumble)
@@ -170,6 +173,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 						triggers->RumbleDevice2(0, percentForce, percentLength);
 					}
 				}
+
 				if (!BothRumbleMotor && !LeftRumbleMotor && RightRumbleMotor)
 				{
 					if (e.jbutton.button == Button1Device2Rumble || e.jbutton.button == Button2Device2Rumble || e.jbutton.button == Button3Device2Rumble || e.jbutton.button == Button4Device2Rumble || e.jbutton.button == Button5Device2Rumble || e.jbutton.button == Button6Device2Rumble || e.jbutton.button == Button7Device2Rumble || e.jbutton.button == Button8Device2Rumble || e.jbutton.button == Button9Device2Rumble || e.jbutton.button == Button10Device2Rumble)
@@ -181,6 +185,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 				}
 			}
 		}
+
 		if (e.type == SDL_JOYBUTTONUP)
 		{
 			if (e.jaxis.which == joystick_index1)
@@ -192,6 +197,7 @@ void ButtonRumble::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectT
 					triggers->Rumble(0, 0, percentLength);
 				}
 			}
+
 			if (e.jaxis.which == joystick_index2)
 			{
 				if (e.jbutton.button == Button1Device2Rumble || e.jbutton.button == Button2Device2Rumble || e.jbutton.button == Button3Device2Rumble || e.jbutton.button == Button4Device2Rumble || e.jbutton.button == Button5Device2Rumble || e.jbutton.button == Button6Device2Rumble || e.jbutton.button == Button7Device2Rumble || e.jbutton.button == Button8Device2Rumble || e.jbutton.button == Button9Device2Rumble || e.jbutton.button == Button10Device2Rumble)

@@ -43,6 +43,7 @@ void AfterburnerClimax::FFBLoop(EffectConstants *constants, Helpers *helpers, Ef
 
 	if (NewVersion)
 		Vibration = helpers->ReadByte(0x834A51E, false);
+
 	if (OldVersion)
 		Vibration = helpers->ReadByte(0x8347A5E, false);
 		

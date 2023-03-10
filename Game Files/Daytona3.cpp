@@ -59,7 +59,7 @@ static int ThreadLoop()
 
 		if (e.type == SDL_JOYBUTTONDOWN)
 		{
-			if (ChangeGearsViaPlugin == 1)
+			if (ChangeGearsViaPlugin)
 			{
 				if (e.jbutton.button == Gear1)
 				{
@@ -77,11 +77,11 @@ static int ThreadLoop()
 				{
 					myHelpers->WriteByte(0x019B468C, 0x03, false);
 				}
-				else if ((e.jbutton.button == GearDown) && (gear > 0x00))
+				else if (e.jbutton.button == GearDown && gear > 0x00)
 				{
 					myHelpers->WriteByte(0x019B468C, --gear, false);
 				}
-				else if ((e.jbutton.button == GearUp) && (gear < 0x03))
+				else if (e.jbutton.button == GearUp && gear < 0x03)
 				{
 					myHelpers->WriteByte(0x019B468C, ++gear, false);
 				}
@@ -116,12 +116,10 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 	UINT8 ff = helpers->ReadByte(0x15AFC46, false);
 	HWND hWnd = FindWindowA(0, ("Daytona Championship USA"));
 
-	if (HideCursor == 1)
-	{
+	if (HideCursor)
 		SetCursorPos(2000, 2000);
-	}
 
-	if (GetAsyncKeyState((VK_ESCAPE)) && (EscapeKeyExitViaPlugin == 1))
+	if (GetAsyncKeyState(VK_ESCAPE) && EscapeKeyExitViaPlugin)
 	{
 		if (hWnd > NULL)
 		{
@@ -136,7 +134,7 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		//Menu Movement & Game Initial Screen
 		if (gamestate == 18 || gamestate == 30)
 		{
-			if ((steering <= 0x75) && (steering > 0x50))
+			if (steering <= 0x75 && steering > 0x50)
 			{
 				//Menu Left
 				if (!keybdleft)
@@ -192,10 +190,8 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		}
 	}
 
-	if (EnableDamper == 1)
-	{
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	}
 
 	if (ff > 15)
 	{
@@ -211,6 +207,7 @@ void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTrigg
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 	}
+
 	myTriggers = triggers;
 	myConstants = constants;
 	myHelpers = helpers;

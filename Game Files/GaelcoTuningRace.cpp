@@ -85,7 +85,7 @@ void GaelcoTuningRace::FFBLoop(EffectConstants* constants, Helpers* helpers, Eff
 		}
 	}
 
-	if (EnableDamper == 1)
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
 
 	myTriggers = triggers;

@@ -24,10 +24,8 @@ void Batman::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigger
 	std::string ffs = std::to_string(ff);
 	helpers->log((char*)ffs.c_str());
 
-	if (EnableDamper == 1)
-	{
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	}
 
 	if (ff > 0)
 	{

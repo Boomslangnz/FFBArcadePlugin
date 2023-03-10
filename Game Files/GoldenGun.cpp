@@ -74,7 +74,6 @@ void GoldenGun::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrig
 			SDL_JoystickGUID guid, dev_guid;
 			int numJoysticks = SDL_NumJoysticks();
 			std::string njs = std::to_string(numJoysticks);
-			((char)njs.c_str());
 			for (int i = 0; i < SDL_NumJoysticks(); i++)
 			{
 				extern int joystick1Index;

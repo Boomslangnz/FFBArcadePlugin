@@ -51,19 +51,13 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	UINT8 static oldgear = 0;
 	UINT8 newgear = gear;
 
-	{
-		triggers->Springi(SpringStrength / 100.0);
-	}
+	triggers->Springi(SpringStrength / 100.0);
 
-	if (EnableDamper == 1)
-	{
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	}
 
-	if ((oldgear != newgear) && (speedo > 0))
-	{
+	if (oldgear != newgear && speedo > 0)
 		gearshift = true;
-	}
 
 	if (gearshift)
 	{
@@ -82,30 +76,30 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		triggers->Sine(80, 80, percentForce);
 	}
 
-	if ((Skids > 12) && (speedo > 0))
+	if (Skids > 12 && speedo > 0)
 	{
 		double percentForce = ((Skids - 12) / 8.0);
 		double percentLength = 100;
 		triggers->Rumble(percentForce, 0, percentLength);
 	}
 
-	if ((AI > 0) && (PanelBase4 > 0))
+	if (AI > 0 && PanelBase4 > 0)
 	{
-		double percentForce = (PanelBase4) / 8.0;
+		double percentForce = PanelBase4 / 8.0;
 		double percentLength = 100;
 		triggers->Rumble(percentForce, percentForce, percentLength);
 	}
 
-	if ((WallBase4 > 0) && (PanelBase4 > 0))
+	if (WallBase4 > 0 && PanelBase4 > 0)
 	{
-		double percentForce = (PanelBase4) / 8.0;
+		double percentForce = PanelBase4 / 8.0;
 		double percentLength = 100;
 		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
-	else if ((WallBase4 < 0) && (PanelBase4 > 0))
+	else if (WallBase4 < 0 && PanelBase4 > 0)
 	{
-		double percentForce = (PanelBase4) / 8.0;
+		double percentForce = PanelBase4 / 8.0;
 		double percentLength = 100;
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
