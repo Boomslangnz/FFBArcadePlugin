@@ -20,14 +20,14 @@ static int __stdcall Out32(DWORD device, DWORD data)
 	{
 		double percentForce = (31 - data) / 15.0;
 		double percentLength = 100;
-		myTriggers->LeftRight(percentForce, 0, percentLength);
+		myTriggers->Rumble(percentForce, 0, percentLength);
 		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
 	}
 	else if (data > 0)
 	{
 		double percentForce = (16 - data) / 15.0;
 		double percentLength = 100;
-		myTriggers->LeftRight(0, percentForce, percentLength);
+		myTriggers->Rumble(0, percentForce, percentLength);
 		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 	return 0;

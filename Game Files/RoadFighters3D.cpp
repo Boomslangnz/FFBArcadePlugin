@@ -104,8 +104,7 @@ static int ThreadLoop()
 	int cabid = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x951034, false);
 	int cabid2 = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x952B9C, false);
 	float timeroutofmenu = myHelpers->ReadByte((INT_PTR)gl_hjgtDll + 0x94BEE8, false);
-	uintptr_t jgtBase;
-	jgtBase = (uintptr_t)GetModuleHandleA("jgt.dll");
+	 uintptr_t jgtBase = (uintptr_t)GetModuleHandleA("jgt.dll");
 
 	if (CabinetID == 2)
 	{
