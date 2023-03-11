@@ -70,14 +70,12 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	{
 		init = true;
 
-		HMODULE hMod = GetModuleHandleA("inpout32.dll");
-		if (hMod)
-		{
-			MH_Initialize();
-			MH_CreateHook((void*)0xB9CDE0, EnableFFBHook, (void**)&EnableFFBOri);
-			MH_CreateHookApi(L"inpout32.dll", "Out32", Out32Hook, (void**)&Out32Ori);
-			MH_EnableHook(MH_ALL_HOOKS);
-		}
+		DWORD ImageBase = (DWORD)GetModuleHandleA(0);
+
+		MH_Initialize();
+		MH_CreateHook((void*)(ImageBase + 0x79CDE0), EnableFFBHook, (void**)&EnableFFBOri);
+		MH_CreateHookApi(L"inpout32.dll", "Out32", Out32Hook, (void**)&Out32Ori);
+		MH_EnableHook(MH_ALL_HOOKS);
 	}
 
 	myTriggers = triggers;

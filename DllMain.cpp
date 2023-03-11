@@ -2283,7 +2283,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if (configGameId != 22 && configGameId != 29 && configGameId != 34) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	if (configGameId != 22 && configGameId != 29 && configGameId != 34 && configGameId != 10) //For games which need code to run quicker etc. Some games will crash if no sleep added
 		Sleep(2500);
 
 	Initialize(0);
