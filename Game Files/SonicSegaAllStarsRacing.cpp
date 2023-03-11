@@ -16,32 +16,48 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 extern int EnableDamper;
 extern int DamperStrength;
 
+static UINT8 OLDFFB;
+
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int SpringEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringEnable"), 0, settingsFilename);
+static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 0, settingsFilename);
+
 void SonicSegaAllStarsRacing::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-	INT_PTR FFBEnable = helpers->ReadByte(0x5CD858, true);
-	INT_PTR FFB = helpers->ReadByte(0x5CD864, true);
+	UINT8 FFB = helpers->ReadByte(0x5CD864, true);
 
 	helpers->WriteByte(0x5CD858, 0x03, true);
 
-	if (EnableDamper == 1)
-	{
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	}
 
-	if ((FFB > 0) && (FFB < 19))
+	if (SpringEnable)
+		triggers->Springi(SpringStrength / 100.0);
+
+	if (OLDFFB != FFB)
 	{
-		helpers->log("moving wheel left");
-		double percentForce = FFB / 18.0;
-		double percentLength = 100;
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-	}	
-	else if ((FFB > 237) && (FFB < 256))
-	{
-		helpers->log("moving wheel right");
-		double percentForce = (256 - FFB) / 18.0;
-		double percentLength = 100;
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		if (FFB > 0 && FFB < 19)
+		{
+			helpers->log("moving wheel left");
+			double percentForce = FFB / 18.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+		else if (FFB > 237 && FFB < 256)
+		{
+			helpers->log("moving wheel right");
+			double percentForce = (256 - FFB) / 18.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else
+		{
+			triggers->Rumble(0, 0, 80);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+		}
 	}
+	OLDFFB = FFB;
 }
