@@ -29,28 +29,25 @@ static int FFBCounter;
 static int(__stdcall* Out32Ori)(DWORD device, DWORD data);
 static int __stdcall Out32Hook(DWORD device, DWORD data)
 {
-	if (device == 0x378)
+	++FFBCounter;
+
+	if (FFBCounter == 5)
 	{
-		++FFBCounter;
+		FFBCounter = 0;
 
-		if (FFBCounter == 5)
+		if (data > 15)
 		{
-			FFBCounter = 0;
-
-			if (data > 15)
-			{
-				double percentForce = (31 - data) / 15.0;
-				double percentLength = 100;
-				myTriggers->Rumble(percentForce, 0, percentLength);
-				myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if (data > 0)
-			{
-				double percentForce = (16 - data) / 15.0;
-				double percentLength = 100;
-				myTriggers->Rumble(0, percentForce, percentLength);
-				myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-			}
+			double percentForce = (31 - data) / 15.0;
+			double percentLength = 100;
+			myTriggers->Rumble(percentForce, 0, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if (data > 0)
+		{
+			double percentForce = (16 - data) / 15.0;
+			double percentLength = 100;
+			myTriggers->Rumble(0, percentForce, percentLength);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 	}
 
