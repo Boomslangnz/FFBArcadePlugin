@@ -57,14 +57,6 @@ static int __stdcall Out32Hook(DWORD device, DWORD data)
 	return Out32Ori(device, data);
 }
 
-static int(__fastcall* EnableFFBOri)(int a1, double a2);
-static int __fastcall EnableFFBHook(int a1, double a2)
-{
-	EnableFFBOri(a1, a2);
-	*(BYTE*)(a1 + 92) = 1;
-	return 0;
-}
-
 void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	if (!init)
 	{
@@ -73,7 +65,6 @@ void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 		DWORD ImageBase = (DWORD)GetModuleHandleA(0);
 
 		MH_Initialize();
-		MH_CreateHook((void*)(ImageBase + 0x79CDE0), EnableFFBHook, (void**)&EnableFFBOri);
 		MH_CreateHookApi(L"inpout32.dll", "Out32", Out32Hook, (void**)&Out32Ori);
 		MH_EnableHook(MH_ALL_HOOKS);
 	}
