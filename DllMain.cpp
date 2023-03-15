@@ -2631,6 +2631,11 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 				currentLibrary = lib::xinput1_3;
 				strcat_s(buffer, MAX_PATH, "\\xinput1_3.dll");
 			}
+			if (NULL != strstr(libName, "XINPUT1_4"))
+			{
+				currentLibrary = lib::xinput1_3;
+				strcat_s(buffer, MAX_PATH, "\\xinput1_4.dll");
+			}
 			if (NULL != strstr(libName, "OPENGL32"))
 			{
 				currentLibrary = lib::opengl32;
