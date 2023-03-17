@@ -20,47 +20,58 @@ void Daytona3NSE::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 	UINT8 FFB = helpers->ReadByte(0x1334061, true);
 
-	if (FFB >= 0xF8 && FFB <= 0xFF)
+	if (FFB > 0x80 && FFB <= 0x8F) // ????
 	{
-		double percentForce = (256 - FFB) / 8.0;
-		triggers->Springi(percentForce);
-	}
-
-	if (FFB >= 0xC4 && FFB <= 0xC7)
-	{
-		double percentForce = ((199 - FFB) / 4.0) / 6.0;
+		double percentForce = (144 - FFB) / 16.0;
 		double percentLength = 100.0;
-		triggers->Sine(35, 0, percentForce);
-		triggers->Rumble(percentForce, percentForce, percentLength);
+		triggers->Spring(percentForce);
 	}
 
-	if (FFB >= 0xD8 && FFB <= 0xDF)
+	if (FFB > 0x90 && FFB <= 0x9F) // Roll Right
 	{
-		double percentForce = (224 - FFB) / 8.0;
-		triggers->Friction(percentForce);
-	}
-
-	if (FFB == 0xBD || FFB == 0xCD)
-	{
-		double percentForce = 0.35;
+		double percentForce = (160 - FFB) / 16.0;
 		double percentLength = 100.0;
-		triggers->Sine(140, 0, percentForce);
-		triggers->Rumble(percentForce, percentForce, percentLength);
+		triggers->Rumble(percentForce, 0, percentLength);
+		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 	}
 
-	if (FFB >= 0xA8 && FFB <= 0xAF) // Roll Left
+	if (FFB > 0xA0 && FFB <= 0xAF) // Roll Left
 	{
-		double percentForce = (176 - FFB) / 8.0;
+		double percentForce = (176 - FFB) / 16.0;
 		double percentLength = 100.0;
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 
-	if (FFB >= 0x98 && FFB <= 0x9F) // Roll Right
+	if (FFB > 0xB0 && FFB <= 0xBF)
 	{
-		double percentForce = (160 - FFB) / 8.0;
+		double percentForce = (192 - FFB) / 16.0;
 		double percentLength = 100.0;
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		triggers->Sine(40, 0, percentForce);
+		triggers->Rumble(percentForce, percentForce, percentLength);
+	}
+
+	if (FFB > 0xC0 && FFB <= 0xCF)
+	{
+		double percentForce = (207 - FFB) / 16.0;
+		triggers->Spring(percentForce);
+	}
+
+	if (FFB > 0xD0 && FFB <= 0xDF)
+	{
+		double percentForce = (224 - FFB) / 16.0;
+		triggers->Friction(percentForce);
+	}
+
+	if (FFB > 0xE0 && FFB <= 0xEF) //????
+	{
+		double percentForce = (FFB - 224) / 16.0;
+		triggers->Spring(percentForce);
+	}
+
+	if (FFB > 0xF0 && FFB <= 0xFF)
+	{
+		double percentForce = (FFB - 240) / 16.0;
+		triggers->Spring(percentForce);
 	}
 }

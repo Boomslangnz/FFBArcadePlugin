@@ -960,6 +960,8 @@ int InputDeviceWheelEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("InputD
 int IgnoreFirstMatchingGUID = GetPrivateProfileInt(TEXT("Settings"), TEXT("IgnoreFirstMatchingGUID"), 0, settingsFilename);
 int DoubleSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSine"), 0, settingsFilename);
 int DoubleConstant = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstant"), 0, settingsFilename);
+int DoubleSpring = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSpring"), 0, settingsFilename);
+int DoubleFriction = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleFriction"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
 extern void CustomFFBStrengthSetup();
@@ -1312,6 +1314,14 @@ void TriggerFrictionEffectWithDefaultOption(double strength, bool isDefault)
 	tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
 	tempEffect.condition.left_sat[0] = 0xFFFF;
 	tempEffect.condition.right_sat[0] = 0xFFFF;
+
+	if (DoubleFriction)
+	{
+		strength = strength * 2.0;
+
+		if (strength > 1.0)
+			strength = 1.0;
+	}
 
 	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
@@ -1746,6 +1756,14 @@ void TriggerSpringEffectWithDefaultOption(double strength, bool isDefault)
 	tempEffect.condition.length = isDefault ? SDL_HAPTIC_INFINITY : configFeedbackLength;
 	tempEffect.condition.direction.dir[0] = 1;
 	tempEffect.constant.direction.dir[1] = 0; //Y Position
+
+	if (DoubleSpring)
+	{
+		strength = strength * 2.0;
+
+		if (strength > 1.0)
+			strength = 1.0;
+	}
 
 	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
 	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
