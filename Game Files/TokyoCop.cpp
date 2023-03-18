@@ -16,11 +16,13 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
+
 extern int EnableDamper;
 extern int DamperStrength;
 static bool init;
 
-static int __stdcall SetMotor(DWORD* a1, float a2)
+static int(__stdcall* SetMotorOri)(DWORD* a1, float a2);
+static int __stdcall SetMotorHook(DWORD* a1, float a2)
 {
 	if (a2 > 0)
 	{
@@ -44,46 +46,20 @@ static int __stdcall SetMotor(DWORD* a1, float a2)
 		myTriggers->Rumble(0, percentForce, percentLength);
 		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 	}
-	return 0;
+	return SetMotorOri(a1, a2);
 }
-
-static bool Hook(void* toHook, void* ourFunct, int len) {
-	if (len < 5) {
-		return false;
-	}
-
-	DWORD curProtection;
-	VirtualProtect(toHook, len, PAGE_EXECUTE_READWRITE, &curProtection);
-
-	memset(toHook, 0x90, len);
-
-	DWORD relativeAddress = ((DWORD)ourFunct - (DWORD)toHook) - 5;
-
-	*(BYTE*)toHook = 0xE9;
-	*(DWORD*)((DWORD)toHook + 1) = relativeAddress;
-
-	DWORD temp;
-	VirtualProtect(toHook, len, curProtection, &temp);
-
-	return true;
-}
-
-static DWORD jmpBackAddy;
 
 void TokyoCop::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
 	if (!init)
 	{
-		int hookLength = 6;
-		DWORD hookAddress = 0x80E6FA4;
-		if (hookAddress)
-		{
-			jmpBackAddy = hookAddress + hookLength;
-			Hook((void*)hookAddress, SetMotor, hookLength);
-			init = true;
-		}
+		init = true;
+		MH_Initialize();
+		MH_CreateHook((void*)0x80E6FA4, SetMotorHook, (void**)&SetMotorOri);
+		MH_EnableHook(MH_ALL_HOOKS);
 	}
 
-	if (EnableDamper == 1)
+	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
 
 	myTriggers = triggers;

@@ -13,14 +13,17 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "GaelcoTuningRace.h"
+
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
 static Helpers* myHelpers;
+
 extern int EnableDamper;
 extern int DamperStrength;
 static bool init;
 
-static int __stdcall SetMotor(DWORD* a1)
+static int(__stdcall* SetMotorOri)(DWORD* a1);
+static int __stdcall SetMotorHook(DWORD* a1)
 {
 	long double v1 = *(float*)&a1;
 
@@ -46,43 +49,17 @@ static int __stdcall SetMotor(DWORD* a1)
 		myTriggers->Rumble(0, percentForce, percentLength);
 		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
 	}
-	return 0;
+	return SetMotorOri(a1);
 }
-
-static bool Hook(void* toHook, void* ourFunct, int len) {
-	if (len < 5) {
-		return false;
-	}
-
-	DWORD curProtection;
-	VirtualProtect(toHook, len, PAGE_EXECUTE_READWRITE, &curProtection);
-
-	memset(toHook, 0x90, len);
-
-	DWORD relativeAddress = ((DWORD)ourFunct - (DWORD)toHook) - 5;
-
-	*(BYTE*)toHook = 0xE9;
-	*(DWORD*)((DWORD)toHook + 1) = relativeAddress;
-
-	DWORD temp;
-	VirtualProtect(toHook, len, curProtection, &temp);
-
-	return true;
-}
-
-static DWORD jmpBackAddy;
 
 void GaelcoTuningRace::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
 	if (!init)
 	{
-		int hookLength = 6;
-		DWORD hookAddress = 0x8188ABC;
-		if (hookAddress)
-		{
-			jmpBackAddy = hookAddress + hookLength;
-			Hook((void*)hookAddress, SetMotor, hookLength);
-			init = true;
-		}
+		init = true;
+		MH_Initialize();
+		MH_CreateHook((void*)0x8188ABC, SetMotorHook, (void**)&SetMotorOri);
+		MH_EnableHook(MH_ALL_HOOKS);
 	}
 
 	if (EnableDamper)
