@@ -230,7 +230,7 @@ std::string FasterThanSPEED("FASTER THAN SPEED\n");
 std::string F355ChallengeJapan("F355 CHALLENGE JAPAN\n");
 std::string ClubKartInJapan("CLUB KART IN JAPAN\n");
 std::string TheKingOfRoute66("THE KING OF ROUTE66\n");
-std::string SegaDrivingSimulator("SAMPLE GAME MAX LONG NAME-\n");
+std::string SegaDrivingSimulator("SEGA DRIVING SIMULATOR\n");
 
 
 //Our string to load game from
