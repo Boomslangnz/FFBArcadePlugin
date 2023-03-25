@@ -17,10 +17,17 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 extern int EnableDamper;
 extern int DamperStrength;
 
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int SpringEnable = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringEnable"), 0, settingsFilename);
+static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 0, settingsFilename);
+
 void MarioKartGPDX118Real::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
+
+	if (SpringEnable)
+		triggers->Springi(SpringStrength / 100.0);
 
 	DWORD Base = helpers->ReadInt32(0xAAEEA0, true);
 	DWORD BaseOff0 = helpers->ReadInt32(Base + 0x08, false);

@@ -12,7 +12,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "GRID.h"
+#include "GRIDReal.h"
 #include "SDL.h"
 
 static EffectTriggers* myTriggers;
@@ -65,7 +65,7 @@ static int __fastcall EnableFFBHook(int a1, double a2)
 	return 0;
 }
 
-void GRID::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+void GRIDReal::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	if (!init)
 	{
 		init = true;

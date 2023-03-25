@@ -46,7 +46,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/GaelcoTuningRace.h"
-#include "Game Files/GRID.h"
+#include "Game Files/GRIDReal.h"
+#include "Game Files/GRIDCustom.h"
 #include "Game Files/GoldenGun.h"
 #include "Game Files/InitialD0v131.h"
 #include "Game Files/InitialD0v211.h"
@@ -995,7 +996,7 @@ const int SEGA_RALLY_3 = 6;
 const int FORD_RACING = 7;
 const int INITIAL_D_6 = 8;
 const int WMMT_5 = 9;
-const int GRID_ = 10;
+const int GRID_Real = 10;
 const int MARIO_KART_GPDX_CUSTOM = 11;
 const int OUTRUN_2Fake = 12;
 const int BG4_JP = 13;
@@ -1054,6 +1055,7 @@ const int INITIAL_D_0_230 = 67;
 const int MARIO_KART_GPDX_118_REAL = 68;
 const int MARIO_KART_GPDX_110_REAL = 69;
 const int MARIO_KART_GPDX_USA_REAL = 70;
+const int GRID_Custom = 71;
 
 HINSTANCE Get_hInstance()
 {
@@ -2378,8 +2380,8 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case FORD_RACING_OTHER:
 		game = new FordRacingOther;
 		break;
-	case GRID_:
-		game = new GRID;
+	case GRID_Real:
+		game = new GRIDReal;
 		break;
 	case Golden_Gun:
 		game = new GoldenGun;
@@ -2554,6 +2556,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case MARIO_KART_GPDX_USA_REAL:
 		game = new MarioKartGPDXUSAReal;
+		break;
+	case GRID_Custom:
+		game = new GRIDCustom;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

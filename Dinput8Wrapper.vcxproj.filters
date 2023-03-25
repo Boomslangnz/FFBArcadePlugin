@@ -151,10 +151,11 @@
     <ClCompile Include="Game Files\TokyoCop.cpp" />
     <ClCompile Include="Game Files\RingRiders.cpp" />
     <ClCompile Include="Game Files\InitialD0v230.cpp" />
-    <ClCompile Include="Game Files\GRID.cpp" />
+    <ClCompile Include="Game Files\GRIDReal.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX1.18Real.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX1.10Real.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDXUSAReal.cpp" />
+    <ClCompile Include="Game Files\GRIDCustom.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -371,7 +372,7 @@
     <ClInclude Include="Common Files\MinHook.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Game Files\GRID.h">
+    <ClInclude Include="Game Files\GRIDReal.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\MarioKartGPDX1.18Real.h">
@@ -381,6 +382,9 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\MarioKartGPDXUSAReal.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\GRIDCustom.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

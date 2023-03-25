@@ -34,7 +34,8 @@
     <ClInclude Include="Game Files\FordRacingOther.h" />
     <ClInclude Include="Game Files\GaelcoTuningRace.h" />
     <ClInclude Include="Game Files\GoldenGun.h" />
-    <ClInclude Include="Game Files\GRID.h" />
+    <ClInclude Include="Game Files\GRIDCustom.h" />
+    <ClInclude Include="Game Files\GRIDReal.h" />
     <ClInclude Include="Game Files\H2Overdrive.h" />
     <ClInclude Include="Game Files\HOTD4.h" />
     <ClInclude Include="Game Files\InitialD0v131.h" />
@@ -94,7 +95,8 @@
     <ClCompile Include="Game Files\FordRacingOther.cpp" />
     <ClCompile Include="Game Files\GaelcoTuningRace.cpp" />
     <ClCompile Include="Game Files\GoldenGun.cpp" />
-    <ClCompile Include="Game Files\GRID.cpp" />
+    <ClCompile Include="Game Files\GRIDCustom.cpp" />
+    <ClCompile Include="Game Files\GRIDReal.cpp" />
     <ClCompile Include="Game Files\H2Overdrive.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
     <ClCompile Include="Game Files\InitialD0v131.cpp" />
