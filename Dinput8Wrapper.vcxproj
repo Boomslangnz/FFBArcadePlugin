@@ -42,13 +42,16 @@
     <ClInclude Include="Game Files\InitialD0v230.h" />
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\MAMESupermodel.h" />
-    <ClInclude Include="Game Files\MarioKartGPDXUSA.h" />
+    <ClInclude Include="Game Files\MarioKartGPDX1.10Real.h" />
+    <ClInclude Include="Game Files\MarioKartGPDX1.18Real.h" />
+    <ClInclude Include="Game Files\MarioKartGPDXUSACustom.h" />
+    <ClInclude Include="Game Files\MarioKartGPDXUSAReal.h" />
     <ClInclude Include="Game Files\OutRun2Real.h" />
     <ClInclude Include="Game Files\ButtonRumble.h" />
     <ClInclude Include="Game Files\Demul.h" />
     <ClInclude Include="dinput8.def">
     </ClInclude>
-    <ClInclude Include="Game Files\MarioKartGPDX1.10.h" />
+    <ClInclude Include="Game Files\MarioKartGPDX1.10Custom.h" />
     <ClInclude Include="Game Files\InitialD5.h" />
     <ClInclude Include="Game Files\InitialD4Japan.h" />
     <ClInclude Include="Game Files\M2Emulator.h" />
@@ -103,7 +106,10 @@
     <ClCompile Include="Game Files\M2EmulatorIndy500Inputs.cpp" />
     <ClCompile Include="Game Files\M2EmulatorSegaRallyInputs.cpp" />
     <ClCompile Include="Game Files\MAMESupermodel.cpp" />
-    <ClCompile Include="Game Files\MarioKartGPDXUSA.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDX1.10Real.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDX1.18Real.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDXUSACustom.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDXUSAReal.cpp" />
     <ClCompile Include="Game Files\OutRun2Real.cpp" />
     <ClCompile Include="Game Files\ButtonRumble.cpp" />
     <ClCompile Include="Common Files\TeknoParrotGame.cpp" />
@@ -127,7 +133,7 @@
     <ClCompile Include="Game Files\SegaRally3.cpp" />
     <ClCompile Include="Game Files\SegaRacingClassic.cpp" />
     <ClCompile Include="Game Files\FordRacing.cpp" />
-    <ClCompile Include="Game Files\MarioKartGPDX.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDXCustom.cpp" />
     <ClCompile Include="Game Files\SegaRally3Other.cpp" />
     <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
@@ -146,7 +152,7 @@
     <ClCompile Include="Game Files\WMMT6.cpp" />
     <ClCompile Include="Game Files\WMMT6R.cpp" />
     <ClCompile Include="IDirectInputDevice.cpp" />
-    <ClCompile Include="Game Files\MarioKartGPDX1.10.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDX1.10Custom.cpp" />
     <ClCompile Include="Game Files\InitialD5.cpp" />
     <ClCompile Include="Game Files\M2Emulator.cpp" />
     <ClCompile Include="Game Files\RoadFighters3D.cpp" />
@@ -170,7 +176,7 @@
     <ClInclude Include="Game Files\SegaRally3.h" />
     <ClInclude Include="Game Files\SegaRacingClassic.h" />
     <ClInclude Include="Game Files\FordRacing.h" />
-    <ClInclude Include="Game Files\MarioKartGPDX.h" />
+    <ClInclude Include="Game Files\MarioKartGPDXCustom.h" />
     <ClInclude Include="Game Files\SegaRally3Other.h" />
     <ClInclude Include="Game Files\SnoCross.h" />
     <ClInclude Include="Game Files\SonicSegaAllStarsRacing.h" />

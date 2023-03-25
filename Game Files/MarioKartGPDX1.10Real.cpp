@@ -1,0 +1,43 @@
+/*This file is part of FFB Arcade Plugin.
+FFB Arcade Plugin is free software : you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+FFB Arcade Plugin is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.See the
+GNU General Public License for more details.
+You should have received a copy of the GNU General Public License
+along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
+*/
+
+#include <string>
+#include "MarioKartGPDX1.10Real.h"
+
+extern int EnableDamper;
+extern int DamperStrength;
+
+void MarioKartGPDX110Real::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	if (EnableDamper)
+		triggers->Damper(DamperStrength / 100.0);
+
+	DWORD Base = helpers->ReadInt32(0xA2FE20, true);
+	DWORD BaseOff0 = helpers->ReadInt32(Base + 0x08, false);
+	float FFB = helpers->ReadFloat32(BaseOff0 + 0xA44, false);
+
+	if (FFB > 0)
+	{
+		double percentForce = FFB;
+		double percentLength = 100;
+		triggers->Rumble(percentForce, 0, percentLength);
+		triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+	}
+	else if (FFB < 0)
+	{
+		double percentForce = -FFB;
+		double percentLength = 100;
+		triggers->Rumble(0, percentForce, percentLength);
+		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+	}
+}

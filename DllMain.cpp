@@ -57,9 +57,12 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/InitialD6.h"
 #include "Game Files/InitialD7.h"
 #include "Game Files/InitialD8.h"
-#include "Game Files/MarioKartGPDX.h"
-#include "Game Files/MarioKartGPDX1.10.h"
-#include "Game Files/MarioKartGPDXUSA.h"
+#include "Game Files/MarioKartGPDXCustom.h"
+#include "Game Files/MarioKartGPDX1.10Custom.h"
+#include "Game Files/MarioKartGPDX1.10Real.h"
+#include "Game Files/MarioKartGPDX1.18Real.h"
+#include "Game Files/MarioKartGPDXUSACustom.h"
+#include "Game Files/MarioKartGPDXUSAReal.h"
 #include "Game Files/MAMESupermodel.h"
 #include "Game Files/OutRun2Fake.h"
 #include "Game Files/OutRun2Real.h"
@@ -993,7 +996,7 @@ const int FORD_RACING = 7;
 const int INITIAL_D_6 = 8;
 const int WMMT_5 = 9;
 const int GRID_ = 10;
-const int MARIO_KART_GPDX = 11;
+const int MARIO_KART_GPDX_CUSTOM = 11;
 const int OUTRUN_2Fake = 12;
 const int BG4_JP = 13;
 const int MACH_STORM = 14;
@@ -1002,7 +1005,7 @@ const int INITIAL_D_4 = 16;
 const int INITIAL_D_7 = 17;
 const int INITIAL_D_8 = 18;
 const int POKKEN_TOURNAMENT = 19;
-const int MARIO_KART_GPDX_110 = 20;
+const int MARIO_KART_GPDX_110_CUSTOM = 20;
 const int Sonic_Sega_AllStars_Racing = 21;
 const int MAME_ = 22;
 const int INITIAL_D_5 = 23;
@@ -1031,7 +1034,7 @@ const int R_Tuned = 46;
 const int SEGA_RALLY_3_Other = 47;
 const int INITIAL_D_0_211 = 49;
 const int SWDC_2018 = 50;
-const int MARIO_KART_GPDX_USA = 51;
+const int MARIO_KART_GPDX_USA_CUSTOM = 51;
 const int WMMT_6 = 52;
 const int WMMT_6_R = 53;
 const int SRG = 54;
@@ -1048,6 +1051,9 @@ const int GAELCO_TUNING_RACE = 64;
 const int TOKYO_COP = 65;
 const int RING_RIDERS = 66;
 const int INITIAL_D_0_230 = 67;
+const int MARIO_KART_GPDX_118_REAL = 68;
+const int MARIO_KART_GPDX_110_REAL = 69;
+const int MARIO_KART_GPDX_USA_REAL = 70;
 
 HINSTANCE Get_hInstance()
 {
@@ -2429,8 +2435,8 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case WMMT_5DXPlus:
 		game = new WMMT5DXPlus;
 		break;
-	case MARIO_KART_GPDX:
-		game = new MarioKartGPDX100;
+	case MARIO_KART_GPDX_CUSTOM:
+		game = new MarioKartGPDX100Custom;
 		break;
 	case OUTRUN_2Fake:
 		game = new OutRun2Fake;
@@ -2450,11 +2456,11 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	case RAMBO_:
 		game = new Rambo;
 		break;
-	case MARIO_KART_GPDX_110:
-		game = new MarioKartGPDX110;
+	case MARIO_KART_GPDX_110_CUSTOM:
+		game = new MarioKartGPDX110Custom;
 		break;
-	case MARIO_KART_GPDX_USA:
-		game = new MarioKartGPDXUSA;
+	case MARIO_KART_GPDX_USA_CUSTOM:
+		game = new MarioKartGPDXUSACustom;
 		break;
 	case Sonic_Sega_AllStars_Racing:
 		game = new SonicSegaAllStarsRacing;
@@ -2539,6 +2545,15 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case RING_RIDERS:
 		game = new RingRiders;
+		break;
+	case MARIO_KART_GPDX_118_REAL:
+		game = new MarioKartGPDX118Real;
+		break;
+	case MARIO_KART_GPDX_110_REAL:
+		game = new MarioKartGPDX110Real;
+		break;
+	case MARIO_KART_GPDX_USA_REAL:
+		game = new MarioKartGPDXUSAReal;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

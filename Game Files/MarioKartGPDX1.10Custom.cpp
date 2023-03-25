@@ -12,7 +12,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "MarioKartGPDX1.10.h"
+#include "MarioKartGPDX1.10Custom.h"
 
 extern int EnableDamper;
 extern int DamperStrength;
@@ -52,7 +52,7 @@ static int RoughTrackRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEX
 static int BridgeRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumble"), 0, settingsFilename);
 static int BridgeRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumbleStrength"), 0, settingsFilename);
 
-void MarioKartGPDX110::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
 	INT_PTR ff1 = helpers->ReadIntPtr(0xA46974, /* isRelativeOffset */ true); //shake
 	INT_PTR ff2 = helpers->ReadIntPtr(0x00A416E4,/* isRelativeOffset */ true);

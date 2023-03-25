@@ -12,12 +12,12 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "MarioKartGPDXUSA.h"
+#include "MarioKartGPDXUSACustom.h"
 
 extern int EnableDamper;
 extern int DamperStrength;
 
-void MarioKartGPDXUSA::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+void MarioKartGPDXUSACustom::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
 	wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
 	int ConstantEffectForSteering = GetPrivateProfileInt(TEXT("Settings"), TEXT("ConstantEffectForSteering"), 0, settingsFilename);

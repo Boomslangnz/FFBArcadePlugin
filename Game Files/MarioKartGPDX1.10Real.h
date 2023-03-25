@@ -13,8 +13,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #pragma once
 #include "../Common Files/Game.h"
-class MarioKartGPDX100 : public Game {
+class MarioKartGPDX110Real : public Game {
 
 public:
-	void FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers);
+	void FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers);
 };

@@ -12,12 +12,12 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "MarioKartGPDX.h"
+#include "MarioKartGPDXCustom.h"
 
 extern int EnableDamper;
 extern int DamperStrength;
 
-void MarioKartGPDX100::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+void MarioKartGPDX100Custom::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 	helpers->log("in MKDX Ffbloop");
 	
 	int ff1 = helpers->ReadInt32(0x564C5F, /* isRelativeOffset */ true); //shake
