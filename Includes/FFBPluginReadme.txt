@@ -164,6 +164,7 @@ DEMUL:
 -Faster Than Speed
 -Maximum Speed
 -Smashing Drive
+-Nascar Racing
 
 
 FLYCAST:
@@ -217,7 +218,6 @@ TEKNOPARROT:
 -Let's Go Island 3D
 -Machstorm
 -Mario Kart GP DX
--Nascar Racing
 -Outrun 2 Special Tours Deluxe
 -Pokken Tournament
 -Ring Riders
