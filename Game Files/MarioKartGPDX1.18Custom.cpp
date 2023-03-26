@@ -12,7 +12,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
 #include <string>
-#include "MarioKartGPDX1.10Custom.h"
+#include "MarioKartGPDX1.18Custom.h"
 
 extern int EnableDamper;
 extern int DamperStrength;
@@ -52,24 +52,24 @@ static int RoughTrackRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEX
 static int BridgeRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumble"), 0, settingsFilename);
 static int BridgeRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumbleStrength"), 0, settingsFilename);
 
-void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
+void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
-	INT_PTR ff1 = helpers->ReadIntPtr(0xA46974, true); //shake
-	INT_PTR ff2 = helpers->ReadIntPtr(0x00A416E4, true);
-	UINT8 ff3 = helpers->ReadByte(ff2 + 0x628, false); // terrain data
-	UINT8 ff5 = helpers->ReadByte(ff2 + 0x658, false); //kart flying or on ground
-	INT_PTR ff6 = helpers->ReadIntPtr(0x00A309A0, true);
-	INT_PTR ff7 = helpers->ReadIntPtr(ff6 + 0x304, false);
-	INT_PTR ff8 = helpers->ReadIntPtr(ff7 + 0xE8, false);
-	INT_PTR ff9 = helpers->ReadIntPtr(ff8 + 0x64, false);
-	INT_PTR ff10 = helpers->ReadIntPtr(ff9 + 0x38, false);
+	INT_PTR ff1 = helpers->ReadIntPtr(0xAC72F4, true); //shake
+	INT_PTR ff2 = helpers->ReadIntPtr(0xAC2A30, true);//??
+	UINT8 ff3 = helpers->ReadByte(ff2 + 0x66C, false); // terrain data
+	UINT8 ff5 = helpers->ReadByte(ff2 + 0x69C, false); //kart flying or on ground
+	INT_PTR ff6 = helpers->ReadIntPtr(0xAAFAB8, true);
+	INT_PTR ff7 = helpers->ReadIntPtr(ff6 + 0x44,false);
+	INT_PTR ff8 = helpers->ReadIntPtr(ff7 + 0x70, false);
+	INT_PTR ff9 = helpers->ReadIntPtr(ff8 + 0x108, false);
+	INT_PTR ff10 = helpers->ReadIntPtr(ff9 + 0x98, false);
 	UINT8 ff11 = helpers->ReadByte(ff10 + 0x4C4, false); // 1 during race only
-	float Speed = helpers->ReadFloat32(ff2 + 0x558, false); //Speed of Kart
-	UINT8 ff13 = helpers->ReadByte(0xA39690, true); //picking up coins
-	UINT8 ff14 = helpers->ReadByte(0xA4528D, true); //picking up weapon box
-	UINT8 Wheel = helpers->ReadByte(0xA4652D, true); //0-255 steering
-	INT_PTR ff16 = helpers->ReadIntPtr(0x00A2E284, true);
-	UINT8 ff17 = helpers->ReadByte(ff2 + 0x674, false); // Drift
+	float Speed = helpers->ReadFloat32(ff2 + 0x580, false); //Speed of Kart
+	UINT8 ff13 = helpers->ReadByte(0xAB9110, true); //picking up coins
+	UINT8 ff14 = helpers->ReadByte(0xAC5C0D, true); //picking up weapon box
+	UINT8 Wheel = helpers->ReadByte(0xAC6EAD, true); //0-255 steering
+	INT_PTR ff16 = helpers->ReadIntPtr(0xAAD0BC, true);
+	UINT8 ff17 = helpers->ReadByte(ff2 + 0x6B8, false); // Drift
 	UINT8 ff18 = helpers->ReadByte(ff16 + 0x3A4, false); // Boost
 
 	int static oldcoins = 0;
@@ -80,11 +80,11 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 	int newhitground = ff5;
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff1);
-	helpers->log((char *)ffs.c_str()); helpers->log("got value: ");
+	helpers->log((char*)ffs.c_str()); helpers->log("got value: ");
 
 	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
-	
+
 	if ((ConstantEffectForSteering == 1) && (ff11 == 1))
 	{
 		if ((Wheel >= 0) && (Wheel < 128))
@@ -128,7 +128,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Friction(percentForce);
 	}
-	
+
 	if ((DriftRumble == 1) && (ff17 == 1) && (Wheel > 127) && (Wheel < 256) && (ff11 == 1))
 	{
 		// Drift Effect including steering right
@@ -137,7 +137,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Friction(percentForce);
 	}
-	
+
 	if ((HitGroundRumble == 1) && (oldhitground != newhitground) && (ff5 == 1) && (ff11 == 1))
 	{
 		// Shake when hitting ground
@@ -148,7 +148,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		Sleep(50);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
-	
+
 	if ((WeaponRumble == 1) && (oldweapon != newweapon) && (ff11 == 1))
 	{
 		// Shake when picking up new weapons or using them
@@ -157,7 +157,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(percentForce, percentForce, percentLength);
 		triggers->Sine(80, 50, percentForce);
 	}
-	
+
 	if ((CoinRumble == 1) && (oldcoins != newcoins) && (ff11 == 1))
 	{
 		// Shake when picking up coins
@@ -166,7 +166,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(percentForce, percentForce, percentLength);
 		triggers->Sine(50, 50, percentForce);
 	}
-	
+
 	if ((DirtRumble == 1) && (3 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		// small friction when driving on dirt while moving
@@ -175,7 +175,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Friction(percentForce);
 	}
-	
+
 	if ((SpeedBumpRumble == 1) && (10 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		//	Small constant when hitting bumps
@@ -185,7 +185,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
 	}
-	
+
 	if ((GrassRumble == 1) && (4 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		// Wheel rumbles while driving on grass
@@ -194,7 +194,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Sine(50, 50, percentForce);
 	}
-	
+
 	if ((CarpetRumble == 1) && (9 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		// Wheel rumbles while driving on carpet
@@ -203,7 +203,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Sine(50, 50, percentForce);
 	}
-	
+
 	if ((WaterRumble == 1) && (7 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1) && (Wheel >= 0) && (Wheel < 128))
 	{
 		//wheel hard to turn while driving through water
@@ -213,7 +213,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(percentForce1, 0, percentLength);
 		triggers->Friction(percentForce);
 	}
-	
+
 	if ((WaterRumble == 1) && (7 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1) && (Wheel > 127))
 	{
 		double percentForce = ((WaterRumbleWheelStrength) / 100.0);
@@ -222,7 +222,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(0, percentForce1, percentLength);
 		triggers->Friction(percentForce);
 	}
-	
+
 	if ((TileRumble == 1) && (12 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		//Wheel rumbles lightly when driving over tiles
@@ -231,7 +231,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Friction(percentForce);
 	}
-	
+
 	if ((SandRumble == 1) && (14 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		//Wheel rumbles lightly when driving over sand
@@ -240,7 +240,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(percentForce, 0, percentLength);
 		triggers->Sine(70, 70, percentForce);
 	}
-	
+
 	if ((RoughTrackRumble == 1) && (11 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		//Wheel rumbles lightly when driving over rough part of track
@@ -249,7 +249,7 @@ void MarioKartGPDX110Custom::FFBLoop(EffectConstants *constants, Helpers *helper
 		triggers->Rumble(0, percentForce, percentLength);
 		triggers->Sine(40, 50, percentForce);
 	}
-	
+
 	if ((BridgeRumble == 1) && (8 == ff3) && (ff11 == 1) && (ff5 == 1) && (Speed > 0.1))
 	{
 		//Wheel rumbles moderately when driving over wooden bridges

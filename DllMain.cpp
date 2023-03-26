@@ -61,6 +61,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/MarioKartGPDXCustom.h"
 #include "Game Files/MarioKartGPDX1.10Custom.h"
 #include "Game Files/MarioKartGPDX1.10Real.h"
+#include "Game Files/MarioKartGPDX1.18Custom.h"
 #include "Game Files/MarioKartGPDX1.18Real.h"
 #include "Game Files/MarioKartGPDXUSACustom.h"
 #include "Game Files/MarioKartGPDXUSAReal.h"
@@ -1056,6 +1057,7 @@ const int MARIO_KART_GPDX_118_REAL = 68;
 const int MARIO_KART_GPDX_110_REAL = 69;
 const int MARIO_KART_GPDX_USA_REAL = 70;
 const int GRID_Custom = 71;
+const int MARIO_KART_GPDX_118_CUSTOM = 72;
 
 HINSTANCE Get_hInstance()
 {
@@ -2460,6 +2462,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case MARIO_KART_GPDX_110_CUSTOM:
 		game = new MarioKartGPDX110Custom;
+		break;
+	case MARIO_KART_GPDX_118_CUSTOM:
+		game = new MarioKartGPDX118Custom;
 		break;
 	case MARIO_KART_GPDX_USA_CUSTOM:
 		game = new MarioKartGPDXUSACustom;

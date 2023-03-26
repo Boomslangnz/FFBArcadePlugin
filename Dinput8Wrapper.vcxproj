@@ -44,6 +44,7 @@
     <ClInclude Include="Game Files\KODrive.h" />
     <ClInclude Include="Game Files\MAMESupermodel.h" />
     <ClInclude Include="Game Files\MarioKartGPDX1.10Real.h" />
+    <ClInclude Include="Game Files\MarioKartGPDX1.18Custom.h" />
     <ClInclude Include="Game Files\MarioKartGPDX1.18Real.h" />
     <ClInclude Include="Game Files\MarioKartGPDXUSACustom.h" />
     <ClInclude Include="Game Files\MarioKartGPDXUSAReal.h" />
@@ -109,6 +110,7 @@
     <ClCompile Include="Game Files\M2EmulatorSegaRallyInputs.cpp" />
     <ClCompile Include="Game Files\MAMESupermodel.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX1.10Real.cpp" />
+    <ClCompile Include="Game Files\MarioKartGPDX1.18Custom.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX1.18Real.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDXUSACustom.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDXUSAReal.cpp" />
