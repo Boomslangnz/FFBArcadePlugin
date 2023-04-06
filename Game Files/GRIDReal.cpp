@@ -31,6 +31,9 @@ static int FFBCounter;
 static int(__stdcall* Out32Ori)(DWORD device, DWORD data);
 static int __stdcall Out32Hook(DWORD device, DWORD data)
 {
+	if (FFBOrRumble)
+		return 0;
+
 	if (device == 0x1020)
 	{
 		++FFBCounter;
@@ -56,7 +59,7 @@ static int __stdcall Out32Hook(DWORD device, DWORD data)
 		}
 	}
 
-	return Out32Ori(device, data);
+	return 0;
 }
 
 static int(__fastcall* EnableFFBOri)(int a1, double a2);
@@ -88,9 +91,8 @@ void GRIDReal::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 
 		MH_Initialize();
 		MH_CreateHook((void*)(ImageBase + 0x79CDE0), EnableFFBHook, (void**)&EnableFFBOri);
-		if (!FFBOrRumble)
-			MH_CreateHookApi(L"inpout32.dll", "Out32", Out32Hook, (void**)&Out32Ori);
-		else
+		MH_CreateHookApi(L"inpout32.dll", "Out32", Out32Hook, (void**)&Out32Ori);
+		if (FFBOrRumble)
 			MH_CreateHookApi(L"xinput1_3.dll", "XInputSetState", &XInputSetStateGRID, NULL);
 		MH_EnableHook(MH_ALL_HOOKS);
 	}
