@@ -14,6 +14,8 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "MarioKartGPDX1.18Custom.h"
 
+static bool init;
+
 extern int EnableDamper;
 extern int DamperStrength;
 
@@ -51,6 +53,150 @@ static int RoughTrackRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("Rough
 static int RoughTrackRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("RoughTrackRumbleStrength"), 0, settingsFilename);
 static int BridgeRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumble"), 0, settingsFilename);
 static int BridgeRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("BridgeRumbleStrength"), 0, settingsFilename);
+static int MenuRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("MenuRumble"), 0, settingsFilename);
+static int MenuRumbleStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("MenuRumbleStrength"), 0, settingsFilename);
+
+static UINT8 MenuPosition;
+static UINT8 oldMenuPosition;
+static UINT8 oldGameState;
+static bool MenuEffect;
+
+static int oldCoins;
+static int oldWeapon;
+static int oldHitGround;
+
+static int(__stdcall* PlayerCostumeSelectionRightOri)(DWORD* a1);
+static int __stdcall PlayerCostumeSelectionRightHook(DWORD* a1)
+{
+	MenuEffect = true;
+	return PlayerCostumeSelectionRightOri(a1);
+}
+
+static int(__stdcall* PlayerCostumeSelectionLeftOri)(DWORD* a1);
+static int __stdcall PlayerCostumeSelectionLeftHook(DWORD* a1)
+{
+	MenuEffect = true;
+	return PlayerCostumeSelectionLeftOri(a1);
+}
+
+static int(__stdcall* KartCostumeSelectionOri)(int a1, int a2, int a3);
+static int __stdcall KartCostumeSelectionHook(int a1, int a2, int a3)
+{
+	MenuEffect = true;
+	return KartCostumeSelectionOri(a1, a2, a3);
+}
+
+static DWORD*(__stdcall* PlayerSelectionRightOri)(int a1);
+static DWORD* __stdcall PlayerSelectionRightHook(int a1)
+{
+	MenuEffect = true;
+	return PlayerSelectionRightOri(a1);
+}
+
+static DWORD* (__stdcall* PlayerSelectionLeftOri)(int a1);
+static DWORD* __stdcall PlayerSelectionLeftHook(int a1)
+{
+	MenuEffect = true;
+	return PlayerSelectionLeftOri(a1);
+}
+
+static DWORD* (__stdcall* ModeSelectionRightOri)(int a1);
+static DWORD* __stdcall ModeSelectionRightHook(int a1)
+{
+	MenuEffect = true;
+	return ModeSelectionRightOri(a1);
+}
+
+static DWORD* (__stdcall* ModeSelectionLeftOri)(int a1);
+static DWORD* __stdcall ModeSelectionLeftHook(int a1)
+{
+	MenuEffect = true;
+	return ModeSelectionLeftOri(a1);
+}
+
+static int(__stdcall* SpeedSelectionRightOri)(int a1);
+static int __stdcall SpeedSelectionRightHook(int a1)
+{
+	MenuEffect = true;
+	return SpeedSelectionRightOri(a1);
+}
+
+static int(__stdcall* SpeedSelectionLeftOri)(int a1);
+static int __stdcall SpeedSelectionLeftHook(int a1)
+{
+	MenuEffect = true;
+	return SpeedSelectionLeftOri(a1);
+}
+
+static int(__stdcall* CupSelectionRightOri)(int a1, int a2, int a3);
+static int __stdcall CupSelectionRightHook(int a1, int a2, int a3)
+{
+	MenuEffect = true;
+	return CupSelectionRightOri(a1, a2, a3);
+}
+
+static int(__stdcall* CupSelectionLeftOri)(int a1, int a2, int a3);
+static int __stdcall CupSelectionLeftHook(int a1, int a2, int a3)
+{
+	MenuEffect = true;
+	return CupSelectionLeftOri(a1, a2, a3);
+}
+
+static int(__stdcall* RoundSelectionRightOri)(int a1);
+static int __stdcall RoundSelectionRightHook(int a1)
+{
+	MenuEffect = true;
+	return RoundSelectionRightOri(a1);
+}
+
+static int(__stdcall* RoundSelectionLeftOri)(int a1);
+static int __stdcall RoundSelectionLeftHook(int a1)
+{
+	MenuEffect = true;
+	return RoundSelectionLeftOri(a1);
+}
+
+static int(__stdcall* ItemSelectionRightOri)(int a1);
+static int __stdcall ItemSelectionRightHook(int a1)
+{
+	MenuEffect = true;
+	return ItemSelectionRightOri(a1);
+}
+
+static int(__stdcall* ItemSelectionLeftOri)(int a1);
+static int __stdcall ItemSelectionLeftHook(int a1)
+{
+	MenuEffect = true;
+	return ItemSelectionLeftOri(a1);
+}
+
+static int(__stdcall* Item2SelectionRightOri)(int a1);
+static int __stdcall Item2SelectionRightHook(int a1)
+{
+	MenuEffect = true;
+	return Item2SelectionRightOri(a1);
+}
+
+static int(__stdcall* Item2SelectionLeftOri)(int a1);
+static int __stdcall Item2SelectionLeftHook(int a1)
+{
+	MenuEffect = true;
+	return Item2SelectionLeftOri(a1);
+}
+
+static int(__stdcall* Item3SelectionRightOri)(int a1);
+static int __stdcall Item3SelectionRightHook(int a1)
+{
+	MenuEffect = true;
+	return Item3SelectionRightOri(a1);
+}
+
+static int(__stdcall* Item3SelectionLeftOri)(int a1);
+static int __stdcall Item3SelectionLeftHook(int a1)
+{
+	MenuEffect = true;
+	return Item3SelectionLeftOri(a1);
+}
 
 void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
@@ -72,29 +218,97 @@ void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helper
 	UINT8 ff17 = helpers->ReadByte(ff2 + 0x6B8, false); // Drift
 	UINT8 ff18 = helpers->ReadByte(ff16 + 0x3A4, false); // Boost
 
-	int static oldcoins = 0;
-	int newcoins = ff13;
-	int static oldweapon = 0;
-	int newweapon = ff14;
-	int static oldhitground = 0;
-	int newhitground = ff5;
+	DWORD GameStateBase = helpers->ReadInt32(0xAAEE58, true);
+	UINT8 GameState = helpers->ReadByte(GameStateBase + 0x44, false);
+
 	helpers->log("got value: ");
 	std::string ffs = std::to_string(ff1);
 	helpers->log((char*)ffs.c_str()); helpers->log("got value: ");
 
+	if (!init && MenuRumble)
+	{
+		init = true;
+
+		DWORD ImageBase = (DWORD)GetModuleHandleA(0);
+
+		MH_Initialize(); 
+		MH_CreateHook((void*)(ImageBase + 0x386940), PlayerCostumeSelectionRightHook, (void**)&PlayerCostumeSelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x3867E0), PlayerCostumeSelectionLeftHook, (void**)&PlayerCostumeSelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x3D1250), KartCostumeSelectionHook, (void**)&KartCostumeSelectionOri);
+		MH_CreateHook((void*)(ImageBase + 0x379650), PlayerSelectionRightHook, (void**)&PlayerSelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x379540), PlayerSelectionLeftHook, (void**)&PlayerSelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x3A7A50), ModeSelectionRightHook, (void**)&ModeSelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x3A79D0), ModeSelectionLeftHook, (void**)&ModeSelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x377B30), SpeedSelectionRightHook, (void**)&SpeedSelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x377AD0), SpeedSelectionLeftHook, (void**)&SpeedSelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x3908D0), CupSelectionRightHook, (void**)&CupSelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x390800), CupSelectionLeftHook, (void**)&CupSelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x3B0160), RoundSelectionRightHook, (void**)&RoundSelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x3B00D0), RoundSelectionLeftHook, (void**)&RoundSelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x39D460), ItemSelectionRightHook, (void**)&ItemSelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x39D3C0), ItemSelectionLeftHook, (void**)&ItemSelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x39C640), Item2SelectionRightHook, (void**)&Item2SelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x39C550), Item2SelectionLeftHook, (void**)&Item2SelectionLeftOri);
+		MH_CreateHook((void*)(ImageBase + 0x39EF70), Item3SelectionRightHook, (void**)&Item3SelectionRightOri);
+		MH_CreateHook((void*)(ImageBase + 0x39EEA0), Item3SelectionLeftHook, (void**)&Item3SelectionLeftOri);
+		MH_EnableHook(MH_ALL_HOOKS);
+	}
+
 	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
 
-	if ((ConstantEffectForSteering == 1) && (ff11 == 1))
+	if (MenuRumble && !ff11)
 	{
-		if ((Wheel >= 0) && (Wheel < 128))
+		DWORD MenuBase = helpers->ReadInt32(0xAAEEB0, true);
+		DWORD MenuOff0 = helpers->ReadInt32(MenuBase + 0x10, false);
+
+		DWORD BanapassOff0 = helpers->ReadInt32(GameStateBase + 0x38, false);
+
+		if (GameState != oldGameState)
+			MenuPosition = 0;
+
+		switch (GameState)
+		{
+		case 0x09: // Banapass Selection Screen
+			MenuPosition = helpers->ReadByte(BanapassOff0 + 0x30, false);
+			break;
+		case 0x13: // Camera Costume Selection Screen
+			MenuPosition = helpers->ReadByte(MenuOff0 + 0x294, false);
+			break;
+		case 0x2D: // After Race Change Selection Screen
+			MenuPosition = helpers->ReadByte(MenuOff0 + 0xE0, false);
+			break;
+		case 0x2F: // After Race Continue Selection Screen
+			MenuPosition = helpers->ReadByte(MenuOff0 + 0xE8, false);
+			break;
+		}
+
+		if (MenuPosition != oldMenuPosition && GameState == oldGameState)
+		{
+			double percentForce = MenuRumbleStrength / 100.0;
+			triggers->Sine(60, 0, percentForce);
+			triggers->Rumble(percentForce, percentForce, 100);
+		}
+
+		if (MenuEffect)
+		{
+			MenuEffect = false;
+			double percentForce = MenuRumbleStrength / 100.0;
+			triggers->Sine(60, 0, percentForce);
+			triggers->Rumble(percentForce, percentForce, 100);
+		}
+	}
+
+	if (ConstantEffectForSteering && ff11 == 1)
+	{
+		if (Wheel >= 0 && Wheel < 128)
 		{
 			double percentForce = ((128 - Wheel) / (ConstantEffectForSteeringStrength / 1.0));
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
-		else if ((Wheel > 127) && (Wheel < 256))
+		else if (Wheel > 127 && Wheel < 256)
 		{
 			double percentForce = ((Wheel - 127) / (ConstantEffectForSteeringStrength / 1.0));
 			double percentLength = 100;
@@ -102,7 +316,8 @@ void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helper
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 		}
 	}
-	if ((MainShakeRumble == 1) && (4194308 == ff1) && (ff11 == 1))
+
+	if ((MainShakeRumble) && (4194308 == ff1) && (ff11 == 1))
 	{
 		// Large Shake when hitting walls, other karts or getting hit by items
 		double percentForce = ((MainShakeRumbleStrength) / 100.0);
@@ -138,7 +353,7 @@ void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helper
 		triggers->Friction(percentForce);
 	}
 
-	if ((HitGroundRumble == 1) && (oldhitground != newhitground) && (ff5 == 1) && (ff11 == 1))
+	if ((HitGroundRumble == 1) && (oldHitGround != ff5) && (ff5 == 1) && (ff11 == 1))
 	{
 		// Shake when hitting ground
 		double percentForce = ((HitGroundRumbleStrength) / 100.0);
@@ -149,7 +364,7 @@ void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helper
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
 
-	if ((WeaponRumble == 1) && (oldweapon != newweapon) && (ff11 == 1))
+	if ((WeaponRumble == 1) && (oldWeapon != ff14) && (ff11 == 1))
 	{
 		// Shake when picking up new weapons or using them
 		double percentForce = ((WeaponRumbleStrength) / 100.0);
@@ -158,7 +373,7 @@ void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helper
 		triggers->Sine(80, 50, percentForce);
 	}
 
-	if ((CoinRumble == 1) && (oldcoins != newcoins) && (ff11 == 1))
+	if ((CoinRumble == 1) && (oldCoins != ff13) && (ff11 == 1))
 	{
 		// Shake when picking up coins
 		double percentForce = ((CoinRumbleStrength) / 100.0);
@@ -258,7 +473,10 @@ void MarioKartGPDX118Custom::FFBLoop(EffectConstants* constants, Helpers* helper
 		triggers->Rumble(percentForce, percentForce, percentLength);
 		triggers->Sine(120, 120, percentForce);
 	}
-	oldcoins = newcoins;
-	oldweapon = newweapon;
-	oldhitground = newhitground;
+
+	oldCoins = ff13;
+	oldWeapon = ff14;
+	oldHitGround = ff5;
+	oldMenuPosition = MenuPosition;
+	oldGameState = GameState;
 }

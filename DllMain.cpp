@@ -967,6 +967,7 @@ int DoubleSine = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSine"), 0, s
 int DoubleConstant = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstant"), 0, settingsFilename);
 int DoubleSpring = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSpring"), 0, settingsFilename);
 int DoubleFriction = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleFriction"), 0, settingsFilename);
+int FFBOrRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBOrRumble"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
 extern void CustomFFBStrengthSetup();
@@ -3449,13 +3450,22 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			WritePrivateProfileStringA("Settings", "ProcessID", 0, ".\\FFBPlugin.ini");
 
 		if (haptic)
+		{
+			SDL_HapticStopAll(haptic);
 			SDL_HapticClose(haptic);
+		}
 
 		if (haptic2)
+		{
+			SDL_HapticStopAll(haptic2);
 			SDL_HapticClose(haptic2);
+		}
 
 		if (haptic3)
+		{
+			SDL_HapticStopAll(haptic3);
 			SDL_HapticClose(haptic3);
+		}
 
 		if (GameController)
 		{

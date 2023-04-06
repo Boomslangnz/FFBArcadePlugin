@@ -14,6 +14,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include <string>
 #include "GRIDReal.h"
 #include "SDL.h"
+#include <Xinput.h>
 
 static EffectTriggers* myTriggers;
 static EffectConstants* myConstants;
@@ -21,6 +22,7 @@ static Helpers* myHelpers;
 
 extern int EnableDamper;
 extern int DamperStrength;
+extern int FFBOrRumble;
 
 static bool init;
 
@@ -61,8 +63,20 @@ static int(__fastcall* EnableFFBOri)(int a1, double a2);
 static int __fastcall EnableFFBHook(int a1, double a2)
 {
 	EnableFFBOri(a1, a2);
-	*(BYTE*)(a1 + 92) = 1;
+	
+	*(BYTE*)(a1 + 92) = 1; // FFB
+
+	if (FFBOrRumble)
+		*(BYTE*)(a1 + 12) = 1; // Rumble
+
 	return 0;
+}
+
+static DWORD WINAPI XInputSetStateGRID(DWORD dwUserIndex, XINPUT_VIBRATION* pVibration)
+{
+	myTriggers->Rumble(pVibration->wLeftMotorSpeed / 65535.0, pVibration->wRightMotorSpeed / 65535.0, 100.0);
+
+	return ERROR_SUCCESS;
 }
 
 void GRIDReal::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
@@ -74,7 +88,10 @@ void GRIDReal::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigg
 
 		MH_Initialize();
 		MH_CreateHook((void*)(ImageBase + 0x79CDE0), EnableFFBHook, (void**)&EnableFFBOri);
-		MH_CreateHookApi(L"inpout32.dll", "Out32", Out32Hook, (void**)&Out32Ori);
+		if (!FFBOrRumble)
+			MH_CreateHookApi(L"inpout32.dll", "Out32", Out32Hook, (void**)&Out32Ori);
+		else
+			MH_CreateHookApi(L"xinput1_3.dll", "XInputSetState", &XInputSetStateGRID, NULL);
 		MH_EnableHook(MH_ALL_HOOKS);
 	}
 
