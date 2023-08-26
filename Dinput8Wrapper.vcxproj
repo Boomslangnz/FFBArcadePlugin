@@ -64,6 +64,7 @@
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
     <ClInclude Include="Game Files\Showdown.h" />
+    <ClInclude Include="Game Files\SpringEffect.h" />
     <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
     <ClInclude Include="Game Files\TokyoCop.h" />
@@ -143,6 +144,7 @@
     <ClCompile Include="Game Files\Showdown.cpp" />
     <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
+    <ClCompile Include="Game Files\SpringEffect.cpp" />
     <ClCompile Include="Game Files\StormRacerG.cpp" />
     <ClCompile Include="Game Files\SWDC2018.cpp" />
     <ClCompile Include="Game Files\TestGame.cpp" />

@@ -84,6 +84,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/AfterburnerClimax.h"
 #include "Game Files/PokkenTournament.h"
 #include "Game Files/SonicSegaAllStarsRacing.h"
+#include "Game Files/SpringEffect.h"
 #include "Game Files/M2Emulator.h"
 #include "Game Files/GTIClub3.h"
 #include "Game Files/Demul.h"
@@ -1061,6 +1062,7 @@ const int MARIO_KART_GPDX_USA_REAL = 70;
 const int GRID_Custom = 71;
 const int MARIO_KART_GPDX_118_CUSTOM = 72;
 const int SEGA_SHOWDOWN = 73;
+const int SPRING_EFFECT = 74;
 
 HINSTANCE Get_hInstance()
 {
@@ -2570,6 +2572,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SEGA_SHOWDOWN:
 		game = new Showdown;
+		break;
+	case SPRING_EFFECT:
+		game = new SpringEffect;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
