@@ -157,6 +157,7 @@
     <ClCompile Include="Game Files\MarioKartGPDXUSAReal.cpp" />
     <ClCompile Include="Game Files\GRIDCustom.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX1.18Custom.cpp" />
+    <ClCompile Include="Game Files\Showdown.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -389,6 +390,9 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\MarioKartGPDX1.18Custom.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\Showdown.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

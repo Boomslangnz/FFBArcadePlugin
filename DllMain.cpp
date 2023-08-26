@@ -71,6 +71,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/SegaRacingClassic.h"
 #include "Game Files/SegaRally3.h"
 #include "Game Files/SegaRally3Other.h"
+#include "Game Files/Showdown.h"
 #include "Game Files/SnoCross.h"
 #include "Game Files/WackyRaces.h"
 #include "Game Files/WMMT3.h"
@@ -1059,6 +1060,7 @@ const int MARIO_KART_GPDX_110_REAL = 69;
 const int MARIO_KART_GPDX_USA_REAL = 70;
 const int GRID_Custom = 71;
 const int MARIO_KART_GPDX_118_CUSTOM = 72;
+const int SEGA_SHOWDOWN = 73;
 
 HINSTANCE Get_hInstance()
 {
@@ -2565,6 +2567,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case GRID_Custom:
 		game = new GRIDCustom;
+		break;
+	case SEGA_SHOWDOWN:
+		game = new Showdown;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

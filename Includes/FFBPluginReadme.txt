@@ -227,6 +227,7 @@ TEKNOPARROT:
 -Sega Racing Classic
 -Sega Rally 3
 -Sega World Drivers Championship 2018
+-Showdown
 -SnoCross
 -Sonic & Sega All Stars Racing
 -Storm Racer G

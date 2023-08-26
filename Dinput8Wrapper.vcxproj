@@ -63,6 +63,7 @@
     <ClInclude Include="Game Files\RoadFighters3D.h" />
     <ClInclude Include="Game Files\LGI.h" />
     <ClInclude Include="Game Files\LGI3D.h" />
+    <ClInclude Include="Game Files\Showdown.h" />
     <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
     <ClInclude Include="Game Files\TokyoCop.h" />
@@ -139,6 +140,7 @@
     <ClCompile Include="Game Files\FordRacing.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDXCustom.cpp" />
     <ClCompile Include="Game Files\SegaRally3Other.cpp" />
+    <ClCompile Include="Game Files\Showdown.cpp" />
     <ClCompile Include="Game Files\SnoCross.cpp" />
     <ClCompile Include="Game Files\SonicSegaAllStarsRacing.cpp" />
     <ClCompile Include="Game Files\StormRacerG.cpp" />
