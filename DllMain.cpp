@@ -1811,8 +1811,21 @@ void TriggerSpringEffectInfinite(double strength)
 	tempEffect.condition.direction.dir[0] = 1;
 	tempEffect.constant.direction.dir[1] = 1; //Y Position
 
-	SHORT minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
-	SHORT maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	SHORT minForce;
+	SHORT maxForce;
+
+	if (EnableForceSpringEffect)
+	{
+		minForce = (SHORT)(0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		maxForce = (SHORT)(ForceSpringStrength / 100.0 * 32767.0);
+
+	}
+	else
+	{
+		minForce = (SHORT)(strength > 0.001 ? (configMinForce / 100.0 * 32767.0) : 0); // strength is a double so we do an epsilon check of 0.001 instead of > 0.
+		maxForce = (SHORT)(configMaxForce / 100.0 * 32767.0);
+	}
+
 	SHORT range = maxForce - minForce;
 	SHORT coeff = (SHORT)(strength * range + minForce);
 
