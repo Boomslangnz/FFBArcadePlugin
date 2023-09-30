@@ -235,6 +235,7 @@ TEKNOPARROT:
 -Transformers: Human Alliance
 -Wacky Races
 -Wangan Midnight Maximum Tune 3
+-Wangan Midnight Maximum Tune 3DX+
 -Wangan Midnight Maximum Tune 5
 -Wangan Midnight Maximum Tune 5DX
 -Wangan Midnight Maximum Tune 5DX+

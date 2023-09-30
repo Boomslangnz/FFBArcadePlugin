@@ -141,6 +141,9 @@ cd..
 cd WMMT3
 rename dinput8.dll opengl32.dll
 cd..
+cd WMMT3DX+
+rename dinput8.dll opengl32.dll
+cd..
 cd WMMT5
 rename dinput8.dll d3d11.dll
 cd..
