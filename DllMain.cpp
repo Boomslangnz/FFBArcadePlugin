@@ -970,6 +970,7 @@ int DoubleConstant = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleConstant
 int DoubleSpring = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleSpring"), 0, settingsFilename);
 int DoubleFriction = GetPrivateProfileInt(TEXT("Settings"), TEXT("DoubleFriction"), 0, settingsFilename);
 int FFBOrRumble = GetPrivateProfileInt(TEXT("Settings"), TEXT("FFBOrRumble"), 0, settingsFilename);
+int StartDelay = GetPrivateProfileInt(TEXT("Settings"), TEXT("StartDelay"), 0, settingsFilename);
 
 extern void DefaultConfigValues();
 extern void CustomFFBStrengthSetup();
@@ -2327,7 +2328,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 {
 	hlp.log("In FFBLoop");
 
-	if (configGameId != 22 && configGameId != 29 && configGameId != 34 && configGameId != 10) //For games which need code to run quicker etc. Some games will crash if no sleep added
+	if (StartDelay) //For games which need code to run quicker etc. Some games will crash if no sleep added
 		Sleep(2500);
 
 	Initialize(0);
