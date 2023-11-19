@@ -25,14 +25,14 @@ void Daytona3NSE::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 	if (FFB > 0x80 && FFB <= 0x8F) // ????
 	{
-		double percentForce = (144 - FFB) / 16.0;
+		double percentForce = (144 - FFB) / 15.0;
 		double percentLength = 100.0;
 		triggers->Spring(percentForce);
 	}
 
 	if (FFB > 0x90 && FFB <= 0x9F) // Roll Right
 	{
-		double percentForce = (160 - FFB) / 16.0;
+		double percentForce = (160 - FFB) / 15.0;
 		double percentLength = 100.0;
 
 		if ((TrackSelected == 2 || TrackSelected == 4) && GameState == 0x16)
@@ -49,7 +49,7 @@ void Daytona3NSE::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 	if (FFB > 0xA0 && FFB <= 0xAF) // Roll Left
 	{
-		double percentForce = (176 - FFB) / 16.0;
+		double percentForce = (176 - FFB) / 15.0;
 		double percentLength = 100.0;
 		
 		if ((TrackSelected == 2 || TrackSelected == 4) && GameState == 0x16)
@@ -66,7 +66,7 @@ void Daytona3NSE::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 	if (FFB > 0xB0 && FFB <= 0xBF) // Shaking across grass etc
 	{
-		double percentForce = (192 - FFB) / 16.0;
+		double percentForce = (192 - FFB) / 15.0;
 		double percentLength = 100.0;
 		triggers->Sine(180, 0, percentForce);
 		triggers->Rumble(percentForce, percentForce, percentLength);
@@ -74,7 +74,7 @@ void Daytona3NSE::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 	if (FFB > 0xC0 && FFB <= 0xCF) // Spring + Rumble on wheel while racing
 	{
-		double percentForce = (207 - FFB) / 16.0;
+		double percentForce = (207 - FFB) / 15.0;
 		double SinepercentForce = (FFB - 192) / 96.0;
 		triggers->Spring(percentForce);
 		triggers->Sine(40, 0, SinepercentForce);
@@ -82,18 +82,18 @@ void Daytona3NSE::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 
 	if (FFB > 0xD0 && FFB <= 0xDF) // Wheel loose as tyres spin (no effect)
 	{
-		double percentForce = (224 - FFB) / 16.0;
+		double percentForce = (224 - FFB) / 15.0;
 	}
 
 	if (FFB > 0xE0 && FFB <= 0xEF) // Big crash ?
 	{
-		double percentForce = (FFB - 224) / 16.0;
+		double percentForce = (FFB - 224) / 15.0;
 		triggers->Spring(percentForce);
 	}
 
 	if (FFB > 0xF0 && FFB <= 0xFF) // Menu only
 	{
-		double percentForce = (FFB - 240) / 16.0;
+		double percentForce = (FFB - 240) / 15.0;
 		triggers->Spring(percentForce);
 	}
 }

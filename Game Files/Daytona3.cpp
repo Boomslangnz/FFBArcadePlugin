@@ -13,202 +13,131 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 #include <string>
 #include "Daytona3.h"
-#include "SDL.h"
-#include <Windows.h>
-static bool keybdleft = false;
-static bool keybdright = false;
-static bool keybdup = false;
-static bool init = false;
 extern int EnableDamper;
 extern int DamperStrength;
-static EffectTriggers *myTriggers;
-static EffectConstants *myConstants;
-static Helpers *myHelpers;
-extern SDL_Event e;
+
 static wchar_t *settingsFilename = TEXT(".\\FFBPlugin.ini");
-static int ShowButtonNumbersForSetup = GetPrivateProfileInt(TEXT("Settings"), TEXT("ShowButtonNumbersForSetup"), 0, settingsFilename);
-static int ChangeGearsViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("ChangeGearsViaPlugin"), 0, settingsFilename);
 static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
-static int MenuMovementViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("MenuMovementViaPlugin"), 0, settingsFilename);
-static int Gear1 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear1"), 0, settingsFilename);
-static int Gear2 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear2"), 0, settingsFilename);
-static int Gear3 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear3"), 0, settingsFilename);
-static int Gear4 = GetPrivateProfileInt(TEXT("Settings"), TEXT("Gear4"), 0, settingsFilename);
-static int GearUp = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearUp"), 0, settingsFilename);
-static int GearDown = GetPrivateProfileInt(TEXT("Settings"), TEXT("GearDown"), 0, settingsFilename);
 static int HideCursor = GetPrivateProfileInt(TEXT("Settings"), TEXT("HideCursor"), 0, settingsFilename);
+static int OriginalFFB = GetPrivateProfileInt(TEXT("Settings"), TEXT("OriginalFFB"), 0, settingsFilename);
 
-static int ThreadLoop()
-{
-	while (SDL_WaitEvent(&e) != 0)
-	{
-		UINT8 gear = myHelpers->ReadByte(0x019B468C, /* isRelativeOffset */ false);
+void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {
 
-		if (ShowButtonNumbersForSetup == 1)
-		{
-			if (e.type == SDL_JOYBUTTONDOWN)
-			{
-				if (e.jbutton.button >= 0)
-				{
-					char buff[100];
-					sprintf_s(buff, "Button %d Pressed", e.jbutton.button);
-					MessageBoxA(NULL, buff, "", NULL);
-				}
-			}
-		}
-
-		if (e.type == SDL_JOYBUTTONDOWN)
-		{
-			if (ChangeGearsViaPlugin)
-			{
-				if (e.jbutton.button == Gear1)
-				{
-					myHelpers->WriteByte(0x019B468C, 0x00, false);
-				}
-				else if (e.jbutton.button == Gear2)
-				{
-					myHelpers->WriteByte(0x019B468C, 0x02, false);
-				}
-				else if (e.jbutton.button == Gear3)
-				{
-					myHelpers->WriteByte(0x019B468C, 0x01, false);
-				}
-				else if (e.jbutton.button == Gear4)
-				{
-					myHelpers->WriteByte(0x019B468C, 0x03, false);
-				}
-				else if (e.jbutton.button == GearDown && gear > 0x00)
-				{
-					myHelpers->WriteByte(0x019B468C, --gear, false);
-				}
-				else if (e.jbutton.button == GearUp && gear < 0x03)
-				{
-					myHelpers->WriteByte(0x019B468C, ++gear, false);
-				}
-			}
-		}
-	}
-	return 0;
-}
-
-static DWORD WINAPI RunningLoop(LPVOID lpParam)
-{
-	while (true)
-	{
-		ThreadLoop();
-		Sleep(16);
-	}
-}
-
-void Daytona3::FFBLoop(EffectConstants *constants, Helpers *helpers, EffectTriggers* triggers) {	
-
-	if (!init)
-	{
-		myTriggers = triggers;
-		myConstants = constants;
-		myHelpers = helpers;
-		CreateThread(NULL, 0, RunningLoop, NULL, 0, NULL);
-		init = true;
-	}
-
-	UINT8 steering = helpers->ReadByte(0x019B4678, false);
-	UINT8 gamestate = helpers->ReadByte(0x19B5744, false);
-	UINT8 ff = helpers->ReadByte(0x15AFC46, false);
 	HWND hWnd = FindWindowA(0, ("Daytona Championship USA"));
 
 	if (HideCursor)
-		SetCursorPos(2000, 2000);
+		ShowCursor(false);
 
 	if (GetAsyncKeyState(VK_ESCAPE) && EscapeKeyExitViaPlugin)
 	{
 		if (hWnd > NULL)
 		{
-			//SendMessage(hWnd, WM_CLOSE, NULL, NULL);
 			system("taskkill /f /im InpWrapper.exe");
 			ExitProcess(0);
-		}
-	}
-
-	if (MenuMovementViaPlugin == 1)
-	{
-		//Menu Movement & Game Initial Screen
-		if (gamestate == 18 || gamestate == 30)
-		{
-			if (steering <= 0x75 && steering > 0x50)
-			{
-				//Menu Left
-				if (!keybdleft)
-				{
-					keybdleft = true;
-					SendMessage(hWnd, WM_KEYDOWN, VK_LEFT, 0);
-				}
-				else
-				{
-					SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
-				}
-			}
-			else if (steering <= 0x50)
-			{
-				SendMessage(hWnd, WM_KEYDOWN, VK_LEFT, 0);
-			}
-			else if ((steering >= 0x89) && (steering < 0xAE))
-			{
-				//Menu Right
-				if (!keybdright)
-				{
-					keybdright = true;
-					SendMessage(hWnd, WM_KEYDOWN, VK_RIGHT, 0);
-				}
-				else
-				{
-					SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
-				}
-			}
-			else if (steering >= 0xAE)
-			{
-				SendMessage(hWnd, WM_KEYDOWN, VK_RIGHT, 0);
-			}
-			else
-			{
-				keybdleft = false;
-				keybdright = false;
-				SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
-				SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
-			}
-			keybdup = false;
-		}
-		else
-		{
-			if (!keybdup)
-			{
-				keybdup = true;
-				keybdleft = false;
-				keybdright = false;
-				SendMessage(hWnd, WM_KEYUP, VK_RIGHT, 0);
-				SendMessage(hWnd, WM_KEYUP, VK_LEFT, 0);
-			}
 		}
 	}
 
 	if (EnableDamper)
 		triggers->Damper(DamperStrength / 100.0);
 
-	if (ff > 15)
+	if (OriginalFFB)
 	{
-		double percentForce = (31 - ff) / 15.0;
-		double percentLength = 100;
-		triggers->Rumble(percentForce, 0, percentLength);
-		triggers->Constant(myConstants->DIRECTION_FROM_LEFT, percentForce);
-	}
-	else if (ff > 0)
-	{
-		double percentForce = (16 - ff) / 15.0;
-		double percentLength = 100;
-		triggers->Rumble(0, percentForce, percentLength);
-		triggers->Constant(myConstants->DIRECTION_FROM_RIGHT, percentForce);
-	}
+		UINT8 FFB = helpers->ReadByte(0x131FEC9, true);
+		UINT8 GameState = helpers->ReadByte(0x15B5744, true);
+		DWORD TrackSelectedBase = helpers->ReadInt32(0x11B0148, true);
+		UINT8 TrackSelected = helpers->ReadByte(TrackSelectedBase + 0x4, false);
 
-	myTriggers = triggers;
-	myConstants = constants;
-	myHelpers = helpers;
+		if (FFB > 0x80 && FFB <= 0x8F) // ????
+		{
+			double percentForce = (144 - FFB) / 15.0;
+			double percentLength = 100.0;
+			triggers->Spring(percentForce);
+		}
+
+		if (FFB > 0x90 && FFB <= 0x9F) // Roll Right
+		{
+			double percentForce = (160 - FFB) / 15.0;
+			double percentLength = 100.0;
+
+			if ((TrackSelected == 2 || TrackSelected == 4) && GameState == 0x16)
+			{
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else
+			{
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+		
+		if (FFB > 0xA0 && FFB <= 0xAF) // Roll Left
+		{
+			double percentForce = (176 - FFB) / 15.0;
+			double percentLength = 100.0;
+
+			if ((TrackSelected == 2 || TrackSelected == 4) && GameState == 0x16)
+			{
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else
+			{
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+
+		if (FFB > 0xB0 && FFB <= 0xBF) // Shaking across grass etc
+		{
+			double percentForce = (192 - FFB) / 15.0;
+			double percentLength = 100.0;
+			triggers->Sine(180, 0, percentForce);
+			triggers->Rumble(percentForce, percentForce, percentLength);
+		}
+
+		if (FFB > 0xC0 && FFB <= 0xCF) // Spring + Rumble on wheel while racing
+		{
+			double percentForce = (207 - FFB) / 15.0;
+			double SinepercentForce = (FFB - 192) / 96.0;
+			triggers->Spring(percentForce);
+			triggers->Sine(40, 0, SinepercentForce);
+		}
+
+		if (FFB > 0xD0 && FFB <= 0xDF) // Wheel loose as tyres spin (no effect)
+		{
+			double percentForce = (224 - FFB) / 15.0;
+		}
+
+		if (FFB > 0xE0 && FFB <= 0xEF) // Big crash ?
+		{
+			double percentForce = (FFB - 224) / 15.0;
+			triggers->Spring(percentForce);
+		}
+
+		if (FFB > 0xF0 && FFB <= 0xFF) // Menu only
+		{
+			double percentForce = (FFB - 240) / 15.0;
+			triggers->Spring(percentForce);
+		}
+	}
+	else
+	{
+		UINT8 ff = helpers->ReadByte(0x15AFC46, false);
+
+		if (ff > 15)
+		{
+			double percentForce = (31 - ff) / 15.0;
+			double percentLength = 100;
+			triggers->Rumble(percentForce, 0, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+		}
+		else if (ff > 0)
+		{
+			double percentForce = (16 - ff) / 15.0;
+			double percentLength = 100;
+			triggers->Rumble(0, percentForce, percentLength);
+			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+		}
+	}
 }

@@ -2337,7 +2337,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 	{
 		if (!EnableFFBStrengthDynamicAdjustment && !InputDeviceWheelEnable)
 		{
-			if (configGameId != 1 && configGameId != 9 && configGameId != 12 && configGameId != 28 && configGameId != 29 && configGameId != 35) // Workaround for SDL_JoystickRumble rumble not stopping issue
+			if (configGameId != 9 && configGameId != 12 && configGameId != 28 && configGameId != 29 && configGameId != 35) // Workaround for SDL_JoystickRumble rumble not stopping issue
 				SDL_CreateThread(WorkaroundToFixRumble, "WorkaroundToFixRumble", (void*)NULL);
 		}
 
@@ -2610,7 +2610,7 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 
 	if (EnableFFBStrengthDynamicAdjustment == 1)
 	{
-		if (configGameId != 1 && configGameId != 9 && configGameId != 12 && configGameId != 28 && configGameId != 29 && configGameId != 35)
+		if (configGameId != 9 && configGameId != 12 && configGameId != 28 && configGameId != 29 && configGameId != 35)
 		{
 			if (configGameId == 26 && InputDeviceWheelEnable)
 				CreateThread(NULL, 0, AdjustFFBStrengthLoopNoWaitEvent, NULL, 0, NULL);
