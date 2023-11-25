@@ -870,6 +870,8 @@ void MEMwrite(void* adr, void* ptr, int size)
 	VirtualProtect(adr, size, OldProtection, &OldProtection);
 }
 
+extern DWORD WINAPI ThreadForOutputs(LPVOID lpParam);
+
 // global variables 
 SDL_Haptic* haptic;
 SDL_Haptic* haptic2 = NULL;
@@ -2677,6 +2679,7 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 			char libName[256];
 			GetModuleFileNameA(hModule, libName, 256);
 			_strupr(libName);
+
 			if (NULL != strstr(libName, "DINPUT8"))
 			{
 				currentLibrary = lib::dinput8;
@@ -2687,51 +2690,55 @@ BOOL APIENTRY DllMain(HMODULE hModule, DWORD ulReasonForCall, LPVOID lpReserved)
 				currentLibrary = lib::dinput;
 				strcat_s(buffer, MAX_PATH, "\\dinput.dll");
 			}
-			if (NULL != strstr(libName, "D3D11"))
+			else if (NULL != strstr(libName, "D3D11"))
 			{
 				currentLibrary = lib::d3d11;
 				strcat_s(buffer, MAX_PATH, "\\d3d11.dll");
 			}
-			if (NULL != strstr(libName, "XINPUT1_3"))
+			else if (NULL != strstr(libName, "XINPUT1_3"))
 			{
 				currentLibrary = lib::xinput1_3;
 				strcat_s(buffer, MAX_PATH, "\\xinput1_3.dll");
 			}
-			if (NULL != strstr(libName, "XINPUT1_4"))
+			else if (NULL != strstr(libName, "XINPUT1_4"))
 			{
 				currentLibrary = lib::xinput1_3;
 				strcat_s(buffer, MAX_PATH, "\\xinput1_4.dll");
 			}
-			if (NULL != strstr(libName, "OPENGL32"))
+			else if (NULL != strstr(libName, "OPENGL32"))
 			{
 				currentLibrary = lib::opengl32;
 				strcat_s(buffer, MAX_PATH, "\\opengl32.dll");
 			}
-			if (NULL != strstr(libName, "D3D9"))
+			else if (NULL != strstr(libName, "D3D9"))
 			{
 				currentLibrary = lib::d3d9;
 				strcat_s(buffer, MAX_PATH, "\\d3d9.dll");
 			}
-			if (NULL != strstr(libName, "WINMM"))
+			else if (NULL != strstr(libName, "WINMM"))
 			{
 				currentLibrary = lib::winmm;
 				strcat_s(buffer, MAX_PATH, "\\winmm.dll");
-			}
+			}	
+
 			hlp.log(buffer);
+
 			gl_hOriginalDll = LoadLibraryA(buffer);
+
+			if (configGameId == 22 || configGameId == 34 || configGameId == 60)
+				CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
+
 			if (configGameId == 47)
-			{
 				MEMwrite((void*)(0x57B2F0), (void*)"\x33\xC0\x40\xC3", 4);
-			}
+
 			if (configGameId == 29)
 			{
 				gl_hjgtDll = LoadLibraryA("jgt.dll");
 				gl_hlibavs = LoadLibraryA("libavs-win32-ea3.dll");
 			}
-			if ((configGameId == 4) || (configGameId == 37))
-			{
+
+			if (configGameId == 4 || configGameId == 37)
 				gl_cgGLDll = LoadLibraryA("cgGL.dll");
-			}
 		}
 		else
 		{

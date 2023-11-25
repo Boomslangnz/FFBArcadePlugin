@@ -1866,8 +1866,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 
 	if (!init)
 	{
-		CreateThread(NULL, 0, ThreadForOutputs, NULL, 0, NULL);
-
 		wchar_t* deviceGUIDString2 = new wchar_t[256];
 		int Device2GUID = GetPrivateProfileString(TEXT("Settings"), TEXT("Device2GUID"), NULL, deviceGUIDString2, 256, settingsFilename);
 		char joystick_guid[256];
