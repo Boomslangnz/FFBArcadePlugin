@@ -20,6 +20,10 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 
 static char GameName[256];
 
+static EffectConstants* myconstants;
+static Helpers* myhelpers;
+static EffectTriggers* mytriggers;
+
 //Supermodel Emulator Games
 std::string dayto2pe("dayto2pe");
 std::string daytona2("daytona2");
@@ -220,6 +224,7 @@ std::string victlapw("victlapw");
 std::string victlap("victlap");
 std::string dblaxle("dblaxle");
 std::string dblaxleu("dblaxleu");
+
 //Flycast Below
 std::string InitialDVer1("INITIAL D\n");
 std::string InitialDVer2("INITIAL D Ver.2\n");
@@ -231,7 +236,6 @@ std::string F355ChallengeJapan("F355 CHALLENGE JAPAN\n");
 std::string ClubKartInJapan("CLUB KART IN JAPAN\n");
 std::string TheKingOfRoute66("THE KING OF ROUTE66\n");
 std::string SegaDrivingSimulator("SEGA DRIVING SIMULATOR\n");
-
 
 //Our string to load game from
 std::string M2Active("M2Active");
@@ -262,6 +266,7 @@ std::string RawDrive("RawDrive");
 std::string digit0("digit0");
 std::string digit1("digit1");
 std::string wheel("wheel");
+std::string wheel_motor("wheel_motor");
 std::string lamp1("lamp1");
 std::string led2("led2");
 std::string cpuled6("cpuled6");
@@ -288,6 +293,7 @@ std::string mcuout1("mcuout1");
 std::string Bank_Motor_Speed("Bank_Motor_Speed");
 std::string Bank_Motor_Direction("Bank_Motor_Direction");
 std::string bank_motor_position("bank_motor_position");
+
 //Flycast
 std::string awffb("awffb");
 std::string midiffb("midiffb");
@@ -1123,6 +1129,600 @@ static UINT8 ff;
 
 std::string wheelA("wheel");
 
+static int speedffb(int ffRaw) {
+	switch (ffRaw) {
+	case 0x1E:
+		return 31;
+	case 0x1C:
+		return 30;
+	case 0x1A:
+		return 29;
+	case 0x18:
+		return 28;
+	case 0x16:
+		return 27;
+	case 0x14:
+		return 26;
+	case 0x12:
+		return 25;
+	case 0x10:
+		return 24;
+	case 0x0E:
+		return 23;
+	case 0x0C:
+		return 22;
+	case 0x0A:
+		return 21;
+	case 0x08:
+		return 20;
+	case 0x06:
+		return 19;
+	case 0x04:
+		return 18;
+	case 0x02:
+		return 17;
+
+	case 0x1F:
+		return 16;
+	case 0x1D:
+		return 15;
+	case 0x1B:
+		return 14;
+	case 0x19:
+		return 13;
+	case 0x17:
+		return 12;
+	case 0x15:
+		return 11;
+	case 0x13:
+		return 10;
+	case 0x11:
+		return 9;
+	case 0x0F:
+		return 8;
+	case 0x0D:
+		return 7;
+	case 0x0B:
+		return 6;
+	case 0x09:
+		return 5;
+	case 0x07:
+		return 4;
+	case 0x05:
+		return 3;
+	case 0x03:
+		return 2;
+	case 0x01:
+		return 1;
+	}
+}
+
+static void FFBGameEffects(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers, int stateFFB, LPCSTR name)
+{
+	if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race & LeMans
+	{
+		if (name == RawDrive)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			if (stateFFB > 0x09 && stateFFB < 0x20) //Spring
+			{
+				double percentForce = (stateFFB - 9) / 16.0;
+				triggers->Spring(percentForce);
+			}
+
+			if (stateFFB > 0x1F && stateFFB < 0x30) //Clutch
+			{
+				double percentForce = (stateFFB - 31) / 16.0;
+				triggers->Friction(percentForce);
+			}
+
+			if (stateFFB > 0x2F && stateFFB < 0x40) //Centering
+			{
+				double percentForce = (stateFFB - 47) / 16.0;
+				triggers->Rumble(percentForce, percentForce, 100);
+				triggers->Sine(40, 0, percentForce);
+			}
+
+			if (stateFFB > 0x3F && stateFFB < 0x50) //Uncentering
+			{
+				double percentForce = (stateFFB - 63) / 16.0;
+				triggers->Spring(0);
+			}
+
+			if (stateFFB > 0x4F && stateFFB < 0x60) //Roll Right
+			{
+				double percentForce = (stateFFB - 79) / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if (stateFFB > 0x5F && stateFFB < 0x70) //Roll Left
+			{
+				double percentForce = (stateFFB - 95) / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+
+			//Test Menu
+			if (stateFFB == 0x80)
+			{
+				triggers->Rumble(0, 0, 0);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+			}
+			else if (stateFFB == 0x81)
+			{
+				triggers->Rumble(0.5, 0, 100);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0.5);
+			}
+			else if (stateFFB == 0x82)
+			{
+				triggers->Rumble(0, 0.5, 100);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0.5);
+			}
+		}
+	}
+
+	if (RunningFFB == DirtDevilsActive) //Dirt Devils
+	{
+		if (name == RawDrive)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			if (stateFFB == 0x10)
+			{
+				double percentForce = 0.7;
+				triggers->Spring(percentForce);
+			}
+
+			if (stateFFB == 0x27 || stateFFB == 0x30)
+				DirtDevilSine = false;
+
+			if (stateFFB == 0x2F)
+				DirtDevilSine = true;
+
+			if (DirtDevilSine)
+			{
+				double percentForce = (stateFFB - 31) / 16.0;
+				triggers->Sine(60, 0, percentForce);
+				triggers->Rumble(percentForce, percentForce, 100);
+			}
+		}
+	}
+
+	if (RunningFFB == Srally2Active) //Sega Rally 2, Emergency Call Ambulance
+	{
+		if (name == RawDrive)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			if (stateFFB > 0x00 && stateFFB <= 0x3F)
+			{
+				double percentForce = (stateFFB) / 64.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if (stateFFB > 0x3F && stateFFB <= 0x7F)
+			{
+				double percentForce = (stateFFB - 64) / 64.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+	}
+
+	if (RunningFFB == VirtuaRacingActive) //Virtua Racing
+	{
+		if (name == digit0)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			if ((stateFFB == 0x03) || (stateFFB == 0x07) || (stateFFB == 0x09) || (stateFFB == 0x10))
+			{
+				if (stateFFB == 0x07)
+					DontSineUntilRaceStart = true;
+
+				if (stateFFB == 0x09)
+					DontSineUntilRaceStart = false;
+
+				//Spring
+				double percentForce = 0.8;
+				triggers->Spring(percentForce);
+			}
+
+			if (stateFFB == 0x20 || stateFFB == 0x28) //Clutch
+			{
+				double percentForce = 0.4;
+				triggers->Friction(percentForce);
+			}
+
+			if (stateFFB > 0x2F && stateFFB < 0x40) //Centering
+			{
+				double percentForce = (stateFFB - 47) / 11.0;
+				triggers->Spring(percentForce);
+			}
+
+			if (stateFFB == 0x40 || stateFFB == 0x46 || stateFFB == 0x4A) //Uncentering
+			{
+				if (stateFFB == 0x40)
+				{
+					double percentForce = 0.4;
+					triggers->Rumble(percentForce, percentForce, 100);
+					triggers->Sine(70, 30, percentForce);
+				}
+				else
+				{
+					if (DontSineUntilRaceStart) //Uncentering
+					{
+						double percentForce = 0.4;
+						triggers->Rumble(percentForce, percentForce, 100);
+						triggers->Sine(70, 30, percentForce);
+					}
+				}
+			}
+
+			if (stateFFB == 0x50 || stateFFB == 0x5F) //Roll Left
+			{
+				double percentForce = 0.5;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if (stateFFB == 0x60 || stateFFB == 0x6F) //Roll Right
+			{
+				double percentForce = 0.5;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+	}
+
+	if (RunningFFB == RacingFullValueActive1) //Mame games using all values 
+	{
+		if (name == wheel || name == wheel_motor)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			if (stateFFB > 0x80 && stateFFB < 0x100)
+			{
+				double percentForce = (256 - stateFFB) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if (stateFFB > 0x00 && stateFFB < 0x80)
+			{
+				double percentForce = (stateFFB) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+	}
+
+	if (RunningFFB == RacingFullValueActive2) //Mame games using all values (reverse direction to above)
+	{
+		if (name == wheel)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			if (stateFFB > 0x80 && stateFFB < 0x100)
+			{
+				double percentForce = (256 - stateFFB) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+			else if (stateFFB > 0x00 && stateFFB < 0x80)
+			{
+				double percentForce = (stateFFB) / 126.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+		}
+	}
+
+	if (RunningFFB == MaximumSpeedActive)
+	{
+		if (name == awffb)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			UINT8 FFB = speedffb(stateFFB);
+
+			if (FFB > 0x00 && FFB < 0x11)
+			{
+				double percentForce = FFB / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if (FFB > 0x10 && FFB < 0x20)
+			{
+				double percentForce = (FFB - 16) / 16.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+	}
+
+	if (RunningFFB == NaomiFFBActive)
+	{
+		if (name == m3ffb)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			if (stateFFB != 0xD0)
+			{
+				if (oldstateFFB != stateFFB)
+				{
+					if ((stateFFB > 0xB0 && stateFFB < 0xC0) || stateFFB == 0x9F)
+					{
+						SineEffectState = stateFFB;
+						Effect1 = true;
+					}
+				}
+
+				if (stateFFB > 0x10 && stateFFB < 0x20)
+				{
+					double percentForce = (stateFFB - 10) / 15.0;
+					triggers->Spring(percentForce);
+				}
+
+				if (stateFFB > 0x20 && stateFFB < 0x30)
+				{
+					double percentForce = (stateFFB - 32) / 15.0;
+					triggers->Friction(percentForce);
+				}
+
+				if (stateFFB > 0x30 && stateFFB < 0x40)
+				{
+					double percentForce = (stateFFB - 48) / 15.0;
+					triggers->Rumble(percentForce, percentForce, 100);
+					triggers->Sine(40, 0, percentForce);
+				}
+
+				if (stateFFB > 0x40 && stateFFB < 0x50)
+				{
+					double percentForce = (stateFFB - 64) / 15.0;
+					triggers->Spring(percentForce);
+				}
+
+				if (stateFFB > 0x50 && stateFFB < 0x60)
+				{
+					double percentForce = (stateFFB - 80) / 15.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB > 0x60 && stateFFB < 0x70)
+				{
+					if (stateFFB != 0x68 && stateFFB != 0x69 && stateFFB != 0x6A && stateFFB != 0x6B)
+					{
+						double percentForce = (stateFFB - 96) / 15.0;
+						double percentLength = 100;
+						triggers->Rumble(0, percentForce, percentLength);
+						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+					}
+				}
+
+				if (stateFFB > 0x80 && stateFFB < 0x90)
+				{
+					double percentForce = (stateFFB - 128) / 15.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				if (stateFFB > 0x90 && stateFFB < 0xA0)
+				{
+					double percentForce = (stateFFB - 144) / 15.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB > 0xA0 && stateFFB < 0xB0)
+				{
+					double percentForce = (stateFFB - 160) / 15.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB == 0xBF)
+				{
+					double percentForce = 1.0;
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				if (stateFFB > 0xC0 && stateFFB < 0xD0)
+				{
+					double percentForce = (stateFFB - 192) / 15.0;
+					triggers->Spring(percentForce);
+				}
+
+				if (stateFFB > 0xD0 && stateFFB < 0xE0)
+				{
+					double percentForce = (stateFFB - 208) / 15.0;
+					double percentLength = 100;
+					triggers->Friction(percentForce);
+				}
+
+				if (stateFFB > 0xE0 && stateFFB < 0xE9)
+				{
+					double percentForce = (stateFFB - 224) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+
+				if (stateFFB > 0xE8 && stateFFB < 0xF0)
+				{
+					double percentForce = (stateFFB - 232) / 8.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+
+				if (Effect1)
+				{
+					++EffectCount;
+
+					if (EffectCount >= 31)
+					{
+						Effect1 = false;
+						EffectCount = 0;
+					}
+
+					double percentForce = (SineEffectState - 176) / 15.0;
+					triggers->Rumble(percentForce, percentForce, 100);
+					triggers->Sine(60, 0, percentForce);
+				}
+
+				if (stateFFB == 0xC0)
+				{
+					triggers->Rumble(0, 0, 100);
+					triggers->Sine(60, 0, 0);
+					triggers->Friction(0);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
+				}
+				oldstateFFB = stateFFB;
+			}
+		}
+	}
+
+	if (RunningFFB == InitialDActive)
+	{
+		if (name == midiffb)
+		{
+			helpers->log("got value: ");
+			std::string ffs = std::to_string(stateFFB);
+			helpers->log((char*)ffs.c_str());
+
+			BYTE* ffb = reinterpret_cast<BYTE*>(&stateFFB);
+
+			if (ffb[2] == 0x80 && ffb[0] == 0x01)
+				triggers->Spring(1.0);
+
+			if (ffb[2] == 0x85 && ffb[1] > 0x00 && ffb[0] > 0x00)
+			{
+				double percentForce = ffb[0] / 127.0;
+				double Period = ffb[1] / 127.0 * 120.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, percentForce, percentLength);
+				triggers->Sine(static_cast<int>(Period), 0, percentForce);
+			}
+
+			if (ffb[2] == 0x86 && ffb[0] > 0x00 && ffb[0] < 0x80)
+			{
+				double percentForce = ffb[0] / 127.0;
+				double percentLength = 100;
+				triggers->Spring(percentForce);
+			}
+
+			if (ffb[2] == 0x84 && ffb[0] > 0x00 && ffb[0] < 0x80)
+			{
+				if (ffb[1] == 0x00)
+				{
+					double percentForce = (128 - ffb[0]) / 127.0;
+					double percentLength = 100;
+					triggers->Rumble(percentForce, 0, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				}
+				else if (ffb[1] == 0x01)
+				{
+					double percentForce = (ffb[0] / 127.0);
+					double percentLength = 100;
+					triggers->Rumble(0, percentForce, percentLength);
+					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				}
+			}
+		}
+	}
+
+	if (RunningFFB == HardDrivinActive) //Hard Drivin
+	{
+		if (!HardDrivinFrame)
+			HardDrivinFrame = true;
+
+		//if ((frame & 7) == 4)
+		if (frame == 4)
+		{
+			HardDrivinFFB = (vals[0] & 15) + ((vals[3] & 7) << 5);
+
+			if ((vals[1] & 0xF0) == 0xF0)
+				HardDrivinFFB |= 0x10;
+
+			if ((vals[2] & 0xF0) == 0xF0)
+				HardDrivinFFB = -HardDrivinFFB;
+
+			//helpers->log("got value: ");
+			//helpers->log((char*)ffs.c_str());
+
+			//std::string ffs = std::to_string(HardDrivinFFB);
+			//std::string val0 = std::to_string(vals[0]);
+			//std::string val1 = std::to_string(vals[1]);
+			//std::string val2 = std::to_string(vals[2]);
+			//std::string val3 = std::to_string(vals[3]);
+			//std::string val4 = std::to_string(vals[4]);
+			//static char moreTest[256];
+			//memset(moreTest, 0, 256);
+			//sprintf(moreTest, "vals=%s %s %s %s FFS=%s", val0.c_str(), val1.c_str(), val2.c_str(), val3.c_str(), ffs.c_str());
+			//helpers->log((char*)moreTest);
+
+			if (HardDrivinFFB > 100) 
+				HardDrivinFFB = 100;
+
+			if (HardDrivinFFB < -100)
+				HardDrivinFFB = -100;
+
+			if (HardDrivinFFB >= 0)
+			{
+				double percentForce = HardDrivinFFB / 100.0;
+				double percentLength = 100;
+				triggers->Rumble(percentForce, 0, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+			}
+			else if (HardDrivinFFB < 0)
+			{
+				HardDrivinFFB = -HardDrivinFFB;
+				double percentForce = HardDrivinFFB / 100.0;
+				double percentLength = 100;
+				triggers->Rumble(0, percentForce, percentLength);
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+			}
+		}
+	}
+}
+
 typedef int(__stdcall* MAME_START)(int hWnd);
 typedef int(__stdcall* MAME_STOP)(void);
 typedef int(__stdcall* MAME_COPYDATA)(int id, const char* name);
@@ -1465,6 +2065,9 @@ int __stdcall mame_updatestate(const char* id, int state)
 			}
 		}
 	}
+
+	if (RomGameName && RunningFFB > 0)
+		FFBGameEffects(myconstants, myhelpers, mytriggers, state, name);
 	
 	return 1;
 }
@@ -1519,77 +2122,8 @@ static DWORD WINAPI ScanThread(LPVOID lpParam)
 	return 0;
 }
 
-static int speedffb(int ffRaw) {
-	switch (ffRaw) {
-	case 0x1E:
-		return 31;
-	case 0x1C:
-		return 30;
-	case 0x1A:
-		return 29;
-	case 0x18:
-		return 28;
-	case 0x16:
-		return 27;
-	case 0x14:
-		return 26;
-	case 0x12:
-		return 25;
-	case 0x10:
-		return 24;
-	case 0x0E:
-		return 23;
-	case 0x0C:
-		return 22;
-	case 0x0A:
-		return 21;
-	case 0x08:
-		return 20;
-	case 0x06:
-		return 19;
-	case 0x04:
-		return 18;
-	case 0x02:
-		return 17;
-
-	case 0x1F:
-		return 16;
-	case 0x1D:
-		return 15;
-	case 0x1B:
-		return 14;
-	case 0x19:
-		return 13;
-	case 0x17:
-		return 12;
-	case 0x15:
-		return 11;
-	case 0x13:
-		return 10;
-	case 0x11:
-		return 9;
-	case 0x0F:
-		return 8;
-	case 0x0D:
-		return 7;
-	case 0x0B:
-		return 6;
-	case 0x09:
-		return 5;
-	case 0x07:
-		return 4;
-	case 0x05:
-		return 3;
-	case 0x03:
-		return 2;
-	case 0x01:
-		return 1;
-	}
-}
-
 static int raveracer(int ffRaw) {
 	switch (ffRaw) {
-
 		//case 0xFE:
 			//return 128;
 	case 0x7E:
@@ -1863,6 +2397,10 @@ DWORD WINAPI ThreadForDaytonaStartEffect(LPVOID lpParam)
 }
 
 void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
+
+	myconstants = constants;
+	myhelpers = helpers;
+	mytriggers = triggers;
 
 	if (!init)
 	{
@@ -2999,7 +3537,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				NaomiFFBGo = true;
 			}
 
-			if (enableLogging == 1)
+			if (enableLogging)
 			{
 				char romnametext[256];
 				sprintf(romnametext, "RomName = %s", romname);
@@ -3011,335 +3549,14 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			}
 
 			if ((RunningFFB != NULL) && (RunningFFB[0] != '\0'))
-			{
 				RomGameName = true;
-			}
 		}
 	}
 
 	if (RomGameName && RunningFFB > 0)
 	{
 		if (RunningFFB > 0 && EnableDamper)
-		{
 			triggers->Damper(DamperStrength / 100.0);
-		}
-
-		if (RunningFFB == Daytona2Active) //Daytona 2,Scud Race & LeMans
-		{
-			if (name == RawDrive)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-			}
-
-			if ((stateFFB > 0x09) && (stateFFB < 0x20))
-			{
-				//Spring
-				double percentForce = (stateFFB - 9) / 16.0;
-				triggers->Spring(percentForce);
-			}
-
-			if ((stateFFB > 0x1F) && (stateFFB < 0x30))
-			{
-				//Clutch
-				double percentForce = (stateFFB - 31) / 16.0;
-				triggers->Friction(percentForce);
-			}
-
-			if ((stateFFB > 0x2F) && (stateFFB < 0x40))
-			{
-				//Centering
-				double percentForce = (stateFFB - 47) / 16.0;
-				triggers->Rumble(percentForce, percentForce, 100);
-				triggers->Sine(40, 0, percentForce);
-			}
-
-			if ((stateFFB > 0x3F) && (stateFFB < 0x50))
-			{
-				//Uncentering
-				double percentForce = (stateFFB - 63) / 16.0;
-				triggers->Spring(0);
-			}
-
-			if ((stateFFB > 0x4F) && (stateFFB < 0x60))
-			{
-				//Roll Right
-				double percentForce = (stateFFB - 79) / 16.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((stateFFB > 0x5F) && (stateFFB < 0x70))
-			{
-				//Roll Left
-				double percentForce = (stateFFB - 95) / 16.0;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-
-			UINT8 static oldff = 0;
-			UINT8 newff = stateFFB;
-
-			if (stateFFB == 0x9C)
-			{
-				if (oldff != newff)
-				{
-					Effect1 = true;
-				}
-			}
-
-			if (Effect1)
-			{
-				triggers->Sine(100, 0, 0.8);
-				Effect1 = false;
-			}
-
-			if (stateFFB == 0x05)
-			{
-				triggers->Sine(40, 0, 0.5);
-				triggers->Friction(0.5);
-			}
-
-			if (stateFFB == 0x75)
-			{
-				if (!StartEffectOnce)
-				{
-					StartEffectOnce = true;
-					Effect2 = true;
-					CreateThread(NULL, 0, ThreadForDaytonaStartEffect, NULL, 0, NULL);
-				}
-			}
-			else
-			{
-				if (StartEffectOnce)
-				{
-					StartEffectOnce = false;
-				}
-			}
-
-			if (Effect2)
-			{
-				triggers->Sine(70, 60, 0.5);
-			}
-
-			//Test Menu
-			if (stateFFB == 0x80)
-			{
-				triggers->Rumble(0, 0, 0);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-			}
-			else if (stateFFB == 0x81)
-			{
-				triggers->Rumble(0.5, 0, 100);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, 0.5);
-			}
-			else if (stateFFB == 0x82)
-			{
-				triggers->Rumble(0, 0.5, 100);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0.5);
-			}
-			oldff = newff;
-		}
-
-		if (RunningFFB == DirtDevilsActive) //Dirt Devils
-		{
-			if (name == RawDrive)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-			}
-
-			if (stateFFB == 0x10)
-			{
-				double percentForce = 0.7;
-				triggers->Spring(percentForce);
-			}
-
-			if ((stateFFB == 0x27) || (stateFFB == 0x30))
-			{
-				DirtDevilSine = false;
-			}
-
-			if (stateFFB == 0x2F)
-			{
-				DirtDevilSine = true;
-			}
-
-			if (DirtDevilSine)
-			{
-				double percentForce = (stateFFB - 31) / 16.0;
-				triggers->Sine(60, 0, percentForce);
-				triggers->Rumble(percentForce, percentForce, 100);
-			}
-		}
-
-		if (RunningFFB == Srally2Active) //Sega Rally 2, Emergency Call Ambulance
-		{
-			if (name == RawDrive)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-			}
-
-			if (stateFFB > 0x00 && stateFFB <= 0x3F)
-			{
-				double percentForce = (stateFFB) / 64.0;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-			else if (stateFFB > 0x3F && stateFFB <= 0x7F)
-			{
-				double percentForce = (stateFFB - 64) / 64.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-		}
-
-		if (RunningFFB == VirtuaRacingActive) //Virtua Racing
-		{
-			if (name == digit0)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-			}
-
-			if ((stateFFB == 0x03) || (stateFFB == 0x07) || (stateFFB == 0x09) || (stateFFB == 0x10))
-			{
-				if (stateFFB == 0x07)
-				{
-					DontSineUntilRaceStart = true;
-				}
-				if (stateFFB == 0x09)
-				{
-					DontSineUntilRaceStart = false;
-				}
-				//Spring
-				double percentForce = 0.8;
-				triggers->Spring(percentForce);
-			}
-
-			if ((stateFFB == 0x20) || (stateFFB == 0x28))
-			{
-				//Clutch
-				double percentForce = 0.4;
-				triggers->Friction(percentForce);
-			}
-
-			if ((stateFFB > 0x2F) && (stateFFB < 0x40))
-			{
-				//Centering
-				double percentForce = (stateFFB - 47) / 11.0;
-				triggers->Spring(percentForce);
-			}
-
-			if ((stateFFB == 0x40) || (stateFFB == 0x46) || (stateFFB == 0x4A))
-			{
-				if (stateFFB == 0x40)
-				{
-					//Uncentering
-					double percentForce = 0.4;
-					triggers->Rumble(percentForce, percentForce, 100);
-					triggers->Sine(70, 30, percentForce);
-				}
-				else
-				{
-					if (DontSineUntilRaceStart)
-					{
-						//Uncentering
-						double percentForce = 0.4;
-						triggers->Rumble(percentForce, percentForce, 100);
-						triggers->Sine(70, 30, percentForce);
-					}
-				}
-			}
-
-			if ((stateFFB == 0x50) || (stateFFB == 0x5F))
-			{
-				//Roll Left
-				double percentForce = 0.5;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-			else if ((stateFFB == 0x60) || (stateFFB == 0x6F))
-			{
-				//Roll Right
-				double percentForce = 0.5;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-		}
-
-		if (RunningFFB == RacingFullValueActive1) //Mame games using all values 
-		{
-			if (name == wheel)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-			}
-
-			if ((stateFFB > 0x80) && (stateFFB < 0x100))
-			{
-				double percentForce = (256 - stateFFB) / 126.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-			else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-			{
-				double percentForce = (stateFFB) / 126.0;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-		}
-
-		if (RunningFFB == RacingFullValueActive2) //Mame games using all values (reverse direction to above)
-		{
-			if (name == wheel)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-			}
-
-			if ((stateFFB > 0x80) && (stateFFB < 0x100))
-			{
-				double percentForce = (256 - stateFFB) / 126.0;
-				double percentLength = 100;
-				triggers->Rumble(0, percentForce, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			}
-			else if ((stateFFB > 0x00) && (stateFFB < 0x80))
-			{
-				double percentForce = (stateFFB) / 126.0;
-				double percentLength = 100;
-				triggers->Rumble(percentForce, 0, percentLength);
-				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			}
-		}
 
 		if (RunningFFB == LightGunActive) //LightGun Games
 		{
@@ -3792,239 +4009,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 			}
 		}
 
-		if (RunningFFB == MaximumSpeedActive)
-		{
-			if (name == awffb)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-				UINT8 FFB = speedffb(stateFFB);
-
-				if (FFB > 0x00 && FFB < 0x11)
-				{
-					double percentForce = FFB / 16.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-				else if (FFB > 0x10 && FFB < 0x20)
-				{
-					double percentForce = (FFB - 16) / 16.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-			}
-		}
-		
-		if (RunningFFB == NaomiFFBActive)
-		{
-			if (name == m3ffb)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				if (newstateFFB != 0xD0)
-					stateFFB = newstateFFB;
-
-				if (oldstateFFB != stateFFB)
-				{
-					if ((stateFFB > 0xB0 && stateFFB < 0xC0) || stateFFB == 0x9F)
-					{
-						SineEffectState = stateFFB;
-						Effect1 = true;
-					}
-				}
-
-				if (stateFFB > 0x10 && stateFFB < 0x20)
-				{
-					double percentForce = (stateFFB - 10) / 15.0;
-					triggers->Spring(percentForce);
-				}
-
-				if (stateFFB > 0x20 && stateFFB < 0x30)
-				{
-					double percentForce = (stateFFB - 32) / 15.0;
-					triggers->Friction(percentForce);
-				}
-
-				if (stateFFB > 0x30 && stateFFB < 0x40)
-				{
-					double percentForce = (stateFFB - 48) / 15.0;
-					triggers->Rumble(percentForce, percentForce, 100);
-					triggers->Sine(40, 0, percentForce);
-				}
-
-				if (stateFFB > 0x40 && stateFFB < 0x50)
-				{
-					double percentForce = (stateFFB - 64) / 15.0;
-					triggers->Spring(percentForce);
-				}
-
-				if (stateFFB > 0x50 && stateFFB < 0x60)
-				{
-					double percentForce = (stateFFB - 80) / 15.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-
-				if (stateFFB > 0x60 && stateFFB < 0x70)
-				{
-					if (stateFFB != 0x68 && stateFFB != 0x69 && stateFFB != 0x6A && stateFFB != 0x6B)
-					{
-						double percentForce = (stateFFB - 96) / 15.0;
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-				}
-
-				if (stateFFB > 0x80 && stateFFB < 0x90)
-				{
-					double percentForce = (stateFFB - 128) / 15.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-
-				if (stateFFB > 0x90 && stateFFB < 0xA0)
-				{
-					double percentForce = (stateFFB - 144) / 15.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-
-				if (stateFFB > 0xA0 && stateFFB < 0xB0)
-				{
-					double percentForce = (stateFFB - 160) / 15.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-
-				if (stateFFB == 0xBF)
-				{
-					double percentForce = 1.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-
-				if (stateFFB > 0xC0 && stateFFB < 0xD0)
-				{
-					double percentForce = (stateFFB - 192) / 15.0;
-					triggers->Spring(percentForce);
-				}
-
-				if (stateFFB > 0xD0 && stateFFB < 0xE0)
-				{
-					double percentForce = (stateFFB - 208) / 15.0;
-					double percentLength = 100;
-					triggers->Friction(percentForce);
-				}
-
-				if (stateFFB > 0xE0 && stateFFB < 0xE9)
-				{
-					double percentForce = (stateFFB - 224) / 8.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				}
-
-				if (stateFFB > 0xE8 && stateFFB < 0xF0)
-				{
-					double percentForce = (stateFFB - 232) / 8.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				}
-
-				if (Effect1)
-				{
-					++EffectCount;
-
-					if (EffectCount >= 31)
-					{
-						Effect1 = false;
-						EffectCount = 0;
-					}
-
-					double percentForce = (SineEffectState - 176) / 15.0;
-					triggers->Rumble(percentForce, percentForce, 100);
-					triggers->Sine(60, 0, percentForce);
-				}
-
-				if (stateFFB == 0xC0)
-				{
-					triggers->Rumble(0, 0, 100);
-					triggers->Sine(60, 0, 0);
-					triggers->Friction(0);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, 0);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
-				}
-				oldstateFFB = stateFFB;
-			}
-		}
-
-		if (RunningFFB == InitialDActive)
-		{
-			if (name == midiffb)
-			{
-				helpers->log("got value: ");
-				std::string ffs = std::to_string(newstateFFB);
-				helpers->log((char*)ffs.c_str());
-
-				stateFFB = newstateFFB;
-
-				BYTE* ffb = reinterpret_cast<BYTE*>(&stateFFB);
-
-				if (ffb[2] == 0x80 && ffb[0] == 0x01)
-				{
-					triggers->Spring(1.0);
-				}
-
-				if (ffb[2] == 0x85 && ffb[1] > 0x00 && ffb[0] > 0x00)
-				{
-					double percentForce = ffb[0] / 127.0;
-					double Period = ffb[1] / 127.0 * 120.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, percentForce, percentLength);
-					triggers->Sine(static_cast<int>(Period), 0, percentForce);
-				}				
-
-				if (ffb[2] == 0x86 && ffb[0] > 0x00 && ffb[0] < 0x80)
-				{
-					double percentForce = ffb[0] / 127.0;
-					double percentLength = 100;
-					triggers->Spring(percentForce);
-				}
-
-				if (ffb[2] == 0x84 && ffb[0] > 0x00 && ffb[0] < 0x80)
-				{
-					if (ffb[1] == 0x00)
-					{
-						double percentForce = (128 - ffb[0]) / 127.0;
-						double percentLength = 100;
-						triggers->Rumble(percentForce, 0, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-					}
-					else if (ffb[1] == 0x01)
-					{
-						double percentForce = (ffb[0] / 127.0);
-						double percentLength = 100;
-						triggers->Rumble(0, percentForce, percentLength);
-						triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-					}
-				}
-			}
-		}
-
 		if (RunningFFB == RaveRacerActive) //Rave Racer
 		{
 			if (!PatternFind)
@@ -4390,70 +4374,6 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 					triggers->Rumble(percentForce, 0, percentLength);
 					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 				}
-			}
-		}
-
-		if (RunningFFB == HardDrivinActive) //Hard Drivin
-		{
-			if (!HardDrivinFrame)
-			{
-				HardDrivinFrame = true;
-			}
-
-			//if ((frame & 7) == 4)
-			if(frame==4)
-			{
-				
-				HardDrivinFFB = (vals[0] & 15) + ((vals[3] & 7) << 5);
-
-				if ((vals[1] & 0xF0) == 0xF0)
-				{
-					HardDrivinFFB |= 0x10;
-				}
-
-				if ((vals[2] & 0xF0) == 0xF0)
-				{
-					HardDrivinFFB = -HardDrivinFFB;
-				}
-				
-
-				//helpers->log("got value: ");
-				//helpers->log((char*)ffs.c_str());
-
-				//std::string ffs = std::to_string(HardDrivinFFB);
-				//std::string val0 = std::to_string(vals[0]);
-				//std::string val1 = std::to_string(vals[1]);
-				//std::string val2 = std::to_string(vals[2]);
-				//std::string val3 = std::to_string(vals[3]);
-				//std::string val4 = std::to_string(vals[4]);
-				//static char moreTest[256];
-				//memset(moreTest, 0, 256);
-				//sprintf(moreTest, "vals=%s %s %s %s FFS=%s", val0.c_str(), val1.c_str(), val2.c_str(), val3.c_str(), ffs.c_str());
-				//helpers->log((char*)moreTest);
-
-				if (HardDrivinFFB > 100) {
-					HardDrivinFFB = 100;
-				}
-
-				if (HardDrivinFFB < -100) {
-					HardDrivinFFB = -100;
-				}
-
-				if (HardDrivinFFB >= 0)
-					{
-					double percentForce = HardDrivinFFB / 100.0;
-					double percentLength = 100;
-					triggers->Rumble(percentForce, 0, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-				} 
-				else if (HardDrivinFFB < 0)
-				{
-					HardDrivinFFB = -HardDrivinFFB;
-					double percentForce = HardDrivinFFB / 100.0;
-					double percentLength = 100;
-					triggers->Rumble(0, percentForce, percentLength);
-					triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-				} 
 			}
 		}
 	}
