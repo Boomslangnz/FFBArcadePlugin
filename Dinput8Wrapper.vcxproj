@@ -24,6 +24,7 @@
     <ClInclude Include="Common Files\SignatureScanning.h" />
     <ClInclude Include="Config\PersistentValues.h" />
     <ClInclude Include="Game Files\AliensExtermination.h" />
+    <ClInclude Include="Game Files\ArcticThunder.h" />
     <ClInclude Include="Game Files\Batman.h" />
     <ClInclude Include="Game Files\CrazyTaxi.h" />
     <ClInclude Include="Game Files\D1GP.h" />
@@ -83,6 +84,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game Files\AliensExtermination.cpp" />
+    <ClCompile Include="Game Files\ArcticThunder.cpp" />
     <ClCompile Include="Game Files\Batman.cpp" />
     <ClCompile Include="Game Files\CrazyTaxi.cpp" />
     <ClCompile Include="Game Files\D1GP.cpp" />

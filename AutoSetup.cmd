@@ -42,6 +42,9 @@ cd..
 cd Aliens Extermination
 rename dinput8.dll opengl32.dll
 cd..
+cd Arctic Thunder
+rename dinput8.dll d3d9.dll
+cd..
 cd Batman
 rename dinput8.dll d3d11.dll
 cd..

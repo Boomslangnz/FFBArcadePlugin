@@ -102,6 +102,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Transformers.h"
 #include "Game Files/H2Overdrive.h"
 #include "Game Files/StormRacerG.h"
+#include "Game Files/ArcticThunder.h"
 
 // typedefs 
 typedef unsigned char U8;
@@ -1066,6 +1067,7 @@ const int GRID_Custom = 71;
 const int MARIO_KART_GPDX_118_CUSTOM = 72;
 const int SEGA_SHOWDOWN = 73;
 const int SPRING_EFFECT = 74;
+const int ARCTIC_THUNDER = 75;
 
 HINSTANCE Get_hInstance()
 {
@@ -2589,6 +2591,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SPRING_EFFECT:
 		game = new SpringEffect;
+		break;
+	case ARCTIC_THUNDER:
+		game = new ArcticThunder;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
