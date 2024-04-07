@@ -37,12 +37,16 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/BG4JP.h"
 #include "Game Files/ChaseHQ2.h"
 #include "Game Files/CrazyTaxi.h"
+#include "Game Files/CruisnBlast.h"
 #include "Game Files/D1GP.h"
 #include "Game Files/Daytona3.h"
 #include "Game Files/Daytona3NSE.h"
 #include "Game Files/DeadHeat.h"
 #include "Game Files/DeadHeatRiders.h"
 #include "Game Files/DirtyDrivin.h"
+#include "Game Files/FnF.h"
+#include "Game Files/FnFDrift.h"
+#include "Game Files/FnFSuperCars.h"
 #include "Game Files/FordRacing.h"
 #include "Game Files/FordRacingOther.h"
 #include "Game Files/GaelcoTuningRace.h"
@@ -68,6 +72,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/MAMESupermodel.h"
 #include "Game Files/OutRun2Fake.h"
 #include "Game Files/OutRun2Real.h"
+#include "Game Files/SegaRaceTV.h"
 #include "Game Files/SegaRacingClassic.h"
 #include "Game Files/SegaRally3.h"
 #include "Game Files/SegaRally3Other.h"
@@ -1068,6 +1073,11 @@ const int MARIO_KART_GPDX_118_CUSTOM = 72;
 const int SEGA_SHOWDOWN = 73;
 const int SPRING_EFFECT = 74;
 const int ARCTIC_THUNDER = 75;
+const int CRUISN_BLAST = 76;
+const int FNF = 77;
+const int FNF_DRIFT = 78;
+const int FNF_SUPERCARS = 79;
+const int SEGA_RACE_TV = 80;
 
 HINSTANCE Get_hInstance()
 {
@@ -2594,6 +2604,21 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case ARCTIC_THUNDER:
 		game = new ArcticThunder;
+		break;
+	case CRUISN_BLAST:
+		game = new CruisnBlast;
+		break;
+	case FNF:
+		game = new FnF;
+		break;
+	case FNF_DRIFT:
+		game = new FnFDrift;
+		break;
+	case FNF_SUPERCARS:
+		game = new FnFSuperCars;
+		break;
+	case SEGA_RACE_TV:
+		game = new SegaRaceTV;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
