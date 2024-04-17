@@ -52,7 +52,7 @@ cd Battle Gear 4 Tuned
 rename dinput8.dll d3d9.dll
 cd..
 cd Cruisn Blast
-rename dinput8.dll xinput1_3.dll
+rename dinput8.dll winmm.dll
 cd..
 cd Crazy Taxi Steam
 rename dinput8.dll xinput1_3.dll
