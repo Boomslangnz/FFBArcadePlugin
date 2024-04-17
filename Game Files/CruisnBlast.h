@@ -15,8 +15,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #pragma once
 #include "../Common Files/TeknoParrotGame.h"
 
-class CruisnBlast : public TeknoParrotGame {
+class CruisnBlast : public Game {
 public:
-	CruisnBlast() : TeknoParrotGame() { }
 	void FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers);
 };

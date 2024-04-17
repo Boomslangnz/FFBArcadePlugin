@@ -11,9 +11,7 @@ You should have received a copy of the GNU General Public License
 along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 */
 
-#include <string>
 #include "CruisnBlast.h"
-#include <iostream>s
 #include <sstream>
 static bool init;
 
@@ -23,220 +21,77 @@ static Helpers* myHelpers;
 extern int EnableDamper;
 extern int DamperStrength;
 
-static float lastFF;
-static int(__fastcall* Wheel_SetHookOrig)(DWORD thisPtr, DWORD *edx);
-static int __fastcall Wheel_SetHook(DWORD thisPtr, DWORD *edx)
-{
-	//OutputDebugStringA("Wheel_SetHook"); 
+static float lastFF = 0;
 
-	float stackValue;
-	__asm {
-		mov eax, [esp + 4]
-		mov stackValue, eax
+static int(__cdecl* Wheel_SetHookOrig)(float param_1);
+static int __cdecl Wheel_SetHook(float param_1)
+{
+	float puVar1 = myHelpers->ReadFloat32(0x8babbac, false); //menus ffb?! CHECKED COOL
+	float puVar2 = myHelpers->ReadByte(0x8babba8, false); //in game ffb?! //CHECKED seems to just go 0 when off the road
+	//int puVar3 = myHelpers->ReadFloat32(0x8babbb0, false); //ffb effects FLOAT??
+	//int puVar4 = myHelpers->ReadFloat32(0x8babbb4, false);
+	//int puVar5 = myHelpers->ReadFloat32(0x8babbbc, false); //ffb effects
+	//int puVar6 = myHelpers->ReadFloat32(0x8babbb8, false); //ffb effects are running (1 at the start i think)
+	int puVar7 = myHelpers->ReadInt32(0x8babbc0, false); //0 menus, 1 game
+
+	if (puVar7 == 1)
+	{
+		//in game - turn on wheel effects
+		myHelpers->WriteByte(0x9c28504, 1, false);
+		lastFF = param_1;
 	}
-
-		//std::stringstream ss;
-		//ss << "Wheel_SetHook: " << stackValue;
-		//OutputDebugStringA(ss.str().c_str());
-	
-		std::stringstream ss;
-		ss << "Wheel_SetHook: " << thisPtr;
-		OutputDebugStringA(ss.str().c_str());
-
-		//float ff = myHelpers->ReadFloat32(*edx, true);
-		//output the ff value
-		//std::stringstream ss2;
-		//ss2 <<  ff;
-		//OutputDebugStringA(ss2.str().c_str());
-
-	//output thisPtr
-	//std::stringstream ss2;
-	//ss2 << "thisPtr: " << thisPtr;
-	//OutputDebugStringA(ss2.str().c_str());
-
-	//output edx
-	//std::stringstream ss3;
-	//ss3 << "edx: " << edx;
-	//OutputDebugStringA(ss3.str().c_str());
-
-
-	return Wheel_SetHookOrig(thisPtr, edx);
-}
-
-static int(__fastcall* GameWheel_initOrig)();
-static int __fastcall GameWheel_init()
-{
-	//OutputDebugStringA("GameWheel_init");
-	return GameWheel_initOrig();
-}
-
-static int(__fastcall* Wheel_InitOrig)();
-static int __fastcall Wheel_Init()
-{
-	OutputDebugStringA("Wheel_Init");
-	myHelpers->WriteByte(0x8bab744, 1, false);
-	return 1;
-}
-
-static int(__fastcall* Game_diaginitOrig)();
-static int __fastcall Game_diaginit()
-{
-	OutputDebugStringA("Game_diaginit");
-	return Game_diaginitOrig();
-}
-
-static int(__stdcall* Game_adjInitORig)();
-static int __stdcall Game_adjInit()
-{
-	OutputDebugStringA("Game_adjInit");
-
-	//set wheel command line i think
-	myHelpers->WriteIntPtr(0x8bdd9e8, 1, false);
-	//write assembly here to jmp to a function
-	_asm {
-		mov eax, 0x8192960
-		jmp eax
+	else
+	{
+		//not in game turn off wheel effects
+		myHelpers->WriteByte(0x9c28504, 0, false);
+		lastFF = puVar1;
 	}
-	
-
-	return 1;
+	if (lastFF >= 0) {
+		myTriggers->Rumble(0, lastFF, 100.0);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, lastFF);
+	}
+	if (lastFF <= 0) {
+		myTriggers->Rumble(0, lastFF * -1, 100.0);
+		myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, lastFF * -1);
+	}
+	return 0;
 }
 
-static int(__fastcall* DefaultCommandLineArgsOrig)();
-static int __fastcall DefaultCommandLineArgs()
-{
-	OutputDebugStringA("DefaultCommandLineArgs");
-	myHelpers->WriteIntPtr(0x8bdd9e8, 1, false);
-	return DefaultCommandLineArgsOrig();
-}
-static int(__fastcall* PlayerDataTblInitOrig)();
-static int __fastcall PlayerDataTblInit()
-{
-	OutputDebugStringA("PlayerDataTblInit");
-	return PlayerDataTblInitOrig();
-}
 
-static int(__fastcall* GameInitDongleOrig)();
-static int __fastcall GameInitDongle()
-{
-	OutputDebugStringA("GameInitDongle");
-	myHelpers->WriteIntPtr(0x8bdd9e8, 1, false);
-	return GameInitDongleOrig();
-}
 
-//void FUN_08136610(void)
-static int(__fastcall* FUN_08136610Orig)();
-static int __fastcall FUN_08136610()
-{
-	OutputDebugStringA("FUN_08136610");
-	myHelpers->WriteIntPtr(0x8bdd9e8, 1, false);
-	return FUN_08136610Orig();
-}
 void CruisnBlast::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	if (!init)
 	{
-
-
 		DWORD ImageBase = (DWORD)GetModuleHandleA(0);
 
+		if (EnableDamper)
+			triggers->Damper(DamperStrength / 100.0);
 
-		myHelpers->WriteNop(0x8151a02, 1, false);
-		myHelpers->WriteNop(0x8151a02, 1, false);
-		myHelpers->WriteNop(0x8151a0d, 1, false);
-		myHelpers->WriteNop(0x8151a15, 1, false);
-		myHelpers->WriteNop(0x8151a1d, 1, false);
-		myHelpers->WriteNop(0x8151a22, 1, false);
-		myHelpers->WriteNop(0x8151a2a, 1, false);
-		myHelpers->WriteNop(0x8151a32, 1, false);
-		myHelpers->WriteNop(0x8151a3a, 1, false);
-
-		myHelpers->WriteNop(0x8151aa7, 1, false);
-		myHelpers->WriteNop(0x8151ab0, 1, false);
-		myHelpers->WriteNop(0x8151ab6, 1, false);
-		myHelpers->WriteNop(0x8151abc, 1, false);
-
-		myHelpers->WriteNop(0x8151ad7, 1, false);
-		myHelpers->WriteNop(0x8151ae0, 1, false);
-		myHelpers->WriteNop(0x8151ae6, 1, false);
-		myHelpers->WriteNop(0x8151aec, 1, false);
-
-		myHelpers->WriteNop(0x8151b07, 1, false);
-		myHelpers->WriteNop(0x8151b12, 1, false);
-		myHelpers->WriteNop(0x8151b1a, 1, false);
-		myHelpers->WriteNop(0x8151b22, 1, false);
-		myHelpers->WriteNop(0x8151b2a, 1, false);
-		myHelpers->WriteNop(0x8151b32, 1, false);
-		myHelpers->WriteNop(0x8151b3a, 1, false);
-		myHelpers->WriteNop(0x8151b42, 1, false);
-
-		myHelpers->WriteNop(0x8151b87, 1, false);
-		myHelpers->WriteNop(0x8151b90, 1, false);
-		myHelpers->WriteNop(0x8151b96, 1, false);
-		myHelpers->WriteNop(0x8151b9c, 1, false);
-
-		myHelpers->WriteNop(0x8151c1a, 1, false);
-		myHelpers->WriteNop(0x8151c25, 1, false);
-		myHelpers->WriteNop(0x8151c2d, 1, false);
-		myHelpers->WriteNop(0x8151c35, 1, false);
-		myHelpers->WriteNop(0x8151c3d, 1, false);
-		myHelpers->WriteNop(0x8151c45, 1, false);
-		myHelpers->WriteNop(0x8151c4d, 1, false);
-		myHelpers->WriteNop(0x8151c55, 1, false);
-		myHelpers->WriteNop(0x8151c5d, 1, false);
-		myHelpers->WriteNop(0x8151c65, 1, false);
-		myHelpers->WriteNop(0x8151c6d, 1, false);
-		myHelpers->WriteNop(0x8151c75, 1, false);
-
-		myHelpers->WriteNop(0x8151c97, 1, false);
-		myHelpers->WriteNop(0x8151ca0, 1, false);
-		myHelpers->WriteNop(0x8151ca6, 1, false);
-		myHelpers->WriteNop(0x8151cac, 1, false);
-
-		myHelpers->WriteNop(0x8151cca, 1, false);
-		myHelpers->WriteNop(0x8151cd5, 1, false);
-		myHelpers->WriteNop(0x8151cdd, 1, false);
-		myHelpers->WriteNop(0x8151ce5, 1, false);
-		myHelpers->WriteNop(0x8151ced, 1, false);
-		myHelpers->WriteNop(0x8151cf5, 1, false);
-		myHelpers->WriteNop(0x8151cfd, 1, false);
-		myHelpers->WriteNop(0x8151d05, 1, false);
-
-		myHelpers->WriteNop(0x8151d25, 1, false);
-
-		myHelpers->WriteNop(0x8151d4b, 1, false);
-
-		myHelpers->WriteNop(0x8151d6f, 1, false);
+		myHelpers = helpers;
+		myTriggers = triggers;
+		myConstants = constants;
 
 		//set cab type
 		myHelpers->WriteByte(0xa0a7808, 4, false);
 		//enable wheel found
 		//myHelpers->WriteByte(0x8bab744, 1, false);
-		myHelpers->WriteByte(0x8bab748, 1, false);
-
-		//bypass random command line
-		myHelpers->WriteIntPtr(0x8bdd9e8, 1, false);
-		myHelpers->WriteNop(0x81ae870, 1, false);
-
-		OutputDebugStringA("CruisnBlast FFB Loop");
-		init = true; 
 		
+		OutputDebugStringA("CruisnBlast FFB Loop");
 		
 		MH_Initialize();
 		MH_CreateHook((LPVOID)(0x8151b50), Wheel_SetHook, (LPVOID*)&Wheel_SetHookOrig);
-		MH_CreateHook((LPVOID)(0x81519d0), Wheel_Init, (LPVOID*)&Wheel_InitOrig);
-		MH_CreateHook((LPVOID)(0x8192960), GameWheel_init, (LPVOID*)&GameWheel_initOrig);
-		MH_CreateHook((LPVOID)(0x8196850), Game_diaginit, (LPVOID*)&Game_diaginitOrig);
-		MH_CreateHook((LPVOID)(0x8191e40), Game_adjInit, (LPVOID*)&Game_adjInitORig);
-		MH_CreateHook((LPVOID)(0x81ae4c0), DefaultCommandLineArgs, (LPVOID*)&DefaultCommandLineArgsOrig);
-		MH_CreateHook((LPVOID)(0x81d8240), PlayerDataTblInit, (LPVOID*)&PlayerDataTblInitOrig);
-		MH_CreateHook((LPVOID)(0x81af700), GameInitDongle, (LPVOID*)&GameInitDongleOrig);
-		MH_CreateHook((LPVOID)(0x8136610), FUN_08136610, (LPVOID*)&FUN_08136610Orig);
-		//MH_CreateHook((LPVOID)(0x8151b87), Wheel_SetOutHook, (LPVOID*)&Wheel_SetOutHookOrig);
-
-		
+		//remove wheel check for WHEEL_SET function
+		myHelpers->WriteNop(0x8151b61, 2, false);
+		//remove outs for WHEEL_SET function just incase we get there
+		myHelpers->WriteNop(0x8151b90, 1, false);
+		myHelpers->WriteNop(0x8151b96, 1, false);
+		myHelpers->WriteNop(0x8151b9c, 1, false);
+		myHelpers->WriteNop(0x8151b87, 1, false);
 
 		MH_EnableHook(MH_ALL_HOOKS);
+		init = true;
 	}
+
 
 
 }

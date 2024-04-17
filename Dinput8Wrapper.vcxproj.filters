@@ -160,6 +160,11 @@
     <ClCompile Include="Game Files\Showdown.cpp" />
     <ClCompile Include="Game Files\SpringEffect.cpp" />
     <ClCompile Include="Game Files\ArcticThunder.cpp" />
+    <ClCompile Include="Game Files\CruisnBlast.cpp" />
+    <ClCompile Include="Game Files\FnF.cpp" />
+    <ClCompile Include="Game Files\FnFDrift.cpp" />
+    <ClCompile Include="Game Files\FnFSuperCars.cpp" />
+    <ClCompile Include="Game Files\SegaRaceTV.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -401,6 +406,21 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\ArcticThunder.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\CruisnBlast.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\FnF.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\FnFDrift.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\FnFSuperCars.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\SegaRaceTV.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>
