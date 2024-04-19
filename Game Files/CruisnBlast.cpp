@@ -22,6 +22,7 @@ extern int EnableDamper;
 extern int DamperStrength;
 
 static float lastFF = 0;
+static int currentScreen = 0;
 
 static int(__cdecl* Wheel_SetHookOrig)(float param_1);
 static int __cdecl Wheel_SetHook(float param_1)
@@ -36,15 +37,31 @@ static int __cdecl Wheel_SetHook(float param_1)
 
 	if (puVar7 == 1)
 	{
-		//in game - turn on wheel effects
-		myHelpers->WriteByte(0x9c28504, 1, false);
-		lastFF = param_1;
+		if (currentScreen == 0)
+		{
+			//in game - turn on wheel effects
+			myHelpers->WriteByte(0x9c28504, 1, false);
+			currentScreen = 1;
+			lastFF = 0;
+		}
+		else
+		{
+			lastFF = param_1;
+		}
 	}
 	else
 	{
-		//not in game turn off wheel effects
-		myHelpers->WriteByte(0x9c28504, 0, false);
-		lastFF = puVar1;
+		if (currentScreen == 1)
+		{
+			//not in game turn off wheel effects
+			myHelpers->WriteByte(0x9c28504, 0, false);
+			lastFF = 0;
+			currentScreen = 0;
+		}
+		else
+		{
+			lastFF = puVar1;
+		}
 	}
 	if (lastFF >= 0) {
 		myTriggers->Rumble(0, lastFF, 100.0);
@@ -56,7 +73,6 @@ static int __cdecl Wheel_SetHook(float param_1)
 	}
 	return 0;
 }
-
 
 
 void CruisnBlast::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
