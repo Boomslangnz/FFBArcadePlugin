@@ -53,6 +53,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/GRIDReal.h"
 #include "Game Files/GRIDCustom.h"
 #include "Game Files/GoldenGun.h"
+#include "Game Files/HummerExtreme.h"
 #include "Game Files/InitialD0v131.h"
 #include "Game Files/InitialD0v211.h"
 #include "Game Files/InitialD0v230.h"
@@ -1078,6 +1079,7 @@ const int FNF = 77;
 const int FNF_DRIFT = 78;
 const int FNF_SUPERCARS = 79;
 const int SEGA_RACE_TV = 80;
+const int HUMMER_EXTREME = 81;
 
 HINSTANCE Get_hInstance()
 {
@@ -2619,6 +2621,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SEGA_RACE_TV:
 		game = new SegaRaceTV;
+		break;
+	case HUMMER_EXTREME:
+		game = new HummerExtreme;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:
