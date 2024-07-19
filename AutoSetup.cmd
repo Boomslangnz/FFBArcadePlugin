@@ -8,6 +8,8 @@ xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v211" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D Zero v211" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D Zero v230" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D Zero v230" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Initial D The Arcade v231" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Initial D The Arcade v231" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\Sega World Drivers Championship 2018" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\Sega World Drivers Championship 2018" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\MAME 64bit Outputs" /Y
@@ -84,17 +86,11 @@ cd..
 cd Dirty Drivin'
 rename dinput8.dll d3d9.dll
 cd..
-cd FnF
-rename dinput8.dll dinput8.dll
-cd..
-cd FnFDrift
-rename dinput8.dll dinput8.dll
-cd..
-cd FnFSuperCars
-rename dinput8.dll dinput8.dll
-cd..
 cd H2Overdrive
 rename dinput8.dll d3d9.dll
+cd..
+cd Hummer Extreme
+rename dinput8.dll winmm.dll
 cd..
 cd HOTD4
 rename dinput8.dll opengl32.dll

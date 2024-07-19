@@ -165,6 +165,8 @@
     <ClCompile Include="Game Files\FnFDrift.cpp" />
     <ClCompile Include="Game Files\FnFSuperCars.cpp" />
     <ClCompile Include="Game Files\SegaRaceTV.cpp" />
+    <ClCompile Include="Game Files\IDTAv231.cpp" />
+    <ClCompile Include="Game Files\HummerExtreme.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game Files\Daytona3.h">
@@ -421,6 +423,12 @@
       <Filter>Common Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Game Files\SegaRaceTV.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\IDTAv231.h">
+      <Filter>Common Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Game Files\HummerExtreme.h">
       <Filter>Common Header Files</Filter>
     </ClInclude>
   </ItemGroup>

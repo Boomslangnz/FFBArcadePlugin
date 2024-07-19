@@ -92,8 +92,6 @@ void CruisnBlast::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTr
 		//enable wheel found
 		//myHelpers->WriteByte(0x8bab744, 1, false);
 		
-		OutputDebugStringA("CruisnBlast FFB Loop");
-		
 		MH_Initialize();
 		MH_CreateHook((LPVOID)(0x8151b50), Wheel_SetHook, (LPVOID*)&Wheel_SetHookOrig);
 		//remove wheel check for WHEEL_SET function

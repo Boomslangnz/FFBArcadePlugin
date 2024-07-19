@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Brought to you by Boomslangnz, Ducon2016, Spazzy, Adam_, jpb & pinkimo.
+Brought to you by Boomslangnz, MightyMike, Ducon2016, Spazzy, Adam_, jpb & pinkimo.
 
 This is a plugin to provide Force Feedback and Rumble to various arcade games.
 
@@ -95,8 +95,8 @@ MAME:
 -California Speed
 -Chase Bombers
 -Cisco Heat
--Crusn'USA
--Crusn' World
+-Cruisn'USA
+-Cruisn' World
 -Daytona USA
 -F-1 Grand Prix Star
 -F-1 Grand Prix Star II
@@ -195,17 +195,22 @@ TEKNOPARROT:
 -Batman (2013)
 -Battle Gear 4 Tuned (Japan version v2.07)
 -ChaseHQ 2
+-Cruisn' Blast
 -Daytona Championship USA
 -Daytona Championship USA New Season Edition
 -Dead Heat
 -Dead Heat Riders
 -Dirty Drivin
 -Ford Racing
+-FNF
+-FNF Drift
+-FNF Supercars
 -Gaelco Tuning Race
 -Golden Gun
 -GRID
 -GTI Club Supermini Festa
 -House of the dead 4
+-Hummer Extreme
 -Initial D Arcade Stage 4
 -Initial D Arcade Stage 4 Japan
 -Initial D Arcade Stage 5
@@ -213,6 +218,7 @@ TEKNOPARROT:
 -Initial D Arcade Stage 7
 -Initial D Arcade Stage 8
 -Initial D Arcade Stage Zero
+-Initial D Arcade The Arcade v2.31
 -KO Drive
 -Let's Go Island
 -Let's Go Island 3D

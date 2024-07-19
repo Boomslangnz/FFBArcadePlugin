@@ -63,6 +63,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/InitialD6.h"
 #include "Game Files/InitialD7.h"
 #include "Game Files/InitialD8.h"
+#include "Game Files/IDTAv231.h"
 #include "Game Files/MarioKartGPDXCustom.h"
 #include "Game Files/MarioKartGPDX1.10Custom.h"
 #include "Game Files/MarioKartGPDX1.10Real.h"
@@ -1080,6 +1081,7 @@ const int FNF_DRIFT = 78;
 const int FNF_SUPERCARS = 79;
 const int SEGA_RACE_TV = 80;
 const int HUMMER_EXTREME = 81;
+const int INITIAL_D_THEARCADE_V231 = 82;
 
 HINSTANCE Get_hInstance()
 {
@@ -2624,6 +2626,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case HUMMER_EXTREME:
 		game = new HummerExtreme;
+		break;
+	case INITIAL_D_THEARCADE_V231:
+		game = new InitialDTA231;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

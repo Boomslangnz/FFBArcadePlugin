@@ -25,7 +25,6 @@ extern int ForceSpringStrength;
 void SegaRaceTV::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 	if (!init)
 	{
-		OutputDebugStringA("SegaRaceTV::FFBLoop");
 		//enable IO calls
 		helpers->WriteIntPtr(0x8b3fe90, 0x1, true);
 		init = true;
@@ -42,9 +41,9 @@ void SegaRaceTV::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 	{
 		double percentForce = ((128.0 - ff) / 127.0);
 
-		std::ostringstream ss;
-		ss << "LEFT: " << percentForce << " FF: " << ff;
-		OutputDebugStringA(ss.str().c_str());
+		//std::ostringstream ss;
+		//ss << "LEFT: " << percentForce << " FF: " << ff;
+		//OutputDebugStringA(ss.str().c_str());
 
 
 		
@@ -54,9 +53,9 @@ void SegaRaceTV::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTri
 	else if (ff > 128)
 	{
 		double percentForce = ((ff - 128.0) / 127.0);
-		std::ostringstream ss;
-		ss << "RIGHT: " << percentForce << " FF: " << ff;
-		OutputDebugStringA(ss.str().c_str());
+		//std::ostringstream ss;
+		//ss << "RIGHT: " << percentForce << " FF: " << ff;
+		//OutputDebugStringA(ss.str().c_str());
 		triggers->Rumble(percentForce, 0, 100.0);
 		triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
 	}
