@@ -44,6 +44,7 @@ void InitialD0v211::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		triggers->Damper(DamperStrength / 100.0);
 
 	DWORD FFB = helpers->ReadInt32(0x18A720C, true);
+	WORD FFBStr = helpers->ReadWord(0x18A720E, true);
 
 	BYTE* ffb = reinterpret_cast<BYTE*>(&FFB);
 
@@ -52,34 +53,34 @@ void InitialD0v211::FFBLoop(EffectConstants* constants, Helpers* helpers, Effect
 		triggers->Spring(1.0);
 	}
 
-	if (ffb[0] == 0x85 && ffb[1] > 0x00 && ffb[2] > 0x00)
+	if (ffb[0] == 0x85 && ffb[1] > 0x00 && FFBStr > 0x00)
 	{
-		double percentForce = ffb[2] / 127.0;
+		double percentForce = FFBStr / 32767.0;
 		double Period = ffb[1] / 127.0 * 120.0;
 		double percentLength = 100;
 		triggers->Rumble(percentForce, percentForce, percentLength);
 		triggers->Sine(static_cast<int>(Period), 0, percentForce);
 	}
 
-	if (ffb[0] == 0x86 && ffb[2] > 0x00)
+	if (ffb[0] == 0x86 && FFBStr)
 	{
-		double percentForce = ffb[2] / 127.0;
+		double percentForce = FFBStr / 32767.0;
 		double percentLength = 100;
 		triggers->Spring(percentForce);
 	}
 
-	if (ffb[0] == 0x84 && ffb[2] > 0x00)
+	if (ffb[0] == 0x84 && FFBStr > 0x00)
 	{
 		if (ffb[1] == 0x00)
 		{
-			double percentForce = (128 - ffb[2]) / 127.0;
+			double percentForce = (32767.0 - FFBStr) / 32767.0;
 			double percentLength = 100;
 			triggers->Rumble(percentForce, 0, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 		}
 		else if (ffb[1] == 0x01)
 		{
-			double percentForce = (ffb[2] / 127.0);
+			double percentForce = (FFBStr / 32767.0);
 			double percentLength = 100;
 			triggers->Rumble(0, percentForce, percentLength);
 			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
