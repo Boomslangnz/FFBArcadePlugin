@@ -81,6 +81,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/Showdown.h"
 #include "Game Files/SnoCross.h"
 #include "Game Files/WackyRaces.h"
+#include "Game Files/WastelandRacers2071.h"
 #include "Game Files/WMMT3.h"
 #include "Game Files/WMMT5.h"
 #include "Game Files/WMMT5DX.h"
@@ -1082,6 +1083,7 @@ const int FNF_SUPERCARS = 79;
 const int SEGA_RACE_TV = 80;
 const int HUMMER_EXTREME = 81;
 const int INITIAL_D_THEARCADE_V231 = 82;
+const int WASTELAND_RACERS_2071 = 83;
 
 HINSTANCE Get_hInstance()
 {
@@ -2629,6 +2631,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case INITIAL_D_THEARCADE_V231:
 		game = new InitialDTA231;
+		break;
+	case WASTELAND_RACERS_2071:
+		game = new WasteLandRacers2071;
 		break;
 	case TEST_GAME_CONST:
 	case TEST_GAME_FRICTION:

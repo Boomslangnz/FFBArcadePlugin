@@ -76,6 +76,7 @@
     <ClInclude Include="Game Files\StormRacerG.h" />
     <ClInclude Include="Game Files\SWDC2018.h" />
     <ClInclude Include="Game Files\TokyoCop.h" />
+    <ClInclude Include="Game Files\WastelandRacers2071.h" />
     <ClInclude Include="Game Files\WMMT3.h" />
     <ClInclude Include="Game Files\WMMT5DX+.h" />
     <ClInclude Include="Game Files\WMMT5DX.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="Game Files\TokyoCop.cpp" />
     <ClCompile Include="Game Files\Transformers.cpp" />
     <ClCompile Include="Game Files\WackyRaces.cpp" />
+    <ClCompile Include="Game Files\WastelandRacers2071.cpp" />
     <ClCompile Include="Game Files\WMMT3.cpp" />
     <ClCompile Include="Game Files\WMMT5.cpp" />
     <ClCompile Include="Game Files\InitialD4Japan.cpp" />
