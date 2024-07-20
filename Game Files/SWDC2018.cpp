@@ -80,9 +80,6 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 
 		BYTE* ffb = reinterpret_cast<BYTE*>(&FFB);
 
-		if (EnableDamper)
-			triggers->Damper(DamperStrength / 100.0);
-
 		if (ffb[0] == 0x80 && ffb[2] == 0x01)
 		{
 			triggers->Spring(1.0);
