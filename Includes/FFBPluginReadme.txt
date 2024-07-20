@@ -240,6 +240,7 @@ TEKNOPARROT:
 -Tokyo Cop
 -Transformers: Human Alliance
 -Wacky Races
+-Wasteland Racers 2071
 -Wangan Midnight Maximum Tune 3
 -Wangan Midnight Maximum Tune 3DX+
 -Wangan Midnight Maximum Tune 5
