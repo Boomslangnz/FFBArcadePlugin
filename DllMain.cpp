@@ -1572,6 +1572,10 @@ void TriggerSineEffect(UINT16 period, UINT16 fadePeriod, double strength)
 	long long elapsedTime = (std::chrono::duration_cast<std::chrono::milliseconds>(now - timeOfLastSineEffect)).count();
 
 	int direction = 1;
+
+	if (period < 1)
+		return;
+
 	if (strength < -0.001) {
 		strength *= -1;
 		direction = -1;
