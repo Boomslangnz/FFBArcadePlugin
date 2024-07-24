@@ -22,8 +22,11 @@ extern int EnableDamper;
 extern int DamperStrength;
 
 bool init = false;
-extern int EnableDamper;
-extern int DamperStrength;
+
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int ViosityStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViosityStrength"), 100, settingsFilename);
+static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 100, settingsFilename);
+
 
 static void(__cdecl* clSteerDualDeviceSetTRQCurveHalfPointOrig)(void* thisParam, int param_1, float param_2, float param_3);
 static void __cdecl clSteerDualDeviceSetTRQCurveHalfPoint(void* thisParam, int param_1, float param_2, float param_3) {
@@ -39,13 +42,15 @@ static void __cdecl clSteerDualDeviceSetVibrate(void* thisParam, int param_1, fl
 
 static void(__cdecl* clSteerDualDeviceSetViscosityOrig)(void* thisParam, int param_1, float param_2, float param_3);
 static void __cdecl clSteerDualDeviceSetViscosity(void* thisParam, int param_1, float param_2, float param_3) {
-	myTriggers->Friction((double)param_2);
+	double percentForce = (double)param_2 * (ViosityStrength / 100.0);
+	myTriggers->Friction(percentForce);
 	return clSteerDualDeviceSetViscosityOrig(thisParam, param_1, param_2, param_3);
 }
 
 static void(__cdecl* clSteerDualDeviceInitCenterOrig)(void* thisParam, int param_1, unsigned char param_2);
 static void __cdecl clSteerDualDeviceInitCenter(void* thisParam, int param_1, unsigned char param_2) {
-	myTriggers->Springi(param_2);
+	double percentForce = (double)param_2 * (SpringStrength / 100.0);
+	myTriggers->Springi(percentForce);
 	return clSteerDualDeviceInitCenterOrig(thisParam, param_1, param_2);
 }
 
