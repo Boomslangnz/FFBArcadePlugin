@@ -82,6 +82,7 @@
     <ClInclude Include="Game Files\WMMT5DX.h" />
     <ClInclude Include="Game Files\WMMT6.h" />
     <ClInclude Include="Game Files\WMMT6R.h" />
+    <ClInclude Include="Game Files\WMMT6RR.h" />
     <ClInclude Include="resource.h" />
     <None Include="Config\FFBPlugin.ini">
       <FileType>Document</FileType>
@@ -177,6 +178,7 @@
     <ClCompile Include="Game Files\WMMT5DX.cpp" />
     <ClCompile Include="Game Files\WMMT6.cpp" />
     <ClCompile Include="Game Files\WMMT6R.cpp" />
+    <ClCompile Include="Game Files\WMMT6RR.cpp" />
     <ClCompile Include="IDirectInputDevice.cpp" />
     <ClCompile Include="Game Files\MarioKartGPDX1.10Custom.cpp" />
     <ClCompile Include="Game Files\InitialD5.cpp" />

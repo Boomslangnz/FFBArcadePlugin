@@ -1,9 +1,17 @@
-# FFB Arcade Plugin
+# FFB Arcade Plugin - WMMT6RR
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy, Adam_, jpb & pinkimo.
 
-This is a plugin to provide Force Feedback and Rumble to various arcade games.
+6RR version brought to you by Rocco.
 
+This is a plugin to provide Force Feedback and Rumble to various arcade games, including WMMT6RR.
+
+## Changelog in 6RR ver:
+
+- Temporarily removed Additional Fake Effects from 6R due to DLL memory access issue
+- Add Reverse Collision option
+- Add Reverse Tires Slip option
+- Have fun ;)
 
 ## Requirements
 
@@ -238,3 +246,4 @@ extremely generous.
 - Wangan Midnight Maximum Tune 5DX+
 - Wangan Midnight Maximum Tune 6
 - Wangan Midnight Maximum Tune 6R
+- Wangan Midnight Maximum Tune 6RR
