@@ -136,6 +136,9 @@ cd..
 cd R-Tuned
 rename dinput8.dll opengl32.dll
 cd..
+cd "Sega Race TV"
+rename dinput8.dll opengl32.dll
+cd..
 cd "Sega World Drivers Championship 2018"
 rename dinput8.dll d3d11.dll
 cd..
