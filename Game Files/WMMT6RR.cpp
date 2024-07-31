@@ -23,7 +23,7 @@ static Helpers* myHelpers;
 extern SDL_Event e;
 static UINT8 oldgear = 0;
 static bool init = false;
-static bool gameFfbStarted = false;
+// static bool gameFfbStarted = false;
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 100, settingsFilename);
 static int FrictionStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("FrictionStrength"), 0, settingsFilename);
@@ -158,9 +158,10 @@ void WMMT6RR::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 	float collisions = helpers->ReadFloat32(0x1F2526C, true);
 	float tiresSlip = helpers->ReadFloat32(0x1F25260, true);
 	int speed = helpers->ReadInt32(0x1F2612C, true);
+	int rpm = helpers->ReadInt32(0x1F2629C, true);
 	std::string msg = "spring: " + std::to_string(spring) + " | friction: " + std::to_string(friction)
 		+ " | collisions: " + std::to_string(collisions) + " | tires slip: " + std::to_string(tiresSlip)
-		+ " | speed: " + std::to_string(speed);
+		+ " | speed: " + std::to_string(speed)+ " | rpm: " +std::to_string(rpm);
 	helpers->log((char*)msg.c_str());
 	if(ReverseCollision)
 	{
@@ -177,7 +178,7 @@ void WMMT6RR::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 	}
 
 	double percentForce;
-	if (0.001 > spring && !gameFfbStarted)
+	if (!rpm && !speed)
 	{
 		helpers->log("fake spring+friction until game's FFB starts");
 		percentForce = 0.3 * SpringStrength / 100.0;
@@ -187,81 +188,78 @@ void WMMT6RR::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigge
 	}
 	else
 	{
-		if (!gameFfbStarted)
-		{
-			helpers->log("game's FFB started");
-			gameFfbStarted = true;
-		}
+		helpers->log("game's FFB started");
 		percentForce = (1.0 * spring) * SpringStrength / 100.0;
 		triggers->Spring(percentForce);
 		percentForce = (1.0 * friction) * FrictionStrength / 100.0;
 		triggers->Friction(percentForce);
-	}
-
-	if (0 < collisions)
-	{
-		if (0.209 <= collisions && 0.311 >= collisions)
+		if (0 < collisions)
 		{
-			helpers->log("joint/stripe on the right");
-			percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
-			triggers->Sine(80, 80, percentForce);
-			triggers->Rumble(0, percentForce, 150);
+			if (0.209 <= collisions && 0.311 >= collisions)
+			{
+				helpers->log("joint/stripe on the right");
+				percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
+				triggers->Sine(80, 80, percentForce);
+				triggers->Rumble(0, percentForce, 150);
+			}
+			else
+			{
+				helpers->log("collision on the right");
+				percentForce = (1.0 * collisions) * CollisionsStrength / 100.0;
+				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
+				triggers->Rumble(0, percentForce, 150);
+			}
+		}
+		else if (0 > collisions)
+		{
+			if (-0.209 >= collisions && -0.311 <= collisions)
+			{
+				helpers->log("joint/stripe on the left");
+				percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
+				triggers->Sine(80, 80, percentForce);
+				triggers->Rumble(0, -1.0 * percentForce, 150);
+			}
+			else
+			{
+				helpers->log("collision on the left");
+				percentForce = (-1.0 * collisions) * CollisionsStrength / 100.0;
+				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
+				triggers->Rumble(0, percentForce, 150);
+			}
 		}
 		else
 		{
-			helpers->log("collision on the right");
-			percentForce = (1.0 * collisions) * CollisionsStrength / 100.0;
-			triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);
-			triggers->Rumble(0, percentForce, 150);
+			helpers->log("resetting collision");
+			triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
 		}
-	}
-	else if (0 > collisions)
-	{
-		if (-0.209 >= collisions && -0.311 <= collisions)
+	
+		if (0 < tiresSlip)
 		{
-			helpers->log("joint/stripe on the left");
-			percentForce = (1.0 * collisions) * JointsAndStripesStrength / 100.0;
-			triggers->Sine(80, 80, percentForce);
-			triggers->Rumble(0, -1.0 * percentForce, 150);
+			helpers->log("tires slip left");
+			bool highSpeedVibrations = (294 <= speed) && (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
+			percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
+			triggers->Sine(100, 100, percentForce);
+	
+			if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
+			{
+				triggers->Rumble(0, -1.0 * percentForce, 150);
+			}
 		}
-		else
+		else if (0 > tiresSlip)
 		{
-			helpers->log("collision on the left");
-			percentForce = (-1.0 * collisions) * CollisionsStrength / 100.0;
-			triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
-			triggers->Rumble(0, percentForce, 150);
+			helpers->log("tires slip right");
+			bool highSpeedVibrations = (294 <= speed) && (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
+			percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
+			triggers->Sine(100, 100, percentForce);
+	
+			if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
+			{
+				triggers->Rumble(0, percentForce, 150);
+			}
 		}
-	}
-	else
-	{
-		helpers->log("resetting collision");
-		triggers->Constant(constants->DIRECTION_FROM_LEFT, 0);
 	}
 
-	if (0 < tiresSlip)
-	{
-		helpers->log("tires slip left");
-		bool highSpeedVibrations = (294 <= speed) && (1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
-		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
-		triggers->Sine(100, 100, percentForce);
-
-		if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
-		{
-			triggers->Rumble(0, -1.0 * percentForce, 150);
-		}
-	}
-	else if (0 > tiresSlip)
-	{
-		helpers->log("tires slip right");
-		bool highSpeedVibrations = (294 <= speed) && (-1.0 * tiresSlip) < (LimitBetweenHighSpeedVibrationsAndTiresSlip / 1000.0);
-		percentForce = (-1.0 * tiresSlip) * (highSpeedVibrations ? HighSpeedVibrationsStrength : TiresSlipStrength) / 100.0;
-		triggers->Sine(100, 100, percentForce);
-
-		if (!highSpeedVibrations && ((0 == JointsAndStripesStrength && 0 == CollisionsStrength) || (0.001 > collisions && -0.001 < collisions)))
-		{
-			triggers->Rumble(0, percentForce, 150);
-		}
-	}
+	
 /* TODO
 	INT_PTR ptr1 = helpers->ReadIntPtr(0x20681C0, true);	//Wg6Enma_Release_IDL0.dll+29B3E0
 	UINT8 gear = helpers->ReadByte(ptr1 + 0x3AC, false);	//ptr1 + 0x3A8

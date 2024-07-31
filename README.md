@@ -1,17 +1,9 @@
-# FFB Arcade Plugin - WMMT6RR
+# FFB Arcade Plugin
 
 Brought to you by Boomslangnz, Ducon2016, Spazzy, Adam_, jpb & pinkimo.
 
-6RR version brought to you by Rocco.
+This is a plugin to provide Force Feedback and Rumble to various arcade games.
 
-This is a plugin to provide Force Feedback and Rumble to various arcade games, including WMMT6RR.
-
-## Changelog in 6RR ver:
-
-- Temporarily removed Additional Fake Effects from 6R due to DLL memory access issue
-- Add Reverse Collision option
-- Add Reverse Tires Slip option
-- Have fun ;)
 
 ## Requirements
 
@@ -90,6 +82,8 @@ extremely generous.
 - POOTERMAN for making logo on GUI
 
 - headkaze for making MAMEInterOp SDK
+
+- Rocco for WMMT6RR FFB.
 
 - Everyone who helps and gives back to this awesome scene. Thanks for everything!
 
