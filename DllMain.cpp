@@ -53,6 +53,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/GRIDReal.h"
 #include "Game Files/GRIDCustom.h"
 #include "Game Files/GoldenGun.h"
+#include "Game Files/Hummer.h"
 #include "Game Files/HummerExtreme.h"
 #include "Game Files/InitialD0v131.h"
 #include "Game Files/InitialD0v211.h"
@@ -1084,7 +1085,7 @@ const int SEGA_RACE_TV = 80;
 const int HUMMER_EXTREME = 81;
 const int INITIAL_D_THEARCADE_V231 = 82;
 const int WASTELAND_RACERS_2071 = 83;
-
+const int HUMMER = 84;
 HINSTANCE Get_hInstance()
 {
 	MEMORY_BASIC_INFORMATION mbi;
@@ -2625,6 +2626,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case SEGA_RACE_TV:
 		game = new SegaRaceTV;
+		break;
+	case HUMMER:
+		game = new Hummer;
 		break;
 	case HUMMER_EXTREME:
 		game = new HummerExtreme;

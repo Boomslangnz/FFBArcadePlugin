@@ -43,6 +43,7 @@
     <ClInclude Include="Game Files\GRIDReal.h" />
     <ClInclude Include="Game Files\H2Overdrive.h" />
     <ClInclude Include="Game Files\HOTD4.h" />
+    <ClInclude Include="Game Files\Hummer.h" />
     <ClInclude Include="Game Files\HummerExtreme.h" />
     <ClInclude Include="Game Files\IDTAv231.h" />
     <ClInclude Include="Game Files\InitialD0v131.h" />
@@ -116,6 +117,7 @@
     <ClCompile Include="Game Files\GRIDReal.cpp" />
     <ClCompile Include="Game Files\H2Overdrive.cpp" />
     <ClCompile Include="Game Files\HOTD4.cpp" />
+    <ClCompile Include="Game Files\Hummer.cpp" />
     <ClCompile Include="Game Files\HummerExtreme.cpp" />
     <ClCompile Include="Game Files\IDTAv231.cpp" />
     <ClCompile Include="Game Files\InitialD0v131.cpp" />
