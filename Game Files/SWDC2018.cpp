@@ -22,6 +22,7 @@ static bool Version103;
 static bool Version230;
 
 static DWORD FFB;
+static WORD FFBStr;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int EscapeKeyExitViaPlugin = GetPrivateProfileInt(TEXT("Settings"), TEXT("EscapeKeyExitViaPlugin"), 0, settingsFilename);
@@ -70,10 +71,16 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 	else
 	{
 		if (Version103)
+		{
 			FFB = helpers->ReadInt32(0x8E5CCF4, true);
+			FFBStr = helpers->ReadWord(0x8E5CCF6, true);
+		}
 
 		if (Version230)
+		{
 			FFB = helpers->ReadInt32(0x9BC7B18, true);
+			FFBStr = helpers->ReadWord(0x9BC7B1A, true);
+		}
 
 		if (EnableDamper)
 			triggers->Damper(DamperStrength / 100.0);
@@ -85,34 +92,34 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 			triggers->Spring(1.0);
 		}
 
-		if (ffb[0] == 0x85 && ffb[1] > 0x00 && ffb[2] > 0x00)
+		if (ffb[0] == 0x85 && ffb[1] > 0x00 && FFBStr > 0x00)
 		{
-			double percentForce = ffb[2] / 127.0;
+			double percentForce = FFBStr / 32767.0;
 			double Period = ffb[1] / 127.0 * 120.0;
 			double percentLength = 100;
 			triggers->Rumble(percentForce, percentForce, percentLength);
 			triggers->Sine(static_cast<int>(Period), 0, percentForce);
 		}
 
-		if (ffb[0] == 0x86 && ffb[2] > 0x00)
+		if (ffb[0] == 0x86 && FFBStr)
 		{
-			double percentForce = ffb[2] / 127.0;
+			double percentForce = FFBStr / 32767.0;
 			double percentLength = 100;
 			triggers->Spring(percentForce);
 		}
 
-		if (ffb[0] == 0x84 && ffb[2] > 0x00)
+		if (ffb[0] == 0x84 && FFBStr > 0x00)
 		{
 			if (ffb[1] == 0x00)
 			{
-				double percentForce = (128 - ffb[2]) / 127.0;
+				double percentForce = (32767.0 - FFBStr) / 32767.0;
 				double percentLength = 100;
 				triggers->Rumble(percentForce, 0, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_LEFT, percentForce);
 			}
-			else if(ffb[1] == 0x01)
+			else if (ffb[1] == 0x01)
 			{
-				double percentForce = (ffb[2] / 127.0);
+				double percentForce = (FFBStr / 32767.0);
 				double percentLength = 100;
 				triggers->Rumble(0, percentForce, percentLength);
 				triggers->Constant(constants->DIRECTION_FROM_RIGHT, percentForce);

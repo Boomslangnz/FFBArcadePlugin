@@ -78,6 +78,14 @@ UINT8 Helpers::WriteByte(INT_PTR offset, UINT8 val, bool isRelativeOffset)
 	return val;
 }
 
+WORD Helpers::WriteWord(INT_PTR offset, WORD val, bool isRelativeOffset)
+{
+	SIZE_T written;
+	LPVOID trueOffset = (isRelativeOffset ? GetTranslatedOffset(offset) : (LPVOID)offset);
+	WriteProcessMemory(GetCurrentProcess(), trueOffset, &val, sizeof(WORD), &written);
+	return val;
+}
+
 INT_PTR Helpers::WriteIntPtr(INT_PTR offset, INT_PTR val, bool isRelativeOffset)
 {
 	SIZE_T written;
@@ -120,6 +128,15 @@ INT_PTR Helpers::ReadIntPtr(INT_PTR offset, bool isRelativeOffset)
 	LPVOID trueOffset = (isRelativeOffset ? GetTranslatedOffset(offset) : (LPVOID)offset);
 	INT_PTR val;
 	ReadProcessMemory(GetCurrentProcess(), trueOffset, &val, sizeof(INT_PTR), &read);
+	return val;
+};
+
+WORD Helpers::ReadWord(INT_PTR offset, bool isRelativeOffset)
+{
+	SIZE_T read;
+	LPVOID trueOffset = (isRelativeOffset ? GetTranslatedOffset(offset) : (LPVOID)offset);
+	WORD val;
+	ReadProcessMemory(GetCurrentProcess(), trueOffset, &val, sizeof(WORD), &read);
 	return val;
 };
 
