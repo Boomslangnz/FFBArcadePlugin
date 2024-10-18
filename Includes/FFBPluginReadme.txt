@@ -1,6 +1,6 @@
 ***FFB Arcade Plugin***
 
-Brought to you by Boomslangnz, MightyMike, Ducon2016, Spazzy, Adam_, jpb & pinkimo.
+Brought to you by Boomslangnz, MightyMike, Ducon2016, Spazzy, Adam_, jpb, Rocco & pinkimo.
 
 This is a plugin to provide Force Feedback and Rumble to various arcade games.
 
@@ -79,6 +79,8 @@ extremely generous.
 - POOTERMAN for making logo on GUI
 
 - headkaze for making MAMEInterOp SDK
+
+- Rocco for WMMT6RR FFB.
 
 - Everyone who helps and gives back to this awesome scene. Thanks for everything!
 

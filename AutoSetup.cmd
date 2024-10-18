@@ -32,6 +32,8 @@ xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT6" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT6" /Y
 xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT6R" /Y
 xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT6R" /Y
+xcopy ".\Release.x64\dinput8.dll" ".\Release.Win32\WMMT6RR" /Y
+xcopy ".\Release.x64\SDL2.dll" ".\Release.Win32\WMMT6RR" /Y
 xcopy ".\MAME32.dll" ".\Release.Win32\MAME 32bit Outputs" /Y
 xcopy ".\MAME64.dll" ".\Release.Win32\MAME 64bit Outputs" /Y
 xcopy ".\MAME32.dll" ".\Release.Win32\Supermodel 32bit Outputs" /Y
@@ -134,6 +136,9 @@ cd..
 cd R-Tuned
 rename dinput8.dll opengl32.dll
 cd..
+cd "Sega Race TV"
+rename dinput8.dll opengl32.dll
+cd..
 cd "Sega World Drivers Championship 2018"
 rename dinput8.dll d3d11.dll
 cd..
@@ -171,6 +176,9 @@ cd WMMT6
 rename dinput8.dll d3d11.dll
 cd..
 cd WMMT6R
+rename dinput8.dll d3d11.dll
+cd..
+cd WMMT6RR
 rename dinput8.dll d3d11.dll
 cd..
 del dinput8.exp

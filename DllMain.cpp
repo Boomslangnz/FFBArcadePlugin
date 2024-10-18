@@ -89,6 +89,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/WMMT5DX+.h"
 #include "Game Files/WMMT6.h"
 #include "Game Files/WMMT6R.h"
+#include "Game Files/WMMT6RR.h"
 #include "Game Files/Machstorm.h"
 #include "Game Files/AfterburnerClimax.h"
 #include "Game Files/PokkenTournament.h"
@@ -1085,7 +1086,8 @@ const int SEGA_RACE_TV = 80;
 const int HUMMER_EXTREME = 81;
 const int INITIAL_D_THEARCADE_V231 = 82;
 const int WASTELAND_RACERS_2071 = 83;
-const int HUMMER = 84;
+const int WMMT_6_RR = 84;
+const int HUMMER = 85;
 HINSTANCE Get_hInstance()
 {
 	MEMORY_BASIC_INFORMATION mbi;
@@ -2567,6 +2569,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case WMMT_6_R:
 		game = new WMMT6R;
+		break;
+	case WMMT_6_RR:
+		game = new WMMT6RR;
 		break;
 	case SRG:
 		game = new StormRacerG;
