@@ -213,6 +213,7 @@ TEKNOPARROT:
 -GTI Club Supermini Festa
 -House of the dead 4
 -Hummer Extreme
+-Hummer
 -Initial D Arcade Stage 4
 -Initial D Arcade Stage 4 Japan
 -Initial D Arcade Stage 5
