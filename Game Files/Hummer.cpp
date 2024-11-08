@@ -22,8 +22,6 @@ extern int EnableDamper;
 extern int DamperStrength;
 
 static bool init = false;
-extern int EnableDamper;
-extern int DamperStrength;
 
 static void(__cdecl* clSteerDualDeviceSetTRQCurveHalfPointOrig)(void* thisParam, int param_1, float param_2, float param_3);
 static void __cdecl clSteerDualDeviceSetTRQCurveHalfPoint(void* thisParam, int param_1, float param_2, float param_3) {
