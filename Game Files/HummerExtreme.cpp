@@ -21,7 +21,7 @@ static Helpers* myHelpers;
 extern int EnableDamper;
 extern int DamperStrength;
 
-bool init = false;
+static bool init = false;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ViosityStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViosityStrength"), 100, settingsFilename);
