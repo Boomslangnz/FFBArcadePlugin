@@ -59,6 +59,7 @@ void Hummer::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigger
 
 	if (!init)
 	{
+		OutputDebugStringA("Hummer FFB Plugin Loaded\n");
 		init = true;
 		myTriggers = triggers;
 		myConstants = constants;
