@@ -20,8 +20,8 @@ static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ffbEnabled = 0;
 static bool init = false;
 
-static EffectTriggers myTriggers;
-static EffectConstants myConstants;
+static EffectTriggers* myTriggers;
+static EffectConstants* myConstants;
 
 static void(__thiscall* testMenuFFB)(int param_1, float ffbAmt, char param_3);
 static void __fastcall testMenuFFBHook(int param_1, float ffbAmt, char param_3) {
@@ -29,11 +29,11 @@ static void __fastcall testMenuFFBHook(int param_1, float ffbAmt, char param_3) 
 	{
 		if (ffbAmt >= 0)
 		{
-			myTriggers.Constant(myConstants.DIRECTION_FROM_RIGHT, ffbAmt);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, ffbAmt);
 		}
 		else
 		{
-			myTriggers.Constant(myConstants.DIRECTION_FROM_LEFT, ffbAmt * -1);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, ffbAmt * -1);
 
 		}
 	}
@@ -46,11 +46,11 @@ static void __fastcall gameFFBHook(int param_1, float ffbAmt, char param_3) {
 	{
 		if (ffbAmt >= 0)
 		{
-			myTriggers.Constant(myConstants.DIRECTION_FROM_RIGHT, ffbAmt);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, ffbAmt);
 		}
 		else
 		{
-			myTriggers.Constant(myConstants.DIRECTION_FROM_LEFT, ffbAmt * -1);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_LEFT, ffbAmt * -1);
 
 		}
 	}
@@ -65,13 +65,13 @@ static void __fastcall enableRumbleEffect(int param_1_00, int rumbleEffect) {
 		if (rumbleEffect == 0)
 		{
 			//in the air
-			myTriggers.Constant(myConstants.DIRECTION_FROM_RIGHT, 0);
+			myTriggers->Constant(myConstants->DIRECTION_FROM_RIGHT, 0);
 		}
 		if (rumbleEffect > 0)
 		{
 			//rumbling after collision
-			myTriggers.Rumble(0, 1, rumbleEffect);
-			myTriggers.Sine(rumbleEffect, 0, 50);
+			myTriggers->Rumble(0, 1, rumbleEffect);
+			myTriggers->Sine(rumbleEffect, 0, 50);
 		}
 	}
 	enableRumbleEffectOrig(param_1_00, rumbleEffect);
@@ -81,6 +81,9 @@ static void __fastcall enableRumbleEffect(int param_1_00, int rumbleEffect) {
 void Cars::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers* triggers) {
 
 	if (!init) {
+
+		myTriggers = triggers;
+		myConstants = constants;
 
 		MH_Initialize();
 		MH_CreateHook((void*)(0x0451ba0), testMenuFFBHook, (void**)&testMenuFFB);
