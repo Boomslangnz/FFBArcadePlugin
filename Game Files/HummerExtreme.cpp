@@ -21,7 +21,7 @@ static Helpers* myHelpers;
 extern int EnableDamper;
 extern int DamperStrength;
 
-bool init = false;
+static bool init = false;
 
 static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
 static int ViosityStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViosityStrength"), 100, settingsFilename);
@@ -35,6 +35,8 @@ static void __cdecl clSteerDualDeviceSetTRQCurveHalfPoint(void* thisParam, int p
 
 static void(__cdecl* clSteerDualDeviceSetVibrateOrig)(void* thisParam, int param_1, float param_2, float param_3);
 static void __cdecl clSteerDualDeviceSetVibrate(void* thisParam, int param_1, float param_2, float param_3) {
+	std::string out = "Vibrate: " + std::to_string(param_2) + " " + std::to_string(param_3);
+	OutputDebugStringA(out.c_str());
 	myTriggers->Sine(param_3 * 100, 1, param_2 * 60);
 	myTriggers->Rumble(param_2 * 60,0,param_3 * 100);
 	return clSteerDualDeviceSetVibrateOrig(thisParam, param_1, param_2, param_3);

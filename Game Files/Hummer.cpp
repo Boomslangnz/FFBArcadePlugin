@@ -22,8 +22,10 @@ extern int EnableDamper;
 extern int DamperStrength;
 
 static bool init = false;
-extern int EnableDamper;
-extern int DamperStrength;
+
+static wchar_t* settingsFilename = TEXT(".\\FFBPlugin.ini");
+static int ViosityStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("ViosityStrength"), 100, settingsFilename);
+static int SpringStrength = GetPrivateProfileInt(TEXT("Settings"), TEXT("SpringStrength"), 100, settingsFilename);
 
 static void(__cdecl* clSteerDualDeviceSetTRQCurveHalfPointOrig)(void* thisParam, int param_1, float param_2, float param_3);
 static void __cdecl clSteerDualDeviceSetTRQCurveHalfPoint(void* thisParam, int param_1, float param_2, float param_3) {
@@ -57,6 +59,7 @@ void Hummer::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTrigger
 
 	if (!init)
 	{
+		OutputDebugStringA("Hummer FFB Plugin Loaded\n");
 		init = true;
 		myTriggers = triggers;
 		myConstants = constants;
