@@ -97,6 +97,7 @@ along with FFB Arcade Plugin.If not, see < https://www.gnu.org/licenses/>.
 #include "Game Files/SonicSegaAllStarsRacing.h"
 #include "Game Files/SpringEffect.h"
 #include "Game Files/M2Emulator.h"
+#include "Game Files/MAMEModel2.h"
 #include "Game Files/GTIClub3.h"
 #include "Game Files/Demul.h"
 #include "Game Files/ButtonRumble.h"
@@ -1090,6 +1091,7 @@ const int WASTELAND_RACERS_2071 = 83;
 const int WMMT_6_RR = 84;
 const int HUMMER = 85;
 const int CARS = 86;
+const int MAME_Model2 = 100;
 
 HINSTANCE Get_hInstance()
 {
@@ -2524,6 +2526,9 @@ DWORD WINAPI FFBLoop(LPVOID lpParam)
 		break;
 	case M2_Emulator:
 		game = new M2Emulator;
+		break;
+	case MAME_Model2:
+		game = new MAMEModel2;
 		break;
 	case Demul_Emulator:
 		game = new Demul;
