@@ -101,7 +101,7 @@ void SWDC::FFBLoop(EffectConstants* constants, Helpers* helpers, EffectTriggers*
 			triggers->Sine(static_cast<int>(Period), 0, percentForce);
 		}
 
-		if (ffb[0] == 0x86 && FFBStr)
+		if (ffb[0] == 0x86 && ffb[1] > 0x00 && FFBStr > 0x00)
 		{
 			double percentForce = FFBStr / 32767.0;
 			double percentLength = 100;

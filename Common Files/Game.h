@@ -28,22 +28,22 @@ struct EffectTriggers {
 // classes
 class EffectCollection {
 public:
-	int effect_constant_id;
-	int effect_leftramp_id;
-	int effect_rightramp_id;
-	int effect_friction_id;
-	int effect_leftright_id;
-	int effect_sine_id;
-	int effect_sine_id_device2;
-	int effect_sine_id_device3;
-	int effect_spring_id;
-	int effect_vibration_id;
-	int effect_inertia_id;
-	int effect_ramp_id;
-	int effect_damper_id;
-	int effect_sawtoothup_id;
-	int effect_sawtoothdown_id;
-	int effect_triangle_id;
+	int effect_constant_id = -1;
+	int effect_leftramp_id = -1;
+	int effect_rightramp_id = -1;
+	int effect_friction_id = -1;
+	int effect_leftright_id = -1;
+	int effect_sine_id = -1;
+	int effect_sine_id_device2 = -1;
+	int effect_sine_id_device3 = -1;
+	int effect_spring_id = -1;
+	int effect_vibration_id = -1;
+	int effect_inertia_id = -1;
+	int effect_ramp_id = -1;
+	int effect_damper_id = -1;
+	int effect_sawtoothup_id = -1;
+	int effect_sawtoothdown_id = -1;
+	int effect_triangle_id = -1;
 };
 
 class EffectConstants {

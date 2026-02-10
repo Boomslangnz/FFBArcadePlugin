@@ -3815,10 +3815,7 @@ void MAMESupermodel::FFBLoop(EffectConstants* constants, Helpers* helpers, Effec
 				std::string ffs = std::to_string(newstateFFB);
 				helpers->log((char*)ffs.c_str());
 
-				if (newstateFFB != 0)
-				{
 					stateFFB = newstateFFB;
-				}
 			}
 
 			if (name == Vibration_motor)
